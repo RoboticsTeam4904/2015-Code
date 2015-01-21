@@ -1,7 +1,5 @@
 package org.usfirst.frc.team4904.robot;
 
-
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.SampleRobot;
 import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.Timer;
@@ -16,9 +14,9 @@ public class Robot extends SampleRobot {
 	private Talon winch;			// the talon controlling the winch
 	private Talon grabber;			// the talon controlling the fork's grabber
 	
-	private Joystick blackStick;	// the ATK3 Logitech joystick (left hand) - operator
-	private Joystick whiteStick;	// the X3D Extreme3DPro Logitech joystick (right hand) - operator
-	private Joystick xboxController;// the Xbox 360 controller - driver
+	private LogitechJoystick blackStick;	// the ATK3 Logitech joystick (left hand) - operator
+	private LogitechJoystick whiteStick;	// the X3D Extreme3DPro Logitech joystick (right hand) - operator
+	private Xbox xboxController;// the Xbox 360 controller - driver
 	
 	private I2C udar;				// I2C connector for the UDAR (ultrasonic detection and ranging)
 	private IMU imu;
@@ -40,9 +38,9 @@ public class Robot extends SampleRobot {
 		grabber = new Talon(5);
 		
 		// Initialize joysticks (numbers correspond to value set by driver station)
-		blackStick = new Joystick(0);
-		//whiteStick = new Joystick(1);
-		//xboxController = new Joystick(2);
+		blackStick = new LogitechJoystick(0);
+		//whiteStick = new LogitechJoystick(1);
+		//xboxController = new Xbox(2);
 		
 		udar = new I2C(I2C.Port.kOnboard, 168); // Initialize I2C
 		imu = new IMU(); // Initialize IMU
