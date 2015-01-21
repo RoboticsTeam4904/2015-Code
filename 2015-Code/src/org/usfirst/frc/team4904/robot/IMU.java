@@ -13,4 +13,17 @@ public class IMU {
 	public void zero() {
 		// TODO set current orientation as "forward"
 	}
+	
+	public void update() {
+		this.readData();
+		this.updateKalman();
+	}
+	
+	private void readData() {
+		
+	}
+	
+	private void updateKalman() {
+		
+	}
 }

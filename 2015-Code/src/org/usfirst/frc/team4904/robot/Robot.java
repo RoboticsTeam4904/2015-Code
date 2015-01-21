@@ -23,6 +23,8 @@ public class Robot extends SampleRobot {
 	private I2C udar;				// I2C connector for the UDAR (ultrasonic detection and ranging)
 	private IMU imu;
 	private Mecanum mecanumDrive;	// the Mecanum class that takes care of the math required to use mecanum drive
+	
+	private AutoAlign align;
 
 	private final double updatePeriod = 0.005; // update every 0.005 seconds/5 milliseconds (200Hz)
 
@@ -57,12 +59,23 @@ public class Robot extends SampleRobot {
 		rightBack.set(0);
 		winch.set(0);
 		grabber.set(0);
+		
+		while(isDisabled()){
+			imu.update();
+		}
 	}
 	
 	public void autonomous(){
 		System.out.println("*** AUTONOMOUS ***");
 		
-		leftFront.set(1);
+		while(isAutonomous() && isEnabled()){
+			leftFront.set(1);
+			
+			
+			mecanumDrive.update();		
+			Timer.delay(updatePeriod);	// wait delay specified by updatePeriod to the next update
+
+		}
 	}
 
 	public void operatorControl() {
@@ -71,6 +84,7 @@ public class Robot extends SampleRobot {
 		while (isOperatorControl() && isEnabled()) {
 			leftFront.set(blackStick.getY());
 			
+			mecanumDrive.update();
 			Timer.delay(updatePeriod);	// wait delay specified by updatePeriod to the next update
 		}
 		

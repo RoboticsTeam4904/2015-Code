@@ -20,12 +20,20 @@ import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.Joystick;
 
 public class Mecanum {
+	private static final double I = 0;
+	private static final double D = 0;
+	private static final double P = 0;
 	SpeedController frontLeftWheel;
 	SpeedController frontRightWheel;
 	SpeedController backLeftWheel;
 	SpeedController backRightWheel;
 	
 	IMU imu;
+	private double desiredSpeed;
+	private double desiredAngle;
+	private double errorIntegral;
+	private double errorDerivative;
+	private double lastError;
 	
 	
 	public Mecanum(SpeedController frontLeftWheel, SpeedController frontRightWheel, SpeedController backLeftWheel, SpeedController backRightWheel, IMU imu) {
@@ -56,16 +64,11 @@ public class Mecanum {
 		return desiredAngle;
 	}
 	
-	public void drive (double desiredSpeed, double desiredAngle, double turnSpeed, boolean fod) {
+	private void move (double desiredSpeed, double desiredAngle, double turnSpeed) {
 		// @param	desiredSpeed	double between 0 and 1 specifying wanted motor speed
 		// @param	desiredAngle	double between 0 and 2pi specifying wanted angle in radians
 		// @param	turnSpeed		double between 0 and 1 specifying rotational speed
 		
-		if (fod) {
-			desiredAngle = fod(desiredAngle);
-		} else {
-			desiredAngle = Math.toRadians(desiredAngle);
-		}
 
 		double frontLeft;
 		double frontRight;
@@ -85,10 +88,28 @@ public class Mecanum {
 		backRightWheel.set(desiredSpeed * backRight / scaleFactor);
 	}
 	
-	public void turn (double speed){
+	public void turn(double speed){
 		frontLeftWheel.set(speed);
 		frontRightWheel.set(speed);
 		backLeftWheel.set(speed);
 		backRightWheel.set(speed);
 	}
+	
+	public void update() {
+		double error = imu.getAngle() - this.desiredAngle;
+		this.errorIntegral += error;
+		this.errorDerivative = (error-this.lastError)/0.005;
+		
+		double turnSpeed = this.P*error + this.I*this.errorIntegral + this.D*this.errorDerivative;
+		
+		this.move(this.desiredSpeed, this.desiredAngle, turnSpeed);
+		this.lastError = error;
+	}
+	
+	
+	public void drive(double desiredSpeed, double desiredAngle){
+		this.desiredAngle = desiredAngle;
+		this.desiredSpeed = desiredSpeed;
+	}
+	
 }
