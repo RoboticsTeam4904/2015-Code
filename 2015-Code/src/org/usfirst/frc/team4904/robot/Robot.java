@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj.SampleRobot;
 import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.VictorSP;
-import edu.wpi.first.wpilibj.I2C;
 
 public class Robot extends SampleRobot {
 	private VictorSP leftFront;		// the victor controlling the left front wheel
@@ -18,7 +17,7 @@ public class Robot extends SampleRobot {
 	private LogitechJoystick whiteStick;	// the X3D Extreme3DPro Logitech joystick (right hand) - operator
 	private Xbox xboxController;// the Xbox 360 controller - driver
 	
-	private I2C udar;				// I2C connector for the UDAR (ultrasonic detection and ranging)
+	private UDAR udar;				// the UDAR (ultrasonic detection and ranging)
 	private IMU imu;
 	private Mecanum mecanumDrive;	// the Mecanum class that takes care of the math required to use mecanum drive
 	
@@ -42,47 +41,47 @@ public class Robot extends SampleRobot {
 		//whiteStick = new LogitechJoystick(1);
 		//xboxController = new Xbox(2);
 		
-		udar = new I2C(I2C.Port.kOnboard, 168); // Initialize I2C
+		udar = new UDAR(); // Initialize UDAR
 		imu = new IMU(); // Initialize IMU
 		mecanumDrive = new Mecanum(leftFront, rightFront, leftBack, rightBack, imu); // Initialize Mecanum control
 	}
 	
 	public void disabled(){
-		System.out.println("*** DISABLED ***");
+		System.out.println("*** DISABLED ***"); // Print the line "*** DISABLED ***"
 		
 		// Disable all motors
-		leftFront.set(0);
-		rightFront.set(0);
-		leftBack.set(0);
-		rightBack.set(0);
-		winch.set(0);
-		grabber.set(0);
+		leftFront.set(0); // Disable left front motor
+		rightFront.set(0); // Disable right front motor
+		leftBack.set(0); // Disable left back motor
+		rightBack.set(0); // Disable right back motor
+		winch.set(0); // Disable winch
+		grabber.set(0); // Disable grabber
 		
-		while(isDisabled()){
-			imu.update();
+		while(isDisabled()){ // While the robot is set to disabled
+			imu.update(); // Update IMU
 		}
 	}
 	
 	public void autonomous(){
-		System.out.println("*** AUTONOMOUS ***");
+		System.out.println("*** AUTONOMOUS ***"); // Print the line "*** AUTONOMOUS ***"
 		
-		while(isAutonomous() && isEnabled()){
+		while(isAutonomous() && isEnabled()){ // While the robot is set to autonomous and is enabled
 			leftFront.set(1);
 			
 			
-			mecanumDrive.update();		
+			mecanumDrive.update();	// Update the mecanum drive
 			Timer.delay(updatePeriod);	// wait delay specified by updatePeriod to the next update
 
 		}
 	}
 
 	public void operatorControl() {
-		System.out.println("*** TELEOPERATED ***");
+		System.out.println("*** TELEOPERATED ***"); // Print the line "*** TELEOPERATED ***"
 		
-		while (isOperatorControl() && isEnabled()) {
+		while (isOperatorControl() && isEnabled()) { // While the robot is set to operator control and is enabled
 			leftFront.set(blackStick.getY());
 			
-			mecanumDrive.update();
+			mecanumDrive.update(); // Update the mecanum drive
 			Timer.delay(updatePeriod);	// wait delay specified by updatePeriod to the next update
 		}
 		
