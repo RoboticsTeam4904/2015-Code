@@ -87,11 +87,11 @@ public class Mecanum {
 	}
 	
 	
-	public void drive(double desiredSpeed, double desiredAngle){
+	public void setDesiredSpeedDirection(double desiredSpeed, double desiredAngle){
 		this.desiredAngle = desiredAngle;
 		this.desiredSpeed = desiredSpeed;
 	}
-	public void setTurn(double turnSpeed){
+	public void setDesiredTurnSpeed(double turnSpeed){
 		desiredAngle+=turnSpeed;
 	}
 	

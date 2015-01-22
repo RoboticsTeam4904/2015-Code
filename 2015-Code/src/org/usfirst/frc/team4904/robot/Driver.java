@@ -8,11 +8,11 @@ public abstract class Driver {
 	public abstract void update();
 	
 	protected void move(double speed, double angle){
-		mecanumDrive.drive(speed, angle);
+		mecanumDrive.setDesiredSpeedDirection(speed, angle);
 	}
 	
 	protected void turn(double speed){
-		mecanumDrive.setTurn(speed);
+		mecanumDrive.setDesiredTurnSpeed(speed);
 	}
 	
 }
