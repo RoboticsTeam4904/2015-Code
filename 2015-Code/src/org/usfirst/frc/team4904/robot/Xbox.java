@@ -6,16 +6,16 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
 
 public class Xbox extends Joystick{
 	
-	Button x1;
-	Button x2;
-	Button x3;
-	Button x4;
-	Button x5;
-	Button x6;
-	Button x7;
-	Button x8;
-	Button x9;
-	Button x10;
+	Button aButton;
+	Button bButton;
+	Button xButton;
+	Button yButton;
+	Button leftBumper;
+	Button rightBumper;
+	Button backButton;
+	Button startButton;
+	Button leftStick;
+	Button rightStick;
 	
 	public Xbox(int port) {
 		super(port);
