@@ -4,15 +4,15 @@ import edu.wpi.first.wpilibj.SpeedController;
 
 public interface Operator {
 	
-	public void update();
+	public void update(); // Call once per cycle to update
 	
-	public void raise(int levels);
-	public void lower(int levels);
+	abstract void raise(int levels); // Raise winch levels levels
+	abstract void lower(int levels); // Lower winch levels levels
 	
-	public void grab(int mode);
-	public void release(int mode);
+	abstract void grab(int mode); // Grab a can/tote
+	abstract void release(int mode); // Release a can/tote
 	
-	public void adjust();
+	abstract void adjust(); // Adjust the winch
 	
 }
 
