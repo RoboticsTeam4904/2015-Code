@@ -16,7 +16,7 @@ public class DriverNathan implements Driver {
 		
 		move(speed, angle);
 		
-		double turnSpeed = xboxController.getTwist();
+		double turnSpeed = xboxController.getTwist(); // lols cats are fun
 	}
 
 	public void move(double speed, double angle) {
