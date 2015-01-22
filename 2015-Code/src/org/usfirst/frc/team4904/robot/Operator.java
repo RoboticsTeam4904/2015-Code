@@ -1,18 +1,16 @@
 package org.usfirst.frc.team4904.robot;
 
-import edu.wpi.first.wpilibj.SpeedController;
-
 public abstract class Operator {
 	
 	LogitechJoystick stick;
-	SpeedController winch;
+	Winch winch;
 	AutoAlign align;
 	int winchTimer;
 	static final int MODE_THIN_TOTE = 0;
 	static final int MODE_WIDE_TOTE = 1;
 	static final int MODE_CAN = 2;
 	
-	public Operator(LogitechJoystick stick, SpeedController winch, AutoAlign align){
+	public Operator(LogitechJoystick stick, Winch winch, AutoAlign align){
 		this.stick = stick;
 		this.winch = winch;
 		this.align = align;

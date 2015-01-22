@@ -7,7 +7,7 @@ public class OperatorNachi extends Operator {
 	boolean holdingTote;
 	boolean holdingCan;
 	
-	public OperatorNachi(LogitechJoystick stick, SpeedController winch, AutoAlign align){
+	public OperatorNachi(LogitechJoystick stick, Whinch winch, AutoAlign align){
 		super(stick, winch, align);
 		
 		holdingTote = false;

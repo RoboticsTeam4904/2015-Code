@@ -3,12 +3,16 @@ package org.usfirst.frc.team4904.robot;
 import edu.wpi.first.wpilibj.VictorSP;
 
 public class Winch extends VictorSP {
+	
+	static final int MAX_HEIGHT = 10;
 
 	public Winch(int channel) {
 		super(channel);
 	}
 	
 	public void set(int height){ // Set winch to specific height
+		if (height > MAX_HEIGHT) height = MAX_HEIGHT;
+		else if (height < 0) height = 0;
 		
 	}
 	

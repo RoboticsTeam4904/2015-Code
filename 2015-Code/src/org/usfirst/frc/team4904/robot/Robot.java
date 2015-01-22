@@ -10,15 +10,16 @@ public class Robot extends SampleRobot {
 	private VictorSP rightFront;	// the victor controlling the right front wheel
 	private VictorSP leftBack;		// the victor controlling the left back wheel
 	private VictorSP rightBack;		// the victor controlling the right back wheel
-	private Talon winch;			// the talon controlling the winch
 	private Talon grabber;			// the talon controlling the fork's grabber
 	
-	private LogitechJoystick blackStick;	// the ATK3 Logitech joystick (left hand) - operator
-	private LogitechJoystick whiteStick;	// the X3D Extreme3DPro Logitech joystick (right hand) - operator
+	private LogitechJoystick stick;	// the X3D Extreme3DPro Logitech joystick (right hand) - operator
 	private Xbox xboxController;// the Xbox 360 controller - driver
 	
 	private UDAR udar;				// the UDAR (ultrasonic detection and ranging)
 	private IMU imu;
+	
+	//Advanced movement controllers
+	private Winch winch;			// the Winch class takes care of moving to specific heights
 	private Mecanum mecanumDrive;	// the Mecanum class that takes care of the math required to use mecanum drive
 	
 	private AutoAlign align;		// the AutoAlign class contains code to align the robot with totes and cans
@@ -33,15 +34,15 @@ public class Robot extends SampleRobot {
 		rightFront = new VictorSP(1);
 		leftBack = new VictorSP(2);
 		rightBack = new VictorSP(3);
-		winch = new Talon(4);
 		grabber = new Talon(5);
-		//Initialize mecanum
+		
+		//Initialize movement controllers
+		winch = new Winch(4);
 		mecanumDrive = new Mecanum(leftFront, rightFront, leftBack, rightBack, imu); // Initialize Mecanum control
 		
 		// Initialize joysticks (numbers correspond to value set by driver station)
-		blackStick = new LogitechJoystick(0);
-		//whiteStick = new LogitechJoystick(1);
-		//xboxController = new Xbox(2);
+		stick = new LogitechJoystick(0);
+		xboxController = new Xbox(1);
 		
 		//Initialize sensors
 		udar = new UDAR(); // Initialize UDAR
@@ -83,7 +84,7 @@ public class Robot extends SampleRobot {
 		System.out.println("*** TELEOPERATED ***"); // Print the line "*** TELEOPERATED ***"
 		
 		while (isOperatorControl() && isEnabled()) { // While the robot is set to operator control and is enabled
-			leftFront.set(blackStick.getY());
+			leftFront.set(stick.getY());
 			
 			mecanumDrive.update(); // Update the mecanum drive
 			Timer.delay(updatePeriod);	// wait delay specified by updatePeriod to the next update

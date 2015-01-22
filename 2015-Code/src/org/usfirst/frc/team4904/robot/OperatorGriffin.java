@@ -1,10 +1,8 @@
 package org.usfirst.frc.team4904.robot;
 
-import edu.wpi.first.wpilibj.SpeedController;
-
 public class OperatorGriffin extends Operator {
 	
-	public OperatorGriffin(LogitechJoystick stick, SpeedController winch, AutoAlign align){
+	public OperatorGriffin(LogitechJoystick stick, Winch winch, AutoAlign align){
 		super(stick, winch, align);
 	}
 	

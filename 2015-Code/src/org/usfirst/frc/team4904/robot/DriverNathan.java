@@ -13,7 +13,8 @@ public class DriverNathan extends Driver {
 		
 		move(speed, angle);
 		
-		double turnSpeed = xboxController.getTwist(); // lols cats are fun
+		double turnSpeed = xboxController.getTwist();
+		turn(turnSpeed);
 	}
 
 }
