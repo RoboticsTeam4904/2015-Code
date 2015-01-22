@@ -2,18 +2,50 @@ package org.usfirst.frc.team4904.robot;
 
 import edu.wpi.first.wpilibj.SpeedController;
 
-public interface Operator {
+public abstract class Operator {
 	
-	public void update(); // Call once per cycle to update
+	LogitechJoystick stick;
+	SpeedController winch;
+	AutoAlign align;
+	int winchTimer;
+	static final int MODE_THIN_TOTE = 0;
+	static final int MODE_WIDE_TOTE = 1;
+	static final int MODE_CAN = 2;
 	
-	abstract void raise(int levels); // Raise winch levels levels
-	abstract void lower(int levels); // Lower winch levels levels
+	public Operator(LogitechJoystick stick, SpeedController winch, AutoAlign align){
+		this.stick = stick;
+		this.winch = winch;
+		this.align = align;
+		winchTimer = 0;
+	}
 	
-	abstract void grab(int mode); // Grab a can/tote
-	abstract void release(int mode); // Release a can/tote
+	abstract void update(); // Call once per cycle to update
 	
-	abstract void adjust(); // Adjust the winch
-	
+	protected void raise(int levels) {
+		winch.set(1);
+		winchTimer = 5;
+	}
+
+	protected void lower(int levels) {
+		winch.set(-1);
+		winchTimer = 5;
+	}
+
+	protected void grab(int mode) {
+		if(mode == MODE_THIN_TOTE) align.toteGrab();
+		else if(mode == MODE_WIDE_TOTE) align.toteGrab();
+		else if(mode == MODE_CAN) align.canGrab();
+	}
+
+	protected void release(int mode) {
+		if(mode == MODE_THIN_TOTE) align.toteRelease();
+		else if(mode == MODE_WIDE_TOTE) align.toteRelease();
+		else if(mode == MODE_CAN) align.canRelease();
+	}
+
+	protected void adjust(double value) {
+		winch.set(value); // Sets winch motor speed
+	}
 }
 
 

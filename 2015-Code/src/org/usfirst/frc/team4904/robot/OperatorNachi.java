@@ -2,22 +2,16 @@ package org.usfirst.frc.team4904.robot;
 
 import edu.wpi.first.wpilibj.SpeedController;
 
-public class OperatorNachi implements Operator {
+public class OperatorNachi extends Operator {
 	
 	boolean holdingTote;
 	boolean holdingCan;
-	int winchTimer;
-	LogitechJoystick stick;
-	SpeedController winch;
-	AutoAlign align;
 	
 	OperatorNachi(LogitechJoystick stick, SpeedController winch, AutoAlign align){
+		super(stick, winch, align);
+		
 		holdingTote = false;
 		holdingCan = false;
-		
-		this.stick = stick;
-		this.winch = winch;
-		this.align = align;
 	}
 	
 	public void update() {
@@ -35,36 +29,10 @@ public class OperatorNachi implements Operator {
 		if(stick.x3.get()) lower(1); // When button 3 is pressed, lower the winch one level
 		if(stick.x6.get()) raise(10); // When button 6 is pressed, raise the winch all the way
 		if(stick.x5.get()) lower(10); // When button 5 is pressed, lower the winch all the way
-		adjust(); // Always adjust by Z axis
+		adjust(stick.getZ()); // Always adjust by Z axis
 		
 		if(winchTimer > 0) winchTimer--; // Winch can move over multiple cycles, so set a countdown
 		else winch.set(0); // If the countdown is done, stop the winch
-	}
-
-	public void raise(int levels) {
-		winch.set(1);
-		winchTimer = 5;
-	}
-
-	public void lower(int levels) {
-		winch.set(-1);
-		winchTimer = 5;
-	}
-
-	public void grab(int mode) {
-		if(mode == 0) align.toteGrab();
-		else if(mode == 1) align.toteGrab();
-		else if(mode == 2) align.canGrab();
-	}
-
-	public void release(int mode) {
-		if(mode == 0) align.toteRelease();
-		else if(mode == 1) align.toteRelease();
-		else if(mode == 2) align.canRelease();
-	}
-
-	public void adjust() {
-		winch.set(stick.getZ());
 	}
 
 }

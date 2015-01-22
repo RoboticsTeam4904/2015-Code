@@ -1,10 +1,18 @@
 package org.usfirst.frc.team4904.robot;
 
-public interface Driver {
+public abstract class Driver {
 	
-	public void update();
+	Mecanum mecanumDrive;
+	Xbox xboxController;
 	
-	abstract void move(double speed, double angle);
-	abstract void turn(double speed);
+	public abstract void update();
+	
+	protected void move(double speed, double angle){
+		
+	}
+	
+	protected void turn(double speed){
+		
+	}
 	
 }
