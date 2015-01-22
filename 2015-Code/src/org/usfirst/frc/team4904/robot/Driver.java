@@ -12,7 +12,7 @@ public abstract class Driver {
 	}
 	
 	protected void turn(double speed){
-		mecanumDrive.turn(speed);
+		mecanumDrive.setTurn(speed);
 	}
 	
 }
