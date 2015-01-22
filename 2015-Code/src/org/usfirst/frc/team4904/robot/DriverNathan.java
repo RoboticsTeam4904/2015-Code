@@ -13,6 +13,10 @@ public class DriverNathan implements Driver {
 	public void update() {
 		double angle = Math.atan2(xboxController.getY(), xboxController.getX());
 		double speed = angle*Math.asin(xboxController.getY());
+		
+		move(speed, angle);
+		
+		double turnSpeed = xboxController.getTwist();
 	}
 
 	public void move(double speed, double angle) {
