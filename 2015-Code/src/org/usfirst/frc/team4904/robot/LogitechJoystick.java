@@ -16,6 +16,8 @@ public class LogitechJoystick extends Joystick{
 	Button x8;
 	Button x9;
 	Button x10;
+	Button x11;
+	Button x12;
 	
 	public LogitechJoystick(int port) {
 		super(port);
@@ -30,6 +32,8 @@ public class LogitechJoystick extends Joystick{
 		x8 = new JoystickButton(this, 8); // Initilize button 8
 		x9 = new JoystickButton(this, 9); // Initilize button 9
 		x10 = new JoystickButton(this, 10); // Initilize button 10
+		x11 = new JoystickButton(this, 11); // Initilize button 11
+		x12 = new JoystickButton(this, 12); // Initilize button 12
 	}
 	
 	
