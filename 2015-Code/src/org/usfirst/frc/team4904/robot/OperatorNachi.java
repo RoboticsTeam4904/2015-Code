@@ -7,7 +7,7 @@ public class OperatorNachi extends Operator {
 	boolean holdingTote;
 	boolean holdingCan;
 	
-	OperatorNachi(LogitechJoystick stick, SpeedController winch, AutoAlign align){
+	public OperatorNachi(LogitechJoystick stick, SpeedController winch, AutoAlign align){
 		super(stick, winch, align);
 		
 		holdingTote = false;
@@ -16,13 +16,13 @@ public class OperatorNachi extends Operator {
 	
 	public void update() {
 		if(stick.x1.get()){ // When button 1 is pressed, toggle tote grabbing
-			if(!holdingTote) grab(0);
-			else release(0);
+			if(!holdingTote) grab(MODE_WIDE_TOTE);
+			else release(MODE_WIDE_TOTE);
 			holdingTote = !holdingTote;
 		}
 		if(stick.x2.get()){ // When button 2 is pressed, toggle can grabbing
-			if(!holdingCan) grab(2);
-			else release(2);
+			if(!holdingCan) grab(MODE_CAN);
+			else release(MODE_CAN);
 			holdingCan = !holdingCan;
 		}
 		if(stick.x4.get()) raise(1); // When button 4 is pressed, raise the winch one level
