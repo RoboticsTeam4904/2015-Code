@@ -32,15 +32,15 @@ public abstract class Operator {
 	}
 
 	protected void grab(int mode) {
-		if(mode == MODE_THIN_TOTE) align.toteGrab();
-		else if(mode == MODE_WIDE_TOTE) align.toteGrab();
-		else if(mode == MODE_CAN) align.canGrab();
+		if (mode == MODE_THIN_TOTE) align.toteGrab();
+		else if (mode == MODE_WIDE_TOTE) align.toteGrab();
+		else if (mode == MODE_CAN) align.canGrab();
 	}
 
 	protected void release(int mode) {
-		if(mode == MODE_THIN_TOTE) align.toteRelease();
-		else if(mode == MODE_WIDE_TOTE) align.toteRelease();
-		else if(mode == MODE_CAN) align.canRelease();
+		if (mode == MODE_THIN_TOTE) align.toteRelease();
+		else if (mode == MODE_WIDE_TOTE) align.toteRelease();
+		else if (mode == MODE_CAN) align.canRelease();
 	}
 
 	protected void adjust(double value) {
