@@ -20,16 +20,16 @@ public class LogitechJoystick extends Joystick{
 	public LogitechJoystick(int port) {
 		super(port);
 		
-		x1 = new JoystickButton(this, 1);
-		x2 = new JoystickButton(this, 2);
-		x3 = new JoystickButton(this, 3);
-		x4 = new JoystickButton(this, 4);
-		x5 = new JoystickButton(this, 5);
-		x6 = new JoystickButton(this, 6);
-		x7 = new JoystickButton(this, 7);
-		x8 = new JoystickButton(this, 8);
-		x9 = new JoystickButton(this, 9);
-		x10 = new JoystickButton(this, 10);
+		x1 = new JoystickButton(this, 1); // Initilize button 1
+		x2 = new JoystickButton(this, 2); // Initilize button 2
+		x3 = new JoystickButton(this, 3); // Initilize button 3
+		x4 = new JoystickButton(this, 4); // Initilize button 4
+		x5 = new JoystickButton(this, 5); // Initilize button 5
+		x6 = new JoystickButton(this, 6); // Initilize button 6
+		x7 = new JoystickButton(this, 7); // Initilize button 7
+		x8 = new JoystickButton(this, 8); // Initilize button 8
+		x9 = new JoystickButton(this, 9); // Initilize button 9
+		x10 = new JoystickButton(this, 10); // Initilize button 10
 	}
 	
 	

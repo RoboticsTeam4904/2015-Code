@@ -21,12 +21,12 @@ public class Robot extends SampleRobot {
 	private IMU imu;
 	private Mecanum mecanumDrive;	// the Mecanum class that takes care of the math required to use mecanum drive
 	
-	private AutoAlign align;
+	private AutoAlign align;		// the AutoAlign class contains code to align the robot with totes and cans
 
 	private final double updatePeriod = 0.005; // update every 0.005 seconds/5 milliseconds (200Hz)
 
 	public Robot() {
-		System.out.println("*** INITIALIZING ROBOT ***");
+		System.out.println("*** INITIALIZING ROBOT ***"); // Print the line "*** INITIALIZING ROBOT ***"
 		
 		// Initialize motor controllers (numbers correspond to PWM port on roboRIO)
 		leftFront = new VictorSP(0);
@@ -35,15 +35,19 @@ public class Robot extends SampleRobot {
 		rightBack = new VictorSP(3);
 		winch = new Talon(4);
 		grabber = new Talon(5);
+		//Initialize mecanum
+		mecanumDrive = new Mecanum(leftFront, rightFront, leftBack, rightBack, imu); // Initialize Mecanum control
 		
 		// Initialize joysticks (numbers correspond to value set by driver station)
 		blackStick = new LogitechJoystick(0);
 		//whiteStick = new LogitechJoystick(1);
 		//xboxController = new Xbox(2);
 		
+		//Initialize sensors
 		udar = new UDAR(); // Initialize UDAR
 		imu = new IMU(); // Initialize IMU
-		mecanumDrive = new Mecanum(leftFront, rightFront, leftBack, rightBack, imu); // Initialize Mecanum control
+		
+		align = new AutoAlign(mecanumDrive, udar, imu); // Initialize AutoAlign system
 	}
 	
 	public void disabled(){
