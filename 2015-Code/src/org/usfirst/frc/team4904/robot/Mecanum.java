@@ -68,7 +68,7 @@ public class Mecanum {
 		backRightWheel.set(desiredSpeed * backRight / scaleFactor);
 	}
 	
-	public void turn(double speed){
+	private void turn(double speed){
 		frontLeftWheel.set(speed);
 		frontRightWheel.set(speed);
 		backLeftWheel.set(speed);
@@ -90,6 +90,9 @@ public class Mecanum {
 	public void drive(double desiredSpeed, double desiredAngle){
 		this.desiredAngle = desiredAngle;
 		this.desiredSpeed = desiredSpeed;
+	}
+	public void setTurn(double turnSpeed){
+		desiredAngle+=turnSpeed;
 	}
 	
 }
