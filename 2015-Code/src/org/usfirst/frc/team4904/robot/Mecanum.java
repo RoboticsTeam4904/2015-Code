@@ -44,26 +44,6 @@ public class Mecanum {
 		this.imu = imu;
 	}
 	
-	public double fod (double mainStickDirection) {
-		double desiredAngle;
-		double imuAngle = imu.getAngle();
-		double errorAngle = 10;
-		
-		if (Math.abs(mainStickDirection - imuAngle) < errorAngle) {
-			desiredAngle = imuAngle;
-		} else {
-			desiredAngle = mainStickDirection - imuAngle;
-		}
-		
-		if (desiredAngle < 0) {
-			desiredAngle += 360;
-		}
-		
-		desiredAngle = Math.toRadians(desiredAngle);
-		
-		return desiredAngle;
-	}
-	
 	private void move (double desiredSpeed, double desiredAngle, double turnSpeed) {
 		// @param	desiredSpeed	double between 0 and 1 specifying wanted motor speed
 		// @param	desiredAngle	double between 0 and 2pi specifying wanted angle in radians

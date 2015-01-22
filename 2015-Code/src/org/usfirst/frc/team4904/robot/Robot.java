@@ -47,7 +47,7 @@ public class Robot extends SampleRobot {
 		udar = new UDAR(); // Initialize UDAR
 		imu = new IMU(); // Initialize IMU
 		
-		align = new AutoAlign(mecanumDrive, udar, imu); // Initialize AutoAlign system
+		align = new AutoAlign(mecanumDrive, udar, imu, grabber); // Initialize AutoAlign system
 	}
 	
 	public void disabled(){
