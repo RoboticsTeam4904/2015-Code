@@ -67,10 +67,7 @@ public class Robot extends SampleRobot implements IUpdatable{
 		// Disable all motors
 		disableMotors();
 		
-		while(isDisabled()){ // While the robot is set to disabled
-			update();
-			Timer.delay(updatePeriod);
-		}
+		doLoop(State.STATE_DISABLED);
 	}
 	private void disableMotors(){// TODO This function also should disable the mecanum drives
 		for(SpeedController sc : speedControllers){
@@ -79,25 +76,18 @@ public class Robot extends SampleRobot implements IUpdatable{
 	}
 	public void autonomous(){
 		System.out.println("*** AUTONOMOUS ***"); // Print the line "*** AUTONOMOUS ***"
-		
-		while(isAutonomous() && isEnabled()){ // While the robot is set to autonomous and is enabled
-			
-			
-			update();
-			Timer.delay(updatePeriod);	// wait delay specified by updatePeriod to the next update
-
-		}
+		doLoop(State.STATE_AUTONOMOUS);
 	}
 
 	public void operatorControl() {
 		System.out.println("*** TELEOPERATED ***"); // Print the line "*** TELEOPERATED ***"
-		
-		while (isOperatorControl() && isEnabled()) { // While the robot is set to operator control and is enabled
-			
+		doLoop(State.STATE_TELEOPERATED);
+	}
+	private void doLoop(State desiredState){
+		while(getState()==desiredState){//Basically, run until the robot changes state
 			update();
-			Timer.delay(updatePeriod);	// wait delay specified by updatePeriod to the next update
+			Timer.delay(updatePeriod);
 		}
-		
 	}
 	public void update(){
 		updateAll(updatables.get(getState()));
