@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.VictorSP;
 
-public class Robot extends SampleRobot {
+public class Robot extends SampleRobot implements Updatable{
 	private VictorSP leftFront;		// the victor controlling the left front wheel
 	private VictorSP rightFront;	// the victor controlling the right front wheel
 	private VictorSP leftBack;		// the victor controlling the left back wheel
@@ -90,12 +90,12 @@ public class Robot extends SampleRobot {
 		while (isOperatorControl() && isEnabled()) { // While the robot is set to operator control and is enabled
 			leftFront.set(stick.getY());
 			
-			updateAll();
+			update();
 			Timer.delay(updatePeriod);	// wait delay specified by updatePeriod to the next update
 		}
 		
 	}
-	public void updateAll(){
+	public void update(){
 		for(Updatable updatable : updatables){
 			updatable.update();
 		}
