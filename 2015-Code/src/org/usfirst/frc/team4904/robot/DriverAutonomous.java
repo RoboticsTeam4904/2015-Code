@@ -1,14 +1,15 @@
 package org.usfirst.frc.team4904.robot;
 
 public class DriverAutonomous extends Driver{
-
-	public DriverAutonomous(Mecanum mecanumDrive, XboxController xboxController) {
+	AutonomousController controller;
+	public DriverAutonomous(Mecanum mecanumDrive, XboxController xboxController, AutonomousController controller) {
 		super(mecanumDrive, xboxController);
+		this.controller=controller;
+		controller.setDriver(this);
 	}
 
-	@Override
 	public void update() {
-		// TODO auto-driving
+		// TODO move(controller.getDesiredMovement())
 	}
 
 }
