@@ -56,7 +56,7 @@ public class AutoAlign implements IUpdatable{
 			doAligningTick();
 		}
 	}
-	public boolean isCurrentlyAligning(){
+	private boolean isCurrentlyAligning(){
 		switch(currentState){
 		case ALIGNING_WITH_CAN:
 		case ALIGNING_WITH_THIN_TOTE:
