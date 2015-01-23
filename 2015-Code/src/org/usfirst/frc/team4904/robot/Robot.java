@@ -32,7 +32,6 @@ public class Robot extends SampleRobot implements IUpdatable{
 	
 	// Update system
 	private final HashMap<State,IUpdatable[]> updatables=new HashMap<>();
-	public static IUpdatable overallUpdate;
 	private final SpeedController[] speedControllers;
 	private final double updatePeriod = 0.005; // update every 0.005 seconds/5 milliseconds (200Hz)
 	public Robot() {
@@ -60,7 +59,6 @@ public class Robot extends SampleRobot implements IUpdatable{
 		updatables.put(State.STATE_DISABLED,new IUpdatable[]{imu});
 		updatables.put(State.STATE_AUTONOMOUS,new IUpdatable[]{align,mecanumDrive,imu});
 		speedControllers=new SpeedController[]{winch,grabber};
-		overallUpdate=this;
 	}
 	
 	public void disabled(){
@@ -70,11 +68,11 @@ public class Robot extends SampleRobot implements IUpdatable{
 		disableMotors();
 		
 		while(isDisabled()){ // While the robot is set to disabled
-			doOverallUpdate();
+			update();
 			Timer.delay(updatePeriod);
 		}
 	}
-	private void disableMotors(){
+	private void disableMotors(){// TODO This function also should disable the mecanum drives
 		for(SpeedController sc : speedControllers){
 			sc.set(0);
 		}
@@ -85,24 +83,21 @@ public class Robot extends SampleRobot implements IUpdatable{
 		while(isAutonomous() && isEnabled()){ // While the robot is set to autonomous and is enabled
 			
 			
-			doOverallUpdate();
+			update();
 			Timer.delay(updatePeriod);	// wait delay specified by updatePeriod to the next update
 
 		}
 	}
 
-	public synchronized void operatorControl() {
+	public void operatorControl() {
 		System.out.println("*** TELEOPERATED ***"); // Print the line "*** TELEOPERATED ***"
 		
 		while (isOperatorControl() && isEnabled()) { // While the robot is set to operator control and is enabled
 			
-			doOverallUpdate();
+			update();
 			Timer.delay(updatePeriod);	// wait delay specified by updatePeriod to the next update
 		}
 		
-	}
-	public static void doOverallUpdate(){
-		overallUpdate.update();
 	}
 	public void update(){
 		updateAll(updatables.get(getState()));
