@@ -31,6 +31,7 @@ public class Mecanum {
 	IMU imu;
 	private double desiredSpeed;
 	private double desiredAngle;
+	private double desiredTurnSpeed;
 	private double errorIntegral;
 	private double errorDerivative;
 	private double lastError;
@@ -55,35 +56,29 @@ public class Mecanum {
 		double backLeft;
 		double backRight;
 
-		frontLeft = Math.sin(desiredAngle + Math.PI / 4) + turnSpeed;
-		frontRight = Math.cos(desiredAngle + Math.PI / 4) - turnSpeed;
-		backLeft = Math.cos(desiredAngle + Math.PI / 4) + turnSpeed;
-		backRight = Math.sin(desiredAngle + Math.PI / 4) - turnSpeed;
+		frontLeft = desiredSpeed*Math.sin(desiredAngle + Math.PI / 4) + turnSpeed;
+		frontRight = desiredSpeed*Math.cos(desiredAngle + Math.PI / 4) - turnSpeed;
+		backLeft = desiredSpeed*Math.cos(desiredAngle + Math.PI / 4) + turnSpeed;
+		backRight = desiredSpeed*Math.sin(desiredAngle + Math.PI / 4) - turnSpeed;
 
 		double scaleFactor = Math.max(Math.max(Math.max(Math.abs(frontLeft),Math.abs(frontRight)),Math.abs(backLeft)),Math.abs(backRight));
 
-		frontLeftWheel.set(-desiredSpeed * frontLeft / scaleFactor);
-		frontRightWheel.set(desiredSpeed * frontRight / scaleFactor);
-		backLeftWheel.set(-desiredSpeed * backLeft / scaleFactor);
-		backRightWheel.set(desiredSpeed * backRight / scaleFactor);
-	}
-	
-	private void turn(double speed){
-		frontLeftWheel.set(speed);
-		frontRightWheel.set(speed);
-		backLeftWheel.set(speed);
-		backRightWheel.set(speed);
+		frontLeftWheel.set(frontLeft / scaleFactor);
+		frontRightWheel.set(frontRight / scaleFactor);
+		backLeftWheel.set(backLeft / scaleFactor);
+		backRightWheel.set(backRight / scaleFactor);
 	}
 	
 	public void update() {
+		/*
 		double error = imu.getAngle() - this.desiredAngle;
 		this.errorIntegral += error;
 		this.errorDerivative = (error-this.lastError)/0.005;
 		
 		double turnSpeed = this.P*error + this.I*this.errorIntegral + this.D*this.errorDerivative;
-		
-		this.move(this.desiredSpeed, this.desiredAngle, turnSpeed);
-		this.lastError = error;
+		*/
+		this.move(this.desiredSpeed, this.desiredAngle, desiredTurnSpeed);
+		//this.lastError = error;
 	}
 	
 	
@@ -92,7 +87,7 @@ public class Mecanum {
 		this.desiredSpeed = desiredSpeed;
 	}
 	public void setDesiredTurnSpeed(double turnSpeed){
-		desiredAngle+=turnSpeed;
+		this.desiredTurnSpeed=turnSpeed;
 	}
 	
 }
