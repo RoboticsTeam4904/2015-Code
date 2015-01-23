@@ -1,6 +1,5 @@
 package org.usfirst.frc.team4904.robot;
 
-import edu.wpi.first.wpilibj.SpeedController;
 
 public class OperatorNachi extends Operator {
 	
