@@ -22,6 +22,10 @@ public class Grabber extends Talon {
 		if (mode == Operator.MODE_THIN_TOTE) moveToWidth(THIN_TOTE_WIDTH);
 		else if (mode == Operator.MODE_WIDE_TOTE) moveToWidth(WIDE_TOTE_WIDTH);
 		else if (mode == Operator.MODE_CAN) moveToWidth(CAN_WIDTH);
+
+		if (mode == Operator.MODE_THIN_TOTE + 10) moveToWidth(THIN_TOTE_WIDTH + 10);
+		else if (mode == Operator.MODE_WIDE_TOTE + 10) moveToWidth(WIDE_TOTE_WIDTH + 10);
+		else if (mode == Operator.MODE_CAN + 10) moveToWidth(CAN_WIDTH + 10);
 	}
 	
 	public void move(double speed){
