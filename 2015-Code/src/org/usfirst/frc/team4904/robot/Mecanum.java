@@ -18,7 +18,7 @@ package org.usfirst.frc.team4904.robot;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.VictorSP;
 
-public class Mecanum implements Updatable{
+public class Mecanum implements IUpdatable{
 	
 	// Default ports for motors
 	private static final int FRONT_LEFT_WHEEL_PORT=0;

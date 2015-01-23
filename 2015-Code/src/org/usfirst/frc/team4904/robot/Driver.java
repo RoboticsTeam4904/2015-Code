@@ -1,6 +1,6 @@
 package org.usfirst.frc.team4904.robot;
 
-public abstract class Driver implements Updatable{
+public abstract class Driver implements IUpdatable{
 	
 	public Driver(Mecanum mecanumDrive, XboxController xboxController){
 		this.mecanumDrive=mecanumDrive;

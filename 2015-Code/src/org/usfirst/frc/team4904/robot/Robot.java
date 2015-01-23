@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj.SampleRobot;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.Timer;
 
-public class Robot extends SampleRobot implements Updatable{
+public class Robot extends SampleRobot implements IUpdatable{
 	private static final int WINCH_PORT=4;
 	private static final int GRABBER_PORT=5;
 	private static final int JOYSTICK_PORT=0;
@@ -26,8 +26,8 @@ public class Robot extends SampleRobot implements Updatable{
 	private final AutoAlign align;		// the AutoAlign class contains code to align the robot with totes and cans
 	
 	// Update system
-	private final Updatable[] updatables;
-	public static Updatable overallUpdate;
+	private final IUpdatable[] updatables;
+	public static IUpdatable overallUpdate;
 	private final SpeedController[] speedControllers;
 	private final double updatePeriod = 0.005; // update every 0.005 seconds/5 milliseconds (200Hz)
 	public Robot() {
@@ -51,7 +51,7 @@ public class Robot extends SampleRobot implements Updatable{
 		operator = new OperatorGriffin(stick,winch,align);
 		driver = new DriverNathan(mecanumDrive,xboxController);
 
-		updatables=new Updatable[]{driver,operator,mecanumDrive,imu};
+		updatables=new IUpdatable[]{driver,operator,mecanumDrive,imu};
 		speedControllers=new SpeedController[]{winch,grabber};
 		overallUpdate=this;
 	}
@@ -108,7 +108,7 @@ public class Robot extends SampleRobot implements Updatable{
 		}
 	}
 	private void updateAll(){
-		for(Updatable updatable : updatables){
+		for(IUpdatable updatable : updatables){
 			updatable.update();
 		}
 	}

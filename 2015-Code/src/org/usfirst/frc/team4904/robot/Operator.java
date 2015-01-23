@@ -1,6 +1,6 @@
 package org.usfirst.frc.team4904.robot;
 
-public abstract class Operator implements Updatable{
+public abstract class Operator implements IUpdatable{
 	
 	protected final LogitechJoystick stick;
 	protected final Winch winch;
