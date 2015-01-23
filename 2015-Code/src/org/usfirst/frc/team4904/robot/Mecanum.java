@@ -30,6 +30,14 @@ public class Mecanum implements Updatable{
 	private double desiredAngle;
 	private double desiredTurnSpeed;
 	
+	public Mecanum(IMU imu){
+		// Initialize motor controllers (numbers correspond to PWM port on roboRIO)
+		// This allows default initialization with motors 0-3
+		this.frontLeftWheel = new VictorSP(0);
+		this.frontRightWheel = new VictorSP(1);
+		this.backLeftWheel = new VictorSP(2);
+		this.backRightWheel = new VictorSP(3);
+	}
 	
 	public Mecanum(SpeedController frontLeftWheel, SpeedController frontRightWheel, SpeedController backLeftWheel, SpeedController backRightWheel, IMU imu) {
 		this.frontLeftWheel = frontLeftWheel;
