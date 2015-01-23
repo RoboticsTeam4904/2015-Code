@@ -19,8 +19,7 @@ public class OperatorGriffin extends Operator {
 		if (stick.x9.get()) release(MODE_WIDE_TOTE); // When button 9 is pressed, release a wide tote
 		if (stick.x7.get()) release(MODE_CAN); // When button 7 is pressed, release a can
 	 	
-		if (winchTimer > 0) winchTimer--; // Winch can move over multiple cycles, so set a countdown
-		else winch.set(0); // If the countdown is done, stop the winch
+		updateWinch();
 	}
 
 }
