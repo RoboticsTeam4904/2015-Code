@@ -7,23 +7,30 @@ import edu.wpi.first.wpilibj.VictorSP;
 
 public class Robot extends SampleRobot implements Updatable{
 	
-	private final LogitechJoystick stick;	// the X3D Extreme3DPro Logitech joystick (right hand) - operator
-	private final XboxController xboxController; 	// the Xbox 360 controller - driver
+	private LogitechJoystick stick;			// the X3D Extreme3DPro Logitech joystick (right hand) - operator
+	private XboxController xboxController; 	// the Xbox 360 controller - driver
 	
-	private final UDAR udar;				// the UDAR (ultrasonic detection and ranging)
-	private final IMU imu;
+	// Sensor classes
+	private UDAR udar;				// the UDAR (ultrasonic detection and ranging)
+	private IMU imu;				// the IMU (inertial measurement unit)
+	private LIDAR lidar;			// the LIDAR (light detection and ranging)
 	
-	//Advanced movement controllers
-	private final Winch winch;			// the Winch class takes care of moving to specific heights
-	private final Grabber grabber;		// the grabber class takes care of openning and closing the grabber
-	private final Mecanum mecanumDrive;	// the Mecanum class that takes care of the math required to use mecanum drive
-	private Driver driver;
-	private Operator operator;
-	private AutoAlign align;		// the AutoAlign class contains code to align the robot with totes and cans
-	private Updatable[] updatables;
-	private final double updatePeriod = 0.005; // update every 0.005 seconds/5 milliseconds (200Hz)
+	// movement controllers
+	private Winch winch;			// the Winch class takes care of moving to specific heights
+	private Grabber grabber;		// the grabber class takes care of openning and closing the grabber
+	private Mecanum mecanumDrive;	// the Mecanum class that takes care of the math required to use mecanum drive
 	private SpeedController[] speedControllers;
+	
+	// Control classes
+	private Driver driver;			// the driver class 
+	private Operator operator;		// the operator class
+	private AutoAlign align;		// the AutoAlign class contains code to align the robot with totes and cans
+	
+	// Update system
+	private Updatable[] updatables;
 	public static Updatable overallUpdate;
+	
+	private final double updatePeriod = 0.005; // update every 0.005 seconds/5 milliseconds (200Hz)
 	public Robot() {
 		System.out.println("*** INITIALIZING ROBOT ***"); // Print the line "*** INITIALIZING ROBOT ***"
 		
@@ -37,13 +44,16 @@ public class Robot extends SampleRobot implements Updatable{
 		stick = new LogitechJoystick(0);
 		xboxController = new XboxController(1);
 		
-		//Initialize sensors
-		udar = new UDAR(); // Initialize UDAR
+		// Initialize sensors
+		udar = new UDAR(); 		// Initialize UDAR
+		imu = new IMU(); 		// Initialize IMU
+		
+		// Initialize control system
+		align = new AutoAlign(mecanumDrive, udar, imu, grabber);	// Initialize AutoAlign system
+		operator = new OperatorGriffin(stick,winch,align); 			// Initialize operator (who needs stick, winch, and align)
+		driver = new DriverNathan(mecanumDrive,xboxController); 	// Initialize driver (who needs xbox and mecanum)
 		
 		
-		align = new AutoAlign(mecanumDrive, udar, imu, grabber); // Initialize AutoAlign system
-		operator = new OperatorGriffin(stick,winch,align);
-		driver = new DriverNathan(mecanumDrive,xboxController);
 		updatables=new Updatable[]{driver,operator,mecanumDrive,imu};
 		speedControllers=new SpeedController[]{winch,grabber};
 		overallUpdate=this;
