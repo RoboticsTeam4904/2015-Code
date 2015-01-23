@@ -6,7 +6,6 @@ public class Grabber extends Talon {
 	
 	static final double MAX_WIDTH = 100;
 
-
 	public static final double THIN_TOTE_WIDTH = 0;
 	public static final double WIDE_TOTE_WIDTH = 0;
 	public static final double CAN_WIDTH = 0;
