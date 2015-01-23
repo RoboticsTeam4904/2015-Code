@@ -15,8 +15,8 @@ public class Robot extends SampleRobot implements IUpdatable{
 	private static enum State{
 		STATE_TELEOPERATED, STATE_AUTONOMOUS, STATE_DISABLED
 	}
-	private LogitechJoystick stick;			// the X3D Extreme3DPro Logitech joystick (right hand) - operator
-	private XboxController xboxController; 	// the Xbox 360 controller - driver
+	private final LogitechJoystick stick;			// the X3D Extreme3DPro Logitech joystick (right hand) - operator
+	private final XboxController xboxController; 	// the Xbox 360 controller - driver
 	
 	private final UDAR udar;				// the UDAR (ultrasonic detection and ranging)
 	private final IMU imu;
