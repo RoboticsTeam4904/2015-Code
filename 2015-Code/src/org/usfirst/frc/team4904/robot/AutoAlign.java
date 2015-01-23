@@ -22,9 +22,6 @@ public class AutoAlign {
 		this.grabber = grabber;
 		this.lidar=lidar;
 	}
-	// TODO OVERALL: Make aligning take place in update.
-	// Robot should still be ticking while aligning is taking place
-	// If the aligning happens in the toteGrab function, then that blocks the ticking of the robot
 	public void grabTote (boolean wide) {
 		if (currentState != State.EMPTY) {
 			return;
