@@ -79,7 +79,7 @@ public class Robot extends SampleRobot {
 			
 			
 			mecanumDrive.update();	// Update the mecanum drive
-			imu.update();
+			imu.update(); // Update the imu
 			Timer.delay(updatePeriod);	// wait delay specified by updatePeriod to the next update
 
 		}
@@ -91,10 +91,10 @@ public class Robot extends SampleRobot {
 		while (isOperatorControl() && isEnabled()) { // While the robot is set to operator control and is enabled
 			leftFront.set(stick.getY());
 			
-			driver.update();
-			operator.update();
+			driver.update(); // Update the driver
+			operator.update(); // Update the operator
 			mecanumDrive.update(); // Update the mecanum drive
-			imu.update();
+			imu.update(); // Update the imu
 			Timer.delay(updatePeriod);	// wait delay specified by updatePeriod to the next update
 		}
 		
