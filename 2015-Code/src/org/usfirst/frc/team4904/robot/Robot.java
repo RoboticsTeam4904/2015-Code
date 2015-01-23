@@ -83,6 +83,10 @@ public class Robot extends SampleRobot {
 	private void disableMotors(){
 		winch.set(0);
 		grabber.set(0);
+		frontLeftWheel.set(0);
+		frontRightWheel.set(0);
+		backLeftWheel.set(0);
+		backRightWheel.set(0);
 		// TODO This function also should disable the mecanum drives
 	}
 	
