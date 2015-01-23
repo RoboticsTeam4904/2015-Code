@@ -8,9 +8,9 @@ public abstract class Operator {
 	SpeedController winch;
 	AutoAlign align;
 	int winchTimer;
-	static final int MODE_THIN_TOTE = 0;
-	static final int MODE_WIDE_TOTE = 1;
-	static final int MODE_CAN = 2;
+	protected static final int MODE_THIN_TOTE = 0;
+	protected static final int MODE_WIDE_TOTE = 1;
+	protected static final int MODE_CAN = 2;
 	
 	public Operator(LogitechJoystick stick, SpeedController winch, AutoAlign align){
 		this.stick = stick;
