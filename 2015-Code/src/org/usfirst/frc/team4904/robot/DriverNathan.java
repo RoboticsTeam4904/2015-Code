@@ -3,8 +3,7 @@ package org.usfirst.frc.team4904.robot;
 public class DriverNathan extends Driver {
 	
 	public DriverNathan(Mecanum mecanumDrive, Xbox xboxController){
-		this.mecanumDrive = mecanumDrive;
-		this.xboxController = xboxController;
+		super(mecanumDrive,xboxController);
 	}
 	
 	public void update() {
