@@ -12,11 +12,11 @@ public abstract class Driver implements Updatable{
 	
 	public abstract void update();
 	
-	protected void move(double speed, double angle){
+	protected void setMovement(double speed, double angle){
 		mecanumDrive.setDesiredSpeedDirection(speed, angle);
 	}
 	
-	protected void turn(double speed){
+	protected void setTurn(double speed){
 		mecanumDrive.setDesiredTurnSpeed(speed);
 	}
 	

@@ -10,6 +10,7 @@ public class AutoAlign implements Updatable{
 	
 	private volatile boolean wide;
 	private volatile boolean isCurrentlyAligning;
+	private volatile boolean isAligningWithCan;
 	public AutoAlign(Mecanum mecanum, UDAR udar, LIDAR lidar, IMU imu, Grabber grabber){
 		this.mecanum = mecanum;
 		this.udar = udar;
@@ -17,11 +18,15 @@ public class AutoAlign implements Updatable{
 		this.grabber = grabber;
 		this.lidar=lidar;
 	}
-	
+	// TODO OVERALL: Make aligning multi-threaded OR in update.
+	// Robot should still be ticking while aligning is taking place
 	public void toteGrab(){
 		if(isCurrentlyAligning){
 			return;
 		}
+		isCurrentlyAligning=true;
+		isAligningWithCan=false;
+		
 		// TODO put alignment code
 		// TODO set "wide" boolean based on sensor data
 		if (wide) grabber.setWidth(Operator.MODE_WIDE_TOTE); // if we are picking up a wide tote, set the grabber to the wide tote width
@@ -32,6 +37,8 @@ public class AutoAlign implements Updatable{
 		if(isCurrentlyAligning){
 			return;
 		}
+		isCurrentlyAligning=true;
+		isAligningWithCan=true;
 		// TODO put alignment code
 		
 		grabber.setWidth(Operator.MODE_CAN);

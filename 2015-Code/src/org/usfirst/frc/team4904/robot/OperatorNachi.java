@@ -3,7 +3,7 @@ package org.usfirst.frc.team4904.robot;
 
 public class OperatorNachi extends Operator {
 	
-	boolean holdingTote;
+	boolean holdingTote;// TODO these two should be in & handled by autoalign
 	boolean holdingCan;
 	
 	public OperatorNachi(LogitechJoystick stick, Winch winch, AutoAlign align){
@@ -30,8 +30,7 @@ public class OperatorNachi extends Operator {
 		if (stick.x5.get()) lower(10); // When button 5 is pressed, lower the winch all the way
 		adjust(stick.getZ()); // Always adjust by Z axis
 		
-		if (winchTimer > 0) winchTimer--; // Winch can move over multiple cycles, so set a countdown
-		else winch.set(0); // If the countdown is done, stop the winch
+		updateWinch();
 	}
 
 }

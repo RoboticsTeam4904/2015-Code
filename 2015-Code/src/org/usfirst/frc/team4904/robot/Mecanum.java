@@ -31,7 +31,7 @@ public class Mecanum implements Updatable{
 	private final SpeedController backLeftWheel;
 	private final SpeedController backRightWheel;
 	
-	IMU imu;
+	private final IMU imu;
 	private double desiredSpeed;
 	private double desiredAngle;
 	private double desiredTurnSpeed;

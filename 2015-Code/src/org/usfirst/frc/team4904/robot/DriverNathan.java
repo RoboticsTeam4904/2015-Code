@@ -6,14 +6,14 @@ public class DriverNathan extends Driver {
 		super(mecanumDrive,xboxController);
 	}
 	
-	public void update() {
+	public synchronized void update() {
 		double angle = Math.atan2(xboxController.getY(), xboxController.getX());// TODO atan needs a if statement checking if x is negative
 		double speed = angle*Math.asin(xboxController.getY());
 		
-		move(speed, angle);
+		setMovement(speed, angle);
 		
 		double turnSpeed = xboxController.getTwist(); // lols cats are fun
-		turn(turnSpeed);//Actually do the turning
+		setTurn(turnSpeed);//Actually do the turning
 	}
 
 }
