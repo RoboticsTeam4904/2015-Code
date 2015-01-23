@@ -80,7 +80,7 @@ public class AutoAlign {
 		case HOLDING_WIDE_TOTE:
 			return Operator.MODE_WIDE_TOTE;
 		case EMPTY:
-			return 5;
+			return 5;// TODO put default empty state here
 		default:
 			throw new Error("Current state of AutoAlign does not exist");
 		}

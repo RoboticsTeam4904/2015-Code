@@ -1,9 +1,8 @@
 package org.usfirst.frc.team4904.robot;
 
-import java.io.Serializable;
 import java.math.BigInteger;
 
-public class LIDAR implements Serializable{
+public class LIDAR{
 	
 	
 	public LIDAR(){

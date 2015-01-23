@@ -1,10 +1,9 @@
 package org.usfirst.frc.team4904.robot;
 
-import java.io.Serializable;
 
 import edu.wpi.first.wpilibj.Talon;
 
-public class Grabber extends Talon implements Serializable{
+public class Grabber extends Talon{
 	
 	private static final double MAX_WIDTH = 100;
 

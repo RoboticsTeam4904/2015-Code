@@ -1,12 +1,11 @@
 package org.usfirst.frc.team4904.robot;
 
-import java.io.Serializable;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 
-public class XboxController extends Joystick implements Serializable{
+public class XboxController extends Joystick{
 	
 	protected Button aButton;
 	private volatile Button bButton;
