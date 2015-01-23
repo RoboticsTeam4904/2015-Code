@@ -1,5 +1,7 @@
 package org.usfirst.frc.team4904.robot;
 
-public interface Updatable {
+import java.io.Serializable;
+
+public interface Updatable extends Serializable{
 	public void update();
 }

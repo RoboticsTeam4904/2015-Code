@@ -1,8 +1,10 @@
 package org.usfirst.frc.team4904.robot;
 
+import java.io.Serializable;
+
 import edu.wpi.first.wpilibj.Talon;
 
-public class Winch extends Talon {
+public class Winch extends Talon implements Serializable{
 	
 	static final int MAX_HEIGHT = 10;
 
