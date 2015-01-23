@@ -55,9 +55,11 @@ public class Robot extends SampleRobot implements IUpdatable{
 		operator = new OperatorGriffin(stick,winch,align);
 		driver = new DriverNathan(mecanumDrive,xboxController);
 
-		updatables.put(State.STATE_TELEOPERATED,new IUpdatable[]{driver,operator,align,mecanumDrive,imu});
-		updatables.put(State.STATE_DISABLED,new IUpdatable[]{imu});
-		updatables.put(State.STATE_AUTONOMOUS,new IUpdatable[]{align,mecanumDrive,imu});
+		updatables.put(State.STATE_TELEOPERATED,new IUpdatable[]{driver,operator,align,mecanumDrive,imu});// In teleoperated mode, update everything
+		updatables.put(State.STATE_DISABLED,new IUpdatable[]{imu});// In disabled mode, only update the IMU. The IMU always needs to be updated
+		updatables.put(State.STATE_AUTONOMOUS,new IUpdatable[]{align,mecanumDrive,imu});// In autonomous mode, update autoalign, mecanumdrive, and IMU
+		// TODO Create DriverAutonomous and OperatorAutonomous classes
+		
 		speedControllers=new SpeedController[]{winch,grabber};
 	}
 	
@@ -85,17 +87,17 @@ public class Robot extends SampleRobot implements IUpdatable{
 	}
 	private void doLoop(State desiredState){
 		while(getState()==desiredState){//Basically, run until the robot changes state
-			update();
+			update();//This updates everything that needs to be updated, based on the current state
 			Timer.delay(updatePeriod);
 		}
 	}
-	public void update(){
-		updateAll(updatables.get(getState()));
+	public void update(){// TODO have doLoop pass the state to this function so getState() is only called once per tick.
+		updateAll(updatables.get(getState()));// Look up in the HashMap what needs to be updated in the current state
 	}
 	private State getState(){
 		return isEnabled()?(isOperatorControl()?State.STATE_TELEOPERATED:(isAutonomous()?State.STATE_AUTONOMOUS:State.STATE_DISABLED)):State.STATE_DISABLED;
 	}
-	private void updateAll(IUpdatable[] toUpdate){
+	private static void updateAll(IUpdatable[] toUpdate){//Update everything in the list
 		for(IUpdatable updatable : toUpdate){
 			updatable.update();
 		}
