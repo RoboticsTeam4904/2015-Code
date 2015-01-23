@@ -30,15 +30,13 @@ public abstract class Operator implements IUpdatable{
 	}
 
 	protected void grab(int mode) {
-		if (mode == MODE_THIN_TOTE) align.toteGrab();
-		else if (mode == MODE_WIDE_TOTE) align.toteGrab();
+		if (mode == MODE_THIN_TOTE) align.toteGrab(false);
+		else if (mode == MODE_WIDE_TOTE) align.toteGrab(true);
 		else if (mode == MODE_CAN) align.canGrab();
 	}
 
-	protected void release(int mode) {
-		if (mode == MODE_THIN_TOTE) align.toteRelease();
-		else if (mode == MODE_WIDE_TOTE) align.toteRelease();
-		else if (mode == MODE_CAN) align.canRelease();
+	protected void release() {
+		align.release();
 	}
 
 	protected void adjust(double value) {

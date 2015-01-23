@@ -15,9 +15,9 @@ public class OperatorGriffin extends Operator {
 		if (stick.x12.get()) grab(MODE_THIN_TOTE); // When button 12 is pressed, grab a thin tote
 		if (stick.x10.get()) grab(MODE_WIDE_TOTE); // When button 10 is pressed, grab a wide tote
 		if (stick.x8.get()) grab(MODE_CAN); // When button 8 is pressed, grab a can
-		if (stick.x11.get()) release(MODE_THIN_TOTE); // When button 11 is pressed, release a thin tote
-		if (stick.x9.get()) release(MODE_WIDE_TOTE); // When button 9 is pressed, release a wide tote
-		if (stick.x7.get()) release(MODE_CAN); // When button 7 is pressed, release a can
+		if (stick.x11.get()) release(); // When button 11 is pressed, release a thin tote
+		if (stick.x9.get()) release(); // When button 9 is pressed, release a wide tote
+		if (stick.x7.get()) release(); // When button 7 is pressed, release a can
 	 	
 		updateWinch();
 	}

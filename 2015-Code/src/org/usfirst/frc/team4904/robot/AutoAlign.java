@@ -7,10 +7,10 @@ public class AutoAlign implements IUpdatable{
 	private final IMU imu;
 	private final LIDAR lidar;
 	private final Grabber grabber;
-	
-	private volatile boolean wide;
-	private volatile boolean isCurrentlyAligning;
-	private volatile boolean isAligningWithCan;
+	private enum State{
+		EMPTY, ALIGNING_WITH_WIDE_TOTE, ALIGNING_WITH_THIN_TOTE, ALIGNING_WITH_CAN, HOLDING_CAN, HOLDING_THIN_TOTE, HOLDING_WIDE_TOTE
+	}
+	private volatile State currentState;
 	public AutoAlign(Mecanum mecanum, UDAR udar, LIDAR lidar, IMU imu, Grabber grabber){
 		this.mecanum = mecanum;
 		this.udar = udar;
@@ -20,48 +20,72 @@ public class AutoAlign implements IUpdatable{
 	}
 	// TODO OVERALL: Make aligning multi-threaded OR in update.
 	// Robot should still be ticking while aligning is taking place
-	public void toteGrab(){
-		if(isCurrentlyAligning){
+	public void toteGrab(boolean wide){
+		if(currentState!=State.EMPTY){
 			return;
 		}
-		isCurrentlyAligning=true;
-		isAligningWithCan=false;
+		currentState=wide?State.ALIGNING_WITH_WIDE_TOTE:State.ALIGNING_WITH_THIN_TOTE;
 		
 		// TODO put alignment code
-		// TODO set "wide" boolean based on sensor data
-		if (wide) grabber.setWidth(Operator.MODE_WIDE_TOTE); // if we are picking up a wide tote, set the grabber to the wide tote width
-		else grabber.setWidth(Operator.MODE_THIN_TOTE); // if we are picking up a thin tote, set the grabber to the thin tote width. If you are reading the end of this comment, you must be looking for significantly more information.
+		// TODO set "wide" boolean based on sensor data in case wring button pressed
 	}
 	
 	public void canGrab(){
-		if(isCurrentlyAligning){
+		if(currentState!=State.EMPTY){
 			return;
 		}
-		isCurrentlyAligning=true;
-		isAligningWithCan=true;
+		currentState=State.ALIGNING_WITH_CAN;
 		// TODO put alignment code
 		
-		grabber.setWidth(Operator.MODE_CAN);
 	}
 	
-	public void toteRelease(){
+	private void toteRelease(boolean wide){
 		// TODO put alignment code
-		
-		if(wide) grabber.setWidth(Operator.MODE_WIDE_TOTE + 10); // set grabber width to wider than tote to release tote
-		else grabber.setWidth(Operator.MODE_THIN_TOTE + 10);
+		currentState=State.EMPTY;
 	}
 	
-	public void canRelease(){
+	private void canRelease(){
 		// TODO put alignment code -- why do we need to align when releasing???
-		
-		grabber.setWidth(Operator.MODE_CAN + 10); // set grabber width to wider than can width to release can
+		currentState=State.EMPTY;
 	}
 
 	public void update() {
-		if(isCurrentlyAligning){
-			// TODO put alignment code
+		grabber.setWidth(getDesiredGrabberState());
+	}
+	public int getDesiredGrabberState(){
+		switch(currentState){
+		case ALIGNING_WITH_CAN:
+			return Operator.MODE_CAN + 10;
+		case ALIGNING_WITH_THIN_TOTE:
+			return Operator.MODE_THIN_TOTE + 10;
+		case ALIGNING_WITH_WIDE_TOTE:
+			return Operator.MODE_WIDE_TOTE + 10;
+		case HOLDING_CAN:
+			return Operator.MODE_CAN;
+		case HOLDING_THIN_TOTE:
+			return Operator.MODE_THIN_TOTE;
+		case HOLDING_WIDE_TOTE:
+			return Operator.MODE_WIDE_TOTE;
+		case EMPTY:
+			return 5;
 		}
-		
+		//should never get here
+		return 5021;
+	}
+	public void release(){
+		switch(currentState){
+		case HOLDING_WIDE_TOTE:
+			toteRelease(true);
+			return;
+		case HOLDING_THIN_TOTE:
+			toteRelease(false);
+			return;
+		case HOLDING_CAN:
+			canRelease();
+			return;
+			default:
+				//You pressed the release button when you aren't holding anything
+		}
 	}
 	
 }

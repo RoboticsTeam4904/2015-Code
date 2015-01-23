@@ -16,12 +16,12 @@ public class OperatorNachi extends Operator {
 	public synchronized void update() {
 		if (stick.x1.get()){ // When button 1 is pressed, toggle tote grabbing
 			if(!holdingTote) grab(MODE_WIDE_TOTE);
-			else release(MODE_WIDE_TOTE);
+			else release();
 			holdingTote = !holdingTote;
 		}
 		if (stick.x2.get()){ // When button 2 is pressed, toggle can grabbing
 			if(!holdingCan) grab(MODE_CAN);
-			else release(MODE_CAN);
+			else release();
 			holdingCan = !holdingCan;
 		}
 		if (stick.x4.get()) raise(1); // When button 4 is pressed, raise the winch one level
