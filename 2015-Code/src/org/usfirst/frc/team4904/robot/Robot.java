@@ -27,6 +27,7 @@ public class Robot extends SampleRobot implements Updatable{
 	private Updatable[] updatables;
 	private final double updatePeriod = 0.005; // update every 0.005 seconds/5 milliseconds (200Hz)
 	private SpeedController[] speedControllers;
+	private static Robot robot;
 	public Robot() {
 		System.out.println("*** INITIALIZING ROBOT ***"); // Print the line "*** INITIALIZING ROBOT ***"
 		
@@ -54,6 +55,7 @@ public class Robot extends SampleRobot implements Updatable{
 		driver = new DriverNathan(mecanumDrive,xboxController);
 		updatables=new Updatable[]{driver,operator,mecanumDrive,imu};
 		speedControllers=new SpeedController[]{leftFront,rightFront,leftBack,rightBack,winch,grabber};
+		robot=this;
 	}
 	
 	public void disabled(){
@@ -65,7 +67,7 @@ public class Robot extends SampleRobot implements Updatable{
 		}
 		
 		while(isDisabled()){ // While the robot is set to disabled
-			update();
+			robot.update();
 			Timer.delay(updatePeriod);
 		}
 	}
@@ -77,7 +79,7 @@ public class Robot extends SampleRobot implements Updatable{
 			leftFront.set(1);
 			
 			
-			update();
+			robot.update();
 			Timer.delay(updatePeriod);	// wait delay specified by updatePeriod to the next update
 
 		}
@@ -89,7 +91,7 @@ public class Robot extends SampleRobot implements Updatable{
 		while (isOperatorControl() && isEnabled()) { // While the robot is set to operator control and is enabled
 			leftFront.set(stick.getY());
 			
-			update();
+			robot.update();
 			Timer.delay(updatePeriod);	// wait delay specified by updatePeriod to the next update
 		}
 		
