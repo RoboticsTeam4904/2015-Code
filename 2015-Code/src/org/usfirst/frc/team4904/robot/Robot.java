@@ -3,7 +3,6 @@ package org.usfirst.frc.team4904.robot;
 import edu.wpi.first.wpilibj.SampleRobot;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.VictorSP;
 
 public class Robot extends SampleRobot implements Updatable{
 	
