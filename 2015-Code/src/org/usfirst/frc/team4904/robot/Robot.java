@@ -16,15 +16,15 @@ public class Robot extends SampleRobot implements Updatable{
 	private final Winch winch;			// the Winch class takes care of moving to specific heights
 	private final Grabber grabber;		// the grabber class takes care of openning and closing the grabber
 	private final Mecanum mecanumDrive;	// the Mecanum class that takes care of the math required to use mecanum drive
-	private Driver driver;
-	private Operator operator;
+	private final Driver driver;
+	private final Operator operator;
 
-	private AutoAlign align;		// the AutoAlign class contains code to align the robot with totes and cans
+	private final AutoAlign align;		// the AutoAlign class contains code to align the robot with totes and cans
 	
 	// Update system
-	private Updatable[] updatables;
+	private final Updatable[] updatables;
 	public static Updatable overallUpdate;
-	private SpeedController[] speedControllers;
+	private final SpeedController[] speedControllers;
 	private final double updatePeriod = 0.005; // update every 0.005 seconds/5 milliseconds (200Hz)
 	public Robot() {
 		System.out.println("*** INITIALIZING ROBOT ***"); // Print the line "*** INITIALIZING ROBOT ***"
