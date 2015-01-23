@@ -6,13 +6,13 @@ public class Grabber extends Talon {
 	
 	static final double MAX_WIDTH = 100;
 
-	static final int MODE_THIN_TOTE = 0;
-	static final int MODE_WIDE_TOTE = 1;
-	static final int MODE_CAN = 2;
+	public static final int MODE_THIN_TOTE = 0;
+	public static final int MODE_WIDE_TOTE = 1;
+	public static final int MODE_CAN = 2;
 
-	private static final double THIN_TOTE_WIDTH = 0;
-	private static final double WIDE_TOTE_WIDTH = 0;
-	private static final double CAN_WIDTH = 0;
+	public static final double THIN_TOTE_WIDTH = 0;
+	public static final double WIDE_TOTE_WIDTH = 0;
+	public static final double CAN_WIDTH = 0;
 
 	public Grabber(int channel) {
 		super(channel);

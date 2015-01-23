@@ -1,16 +1,14 @@
 package org.usfirst.frc.team4904.robot;
 
-import edu.wpi.first.wpilibj.SpeedController;
-
 public class AutoAlign {
 	
 	Mecanum mecanum;
 	UDAR udar;
 	IMU imu;
 	
-	SpeedController grabber;
+	Grabber grabber;
 	
-	public AutoAlign(Mecanum mecanum, UDAR udar, IMU imu, SpeedController grabber){
+	public AutoAlign(Mecanum mecanum, UDAR udar, IMU imu, Grabber grabber){
 		this.mecanum = mecanum;
 		this.udar = udar;
 		this.imu = imu;
@@ -19,15 +17,22 @@ public class AutoAlign {
 	
 	public void toteGrab(){
 		
-	}
+		boolean wide = false;
+		
+		if (wide) grabber.setWidth(grabber.MODE_WIDE_TOTE);
+		else grabber.setWidth(grabber.MODE_THIN_TOTE);
+		}
 	
 	public void canGrab(){
 		
 		
+		grabber.setWidth(grabber.MODE_CAN);
 	}
 	
 	public void toteRelease(){
 		
+		
+		grabber.setWidth(mode);
 	}
 	
 	public void canRelease(){
