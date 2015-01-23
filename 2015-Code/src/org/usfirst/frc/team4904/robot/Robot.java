@@ -21,7 +21,8 @@ public class Robot extends SampleRobot {
 	private Winch winch;			// the Winch class takes care of moving to specific heights
 	private Grabber grabber;		// the grabber class takes care of openning and closing the grabber
 	private Mecanum mecanumDrive;	// the Mecanum class that takes care of the math required to use mecanum drive
-	
+	private Driver driver;
+	private Operator operator;
 	private AutoAlign align;		// the AutoAlign class contains code to align the robot with totes and cans
 
 	private final double updatePeriod = 0.005; // update every 0.005 seconds/5 milliseconds (200Hz)
@@ -49,6 +50,8 @@ public class Robot extends SampleRobot {
 		imu = new IMU(); // Initialize IMU
 		
 		align = new AutoAlign(mecanumDrive, udar, imu, grabber); // Initialize AutoAlign system
+		operator = new OperatorGriffin(stick,winch,align);
+		driver = new DriverNathan(mecanumDrive,xboxController);
 	}
 	
 	public void disabled(){
@@ -64,6 +67,7 @@ public class Robot extends SampleRobot {
 		
 		while(isDisabled()){ // While the robot is set to disabled
 			imu.update(); // Update IMU
+			Timer.delay(updatePeriod);
 		}
 	}
 	
@@ -75,6 +79,7 @@ public class Robot extends SampleRobot {
 			
 			
 			mecanumDrive.update();	// Update the mecanum drive
+			imu.update();
 			Timer.delay(updatePeriod);	// wait delay specified by updatePeriod to the next update
 
 		}
@@ -86,7 +91,10 @@ public class Robot extends SampleRobot {
 		while (isOperatorControl() && isEnabled()) { // While the robot is set to operator control and is enabled
 			leftFront.set(stick.getY());
 			
+			driver.update();
+			operator.update();
 			mecanumDrive.update(); // Update the mecanum drive
+			imu.update();
 			Timer.delay(updatePeriod);	// wait delay specified by updatePeriod to the next update
 		}
 		
