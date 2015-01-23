@@ -19,7 +19,7 @@ import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.Joystick;
 
-public class Mecanum {
+public class Mecanum implements Updatable{
 	SpeedController frontLeftWheel;
 	SpeedController frontRightWheel;
 	SpeedController backLeftWheel;
