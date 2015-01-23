@@ -1,8 +1,8 @@
 package org.usfirst.frc.team4904.robot;
 
-import edu.wpi.first.wpilibj.VictorSP;
+import edu.wpi.first.wpilibj.Talon;
 
-public class Winch extends VictorSP {
+public class Winch extends Talon {
 	
 	static final int MAX_HEIGHT = 10;
 

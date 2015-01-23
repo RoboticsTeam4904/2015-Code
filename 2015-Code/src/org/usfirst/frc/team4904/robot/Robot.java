@@ -10,7 +10,6 @@ public class Robot extends SampleRobot {
 	private VictorSP rightFront;	// the victor controlling the right front wheel
 	private VictorSP leftBack;		// the victor controlling the left back wheel
 	private VictorSP rightBack;		// the victor controlling the right back wheel
-	private Talon grabber;			// the talon controlling the fork's grabber
 	
 	private LogitechJoystick stick;	// the X3D Extreme3DPro Logitech joystick (right hand) - operator
 	private Xbox xboxController;// the Xbox 360 controller - driver
@@ -20,6 +19,7 @@ public class Robot extends SampleRobot {
 	
 	//Advanced movement controllers
 	private Winch winch;			// the Winch class takes care of moving to specific heights
+	private Grabber grabber;		// the grabber class takes care of openning and closing the grabber
 	private Mecanum mecanumDrive;	// the Mecanum class that takes care of the math required to use mecanum drive
 	
 	private AutoAlign align;		// the AutoAlign class contains code to align the robot with totes and cans
@@ -34,10 +34,10 @@ public class Robot extends SampleRobot {
 		rightFront = new VictorSP(1);
 		leftBack = new VictorSP(2);
 		rightBack = new VictorSP(3);
-		grabber = new Talon(5);
 		
 		//Initialize movement controllers
-		winch = new Winch(4);
+		winch = new Winch(4); // Initialize Winch control
+		grabber = new Grabber(5); // Initialize Grabber control
 		mecanumDrive = new Mecanum(leftFront, rightFront, leftBack, rightBack, imu); // Initialize Mecanum control
 		
 		// Initialize joysticks (numbers correspond to value set by driver station)
