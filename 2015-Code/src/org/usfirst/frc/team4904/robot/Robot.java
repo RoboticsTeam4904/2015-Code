@@ -12,7 +12,7 @@ public class Robot extends SampleRobot {
 	private VictorSP rightBack;		// the victor controlling the right back wheel
 	
 	private LogitechJoystick stick;	// the X3D Extreme3DPro Logitech joystick (right hand) - operator
-	private Xbox xboxController;// the Xbox 360 controller - driver
+	private Xbox xboxController; 	// the Xbox 360 controller - driver
 	
 	private UDAR udar;				// the UDAR (ultrasonic detection and ranging)
 	private IMU imu;
