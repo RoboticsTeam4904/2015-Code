@@ -7,8 +7,13 @@ public class AutonomousController {
 	private volatile double angle=0;
 	private volatile double speed=0;
 	private volatile double turnSpeed=0;
-	public AutonomousController(){
-		
+	private final UDAR udar;
+	private final IMU imu;
+	private final LIDAR lidar;
+	public AutonomousController(UDAR udar, IMU imu, LIDAR lidar){
+		this.udar=udar;
+		this.imu=imu;
+		this.lidar=lidar;
 	}
 	public void setDriver(DriverAutonomous driver){
 		if(this.driver!=null){
