@@ -24,7 +24,7 @@ public class Robot extends SampleRobot {
 	private Driver driver;
 	private Operator operator;
 	private AutoAlign align;		// the AutoAlign class contains code to align the robot with totes and cans
-
+	private Updatable[] updatables;
 	private final double updatePeriod = 0.005; // update every 0.005 seconds/5 milliseconds (200Hz)
 
 	public Robot() {
@@ -52,6 +52,7 @@ public class Robot extends SampleRobot {
 		align = new AutoAlign(mecanumDrive, udar, imu, grabber); // Initialize AutoAlign system
 		operator = new OperatorGriffin(stick,winch,align);
 		driver = new DriverNathan(mecanumDrive,xboxController);
+		updatables=new Updatable[]{driver,operator,mecanumDrive,imu};
 	}
 	
 	public void disabled(){
@@ -91,12 +92,14 @@ public class Robot extends SampleRobot {
 		while (isOperatorControl() && isEnabled()) { // While the robot is set to operator control and is enabled
 			leftFront.set(stick.getY());
 			
-			driver.update(); // Update the driver
-			operator.update(); // Update the operator
-			mecanumDrive.update(); // Update the mecanum drive
-			imu.update(); // Update the imu
+			updateAll();
 			Timer.delay(updatePeriod);	// wait delay specified by updatePeriod to the next update
 		}
 		
+	}
+	public void updateAll(){
+		for(Updatable updatable : updatables){
+			updatable.update();
+		}
 	}
 }
