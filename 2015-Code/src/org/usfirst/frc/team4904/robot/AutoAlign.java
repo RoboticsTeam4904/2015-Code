@@ -23,7 +23,7 @@ public class AutoAlign {
 		
 		if (wide) grabber.setWidth(Operator.MODE_WIDE_TOTE); // if we are picking up a wide tote, set the grabber to the wide tote width
 		else grabber.setWidth(Operator.MODE_THIN_TOTE); // if we are picking up a thin tote, set the grabber to the thin tote width. If you are reading the end of this comment, you must be looking for significantly more information.
-		}
+	}
 	
 	public void canGrab(){
 		// TODO put alignment code
