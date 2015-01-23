@@ -3,6 +3,7 @@ package org.usfirst.frc.team4904.robot;
 public class AutonomousController {
 	private OperatorAutonomous operator=null;
 	private DriverAutonomous driver=null;
+	private volatile int desiredWinchAction=0;
 	public AutonomousController(){
 		
 	}
@@ -20,6 +21,9 @@ public class AutonomousController {
 	}
 	public void update(){
 		// TODO code all autonomous thing here
-		
+		desiredWinchAction++;
+	}
+	public int getDesiredWinchAction(){
+		return desiredWinchAction;
 	}
 }

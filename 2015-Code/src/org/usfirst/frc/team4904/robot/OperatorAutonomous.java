@@ -10,7 +10,15 @@ public class OperatorAutonomous extends Operator{
 	}
 
 	public void update() {
-		// TODO controller.getDesiredWinchAction()
+		int action=controller.getDesiredWinchAction();
+		switch(action){// TODO finish!!!
+		case MODE_THIN_TOTE:
+			grab(MODE_THIN_TOTE);
+			break;
+		case MODE_WIDE_TOTE:
+			grab(MODE_WIDE_TOTE);
+			break;
+		}
 		updateWinch();
 	}
 

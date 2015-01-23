@@ -4,7 +4,7 @@ public abstract class Operator {
 	
 	protected final LogitechJoystick stick;
 	protected final Winch winch;
-	protected final AutoAlign align;
+	private final AutoAlign align;
 	protected volatile int winchTimer;
 	protected static final int MODE_THIN_TOTE = 0;
 	protected static final int MODE_WIDE_TOTE = 1;
