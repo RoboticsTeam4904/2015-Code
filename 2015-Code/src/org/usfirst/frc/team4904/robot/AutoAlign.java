@@ -1,6 +1,6 @@
 package org.usfirst.frc.team4904.robot;
 
-public class AutoAlign {
+public class AutoAlign implements Updatable{
 	
 	private final Mecanum mecanum;
 	private final UDAR udar;
@@ -9,7 +9,7 @@ public class AutoAlign {
 	private final Grabber grabber;
 	
 	private volatile boolean wide;
-	
+	private volatile boolean isCurrentlyAligning;
 	public AutoAlign(Mecanum mecanum, UDAR udar, LIDAR lidar, IMU imu, Grabber grabber){
 		this.mecanum = mecanum;
 		this.udar = udar;
@@ -19,7 +19,9 @@ public class AutoAlign {
 	}
 	
 	public void toteGrab(){
-		
+		if(isCurrentlyAligning){
+			return;
+		}
 		// TODO put alignment code
 		// TODO set "wide" boolean based on sensor data
 		if (wide) grabber.setWidth(Operator.MODE_WIDE_TOTE); // if we are picking up a wide tote, set the grabber to the wide tote width
@@ -27,6 +29,9 @@ public class AutoAlign {
 	}
 	
 	public void canGrab(){
+		if(isCurrentlyAligning){
+			return;
+		}
 		// TODO put alignment code
 		
 		grabber.setWidth(Operator.MODE_CAN);
@@ -40,9 +45,16 @@ public class AutoAlign {
 	}
 	
 	public void canRelease(){
-		// TODO put alignment code
+		// TODO put alignment code -- why do we need to align when releasing???
 		
 		grabber.setWidth(Operator.MODE_CAN + 10); // set grabber width to wider than can width to release can
+	}
+
+	public void update() {
+		if(isCurrentlyAligning){
+			// TODO put alignment code
+		}
+		
 	}
 	
 }
