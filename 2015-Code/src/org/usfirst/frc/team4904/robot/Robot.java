@@ -1,5 +1,8 @@
 package org.usfirst.frc.team4904.robot;
 
+import java.math.BigInteger;
+import java.util.HashMap;
+
 import edu.wpi.first.wpilibj.SampleRobot;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.Timer;
@@ -9,7 +12,9 @@ public class Robot extends SampleRobot implements IUpdatable{
 	private static final int GRABBER_PORT=5;
 	private static final int JOYSTICK_PORT=0;
 	private static final int CONTROLLER_PORT=1;
-	
+	private static enum State{
+		STATE_TELEOPERATED, STATE_AUTONOMOUS, STATE_DISABLED
+	}
 	private LogitechJoystick stick;			// the X3D Extreme3DPro Logitech joystick (right hand) - operator
 	private XboxController xboxController; 	// the Xbox 360 controller - driver
 	
@@ -26,7 +31,7 @@ public class Robot extends SampleRobot implements IUpdatable{
 	private final AutoAlign align;		// the AutoAlign class contains code to align the robot with totes and cans
 	
 	// Update system
-	private final IUpdatable[] updatables;
+	private final HashMap<State,IUpdatable[]> updatables=new HashMap<>();
 	public static IUpdatable overallUpdate;
 	private final SpeedController[] speedControllers;
 	private final double updatePeriod = 0.005; // update every 0.005 seconds/5 milliseconds (200Hz)
@@ -51,7 +56,9 @@ public class Robot extends SampleRobot implements IUpdatable{
 		operator = new OperatorGriffin(stick,winch,align);
 		driver = new DriverNathan(mecanumDrive,xboxController);
 
-		updatables=new IUpdatable[]{driver,operator,mecanumDrive,imu};
+		updatables.put(State.STATE_TELEOPERATED,new IUpdatable[]{driver,operator,align,mecanumDrive,imu});
+		updatables.put(State.STATE_DISABLED,new IUpdatable[]{imu});
+		updatables.put(State.STATE_AUTONOMOUS,new IUpdatable[]{align,mecanumDrive,imu});
 		speedControllers=new SpeedController[]{winch,grabber};
 		overallUpdate=this;
 	}
@@ -98,17 +105,13 @@ public class Robot extends SampleRobot implements IUpdatable{
 		overallUpdate.update();
 	}
 	public void update(){
-		if(isOperatorControl() && isEnabled()){
-			updateAll();
-		}else if (isAutonomous() && isEnabled()){
-			updatables[2].update();
-			updatables[3].update();
-		}else{
-			updatables[3].update();
-		}
+		updateAll(updatables.get(getState()));
 	}
-	private void updateAll(){
-		for(IUpdatable updatable : updatables){
+	private State getState(){
+		return isEnabled()?(isOperatorControl()?State.STATE_TELEOPERATED:(isAutonomous()?State.STATE_AUTONOMOUS:State.STATE_DISABLED)):State.STATE_DISABLED;
+	}
+	private void updateAll(IUpdatable[] toUpdate){
+		for(IUpdatable updatable : toUpdate){
 			updatable.update();
 		}
 	}
