@@ -14,7 +14,7 @@ public class OperatorNachi extends Operator {
 		holdingCan = false;
 	}
 	
-	public void update() {
+	public synchronized void update() {
 		if (stick.x1.get()){ // When button 1 is pressed, toggle tote grabbing
 			if(!holdingTote) grab(MODE_WIDE_TOTE);
 			else release(MODE_WIDE_TOTE);

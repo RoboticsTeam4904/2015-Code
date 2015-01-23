@@ -2,13 +2,13 @@ package org.usfirst.frc.team4904.robot;
 
 public class AutoAlign {
 	
-	Mecanum mecanum;
-	UDAR udar;
-	IMU imu;
+	private final Mecanum mecanum;
+	private final UDAR udar;
+	private final IMU imu;
 	
-	Grabber grabber;
+	private final Grabber grabber;
 	
-	private boolean wide;
+	private volatile boolean wide;
 	
 	public AutoAlign(Mecanum mecanum, UDAR udar, IMU imu, Grabber grabber){
 		this.mecanum = mecanum;

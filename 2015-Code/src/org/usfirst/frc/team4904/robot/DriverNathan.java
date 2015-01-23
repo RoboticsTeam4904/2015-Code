@@ -7,7 +7,7 @@ public class DriverNathan extends Driver {
 	}
 	
 	public void update() {
-		double angle = Math.atan2(xboxController.getY(), xboxController.getX());
+		double angle = Math.atan2(xboxController.getY(), xboxController.getX());// TODO atan needs a if statement checking if x is negative
 		double speed = angle*Math.asin(xboxController.getY());
 		
 		move(speed, angle);

@@ -14,7 +14,7 @@ public class IMU implements Updatable{
 		// TODO set current orientation as "forward"
 	}
 	
-	public void update() {
+	public synchronized void update() {
 		this.readData();
 		this.updateKalman();
 	}

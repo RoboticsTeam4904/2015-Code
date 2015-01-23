@@ -8,21 +8,19 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
 
 public class XboxController extends Joystick implements Serializable{
 	
-	Button aButton;
-	Button bButton;
-	Button xButton;
-	Button yButton;
-	Button leftBumper;
-	Button rightBumper;
-	Button backButton;
-	Button startButton;
-	Button leftStick;
-	Button rightStick;
+	protected Button aButton;
+	private volatile Button bButton;
+	protected final transient Button xButton;
+	private final Button yButton;
+	protected volatile Button leftBumper;
+	private transient Button rightBumper;
+	protected final Button backButton;
+	private volatile Button startButton;
+	protected transient Button leftStick;
+	private Button rightStick;
 	
 	public XboxController(int port) {
 		super(port);
-		// TODO Auto-generated constructor stub
-		
 		aButton = new JoystickButton(this, 1); // A button
 		bButton = new JoystickButton(this, 2); // B button
 		xButton = new JoystickButton(this, 3); // X button

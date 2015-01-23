@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj.Talon;
 
 public class Winch extends Talon implements Serializable{
 	
-	static final int MAX_HEIGHT = 10;
+	private static transient final int MAX_HEIGHT = 10;
 
 	public Winch(int channel) {
 		super(channel);

@@ -7,8 +7,8 @@ public abstract class Driver implements Updatable{
 		this.xboxController=xboxController;
 	}
 	
-	Mecanum mecanumDrive;
-	XboxController xboxController;
+	protected final Mecanum mecanumDrive;
+	protected final XboxController xboxController;
 	
 	public abstract void update();
 	

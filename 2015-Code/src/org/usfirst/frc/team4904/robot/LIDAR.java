@@ -1,9 +1,12 @@
 package org.usfirst.frc.team4904.robot;
 
+import java.io.Serializable;
 import java.math.BigInteger;
 
-public class LIDAR {
-	
+public class LIDAR implements Serializable{
+	public LIDAR(){
+		
+	}
     public int connect(){
         
     	// TODO add RS-232 connect

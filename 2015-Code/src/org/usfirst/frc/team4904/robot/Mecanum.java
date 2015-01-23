@@ -39,7 +39,7 @@ public class Mecanum implements Updatable{
 		this.imu = imu;
 	}
 	
-	private void move (double desiredSpeed, double desiredAngle, double turnSpeed) {
+	private void move(double desiredSpeed, double desiredAngle, double turnSpeed) {
 		// @param	desiredSpeed	double between 0 and 1 specifying wanted motor speed
 		// @param	desiredAngle	double between 0 and 2pi specifying wanted angle in radians
 		// @param	turnSpeed		double between 0 and 1 specifying rotational speed
@@ -57,8 +57,8 @@ public class Mecanum implements Updatable{
 		backRightWheel.set(backRight / scaleFactor);
 	}
 	
-	public void update() {
-		this.move(this.desiredSpeed, this.desiredAngle, desiredTurnSpeed);
+	public synchronized void update() {
+		this.move(this.desiredSpeed, this.desiredAngle, this.desiredTurnSpeed);
 	}
 	
 	

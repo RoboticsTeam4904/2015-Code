@@ -1,10 +1,12 @@
 package org.usfirst.frc.team4904.robot;
 
+import java.io.Serializable;
+
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 
-public class LogitechJoystick extends Joystick{
+public class LogitechJoystick extends Joystick implements Serializable{
 	
 	Button x1;
 	Button x2;

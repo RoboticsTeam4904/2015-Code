@@ -2,10 +2,10 @@ package org.usfirst.frc.team4904.robot;
 
 public abstract class Operator implements Updatable{
 	
-	LogitechJoystick stick;
-	Winch winch;
-	AutoAlign align;
-	int winchTimer;
+	protected final LogitechJoystick stick;
+	protected final Winch winch;
+	protected final AutoAlign align;
+	protected volatile int winchTimer;
 	protected static final int MODE_THIN_TOTE = 0;
 	protected static final int MODE_WIDE_TOTE = 1;
 	protected static final int MODE_CAN = 2;

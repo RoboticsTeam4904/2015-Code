@@ -6,7 +6,7 @@ public class OperatorGriffin extends Operator {
 		super(stick, winch, align);
 	}
 	
-	public void update() {
+	public synchronized void update() {
 		if (stick.x2.get()) adjust(stick.getY()); // When button 2 is pressed, adjust the winch
 		if (stick.x4.get()) raise(1); // When button 4 is pressed, raise the winch one level
 		if (stick.x3.get()) lower(1); // When button 3 is pressed, lower the winch one level
