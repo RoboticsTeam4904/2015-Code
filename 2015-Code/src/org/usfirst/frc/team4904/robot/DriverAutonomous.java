@@ -9,7 +9,9 @@ public class DriverAutonomous extends Driver{
 	}
 
 	public void update() {
-		// TODO move(controller.getDesiredMovement())
+		double[] movement=controller.getDesiredMovement();
+		setMovement(movement[0],movement[1]);
+		setTurn(movement[2]);
 	}
 
 }

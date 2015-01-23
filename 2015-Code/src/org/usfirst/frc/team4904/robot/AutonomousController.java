@@ -4,6 +4,9 @@ public class AutonomousController {
 	private OperatorAutonomous operator=null;
 	private DriverAutonomous driver=null;
 	private volatile int desiredWinchAction=0;
+	private volatile double angle=0;
+	private volatile double speed=0;
+	private volatile double turnSpeed=0;
 	public AutonomousController(){
 		
 	}
@@ -22,8 +25,14 @@ public class AutonomousController {
 	public void update(){
 		// TODO code all autonomous thing here
 		desiredWinchAction++;
+		angle++;
+		speed++;
+		turnSpeed++;
 	}
 	public int getDesiredWinchAction(){
 		return desiredWinchAction;
+	}
+	public double[] getDesiredMovement(){
+		return new double[]{angle,speed,turnSpeed};
 	}
 }
