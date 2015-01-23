@@ -2,10 +2,10 @@ package org.usfirst.frc.team4904.robot;
 
 import java.io.*;
 import java.util.*;
-import comm
+import javax.comm.*;
 
 public class SimpleRead implements Runnable, SerialPortEventListener{
-	static comm.CommPortIdentifier portId;
+	static javax.comm.CommPortIdentifier portId;
     static Enumeration portList;
 
     InputStream inputStream;
