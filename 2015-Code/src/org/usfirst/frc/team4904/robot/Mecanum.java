@@ -20,10 +20,13 @@ import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.Joystick;
 
 public class Mecanum implements Updatable{
+	
+	// Default ports for motors
 	private static final int FRONT_LEFT_WHEEL_PORT=0;
 	private static final int FRONT_RIGHT_WHEEL_PORT=1;
 	private static final int BACK_LEFT_WHEEL_PORT=2;
 	private static final int BACK_RIGHT_WHEEL_PORT=3;
+	
 	private final SpeedController frontLeftWheel;
 	private final SpeedController frontRightWheel;
 	private final SpeedController backLeftWheel;
@@ -35,8 +38,7 @@ public class Mecanum implements Updatable{
 	private double desiredTurnSpeed;
 	
 	public Mecanum(IMU imu){
-		// Initialize motor controllers (numbers correspond to PWM port on roboRIO)
-		// This allows default initialization with motors 0-3
+		// Initialize motor controllers with default ports
 		this.frontLeftWheel = new VictorSP(FRONT_LEFT_WHEEL_PORT);
 		this.frontRightWheel = new VictorSP(FRONT_RIGHT_WHEEL_PORT);
 		this.backLeftWheel = new VictorSP(BACK_LEFT_WHEEL_PORT);
