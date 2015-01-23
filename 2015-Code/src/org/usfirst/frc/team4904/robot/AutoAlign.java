@@ -19,20 +19,20 @@ public class AutoAlign {
 		
 		boolean wide = false;
 		
-		if (wide) grabber.setWidth(Grabber.MODE_WIDE_TOTE); // if we are picking up a wide tote, set the grabber to the wide tote width
-		else grabber.setWidth(Grabber.MODE_THIN_TOTE); // if we are picking up a thin tote, set the grabber to the thin tote width. If you are reading the end of this comment, you must be looking for significantly more information.
+		if (wide) grabber.setWidth(Operator.MODE_WIDE_TOTE); // if we are picking up a wide tote, set the grabber to the wide tote width
+		else grabber.setWidth(Operator.MODE_THIN_TOTE); // if we are picking up a thin tote, set the grabber to the thin tote width. If you are reading the end of this comment, you must be looking for significantly more information.
 		}
 	
 	public void canGrab(){
 		
 		
-		grabber.setWidth(Grabber.MODE_CAN);
+		grabber.setWidth(Operator.MODE_CAN);
 	}
 	
 	public void toteRelease(){
 		
 		
-		grabber.setWidth(Grabber.MODE_WIDE_TOTE+1); // set 
+		grabber.setWidth(Operator.MODE_WIDE_TOTE+1); // set 
 	}
 	
 	public void canRelease(){
