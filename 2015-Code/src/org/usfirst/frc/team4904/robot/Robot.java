@@ -1,6 +1,7 @@
 package org.usfirst.frc.team4904.robot;
 
 import edu.wpi.first.wpilibj.SampleRobot;
+import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.VictorSP;
 
@@ -25,7 +26,7 @@ public class Robot extends SampleRobot {
 	private AutoAlign align;		// the AutoAlign class contains code to align the robot with totes and cans
 	private Updatable[] updatables;
 	private final double updatePeriod = 0.005; // update every 0.005 seconds/5 milliseconds (200Hz)
-
+	private SpeedController[] speedControllers;
 	public Robot() {
 		System.out.println("*** INITIALIZING ROBOT ***"); // Print the line "*** INITIALIZING ROBOT ***"
 		
@@ -52,18 +53,16 @@ public class Robot extends SampleRobot {
 		operator = new OperatorGriffin(stick,winch,align);
 		driver = new DriverNathan(mecanumDrive,xboxController);
 		updatables=new Updatable[]{driver,operator,mecanumDrive,imu};
+		speedControllers=new SpeedController[]{leftFront,rightFront,leftBack,rightBack,winch,grabber};
 	}
 	
 	public void disabled(){
 		System.out.println("*** DISABLED ***"); // Print the line "*** DISABLED ***"
 		
 		// Disable all motors
-		leftFront.set(0); // Disable left front motor
-		rightFront.set(0); // Disable right front motor
-		leftBack.set(0); // Disable left back motor
-		rightBack.set(0); // Disable right back motor
-		winch.set(0); // Disable winch
-		grabber.set(0); // Disable grabber
+		for(SpeedController sc : speedControllers){
+			sc.set(0);
+		}
 		
 		while(isDisabled()){ // While the robot is set to disabled
 			imu.update(); // Update IMU
