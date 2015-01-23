@@ -16,13 +16,13 @@ public abstract class Driver {
 	
 	protected void setMovement(double speed, double angle){
 		if(isInControl()){
-		mecanumDrive.setDesiredSpeedDirection(speed, angle);
+			mecanumDrive.setDesiredSpeedDirection(speed, angle);
 		}
 	}
 	
 	protected void setTurn(double speed){
 		if(isInControl()){
-		mecanumDrive.setDesiredTurnSpeed(speed);
+			mecanumDrive.setDesiredTurnSpeed(speed);
 		}
 	}
 	private boolean isInControl(){
