@@ -7,6 +7,9 @@ import edu.wpi.first.wpilibj.Timer;
 public class Robot extends SampleRobot implements Updatable{
 	private static final int WINCH_PORT=4;
 	private static final int GRABBER_PORT=5;
+	private static final int JOYSTICK_PORT=0;
+	private static final int CONTROLLER_PORT=1;
+	
 	private LogitechJoystick stick;			// the X3D Extreme3DPro Logitech joystick (right hand) - operator
 	private XboxController xboxController; 	// the Xbox 360 controller - driver
 	
@@ -36,8 +39,8 @@ public class Robot extends SampleRobot implements Updatable{
 		mecanumDrive = new Mecanum(imu); // Initialize Mecanum control
 		
 		// Initialize joysticks (numbers correspond to value set by driver station)
-		stick = new LogitechJoystick(0);
-		xboxController = new XboxController(1);
+		stick = new LogitechJoystick(JOYSTICK_PORT);
+		xboxController = new XboxController(CONTROLLER_PORT);
 		
 		//Initialize sensors
 		udar = new UDAR(); // Initialize UDAR
