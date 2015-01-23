@@ -20,9 +20,6 @@ import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.Joystick;
 
 public class Mecanum {
-	private static final double I = 0;
-	private static final double D = 0;
-	private static final double P = 0;
 	SpeedController frontLeftWheel;
 	SpeedController frontRightWheel;
 	SpeedController backLeftWheel;
@@ -31,9 +28,7 @@ public class Mecanum {
 	IMU imu;
 	private double desiredSpeed;
 	private double desiredAngle;
-	private double errorIntegral;
-	private double errorDerivative;
-	private double lastError;
+	private double desiredTurnSpeed;
 	
 	
 	public Mecanum(SpeedController frontLeftWheel, SpeedController frontRightWheel, SpeedController backLeftWheel, SpeedController backRightWheel, IMU imu) {
@@ -49,41 +44,21 @@ public class Mecanum {
 		// @param	desiredAngle	double between 0 and 2pi specifying wanted angle in radians
 		// @param	turnSpeed		double between 0 and 1 specifying rotational speed
 		
-
-		double frontLeft;
-		double frontRight;
-		double backLeft;
-		double backRight;
-
-		frontLeft = Math.sin(desiredAngle + Math.PI / 4) + turnSpeed;
-		frontRight = Math.cos(desiredAngle + Math.PI / 4) - turnSpeed;
-		backLeft = Math.cos(desiredAngle + Math.PI / 4) + turnSpeed;
-		backRight = Math.sin(desiredAngle + Math.PI / 4) - turnSpeed;
+		double frontLeft = desiredSpeed * Math.sin(desiredAngle + Math.PI / 4) + turnSpeed;
+		double frontRight = desiredSpeed * Math.cos(desiredAngle + Math.PI / 4) - turnSpeed;
+		double backLeft = desiredSpeed * Math.cos(desiredAngle + Math.PI / 4) + turnSpeed;
+		double backRight = desiredSpeed * Math.sin(desiredAngle + Math.PI / 4) - turnSpeed;
 
 		double scaleFactor = Math.max(Math.max(Math.max(Math.abs(frontLeft),Math.abs(frontRight)),Math.abs(backLeft)),Math.abs(backRight));
 
-		frontLeftWheel.set(-desiredSpeed * frontLeft / scaleFactor);
-		frontRightWheel.set(desiredSpeed * frontRight / scaleFactor);
-		backLeftWheel.set(-desiredSpeed * backLeft / scaleFactor);
-		backRightWheel.set(desiredSpeed * backRight / scaleFactor);
-	}
-	
-	private void turn(double speed){
-		frontLeftWheel.set(speed);
-		frontRightWheel.set(speed);
-		backLeftWheel.set(speed);
-		backRightWheel.set(speed);
+		frontLeftWheel.set(frontLeft / scaleFactor);
+		frontRightWheel.set(frontRight / scaleFactor);
+		backLeftWheel.set(backLeft / scaleFactor);
+		backRightWheel.set(backRight / scaleFactor);
 	}
 	
 	public void update() {
-		double error = imu.getAngle() - this.desiredAngle;
-		this.errorIntegral += error;
-		this.errorDerivative = (error-this.lastError)/0.005;
-		
-		double turnSpeed = this.P*error + this.I*this.errorIntegral + this.D*this.errorDerivative;
-		
-		this.move(this.desiredSpeed, this.desiredAngle, turnSpeed);
-		this.lastError = error;
+		this.move(this.desiredSpeed, this.desiredAngle, desiredTurnSpeed);
 	}
 	
 	
@@ -92,7 +67,7 @@ public class Mecanum {
 		this.desiredSpeed = desiredSpeed;
 	}
 	public void setDesiredTurnSpeed(double turnSpeed){
-		desiredAngle+=turnSpeed;
+		this.desiredTurnSpeed=turnSpeed;
 	}
 	
 }
