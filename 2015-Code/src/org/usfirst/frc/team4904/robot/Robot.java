@@ -70,10 +70,10 @@ public class Robot extends SampleRobot {
 		
 		align = new AutoAlign(mecanumDrive, udar, lidar, imu, grabber); // Initialize AutoAlign system
 		humanOperator = new OperatorGriffin(stick,winch,align);
-		humanDriver = new DriverNathan(mecanumDrive,xboxController);
+		humanDriver = new DriverNathan(mecanumDrive,xboxController,align);
 		controller=new AutonomousController();
 		autonomousOperator = new OperatorAutonomous(stick,winch,align,controller);
-		autonomousDriver = new DriverAutonomous(mecanumDrive,xboxController,controller);
+		autonomousDriver = new DriverAutonomous(mecanumDrive,xboxController,controller,align);
 	}
 	
 	public void disabled(){

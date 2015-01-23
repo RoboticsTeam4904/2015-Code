@@ -2,8 +2,8 @@ package org.usfirst.frc.team4904.robot;
 
 public class DriverAutonomous extends Driver{
 	AutonomousController controller;
-	public DriverAutonomous(Mecanum mecanumDrive, XboxController xboxController, AutonomousController controller) {
-		super(mecanumDrive, xboxController);
+	public DriverAutonomous(Mecanum mecanumDrive, XboxController xboxController, AutonomousController controller, AutoAlign align) {
+		super(mecanumDrive, xboxController,align);
 		this.controller=controller;
 		controller.setDriver(this);
 	}
