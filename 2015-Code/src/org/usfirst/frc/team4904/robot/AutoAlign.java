@@ -20,7 +20,7 @@ public class AutoAlign {
 	// TODO OVERALL: Make aligning take place in update.
 	// Robot should still be ticking while aligning is taking place
 	// If the aligning happens in the toteGrab function, then that blocks the ticking of the robot
-	public void toteGrab (boolean wide) {
+	public void grabTote (boolean wide) {
 		if (currentState != State.EMPTY) {
 			return;
 		}
@@ -28,20 +28,20 @@ public class AutoAlign {
 		currentState = wide ? State.ALIGNING_WITH_WIDE_TOTE : State.ALIGNING_WITH_THIN_TOTE;
 	}
 	
-	public void canGrab(){
+	public void grabCan(){
 		if (currentState !=State.EMPTY) {
 			return;
 		}
 		currentState = State.ALIGNING_WITH_CAN; // NOTE: Setting the grabber is NOT done in these functions and is instead done the next time update is called
 	}
 	
-	private void toteRelease (boolean wide) {
+	private void releaseTote (boolean wide) {
 		// TODO put alignment code
 		// If we are putting the tote on top of a stack, we need to align before releasing
 		currentState = State.EMPTY;
 	}
 	
-	private void canRelease() {
+	private void releaseCan() {
 		// TODO put alignment code
 		// If we are putting the can on top of a stack, we need to align before releasing
 		currentState = State.EMPTY;
@@ -88,13 +88,13 @@ public class AutoAlign {
 	public void release () {
 		switch (currentState) {
 		case HOLDING_WIDE_TOTE:
-			toteRelease(true);
+			releaseTote(true);
 			return;
 		case HOLDING_THIN_TOTE:
-			toteRelease(false);
+			releaseTote(false);
 			return;
 		case HOLDING_CAN:
-			canRelease();
+			releaseCan();
 			return;
 		default:
 			// You pressed the release button when you aren't holding anything

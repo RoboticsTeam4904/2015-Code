@@ -30,9 +30,9 @@ public abstract class Operator {
 	}
 
 	protected void grab(int mode) {
-		if (mode == MODE_THIN_TOTE) align.toteGrab(false);
-		else if (mode == MODE_WIDE_TOTE) align.toteGrab(true);
-		else if (mode == MODE_CAN) align.canGrab();
+		if (mode == MODE_THIN_TOTE) align.grabTote(false);
+		else if (mode == MODE_WIDE_TOTE) align.grabTote(true);
+		else if (mode == MODE_CAN) align.grabCan();
 	}
 
 	protected void release() {
