@@ -6,13 +6,6 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.VictorSP;
 
 public class Robot extends SampleRobot implements Updatable{
-<<<<<<< HEAD
-	private final VictorSP leftFront;		// the victor controlling the left front wheel
-	private final VictorSP rightFront;	// the victor controlling the right front wheel
-	private final VictorSP leftBack;		// the victor controlling the left back wheel
-	private final VictorSP rightBack;		// the victor controlling the right back wheel
-=======
->>>>>>> 8bc2e961dfb4017874286066a83a3ca1b79e9223
 	
 	private final LogitechJoystick stick;	// the X3D Extreme3DPro Logitech joystick (right hand) - operator
 	private final XboxController xboxController; 	// the Xbox 360 controller - driver
@@ -37,12 +30,8 @@ public class Robot extends SampleRobot implements Updatable{
 		//Initialize movement controllers
 		winch = new Winch(4); // Initialize Winch control
 		grabber = new Grabber(5); // Initialize Grabber control
-<<<<<<< HEAD
 		imu=new IMU();
-		mecanumDrive = new Mecanum(leftFront, rightFront, leftBack, rightBack, imu); // Initialize Mecanum control
-=======
 		mecanumDrive = new Mecanum(imu); // Initialize Mecanum control
->>>>>>> 8bc2e961dfb4017874286066a83a3ca1b79e9223
 		
 		// Initialize joysticks (numbers correspond to value set by driver station)
 		stick = new LogitechJoystick(0);
