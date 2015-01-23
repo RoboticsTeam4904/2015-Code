@@ -65,7 +65,7 @@ public class Robot extends SampleRobot implements Updatable{
 		}
 		
 		while(isDisabled()){ // While the robot is set to disabled
-			imu.update(); // Update IMU
+			update();
 			Timer.delay(updatePeriod);
 		}
 	}
@@ -77,8 +77,7 @@ public class Robot extends SampleRobot implements Updatable{
 			leftFront.set(1);
 			
 			
-			mecanumDrive.update();	// Update the mecanum drive
-			imu.update(); // Update the imu
+			update();
 			Timer.delay(updatePeriod);	// wait delay specified by updatePeriod to the next update
 
 		}
@@ -96,6 +95,16 @@ public class Robot extends SampleRobot implements Updatable{
 		
 	}
 	public void update(){
+		if(isOperatorControl() && isEnabled()){
+			updateAll();
+		}else if (isAutonomous() && isEnabled()){
+			updatables[2].update();
+			updatables[3].update();
+		}else{
+			updatables[3].update();
+		}
+	}
+	public void updateAll(){
 		for(Updatable updatable : updatables){
 			updatable.update();
 		}
