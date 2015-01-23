@@ -20,9 +20,6 @@ import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.Joystick;
 
 public class Mecanum {
-	private static final double I = 0;
-	private static final double D = 0;
-	private static final double P = 0;
 	SpeedController frontLeftWheel;
 	SpeedController frontRightWheel;
 	SpeedController backLeftWheel;
@@ -32,9 +29,6 @@ public class Mecanum {
 	private double desiredSpeed;
 	private double desiredAngle;
 	private double desiredTurnSpeed;
-	private double errorIntegral;
-	private double errorDerivative;
-	private double lastError;
 	
 	
 	public Mecanum(SpeedController frontLeftWheel, SpeedController frontRightWheel, SpeedController backLeftWheel, SpeedController backRightWheel, IMU imu) {
@@ -50,16 +44,10 @@ public class Mecanum {
 		// @param	desiredAngle	double between 0 and 2pi specifying wanted angle in radians
 		// @param	turnSpeed		double between 0 and 1 specifying rotational speed
 		
-
-		double frontLeft;
-		double frontRight;
-		double backLeft;
-		double backRight;
-
-		frontLeft = desiredSpeed*Math.sin(desiredAngle + Math.PI / 4) + turnSpeed;
-		frontRight = desiredSpeed*Math.cos(desiredAngle + Math.PI / 4) - turnSpeed;
-		backLeft = desiredSpeed*Math.cos(desiredAngle + Math.PI / 4) + turnSpeed;
-		backRight = desiredSpeed*Math.sin(desiredAngle + Math.PI / 4) - turnSpeed;
+		double frontLeft = desiredSpeed * Math.sin(desiredAngle + Math.PI / 4) + turnSpeed;
+		double frontRight = desiredSpeed * Math.cos(desiredAngle + Math.PI / 4) - turnSpeed;
+		double backLeft = desiredSpeed * Math.cos(desiredAngle + Math.PI / 4) + turnSpeed;
+		double backRight = desiredSpeed * Math.sin(desiredAngle + Math.PI / 4) - turnSpeed;
 
 		double scaleFactor = Math.max(Math.max(Math.max(Math.abs(frontLeft),Math.abs(frontRight)),Math.abs(backLeft)),Math.abs(backRight));
 
@@ -70,15 +58,7 @@ public class Mecanum {
 	}
 	
 	public void update() {
-		/*
-		double error = imu.getAngle() - this.desiredAngle;
-		this.errorIntegral += error;
-		this.errorDerivative = (error-this.lastError)/0.005;
-		
-		double turnSpeed = this.P*error + this.I*this.errorIntegral + this.D*this.errorDerivative;
-		*/
 		this.move(this.desiredSpeed, this.desiredAngle, desiredTurnSpeed);
-		//this.lastError = error;
 	}
 	
 	
