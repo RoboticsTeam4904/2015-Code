@@ -7,8 +7,8 @@ import edu.wpi.first.wpilibj.VictorSP;
 
 public class Robot extends SampleRobot implements Updatable{
 	
-	private final LogitechJoystick stick;	// the X3D Extreme3DPro Logitech joystick (right hand) - operator
-	private final XboxController xboxController; 	// the Xbox 360 controller - driver
+	private LogitechJoystick stick;			// the X3D Extreme3DPro Logitech joystick (right hand) - operator
+	private XboxController xboxController; 	// the Xbox 360 controller - driver
 	
 	private final UDAR udar;				// the UDAR (ultrasonic detection and ranging)
 	private final IMU imu;
@@ -19,18 +19,20 @@ public class Robot extends SampleRobot implements Updatable{
 	private final Mecanum mecanumDrive;	// the Mecanum class that takes care of the math required to use mecanum drive
 	private Driver driver;
 	private Operator operator;
+
 	private AutoAlign align;		// the AutoAlign class contains code to align the robot with totes and cans
+	
+	// Update system
 	private Updatable[] updatables;
-	private final double updatePeriod = 0.005; // update every 0.005 seconds/5 milliseconds (200Hz)
-	private SpeedController[] speedControllers;
 	public static Updatable overallUpdate;
+	private SpeedController[] speedControllers;
+	private final double updatePeriod = 0.005; // update every 0.005 seconds/5 milliseconds (200Hz)
 	public Robot() {
 		System.out.println("*** INITIALIZING ROBOT ***"); // Print the line "*** INITIALIZING ROBOT ***"
-		
+		imu = new IMU(); 		// Initialize IMU
 		//Initialize movement controllers
 		winch = new Winch(4); // Initialize Winch control
 		grabber = new Grabber(5); // Initialize Grabber control
-		imu=new IMU();
 		mecanumDrive = new Mecanum(imu); // Initialize Mecanum control
 		
 		// Initialize joysticks (numbers correspond to value set by driver station)
@@ -44,6 +46,7 @@ public class Robot extends SampleRobot implements Updatable{
 		align = new AutoAlign(mecanumDrive, udar, lidar, imu, grabber); // Initialize AutoAlign system
 		operator = new OperatorGriffin(stick,winch,align);
 		driver = new DriverNathan(mecanumDrive,xboxController);
+
 		updatables=new Updatable[]{driver,operator,mecanumDrive,imu};
 		speedControllers=new SpeedController[]{winch,grabber};
 		overallUpdate=this;
