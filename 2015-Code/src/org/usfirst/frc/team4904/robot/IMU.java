@@ -1,6 +1,6 @@
 package org.usfirst.frc.team4904.robot;
 
-public class IMU implements IUpdatable{
+public class IMU {
 	public IMU() {
 		this.zero();
 	}
