@@ -1,6 +1,5 @@
 package org.usfirst.frc.team4904.robot;
 
-import java.util.HashMap;
 
 import edu.wpi.first.wpilibj.SampleRobot;
 import edu.wpi.first.wpilibj.SpeedController;
