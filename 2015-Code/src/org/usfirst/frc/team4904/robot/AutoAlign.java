@@ -18,41 +18,55 @@ public class AutoAlign implements IUpdatable{
 		this.grabber = grabber;
 		this.lidar=lidar;
 	}
-	// TODO OVERALL: Make aligning multi-threaded OR in update.
+	// TODO OVERALL: Make aligning take place in update.
 	// Robot should still be ticking while aligning is taking place
+	// If the aligning happens in the toteGrab function, then that blocks the ticking of the robot
 	public void toteGrab(boolean wide){
 		if(currentState!=State.EMPTY){
 			return;
 		}
-		currentState=wide?State.ALIGNING_WITH_WIDE_TOTE:State.ALIGNING_WITH_THIN_TOTE;
-		
-		// TODO put alignment code
 		// TODO set "wide" boolean based on sensor data in case wring button pressed
+		currentState=wide?State.ALIGNING_WITH_WIDE_TOTE:State.ALIGNING_WITH_THIN_TOTE;
 	}
 	
 	public void canGrab(){
 		if(currentState!=State.EMPTY){
 			return;
 		}
-		currentState=State.ALIGNING_WITH_CAN;
-		// TODO put alignment code
-		
+		currentState=State.ALIGNING_WITH_CAN;//NOTE: Setting the grabber is NOT done in these functions and is instead done the next time update is called
 	}
 	
 	private void toteRelease(boolean wide){
 		// TODO put alignment code
+		// If we are putting the tote on top of a stack, we need to align before releasing
 		currentState=State.EMPTY;
 	}
 	
 	private void canRelease(){
-		// TODO put alignment code -- why do we need to align when releasing???
+		// TODO put alignment code
+		// If we are putting the can on top of a stack, we need to align before releasing
 		currentState=State.EMPTY;
 	}
-
+	private void doAligningTick(){
+		// TODO put alignment code
+	}
 	public void update() {
 		grabber.setWidth(getDesiredGrabberState());
+		if(isCurrentlyAligning()){
+			doAligningTick();
+		}
 	}
-	public int getDesiredGrabberState(){
+	public boolean isCurrentlyAligning(){
+		switch(currentState){
+		case ALIGNING_WITH_CAN:
+		case ALIGNING_WITH_THIN_TOTE:
+		case ALIGNING_WITH_WIDE_TOTE:
+			return true;
+			default:
+				return false;
+		}
+	}
+	private int getDesiredGrabberState(){
 		switch(currentState){
 		case ALIGNING_WITH_CAN:
 			return Operator.MODE_CAN + 10;
