@@ -70,7 +70,7 @@ public class Robot extends SampleRobot implements Updatable{
 			Timer.delay(updatePeriod);
 		}
 	}
-	public void disableMotors(){
+	private void disableMotors(){
 		for(SpeedController sc : speedControllers){
 			sc.set(0);
 		}
@@ -110,7 +110,7 @@ public class Robot extends SampleRobot implements Updatable{
 			updatables[3].update();
 		}
 	}
-	public void updateAll(){
+	private void updateAll(){
 		for(Updatable updatable : updatables){
 			updatable.update();
 		}

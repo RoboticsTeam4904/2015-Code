@@ -20,10 +20,14 @@ import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.Joystick;
 
 public class Mecanum implements Updatable{
-	SpeedController frontLeftWheel;
-	SpeedController frontRightWheel;
-	SpeedController backLeftWheel;
-	SpeedController backRightWheel;
+	private static final int FRONT_LEFT_WHEEL_PORT=0;
+	private static final int FRONT_RIGHT_WHEEL_PORT=1;
+	private static final int BACK_LEFT_WHEEL_PORT=2;
+	private static final int BACK_RIGHT_WHEEL_PORT=3;
+	private final SpeedController frontLeftWheel;
+	private final SpeedController frontRightWheel;
+	private final SpeedController backLeftWheel;
+	private final SpeedController backRightWheel;
 	
 	IMU imu;
 	private double desiredSpeed;
@@ -33,19 +37,13 @@ public class Mecanum implements Updatable{
 	public Mecanum(IMU imu){
 		// Initialize motor controllers (numbers correspond to PWM port on roboRIO)
 		// This allows default initialization with motors 0-3
-		this.frontLeftWheel = new VictorSP(0);
-		this.frontRightWheel = new VictorSP(1);
-		this.backLeftWheel = new VictorSP(2);
-		this.backRightWheel = new VictorSP(3);
+		this.frontLeftWheel = new VictorSP(FRONT_LEFT_WHEEL_PORT);
+		this.frontRightWheel = new VictorSP(FRONT_RIGHT_WHEEL_PORT);
+		this.backLeftWheel = new VictorSP(BACK_LEFT_WHEEL_PORT);
+		this.backRightWheel = new VictorSP(BACK_RIGHT_WHEEL_PORT);
+		this.imu=imu;
 	}
 	
-	public Mecanum(SpeedController frontLeftWheel, SpeedController frontRightWheel, SpeedController backLeftWheel, SpeedController backRightWheel, IMU imu) {
-		this.frontLeftWheel = frontLeftWheel;
-		this.frontRightWheel = frontRightWheel;
-		this.backLeftWheel = backLeftWheel;
-		this.backRightWheel = backRightWheel;
-		this.imu = imu;
-	}
 	
 	private void move(double desiredSpeed, double desiredAngle, double turnSpeed) {
 		// @param	desiredSpeed	double between 0 and 1 specifying wanted motor speed
