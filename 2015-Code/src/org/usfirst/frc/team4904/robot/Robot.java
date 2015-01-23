@@ -32,19 +32,20 @@ public class Robot extends SampleRobot implements Updatable{
 	private final double updatePeriod = 0.005; // update every 0.005 seconds/5 milliseconds (200Hz)
 	public Robot() {
 		System.out.println("*** INITIALIZING ROBOT ***"); // Print the line "*** INITIALIZING ROBOT ***"
-		imu = new IMU(); 		// Initialize IMU
+		
 		//Initialize movement controllers
 		winch = new Winch(WINCH_PORT); // Initialize Winch control
 		grabber = new Grabber(GRABBER_PORT); // Initialize Grabber control
-		mecanumDrive = new Mecanum(imu); // Initialize Mecanum control
+		mecanumDrive = new Mecanum(); // Initialize Mecanum control
 		
 		// Initialize joysticks (numbers correspond to value set by driver station)
 		stick = new LogitechJoystick(JOYSTICK_PORT);
 		xboxController = new XboxController(CONTROLLER_PORT);
 		
 		//Initialize sensors
+		imu = new IMU(); 		// Initialize IMU
 		udar = new UDAR(); // Initialize UDAR
-		lidar = new LIDAR();
+		lidar = new LIDAR(); // Initalize LIDAR
 		
 		align = new AutoAlign(mecanumDrive, udar, lidar, imu, grabber); // Initialize AutoAlign system
 		operator = new OperatorGriffin(stick,winch,align);

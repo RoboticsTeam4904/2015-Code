@@ -31,18 +31,16 @@ public class Mecanum implements Updatable{
 	private final SpeedController backLeftWheel;
 	private final SpeedController backRightWheel;
 	
-	private final IMU imu;
 	private double desiredSpeed;
 	private double desiredAngle;
 	private double desiredTurnSpeed;
 	
-	public Mecanum(IMU imu){
+	public Mecanum(){
 		// Initialize motor controllers with default ports
 		this.frontLeftWheel = new VictorSP(FRONT_LEFT_WHEEL_PORT);
 		this.frontRightWheel = new VictorSP(FRONT_RIGHT_WHEEL_PORT);
 		this.backLeftWheel = new VictorSP(BACK_LEFT_WHEEL_PORT);
 		this.backRightWheel = new VictorSP(BACK_RIGHT_WHEEL_PORT);
-		this.imu=imu;
 	}
 	
 	
