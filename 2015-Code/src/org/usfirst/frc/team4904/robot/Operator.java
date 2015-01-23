@@ -25,7 +25,7 @@ public abstract class Operator {
 	}
 
 	protected void lower(int levels) {
-		winch.set(-1);
+		winch.set(-1);// TODO Mave moving the winch a little more accurate than moving at a certian speed for 5 ticks
 		winchTimer = 5;
 	}
 
