@@ -17,8 +17,6 @@ public abstract class Operator implements IUpdatable{
 		winchTimer = 0;
 	}
 	
-	public abstract void update(); // Call once per cycle to update
-	
 	protected void raise(int levels) {
 		winch.set(1);
 		winchTimer = 5;
