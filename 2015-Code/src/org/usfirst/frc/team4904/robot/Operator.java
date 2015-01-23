@@ -19,7 +19,7 @@ public abstract class Operator {
 		winchTimer = 0;
 	}
 	
-	abstract void update(); // Call once per cycle to update
+	public abstract void update(); // Call once per cycle to update
 	
 	protected void raise(int levels) {
 		winch.set(1);
