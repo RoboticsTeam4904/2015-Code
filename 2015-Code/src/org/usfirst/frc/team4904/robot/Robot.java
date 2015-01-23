@@ -33,8 +33,12 @@ public class Robot extends SampleRobot {
 	private final SpeedController frontRightWheel;
 	private final SpeedController backLeftWheel;
 	private final SpeedController backRightWheel;
-	private final Driver driver;
-	private final Operator operator;
+	private Driver driver;
+	private Operator operator;
+	private final Driver humanDriver;
+	private final Operator humanOperator;
+	private final Driver autonomousDriver;
+	private final Operator autonomousOperator;
 
 	private final AutoAlign align;		// the AutoAlign class contains code to align the robot with totes and cans
 	
@@ -64,10 +68,10 @@ public class Robot extends SampleRobot {
 		lidar = new LIDAR();	// Initalize LIDAR
 		
 		align = new AutoAlign(mecanumDrive, udar, lidar, imu, grabber); // Initialize AutoAlign system
-		operator = new OperatorGriffin(stick,winch,align);
-		driver = new DriverNathan(mecanumDrive,xboxController);
-
-		// TODO Create DriverAutonomous and OperatorAutonomous classes
+		humanOperator = new OperatorGriffin(stick,winch,align);
+		humanDriver = new DriverNathan(mecanumDrive,xboxController);
+		autonomousOperator = new OperatorAutonomous(stick,winch,align);
+		autonomousDriver = new DriverAutonomous(mecanumDrive,xboxController);
 	}
 	
 	public void disabled(){
@@ -84,7 +88,8 @@ public class Robot extends SampleRobot {
 	
 	public void autonomous(){
 		System.out.println("*** AUTONOMOUS ***");
-		// TODO driver=new DriverAutonomous  operator=new OperatorAutonomous
+		operator=autonomousOperator;
+		driver=autonomousDriver;
 		while (isEnabled() && isAutonomous()) {
 			Timer.delay(updatePeriod);
 			updateAll();
@@ -93,7 +98,8 @@ public class Robot extends SampleRobot {
 
 	public void operatorControl() {
 		System.out.println("*** TELEOPERATED ***");
-		
+		operator=humanOperator;
+		driver=humanDriver;
 		while (isEnabled() && isOperatorControl()) {
 			Timer.delay(updatePeriod);
 			updateAll();
