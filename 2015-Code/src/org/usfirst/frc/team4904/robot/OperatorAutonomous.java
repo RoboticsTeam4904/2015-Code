@@ -18,6 +18,18 @@ public class OperatorAutonomous extends Operator{
 		case MODE_WIDE_TOTE:
 			grab(MODE_WIDE_TOTE);
 			break;
+		case MODE_CAN:
+			grab(MODE_CAN);
+			break;
+		case 4:
+			release();
+			break;
+		}
+		if(action<0){
+			lower(-action);
+		}
+		if(action>4){
+			raise(action-4);
 		}
 		updateWinch();
 	}
