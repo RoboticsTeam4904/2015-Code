@@ -27,7 +27,7 @@ public class Robot extends SampleRobot implements Updatable{
 	private Updatable[] updatables;
 	private final double updatePeriod = 0.005; // update every 0.005 seconds/5 milliseconds (200Hz)
 	private SpeedController[] speedControllers;
-	private static Robot robot;
+	private Updatable overallUpdate;
 	public Robot() {
 		System.out.println("*** INITIALIZING ROBOT ***"); // Print the line "*** INITIALIZING ROBOT ***"
 		
@@ -55,23 +55,25 @@ public class Robot extends SampleRobot implements Updatable{
 		driver = new DriverNathan(mecanumDrive,xboxController);
 		updatables=new Updatable[]{driver,operator,mecanumDrive,imu};
 		speedControllers=new SpeedController[]{leftFront,rightFront,leftBack,rightBack,winch,grabber};
-		robot=this;
+		overallUpdate=this;
 	}
 	
 	public void disabled(){
 		System.out.println("*** DISABLED ***"); // Print the line "*** DISABLED ***"
 		
 		// Disable all motors
-		for(SpeedController sc : speedControllers){
-			sc.set(0);
-		}
+		disableMotors();
 		
 		while(isDisabled()){ // While the robot is set to disabled
-			robot.update();
+			doOverallUpdate();
 			Timer.delay(updatePeriod);
 		}
 	}
-	
+	public void disableMotors(){
+		for(SpeedController sc : speedControllers){
+			sc.set(0);
+		}
+	}
 	public void autonomous(){
 		System.out.println("*** AUTONOMOUS ***"); // Print the line "*** AUTONOMOUS ***"
 		
@@ -79,7 +81,7 @@ public class Robot extends SampleRobot implements Updatable{
 			leftFront.set(1);
 			
 			
-			robot.update();
+			doOverallUpdate();
 			Timer.delay(updatePeriod);	// wait delay specified by updatePeriod to the next update
 
 		}
@@ -91,10 +93,13 @@ public class Robot extends SampleRobot implements Updatable{
 		while (isOperatorControl() && isEnabled()) { // While the robot is set to operator control and is enabled
 			leftFront.set(stick.getY());
 			
-			robot.update();
+			doOverallUpdate();
 			Timer.delay(updatePeriod);	// wait delay specified by updatePeriod to the next update
 		}
 		
+	}
+	public void doOverallUpdate(){
+		overallUpdate.update();
 	}
 	public void update(){
 		if(isOperatorControl() && isEnabled()){
