@@ -7,7 +7,7 @@ public class DriverNathan extends Driver {
 	}
 	
 	public synchronized void update() {
-		double angle = Math.atan2(xboxController.getY(), xboxController.getX());// TODO atan needs a if statement checking if x is negative
+		double angle = Math.atan2(xboxController.getY(), xboxController.getX());
 		double speed = angle*Math.asin(xboxController.getY());//<< TODO Fix because that is not how trig works
 		
 		setMovement(speed, angle);
