@@ -2,8 +2,8 @@ package org.usfirst.frc.team4904.robot;
 
 public class DriverNathan extends Driver {
 	
-	public DriverNathan(Mecanum mecanumDrive, XboxController xboxController){
-		super(mecanumDrive,xboxController);
+	public DriverNathan(Mecanum mecanumDrive, XboxController xboxController, AutoAlign align){
+		super(mecanumDrive,xboxController,align);
 	}
 	
 	public synchronized void update() {

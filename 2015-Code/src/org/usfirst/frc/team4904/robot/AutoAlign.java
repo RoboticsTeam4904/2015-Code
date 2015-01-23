@@ -60,7 +60,7 @@ public class AutoAlign {
 			doAligningTick();
 		}
 	}
-	private boolean isCurrentlyAligning () {
+	public boolean isCurrentlyAligning () {
 		switch (currentState) {
 		case ALIGNING_WITH_CAN:
 		case ALIGNING_WITH_THIN_TOTE:
