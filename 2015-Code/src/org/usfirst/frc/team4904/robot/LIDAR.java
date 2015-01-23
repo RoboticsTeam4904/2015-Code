@@ -4,7 +4,10 @@ import java.io.Serializable;
 import java.math.BigInteger;
 
 public class LIDAR implements Serializable{
+	
+	
 	public LIDAR(){
+		
 		
 	}
     public int connect(){
