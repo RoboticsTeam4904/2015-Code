@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 
-public class Xbox extends Joystick{
+public class XboxController extends Joystick{
 	
 	Button aButton;
 	Button bButton;
@@ -17,7 +17,7 @@ public class Xbox extends Joystick{
 	Button leftStick;
 	Button rightStick;
 	
-	public Xbox(int port) {
+	public XboxController(int port) {
 		super(port);
 		// TODO Auto-generated constructor stub
 		

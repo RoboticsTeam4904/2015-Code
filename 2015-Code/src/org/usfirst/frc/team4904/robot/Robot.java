@@ -12,7 +12,7 @@ public class Robot extends SampleRobot implements Updatable{
 	private VictorSP rightBack;		// the victor controlling the right back wheel
 	
 	private LogitechJoystick stick;	// the X3D Extreme3DPro Logitech joystick (right hand) - operator
-	private Xbox xboxController; 	// the Xbox 360 controller - driver
+	private XboxController xboxController; 	// the Xbox 360 controller - driver
 	
 	private UDAR udar;				// the UDAR (ultrasonic detection and ranging)
 	private IMU imu;
@@ -27,7 +27,7 @@ public class Robot extends SampleRobot implements Updatable{
 	private Updatable[] updatables;
 	private final double updatePeriod = 0.005; // update every 0.005 seconds/5 milliseconds (200Hz)
 	private SpeedController[] speedControllers;
-	private Updatable overallUpdate;
+	public static Updatable overallUpdate;
 	public Robot() {
 		System.out.println("*** INITIALIZING ROBOT ***"); // Print the line "*** INITIALIZING ROBOT ***"
 		
@@ -44,7 +44,7 @@ public class Robot extends SampleRobot implements Updatable{
 		
 		// Initialize joysticks (numbers correspond to value set by driver station)
 		stick = new LogitechJoystick(0);
-		xboxController = new Xbox(1);
+		xboxController = new XboxController(1);
 		
 		//Initialize sensors
 		udar = new UDAR(); // Initialize UDAR
@@ -98,7 +98,7 @@ public class Robot extends SampleRobot implements Updatable{
 		}
 		
 	}
-	public void doOverallUpdate(){
+	public static void doOverallUpdate(){
 		overallUpdate.update();
 	}
 	public void update(){
