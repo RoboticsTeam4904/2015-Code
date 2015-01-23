@@ -91,7 +91,6 @@ public class Robot extends SampleRobot {
 			
 			imu.update();
 			
-			
 		}
 	}
 

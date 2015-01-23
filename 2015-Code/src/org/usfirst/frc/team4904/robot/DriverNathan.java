@@ -8,12 +8,11 @@ public class DriverNathan extends Driver {
 	
 	public synchronized void update() {
 		double angle = Math.atan2(xboxController.getY(), xboxController.getX());
-		double speed = angle*Math.asin(xboxController.getY());//<< TODO Fix because that is not how trig works
+		double speed = angle * Math.asin(xboxController.getY()); // TODO Fix because that is not how trig works
 		
 		setMovement(speed, angle);
 		
-		double turnSpeed = xboxController.getTwist(); // lols cats are fun
-		setTurn(turnSpeed);//Actually do the turning
+		double turnSpeed = xboxController.getTwist();
+		setTurn(turnSpeed); // Actually do the turning
 	}
-
 }
