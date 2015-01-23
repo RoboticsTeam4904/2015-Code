@@ -4,7 +4,7 @@ import java.io.*;
 import java.util.*;
 import javax.comm.*;
 
-public class SimpleRead implements Runnable, SerialPortEventListener{
+public class SimpleRead implements Runnable, SerialPortEventListener {
 	static javax.comm.CommPortIdentifier portId;
     static Enumeration portList;
 

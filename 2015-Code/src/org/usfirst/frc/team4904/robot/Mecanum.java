@@ -18,13 +18,13 @@ package org.usfirst.frc.team4904.robot;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.VictorSP;
 
-public class Mecanum implements IUpdatable{
+public class Mecanum {
 	
 	// Default ports for motors
-	private static final int FRONT_LEFT_WHEEL_PORT=0;
-	private static final int FRONT_RIGHT_WHEEL_PORT=1;
-	private static final int BACK_LEFT_WHEEL_PORT=2;
-	private static final int BACK_RIGHT_WHEEL_PORT=3;
+	private static final int FRONT_LEFT_WHEEL_PORT = 0;
+	private static final int FRONT_RIGHT_WHEEL_PORT = 1;
+	private static final int BACK_LEFT_WHEEL_PORT = 2;
+	private static final int BACK_RIGHT_WHEEL_PORT = 3;
 	
 	private final SpeedController frontLeftWheel;
 	private final SpeedController frontRightWheel;
@@ -54,7 +54,7 @@ public class Mecanum implements IUpdatable{
 		double backLeft = desiredSpeed * Math.cos(desiredAngle + Math.PI / 4) + turnSpeed;
 		double backRight = desiredSpeed * Math.sin(desiredAngle + Math.PI / 4) - turnSpeed;
 
-		double scaleFactor = Math.max(Math.max(Math.max(Math.abs(frontLeft),Math.abs(frontRight)),Math.abs(backLeft)),Math.abs(backRight));
+		double scaleFactor = Math.max(Math.max(Math.max(Math.abs(frontLeft), Math.abs(frontRight)), Math.abs(backLeft)), Math.abs(backRight));
 
 		frontLeftWheel.set(frontLeft / scaleFactor);
 		frontRightWheel.set(frontRight / scaleFactor);
