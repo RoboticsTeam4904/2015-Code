@@ -1,12 +1,10 @@
 *.class
-2015-Code/build/*
 2015-Code/dist/*
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
 
 # Package Files #
-*.jar
 *.war
 *.ear
 
