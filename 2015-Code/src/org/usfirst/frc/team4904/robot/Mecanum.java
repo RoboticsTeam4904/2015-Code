@@ -17,7 +17,6 @@ package org.usfirst.frc.team4904.robot;
 
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.VictorSP;
-import edu.wpi.first.wpilibj.Joystick;
 
 public class Mecanum implements Updatable{
 	private static final int FRONT_LEFT_WHEEL_PORT=0;

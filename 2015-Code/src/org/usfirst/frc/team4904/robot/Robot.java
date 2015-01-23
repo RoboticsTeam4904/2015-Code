@@ -12,7 +12,7 @@ public class Robot extends SampleRobot implements Updatable{
 	
 	private final UDAR udar;				// the UDAR (ultrasonic detection and ranging)
 	private final IMU imu;
-	
+	private final LIDAR lidar;
 	//Advanced movement controllers
 	private final Winch winch;			// the Winch class takes care of moving to specific heights
 	private final Grabber grabber;		// the grabber class takes care of openning and closing the grabber
@@ -39,9 +39,9 @@ public class Robot extends SampleRobot implements Updatable{
 		
 		//Initialize sensors
 		udar = new UDAR(); // Initialize UDAR
+		lidar = new LIDAR();
 		
-		
-		align = new AutoAlign(mecanumDrive, udar, imu, grabber); // Initialize AutoAlign system
+		align = new AutoAlign(mecanumDrive, udar, lidar, imu, grabber); // Initialize AutoAlign system
 		operator = new OperatorGriffin(stick,winch,align);
 		driver = new DriverNathan(mecanumDrive,xboxController);
 		updatables=new Updatable[]{driver,operator,mecanumDrive,imu};

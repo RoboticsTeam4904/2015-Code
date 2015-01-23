@@ -5,16 +5,17 @@ public class AutoAlign {
 	private final Mecanum mecanum;
 	private final UDAR udar;
 	private final IMU imu;
-	
+	private final LIDAR lidar;
 	private final Grabber grabber;
 	
 	private volatile boolean wide;
 	
-	public AutoAlign(Mecanum mecanum, UDAR udar, IMU imu, Grabber grabber){
+	public AutoAlign(Mecanum mecanum, UDAR udar, LIDAR lidar, IMU imu, Grabber grabber){
 		this.mecanum = mecanum;
 		this.udar = udar;
 		this.imu = imu;
 		this.grabber = grabber;
+		this.lidar=lidar;
 	}
 	
 	public void toteGrab(){
