@@ -32,7 +32,7 @@ public class AutoAlign {
 	public void toteRelease(){
 		
 		
-		grabber.setWidth(mode);
+		grabber.setWidth(grabber.MODE_WIDE_TOTE+1);
 	}
 	
 	public void canRelease(){
