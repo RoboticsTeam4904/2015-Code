@@ -7,7 +7,12 @@ public class AutoAlign {
 	private final LIDAR lidar;
 	private final Grabber grabber;
 	private enum State{
-		EMPTY, ALIGNING_WITH_WIDE_TOTE, ALIGNING_WITH_THIN_TOTE, ALIGNING_WITH_CAN, HOLDING_CAN, HOLDING_THIN_TOTE, HOLDING_WIDE_TOTE
+		EMPTY,
+		ALIGNING_WITH_WIDE_TOTE,
+		ALIGNING_WITH_THIN_TOTE,
+		ALIGNING_WITH_CAN, HOLDING_CAN,
+		HOLDING_THIN_TOTE,
+		HOLDING_WIDE_TOTE
 	}
 	private volatile State currentState;
 	public AutoAlign(Mecanum mecanum, UDAR udar, LIDAR lidar, IMU imu, Grabber grabber){
