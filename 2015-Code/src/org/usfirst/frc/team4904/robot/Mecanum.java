@@ -16,7 +16,6 @@ package org.usfirst.frc.team4904.robot;
  */
 
 import edu.wpi.first.wpilibj.SpeedController;
-import edu.wpi.first.wpilibj.VictorSP;
 
 public class Mecanum {
 	
