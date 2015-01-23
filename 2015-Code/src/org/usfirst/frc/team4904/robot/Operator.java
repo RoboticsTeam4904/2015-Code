@@ -17,6 +17,8 @@ public abstract class Operator {
 		winchTimer = 0;
 	}
 	
+	public abstract void update();
+	
 	protected void raise(int levels) {
 		winch.set(1);
 		winchTimer = 5;

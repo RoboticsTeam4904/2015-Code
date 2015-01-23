@@ -85,12 +85,10 @@ public class Robot extends SampleRobot {
 	
 	public void autonomous(){
 		System.out.println("*** AUTONOMOUS ***");
-		
+		// TODO driver=new DriverAutonomous  operator=new OperatorAutonomous
 		while (isEnabled() && isAutonomous()) {
 			Timer.delay(updatePeriod);
-			
-			imu.update();
-			
+			updateAll();
 		}
 	}
 
@@ -99,8 +97,14 @@ public class Robot extends SampleRobot {
 		
 		while (isEnabled() && isOperatorControl()) {
 			Timer.delay(updatePeriod);
-			
-			imu.update();
+			updateAll();
 		}
+	}
+	public void updateAll(){
+		imu.update();
+		driver.update();
+		operator.update();
+		align.update();
+		mecanumDrive.update();
 	}
 }

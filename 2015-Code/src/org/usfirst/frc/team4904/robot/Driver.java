@@ -10,6 +10,7 @@ public abstract class Driver {
 	protected final Mecanum mecanumDrive;
 	protected final XboxController xboxController;
 	
+	public abstract void update();
 	
 	protected void setMovement(double speed, double angle){
 		mecanumDrive.setDesiredSpeedDirection(speed, angle);
