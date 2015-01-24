@@ -1,6 +1,6 @@
 package org.usfirst.frc.team4904.robot;
 
-public class AutonomousController {
+public class AutonomousController {//This needs to be a seperate class because it cant extend both Operator and Driver
 	private OperatorAutonomous operator=null;
 	private DriverAutonomous driver=null;
 	private volatile int desiredWinchAction=0;
@@ -27,14 +27,15 @@ public class AutonomousController {
 		}
 		this.operator=operator;
 	}
-	public void update(){
+	public synchronized void update(){//This is in this architecture beacuse this 
+		//update function might take a long time (e.g. graph search), and we don't want other parts of the robot (e.g. motors) to be slowed by it
 		// TODO code all autonomous thing here
 		desiredWinchAction++;
 		angle++;
 		speed++;
 		turnSpeed++;
 	}
-	public int getDesiredWinchAction(){
+	public int getDesiredWinchAction(){//While these functions might be called very quickly, their return values might change only every once in a while
 		return desiredWinchAction;
 	}
 	public double[] getDesiredMovement(){

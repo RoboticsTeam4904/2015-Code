@@ -24,9 +24,9 @@ public class Mecanum {
 	private final SpeedController backLeftWheel;
 	private final SpeedController backRightWheel;
 	
-	private double desiredSpeed;
-	private double desiredAngle;
-	private double desiredTurnSpeed;
+	private volatile double desiredSpeed;
+	private volatile double desiredAngle;
+	private volatile double desiredTurnSpeed;
 	
 	public Mecanum(SpeedController frontLeftWheel, SpeedController frontRightWheel, SpeedController backLeftWheel, SpeedController backRightWheel){
 		// Initialize motor controllers with default ports
@@ -38,8 +38,8 @@ public class Mecanum {
 	
 	
 	private void move(double desiredSpeed, double desiredAngle, double turnSpeed) {
-		// @param	desiredSpeed	double between 0 and 1 specifying wanted motor speed
-		// @param	desiredAngle	double between 0 and 2pi specifying wanted angle in radians
+		// @param	desiredSpeed	double between 0 and 1 specifying wanted movement speed
+		// @param	desiredAngle	double between 0 and 2pi specifying wanted movement angle in radians
 		// @param	turnSpeed		double between 0 and 1 specifying rotational speed
 		
 		double frontLeft = desiredSpeed * Math.sin(desiredAngle + Math.PI / 4) + turnSpeed;
@@ -56,7 +56,7 @@ public class Mecanum {
 	}
 	
 	public synchronized void update() {
-		this.move(this.desiredSpeed, this.desiredAngle, this.desiredTurnSpeed);
+		this.move(this.desiredSpeed, this.desiredAngle, this.desiredTurnSpeed);//This system allows for different updating times and rates
 	}
 	
 	

@@ -2,15 +2,16 @@ package org.usfirst.frc.team4904.robot;
 
 
 public class OperatorNachi extends Operator {
-	
+	protected final LogitechJoystick stick;
 	boolean holdingTote;// TODO these two should be in & handled by autoalign
 	boolean holdingCan;
 	
 	public OperatorNachi(LogitechJoystick stick, Winch winch, AutoAlign align){
-		super(stick, winch, align);
+		super(winch, align);
 		
 		holdingTote = false;
 		holdingCan = false;
+		this.stick=stick;
 	}
 	
 	public synchronized void update() {

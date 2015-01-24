@@ -72,8 +72,8 @@ public class Robot extends SampleRobot {
 		humanOperator = new OperatorGriffin(stick,winch,align);
 		humanDriver = new DriverNathan(mecanumDrive,xboxController,align);
 		controller=new AutonomousController(udar,imu,lidar);
-		autonomousOperator = new OperatorAutonomous(stick,winch,align,controller);
-		autonomousDriver = new DriverAutonomous(mecanumDrive,xboxController,controller,align);
+		autonomousOperator = new OperatorAutonomous(winch,align,controller);
+		autonomousDriver = new DriverAutonomous(mecanumDrive,controller,align);
 	}
 	
 	public void disabled(){

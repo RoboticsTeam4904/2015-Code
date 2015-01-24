@@ -1,17 +1,16 @@
 package org.usfirst.frc.team4904.robot;
 
 public class OperatorAutonomous extends Operator{
-	AutonomousController controller;
-	public OperatorAutonomous(LogitechJoystick stick, Winch winch,
-			AutoAlign align, AutonomousController controller) {
-		super(stick, winch, align);
+	private final AutonomousController controller;
+	public OperatorAutonomous(Winch winch, AutoAlign align, AutonomousController controller) {
+		super(winch, align);
 		this.controller=controller;
 		controller.setOperator(this);
 	}
 
-	public void update() {
+	public synchronized void update() {
 		int action=controller.getDesiredWinchAction();
-		switch(action){// TODO finish!!!
+		switch(action){// TODO improve this (terrible) system or create a WinchAction class/enum.
 		case MODE_THIN_TOTE:
 			grab(MODE_THIN_TOTE);
 			break;

@@ -22,7 +22,7 @@ public class AutoAlign {
 		this.grabber = grabber;
 		this.lidar=lidar;
 	}
-	public void grabTote (boolean wide) {
+	public void grabTote (boolean wide) { 
 		if (currentState != State.EMPTY) {
 			return;
 		}
@@ -82,7 +82,7 @@ public class AutoAlign {
 		case HOLDING_WIDE_TOTE:
 			return Operator.MODE_WIDE_TOTE;
 		case EMPTY:
-			return 5;// TODO put default empty state here
+			return 3;// TODO put default empty state here
 		default:
 			throw new Error("Current state of AutoAlign does not exist");
 		}

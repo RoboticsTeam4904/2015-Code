@@ -2,7 +2,7 @@ package org.usfirst.frc.team4904.robot;
 
 public abstract class Operator {
 	
-	protected final LogitechJoystick stick;
+	
 	private final Winch winch;
 	private final AutoAlign align;
 	private volatile int winchTimer;
@@ -10,8 +10,7 @@ public abstract class Operator {
 	protected static final int MODE_WIDE_TOTE = 1;
 	protected static final int MODE_CAN = 2;
 	
-	public Operator(LogitechJoystick stick, Winch winch, AutoAlign align){
-		this.stick = stick;
+	public Operator(Winch winch, AutoAlign align){
 		this.winch = winch;
 		this.align = align;
 		winchTimer = 0;
