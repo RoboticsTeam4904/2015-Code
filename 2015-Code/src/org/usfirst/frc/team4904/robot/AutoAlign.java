@@ -101,5 +101,8 @@ public class AutoAlign {
 		default:
 			// You pressed the release button when you aren't holding anything
 		}
-	}	
+	}
+	public boolean isEmpty(){
+		return currentState==State.EMPTY;
+	}
 }
