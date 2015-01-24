@@ -2,9 +2,9 @@ package org.usfirst.frc.team4904.robot;
 
 
 public class OperatorNachi extends Operator {
-	protected final LogitechJoystick stick;
-	boolean holdingTote;// TODO these two should be in & handled by autoalign
-	boolean holdingCan;
+	private final LogitechJoystick stick;
+	private boolean holdingTote;// TODO these two should be in & handled by autoalign
+	private boolean holdingCan;
 	
 	public OperatorNachi(LogitechJoystick stick, Winch winch, AutoAlign align){
 		super(winch, align);

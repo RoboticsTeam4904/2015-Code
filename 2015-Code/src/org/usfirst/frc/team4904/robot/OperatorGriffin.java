@@ -1,7 +1,7 @@
 package org.usfirst.frc.team4904.robot;
 
 public class OperatorGriffin extends Operator {
-	protected final LogitechJoystick stick;
+	private final LogitechJoystick stick;
 	public OperatorGriffin(LogitechJoystick stick, Winch winch, AutoAlign align){
 		super(winch, align);
 		this.stick=stick;
