@@ -2,7 +2,9 @@ package org.usfirst.frc.team4904.robot.input;
 
 import java.math.BigInteger;
 
-public class LIDAR{
+import org.usfirst.frc.team4904.robot.Updatable;
+
+public class LIDAR implements Updatable {
 
     int[] Dists = new int[360];
 	
