@@ -10,7 +10,8 @@ public class AutoAlign {
 		EMPTY,
 		ALIGNING_WITH_WIDE_TOTE,
 		ALIGNING_WITH_THIN_TOTE,
-		ALIGNING_WITH_CAN, HOLDING_CAN,
+		ALIGNING_WITH_CAN,
+		HOLDING_CAN,
 		HOLDING_THIN_TOTE,
 		HOLDING_WIDE_TOTE
 	}
@@ -24,7 +25,7 @@ public class AutoAlign {
 		this.currentState = State.EMPTY;
 	}
 	public void grabTote (boolean wide) { 
-		if (currentState != State.EMPTY) {
+		if (currentState != State.EMPTY) {//Don't do anything if grabber isn't empty
 			return;
 		}
 		// TODO set "wide" boolean based on sensor data in case wring button pressed
@@ -32,7 +33,7 @@ public class AutoAlign {
 	}
 	
 	public void grabCan(){
-		if (currentState !=State.EMPTY) {
+		if (currentState !=State.EMPTY) {//Don't do anything if grabber isn't empty
 			return;
 		}
 		currentState = State.ALIGNING_WITH_CAN; // NOTE: Setting the grabber is NOT done in these functions and is instead done the next time update is called
@@ -41,21 +42,21 @@ public class AutoAlign {
 	private void releaseTote (boolean wide) {
 		// TODO put alignment code
 		// If we are putting the tote on top of a stack, we need to align before releasing
-		// TODO set state to ALIGNING_TO_RELEASE_THIN/WIDE_TOTE
+		// TODO set state to ALIGNING_TO_RELEASE_THIN/WIDE_TOTE so that alignment takes place in doAligningTick
 		currentState = State.EMPTY;
 	}
 	
 	private void releaseCan() {
 		// TODO put alignment code
 		// If we are putting the can on top of a stack, we need to align before releasing
-		// TODO set state to ALIGNING_TO_RELEASE_CAN
+		// TODO set state to ALIGNING_TO_RELEASE_CAN so that alignment takes place in doAligningTick
 		currentState = State.EMPTY;
 	}
 	private void doAligningTick() {
 		// TODO put alignment code
 	}
 	public synchronized void update() {
-		grabber.setWidth(getDesiredGrabberState());
+		grabber.setWidth(getDesiredGrabberState());//This is (on purpose) the only place that grabber.setWidth is ever called
 		if (isCurrentlyAligning()) {
 			doAligningTick();
 		}
@@ -85,7 +86,7 @@ public class AutoAlign {
 		case HOLDING_WIDE_TOTE:
 			return Operator.MODE_WIDE_TOTE;
 		case EMPTY:
-			return 3;// TODO put default empty state here
+			return Operator.MODE_EMPTY;
 		default:
 			throw new Error("Current state of AutoAlign does not exist/is null");
 		}

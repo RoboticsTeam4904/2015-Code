@@ -20,6 +20,9 @@ public class Grabber extends Talon{
 	}
 	
 	public void setWidth(int mode){
+		if(mode==Operator.MODE_EMPTY){
+			moveToWidth(MAX_WIDTH);
+		}
 		if (mode == Operator.MODE_THIN_TOTE) moveToWidth(THIN_TOTE_WIDTH);
 		else if (mode == Operator.MODE_WIDE_TOTE) moveToWidth(WIDE_TOTE_WIDTH);
 		else if (mode == Operator.MODE_CAN) moveToWidth(CAN_WIDTH);
