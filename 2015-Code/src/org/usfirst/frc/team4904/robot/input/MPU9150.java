@@ -112,7 +112,7 @@ public class MPU9150 {
 	// I2C objects
 	private I2C accelMag;
 	private I2C compass;
-	
+
 	public void MPU9150() {
 		// Initialize I2C
 		this.accelMag = new I2C(I2C.Port.kOnboard, 0x0C);
@@ -120,11 +120,33 @@ public class MPU9150 {
 		this.accelMag.write(MPU9150_PWR_MGMT_1, 0);
 		this.setup();
 	}
-	
-	public double[] read() {
-		return new double[9];
+
+	public int[] read() {
+		int[] data = new int[10];
+		double dT = (this.readSensor(MPU9150_TEMP_OUT_L, MPU9150_TEMP_OUT_H) + 12412.0) / 340.0;
+		System.out.print(dT);
+		System.out.print("  ");
+		System.out.print(this.readSensor(MPU9150_CMPS_XOUT_L, MPU9150_CMPS_XOUT_H));
+		System.out.print("  ");
+		System.out.print(this.readSensor(MPU9150_CMPS_YOUT_L, MPU9150_CMPS_YOUT_H));
+		System.out.print("  ");
+		System.out.print(this.readSensor(MPU9150_CMPS_ZOUT_L, MPU9150_CMPS_ZOUT_H));
+		System.out.print("  ");
+		System.out.print(this.readSensor(MPU9150_GYRO_XOUT_L, MPU9150_GYRO_XOUT_H));
+		System.out.print("  ");
+		System.out.print(this.readSensor(MPU9150_GYRO_YOUT_L, MPU9150_GYRO_YOUT_H));
+		System.out.print("  ");
+		System.out.print(this.readSensor(MPU9150_GYRO_ZOUT_L, MPU9150_GYRO_ZOUT_H));
+		System.out.print("  ");
+		System.out.print(this.readSensor(MPU9150_ACCEL_XOUT_L, MPU9150_ACCEL_XOUT_H));
+		System.out.print("  ");
+		System.out.print(this.readSensor(MPU9150_ACCEL_YOUT_L, MPU9150_ACCEL_YOUT_H));
+		System.out.print("  ");
+		System.out.print(this.readSensor(MPU9150_ACCEL_ZOUT_L, MPU9150_ACCEL_ZOUT_H));
+		System.out.println();
+		return new int[10];
 	}
-	
+
 	private void setup() {
 		// Extremely modified from http://playground.arduino.cc/Main/MPU-9150
 		// Mag setup
@@ -149,29 +171,17 @@ public class MPU9150 {
 		this.accelMag.write(0x6A, 0x20); // enable master i2c mode
 		this.accelMag.write(0x34, 0x13); // disable slv4
 	}
-
+	
 	public void readAcc() {}
-
+	
 	// ///////////////////////////
 	// Low level I2C functions //
 	// ///////////////////////////
-	private int readCompass(int addrL, int addrH) {
-		return 0;
+	private int readSensor(int addrL, int addrH) {
+		byte[] H = new byte[1];
+		byte[] L = new byte[1];
+		if (!this.accelMag.read(addrH, 1, H)) return -1;
+		if (!this.accelMag.read(addrL, 1, L)) return -1;
+		return (H[0] << 8) + L[0];
 	}
-
-	private int readCompass(int addr) {
-		return 0;
-	}
-	
-	private int readAccGyro(int addrL, int addrH) {
-		return 0;
-	}
-
-	private int readAccGyro(int addr) {
-		return 0;
-	}
-
-	private void writeAccGyro(int addr, int data) {}
-	
-	private void writeCompass(int addr, int data) {}
 }
