@@ -18,38 +18,23 @@ public class XboxController extends Joystick{
 	public final int LEFT_STICK = 9;
 	public final int RIGHT_STICK = 10;
 	
-	private Button[] buttons = new Button[10];
+	private SuperButton[] buttons = new SuperButton[10];
 	private boolean[] pressed = new boolean[10];
 	
 	public XboxController(int port) {
 		super(port);
-		buttons[0] = new JoystickButton(this, A_BUTTON); // A button
-		buttons[1] = new JoystickButton(this, B_BUTTON); // B button
-		buttons[2] = new JoystickButton(this, X_BUTTON); // X button
-		buttons[3] = new JoystickButton(this, Y_BUTTON); // Y button
-		buttons[4] = new JoystickButton(this, LEFT_BUMPER); // Left bumper
-		buttons[5] = new JoystickButton(this, RIGHT_BUMPER); // Right bumper
-		buttons[6] = new JoystickButton(this, BACK_BUTTON); // Back button
-		buttons[7] = new JoystickButton(this, START_BUTTON); // Start button
-		buttons[8] = new JoystickButton(this, LEFT_STICK); // Left stick
-		buttons[9] = new JoystickButton(this, RIGHT_STICK); // Right stick
+		buttons[0] = new SuperButton(this, A_BUTTON); // A button
+		buttons[1] = new SuperButton(this, B_BUTTON); // B button
+		buttons[2] = new SuperButton(this, X_BUTTON); // X button
+		buttons[3] = new SuperButton(this, Y_BUTTON); // Y button
+		buttons[4] = new SuperButton(this, LEFT_BUMPER); // Left bumper
+		buttons[5] = new SuperButton(this, RIGHT_BUMPER); // Right bumper
+		buttons[6] = new SuperButton(this, BACK_BUTTON); // Back button
+		buttons[7] = new SuperButton(this, START_BUTTON); // Start button
+		buttons[8] = new SuperButton(this, LEFT_STICK); // Left stick
+		buttons[9] = new SuperButton(this, RIGHT_STICK); // Right stick
 		for (int i = 0; i < 10; i++) {
 			pressed[i] = false;
 		}
-	}
-	
-	public boolean get(int button) {
-		if (button < 1 || button >= buttons.length + 1) {
-			return false;
-		}
-		
-		boolean buttonVal = buttons[button-1].get();
-		
-		if(pressed[button] != buttonVal){
-			pressed[button] = buttonVal;
-			return buttonVal;
-		}
-		
-		return false;
 	}
 }
