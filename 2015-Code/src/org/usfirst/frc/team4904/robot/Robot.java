@@ -109,21 +109,10 @@ public class Robot extends SampleRobot {
 		System.out.println("*** AUTONOMOUS ***");
 		operator = autonomousOperator;
 		driver = autonomousDriver;
-		new Thread(){
-			public void run(){
-				double desiredTime=time()+slowUpdatePeriod;
-				while (isEnabled() && isAutonomous()) {
-					updateSlow();
-					Timer.delay(desiredTime-time());//Wait until the time that this tick should end
-					desiredTime+=slowUpdatePeriod;//Next tick should end updatePeriod seconds in the future
-				}
-			}
-		}.start();
-		double desiredTime=time()+fastUpdatePeriod;
-		while (isEnabled() && isAutonomous()) {
-			updateFast();
-			Timer.delay(desiredTime-time());//Wait until the time that this tick should end
-			desiredTime+=fastUpdatePeriod;//Next tick should end updatePeriod seconds in the future
+		new Updater(2,new Updatable[]{controller,align},slowUpdatePeriod).start();
+		new Updater(2,new Updatable[]{imu,driver,operator,mecanumDrive},fastUpdatePeriod).start();
+		while(getRobotState()==2){
+			Timer.delay(0.01);
 		}
 	}
 
@@ -131,24 +120,21 @@ public class Robot extends SampleRobot {
 		System.out.println("*** TELEOPERATED ***");
 		operator = humanOperator;
 		driver = humanDriver;
-		new Thread(){
-			public void run(){
-				double desiredTime=time()+slowUpdatePeriod;
-				while (isEnabled() && isOperatorControl()) {
-					updateSlow();
-					Timer.delay(desiredTime-time());//Wait until the time that this tick should end
-					desiredTime+=slowUpdatePeriod;//Next tick should end updatePeriod seconds in the future
-				}
-			}
-		}.start();
-		double desiredTime=time()+fastUpdatePeriod;
-		while (isEnabled() && isOperatorControl()) {
-			updateFast();
-			Timer.delay(desiredTime-time());//Wait until the time that this tick should end
-			desiredTime+=fastUpdatePeriod;//Next tick should end updatePeriod seconds in the future
+		new Updater(1,new Updatable[]{controller,align},slowUpdatePeriod).start();
+		new Updater(1,new Updatable[]{imu,driver,operator,mecanumDrive},fastUpdatePeriod).start();
+		while(getRobotState()==1){
+			Timer.delay(0.01);
 		}
 	}
-	
+	private int getRobotState(){
+		if(isEnabled() && isOperatorControl()){
+			return 1;
+		}
+		if(isEnabled() && isAutonomous()) {
+			return 2;
+		}
+		return 0;
+	}
 	private void updateSlow(){
 		controller.update();
 		align.update();
@@ -161,5 +147,25 @@ public class Robot extends SampleRobot {
 	}
 	private static double time(){
 		return ((double)System.currentTimeMillis())/1000;
+	}
+	private class Updater extends Thread{
+		final int state;
+		final Updatable[] toUpdate;
+		final double updateSpeed;
+		public Updater(int state, Updatable[] toUpdate, double updateSpeed){
+			this.state=state;
+			this.toUpdate=toUpdate;
+			this.updateSpeed=updateSpeed;
+		}
+		public void run(){
+			double desiredTime=time()+updateSpeed;
+			while (getRobotState()==state) {
+				for(Updatable update : toUpdate){
+					update.update();
+				}
+				Timer.delay(desiredTime-time());//Wait until the time that this tick should end
+				desiredTime+=updateSpeed;//Next tick should end updatePeriod seconds in the future
+			}
+		}
 	}
 }
