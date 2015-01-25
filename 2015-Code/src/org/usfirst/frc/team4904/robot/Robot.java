@@ -39,7 +39,7 @@ public class Robot extends SampleRobot {
 	private final LIDAR lidar;
 	// movement controllers
 	private final Winch winch; // the Winch class takes care of moving to specific heights
-	private final Grabber grabber; // the grabber class takes care of openning and closing the grabber
+	private final Grabber grabber; // the grabber class takes care of opening and closing the grabber
 	private final Mecanum mecanumDrive; // the Mecanum class that takes care of the math required to use mecanum drive
 	private final SpeedController frontLeftWheel;
 	private final SpeedController frontRightWheel;
@@ -56,11 +56,11 @@ public class Robot extends SampleRobot {
 	// Update system
 	private final double fastUpdatePeriod = 0.005; // update every 0.005 seconds/5 milliseconds (200Hz)
 	private final double slowUpdatePeriod = 0.5; // update every 0.005 seconds/5 milliseconds (200Hz)
-	
+
 	private enum RobotState {
 		DISABLED, OPERATOR, AUTONOMOUS
 	}
-	
+
 	public Robot() {
 		System.out.println("*** INITIALIZING ROBOT ***");
 		// Initialize movement controllers
@@ -76,11 +76,11 @@ public class Robot extends SampleRobot {
 		stick = new LogitechJoystick(JOYSTICK_PORT);
 		xboxController = new XboxController(CONTROLLER_PORT);
 		// Initialize sensors
-		i2c = new I2C(I2C.Port.kOnboard, 168); // Initalize I2C
+		i2c = new I2C(I2C.Port.kOnboard, 168); // Initialize I2C
 		imu = new IMU(i2c); // Initialize IMU
 		udar = new UDAR(i2c); // Initialize UDAR
-		lidar = new LIDAR(); // Initalize LIDAR
-		// Initalize subsystems
+		lidar = new LIDAR(); // Initialize LIDAR
+		// Initialize subsystems
 		align = new AutoAlign(mecanumDrive, udar, lidar, imu, grabber); // Initialize AutoAlign system
 		humanOperator = new OperatorGriffin(stick, winch, align);
 		humanDriver = new DriverNathan(mecanumDrive, xboxController, align);
@@ -88,7 +88,8 @@ public class Robot extends SampleRobot {
 		autonomousOperator = new OperatorAutonomous(winch, align, controller);
 		autonomousDriver = new DriverAutonomous(mecanumDrive, controller, align);
 	}
-	
+
+	@Override
 	public void disabled() {
 		System.out.println("*** DISABLED ***");
 		while (isDisabled()) {
@@ -96,7 +97,7 @@ public class Robot extends SampleRobot {
 			Timer.delay(0.01);
 		}
 	}
-	
+
 	private void disableMotors() {
 		winch.set(0);
 		grabber.set(0);
@@ -105,7 +106,8 @@ public class Robot extends SampleRobot {
 		backLeftWheel.set(0);
 		backRightWheel.set(0);
 	}
-	
+
+	@Override
 	public void autonomous() {
 		System.out.println("*** AUTONOMOUS ***");
 		operator = autonomousOperator;
@@ -117,7 +119,8 @@ public class Robot extends SampleRobot {
 			Timer.delay(0.01);
 		}
 	}
-	
+
+	@Override
 	public void operatorControl() {
 		System.out.println("*** TELEOPERATED ***");
 		operator = humanOperator;
@@ -129,7 +132,7 @@ public class Robot extends SampleRobot {
 			Timer.delay(0.01);
 		}
 	}
-	
+
 	private RobotState getRobotState() {
 		if (isDisabled()) {
 			return RobotState.DISABLED;
@@ -142,24 +145,25 @@ public class Robot extends SampleRobot {
 		}
 		return RobotState.DISABLED;
 	}
-	
+
 	private static double time() {
-		return ((double) System.currentTimeMillis()) / 1000;
+		return (double) System.currentTimeMillis() / 1000;
 	}
-	
+
 	private class Updater extends Thread { // Function to update automatically in a new thread
 		private final RobotState robotState;
 		private final Updatable[] toUpdate;
 		private final double updateSpeed;
-		
+
 		public Updater(RobotState state, Updatable[] toUpdate, double updateSpeed) {
 			this.robotState = state;
 			this.toUpdate = toUpdate;
 			this.updateSpeed = updateSpeed;
 		}
-		
+
+		@Override
 		public void run() {
-			double desiredTime = time() + updateSpeed; // Sync with clock to ensure that update interval is consistant regardless of how long each update takes
+			double desiredTime = time() + updateSpeed; // Sync with clock to ensure that update interval is consistent regardless of how long each update takes
 			while (getRobotState() == robotState) {
 				for (Updatable update : toUpdate) {
 					update.update();
