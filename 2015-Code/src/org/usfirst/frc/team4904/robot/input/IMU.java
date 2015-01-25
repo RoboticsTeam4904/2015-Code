@@ -22,7 +22,7 @@ public class IMU implements Updatable{
 	}
 	
 	private void readData() {
-		
+		// TODO only read data if enough data is available, otherwise return so that this function is always fast
 	}
 	
 	private void updateKalman() {
