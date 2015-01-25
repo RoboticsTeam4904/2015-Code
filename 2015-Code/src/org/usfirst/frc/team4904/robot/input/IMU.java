@@ -4,7 +4,7 @@ import org.usfirst.frc.team4904.robot.Updatable;
 
 import edu.wpi.first.wpilibj.I2C;
 
-public class IMU implements Updatable{
+public class IMU implements Updatable {
 	private I2C i2c;
 	
 	public IMU(I2C i2c) {
@@ -31,6 +31,7 @@ public class IMU implements Updatable{
 	
 	private void readData() {
 		// TODO only read data if enough data is available, otherwise return so that this function is always fast
+		this.i2c.
 	}
 	
 	private void updateKalman() {
