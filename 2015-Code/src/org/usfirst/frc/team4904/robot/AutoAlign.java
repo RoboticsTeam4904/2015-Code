@@ -56,7 +56,7 @@ public class AutoAlign {
 		// TODO put alignment code
 	}
 	public synchronized void update() {
-		grabber.setWidth(getDesiredGrabberState());//This is (on purpose) the only place that grabber.setWidth is ever called
+		grabber.setWidth(getDesiredGrabberState());//This is (on purpose) the only place that grabber.setWidth is ever called (other than in disableMotors())
 		if (isCurrentlyAligning()) {
 			doAligningTick();
 		}

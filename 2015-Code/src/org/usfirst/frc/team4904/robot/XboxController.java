@@ -30,8 +30,5 @@ public class XboxController extends Joystick{
 		startButton = new JoystickButton(this, 8); // Start button
 		leftStick = new JoystickButton(this, 9); // Left stick
 		rightStick = new JoystickButton(this, 10); // Right stick
-	}
-	
-	
-	
+	}	
 }

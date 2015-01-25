@@ -50,11 +50,3 @@ public abstract class Operator {
 		return align.isGrabberEmpty();
 	}
 }
-
-
-
-
-
-
-
-

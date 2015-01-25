@@ -19,6 +19,5 @@ public class Winch extends Talon{
 	
 	public void move(double speed){ // Move winch at speed
 		super.set(speed); // Actually do the moving
-	}
-	
+	}	
 }

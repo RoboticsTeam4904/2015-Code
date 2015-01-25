@@ -111,6 +111,7 @@ public class Robot extends SampleRobot {
 		}
 	}
 	public void updateAll(){//This order of updating is important by the way
+		// TODO Make this multithreaded, and improve timing
 		imu.update();
 		controller.update();
 		driver.update();

@@ -22,5 +22,4 @@ public class OperatorGriffin extends Operator {
 	 	
 		updateWinch();
 	}
-
 }

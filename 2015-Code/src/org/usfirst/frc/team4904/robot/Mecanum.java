@@ -67,5 +67,4 @@ public class Mecanum {
 	public void setDesiredTurnSpeed(double turnSpeed){
 		this.desiredTurnSpeed=turnSpeed;
 	}
-	
 }

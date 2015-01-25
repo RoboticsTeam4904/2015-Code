@@ -35,8 +35,5 @@ public class LogitechJoystick extends Joystick{
 		x10 = new JoystickButton(this, 10); // Initilize button 10
 		x11 = new JoystickButton(this, 11); // Initilize button 11
 		x12 = new JoystickButton(this, 12); // Initilize button 12
-	}
-	
-	
-	
+	}	
 }

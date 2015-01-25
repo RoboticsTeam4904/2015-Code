@@ -32,5 +32,4 @@ public class OperatorAutonomous extends Operator{
 		}
 		updateWinch();
 	}
-
 }

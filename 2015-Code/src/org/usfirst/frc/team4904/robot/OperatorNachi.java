@@ -29,5 +29,4 @@ public class OperatorNachi extends Operator {
 		
 		updateWinch();
 	}
-
 }
