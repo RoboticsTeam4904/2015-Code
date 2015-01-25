@@ -1,12 +1,11 @@
 package org.usfirst.frc.team4904.robot.input;
 
-
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 
-public class XboxController extends Joystick{
-	
+public class XboxController extends Joystick {
+
 	public final int A_BUTTON = 1;
 	public final int B_BUTTON = 2;
 	public final int X_BUTTON = 3;
@@ -17,10 +16,10 @@ public class XboxController extends Joystick{
 	public final int START_BUTTON = 8;
 	public final int LEFT_STICK = 9;
 	public final int RIGHT_STICK = 10;
-	
+
 	private SuperButton[] buttons = new SuperButton[10];
 	private boolean[] pressed = new boolean[10];
-	
+
 	public XboxController(int port) {
 		super(port);
 		buttons[0] = new SuperButton(this, A_BUTTON); // A button

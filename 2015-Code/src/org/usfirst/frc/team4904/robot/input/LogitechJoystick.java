@@ -1,12 +1,11 @@
 package org.usfirst.frc.team4904.robot.input;
 
-
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 
-public class LogitechJoystick extends Joystick{
-	
+public class LogitechJoystick extends Joystick {
+
 	public Button x1;
 	public Button x2;
 	public Button x3;
@@ -19,10 +18,10 @@ public class LogitechJoystick extends Joystick{
 	public Button x10;
 	public Button x11;
 	public Button x12;
-	
+
 	public LogitechJoystick(int port) {
 		super(port);
-		
+
 		x1 = new JoystickButton(this, 1); // Initilize button 1
 		x2 = new JoystickButton(this, 2); // Initilize button 2
 		x3 = new JoystickButton(this, 3); // Initilize button 3
@@ -35,5 +34,5 @@ public class LogitechJoystick extends Joystick{
 		x10 = new JoystickButton(this, 10); // Initilize button 10
 		x11 = new JoystickButton(this, 11); // Initilize button 11
 		x12 = new JoystickButton(this, 12); // Initilize button 12
-	}	
+	}
 }
