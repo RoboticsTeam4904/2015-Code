@@ -33,10 +33,9 @@ public class AutoAlign {
 	}
 	
 	public void grabCan(){
-		if (currentState !=State.EMPTY) {//Don't do anything if grabber isn't empty
-			return;
+		if (currentState == State.EMPTY) {//Don't do anything if grabber isn't empty
+			currentState = State.ALIGNING_WITH_CAN; // NOTE: Setting the grabber is NOT done in these functions and is instead done the next time update is called
 		}
-		currentState = State.ALIGNING_WITH_CAN; // NOTE: Setting the grabber is NOT done in these functions and is instead done the next time update is called
 	}
 	
 	private void releaseTote (boolean wide) {
