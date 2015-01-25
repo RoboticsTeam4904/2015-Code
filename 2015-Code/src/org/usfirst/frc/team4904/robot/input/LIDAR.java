@@ -56,9 +56,13 @@ public class LIDAR implements Updatable {
     public int[] getDists(){
     	return Dists;
     }
-    
+    public int bytesCurrentlyAvailable(){
+    	return 0;
+    }
     public void update(){
-        
+        if(bytesCurrentlyAvailable()<1000){
+        	return;
+        }
         byte scanhdr = (byte) 0xA0;
         
         try{        
