@@ -1,6 +1,6 @@
 package org.usfirst.frc.team4904.robot;
 
-public class AutoAlign {
+public class AutoAlign implements Updatable{
 	private final Mecanum mecanum;
 	private final UDAR udar;
 	private final IMU imu;

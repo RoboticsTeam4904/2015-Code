@@ -1,6 +1,6 @@
 package org.usfirst.frc.team4904.robot;
 
-public abstract class Operator {
+public abstract class Operator implements Updatable{
 	
 	
 	private final Winch winch;

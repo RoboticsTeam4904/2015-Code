@@ -17,7 +17,7 @@ package org.usfirst.frc.team4904.robot;
 
 import edu.wpi.first.wpilibj.SpeedController;
 
-public class Mecanum {
+public class Mecanum implements Updatable{
 	
 	private final SpeedController frontLeftWheel;
 	private final SpeedController frontRightWheel;

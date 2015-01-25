@@ -1,6 +1,6 @@
 package org.usfirst.frc.team4904.robot;
 
-public class AutonomousController {//This needs to be a seperate class because it cant extend both Operator and Driver
+public class AutonomousController implements Updatable{//This needs to be a seperate class because it cant extend both Operator and Driver
 	private OperatorAutonomous operator=null;
 	private DriverAutonomous driver=null;
 	private volatile int desiredWinchAction=0;
