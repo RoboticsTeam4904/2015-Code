@@ -2,8 +2,6 @@ package org.usfirst.frc.team4904.robot.input;
 
 
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.buttons.Button;
-import edu.wpi.first.wpilibj.buttons.JoystickButton;
 
 public class LogitechJoystick extends Joystick {
 	public SuperButton[] buttons = new SuperButton[12];
