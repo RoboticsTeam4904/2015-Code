@@ -135,37 +135,28 @@ public class Robot extends SampleRobot {
 		}
 		return 0;
 	}
-	private void updateSlow(){
-		controller.update();
-		align.update();
-	}
-	private void updateFast(){
-		imu.update();
-		driver.update();
-		operator.update();
-		mecanumDrive.update();
-	}
 	private static double time(){
 		return ((double)System.currentTimeMillis())/1000;
 	}
-	private class Updater extends Thread{
-		final int state;
-		final Updatable[] toUpdate;
-		final double updateSpeed;
+	private class Updater extends Thread{ // Function to update automatically in a new thread
+		private final int state;
+		private final Updatable[] toUpdate;
+		private final double updateSpeed;
+		
 		public Updater(int state, Updatable[] toUpdate, double updateSpeed){
 			this.state=state;
 			this.toUpdate=toUpdate;
 			this.updateSpeed=updateSpeed;
 		}
+		
 		public void run(){
-			double desiredTime=time()+updateSpeed;
+			double desiredTime=time()+updateSpeed;	// Sync with clock to ensure that update interval is consistant regardless of how long each update takes
 			while (getRobotState()==state) {
 				for(Updatable update : toUpdate){
 					update.update();
 				}
-				double toWait=desiredTime-time();
-				Timer.delay(toWait);//Wait until the time that this tick should end
-				desiredTime+=updateSpeed;//Next tick should end updatePeriod seconds in the future
+				Timer.delay(desiredTime-time());	// Wait until the time that this tick should end
+				desiredTime+=updateSpeed;			// Next tick should end updatePeriod seconds in the future
 			}
 		}
 	}
