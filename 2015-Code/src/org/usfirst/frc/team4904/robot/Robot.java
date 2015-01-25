@@ -93,24 +93,24 @@ public class Robot extends SampleRobot {
 	
 	public void autonomous(){
 		System.out.println("*** AUTONOMOUS ***");
-		operator=autonomousOperator;
-		driver=autonomousDriver;
-		double desiredTime=Timer.getFPGATimestamp()+updatePeriod;
+		operator = autonomousOperator;
+		driver = autonomousDriver;
+		double desiredTime=time()+updatePeriod;
 		while (isEnabled() && isAutonomous()) {
 			updateAll();
-			Timer.delay(desiredTime-Timer.getFPGATimestamp());//Wait until the time that this tick should end
+			Timer.delay(desiredTime-time());//Wait until the time that this tick should end
 			desiredTime+=updatePeriod;//Next tick should end updatePeriod seconds in the future
 		}
 	}
 
 	public void operatorControl() {
 		System.out.println("*** TELEOPERATED ***");
-		operator=humanOperator;
-		driver=humanDriver;
-		double desiredTime=Timer.getFPGATimestamp()+updatePeriod;
+		operator = humanOperator;
+		driver = humanDriver;
+		double desiredTime=time()+updatePeriod;
 		while (isEnabled() && isOperatorControl()) {
 			updateAll();
-			Timer.delay(desiredTime-Timer.getFPGATimestamp());//Wait until the time that this tick should end
+			Timer.delay(desiredTime-time());//Wait until the time that this tick should end
 			desiredTime+=updatePeriod;//Next tick should end updatePeriod seconds in the future
 		}
 	}
@@ -122,5 +122,8 @@ public class Robot extends SampleRobot {
 		operator.update();
 		align.update();
 		mecanumDrive.update();
+	}
+	private static double time(){
+		return ((double)System.currentTimeMillis())/1000;
 	}
 }
