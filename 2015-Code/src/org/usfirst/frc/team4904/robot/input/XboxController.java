@@ -45,16 +45,11 @@ public class XboxController extends Joystick{
 		
 		boolean buttonVal = buttons[button-1].get();
 		
-		if (pressed[button - 1] && buttonVal) {
-			buttonVal = false;
-		}
-		else if (pressed[button - 1] && !buttonVal) {
-			pressed[button - 1] = false;
-		}
-		else if (!pressed[button - 1] && buttonVal) {
-			pressed[button - 1] = true;
+		if(pressed[button] != buttonVal){
+			pressed[button] = buttonVal;
+			return buttonVal;
 		}
 		
-		return buttonVal;
+		return false;
 	}
 }
