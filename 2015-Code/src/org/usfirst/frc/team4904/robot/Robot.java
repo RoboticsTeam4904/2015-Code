@@ -95,9 +95,11 @@ public class Robot extends SampleRobot {
 		System.out.println("*** AUTONOMOUS ***");
 		operator=autonomousOperator;
 		driver=autonomousDriver;
+		double desiredTime=Timer.getFPGATimestamp()+updatePeriod;
 		while (isEnabled() && isAutonomous()) {
-			Timer.delay(updatePeriod);
 			updateAll();
+			Timer.delay(desiredTime-Timer.getFPGATimestamp());//Wait until the time that this tick should end
+			desiredTime+=updatePeriod;//Next tick should end updatePeriod seconds in the future
 		}
 	}
 
@@ -105,9 +107,11 @@ public class Robot extends SampleRobot {
 		System.out.println("*** TELEOPERATED ***");
 		operator=humanOperator;
 		driver=humanDriver;
+		double desiredTime=Timer.getFPGATimestamp()+updatePeriod;
 		while (isEnabled() && isOperatorControl()) {
-			Timer.delay(updatePeriod);//Delay for updatePeriod
 			updateAll();
+			Timer.delay(desiredTime-Timer.getFPGATimestamp());//Wait until the time that this tick should end
+			desiredTime+=updatePeriod;//Next tick should end updatePeriod seconds in the future
 		}
 	}
 	private void updateAll(){//This order of updating is important by the way
