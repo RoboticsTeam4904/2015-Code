@@ -106,7 +106,7 @@ public class Robot extends SampleRobot {
 		operator=humanOperator;
 		driver=humanDriver;
 		while (isEnabled() && isOperatorControl()) {
-			Timer.delay(updatePeriod);
+			Timer.delay(updatePeriod);//Delay for updatePeriod
 			updateAll();
 		}
 	}
