@@ -14,6 +14,7 @@ import org.usfirst.frc.team4904.robot.output.Grabber;
 import org.usfirst.frc.team4904.robot.output.Mecanum;
 import org.usfirst.frc.team4904.robot.output.Winch;
 
+import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.SampleRobot;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.Timer;
@@ -33,7 +34,9 @@ public class Robot extends SampleRobot {
 	
 	private final LogitechJoystick stick;			// the X3D Extreme3DPro Logitech joystick (right hand) - operator
 	private final XboxController xboxController; 	// the Xbox 360 controller - driver
-	
+
+	// Input devices
+	private I2C i2c;
 	private final UDAR udar;				// the UDAR (ultrasonic detection and ranging)
 	private final IMU imu;
 	private final LIDAR lidar;
@@ -81,12 +84,14 @@ public class Robot extends SampleRobot {
 		stick = new LogitechJoystick(JOYSTICK_PORT);
 		xboxController = new XboxController(CONTROLLER_PORT);
 		
-		//Initialize sensors
-		imu = new IMU();		// Initialize IMU
-		udar = new UDAR();		// Initialize UDAR
-		lidar = new LIDAR();	// Initalize LIDAR
+		// Initialize sensors
+		i2c = new I2C(I2C.Port.kOnboard, 168); // Initalize I2C
+		imu = new IMU(i2c);			// Initialize IMU
+		udar = new UDAR(i2c);		// Initialize UDAR
+		lidar = new LIDAR();		// Initalize LIDAR
 		
-		align = new AutoAlign(mecanumDrive, udar, lidar, imu, grabber); // Initialize AutoAlign system
+		// Initalize subsystems
+		align = new AutoAlign(mecanumDrive, udar, lidar, imu, grabber);
 		humanOperator = new OperatorGriffin(stick,winch,align);
 		humanDriver = new DriverNathan(mecanumDrive,xboxController,align);
 		controller=new AutonomousController(udar,imu,lidar);

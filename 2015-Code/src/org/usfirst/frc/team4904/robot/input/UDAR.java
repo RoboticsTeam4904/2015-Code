@@ -4,11 +4,11 @@ import edu.wpi.first.wpilibj.I2C;
 
 public class UDAR {
 	
-	I2C i2c;
+	private I2C i2c;
 	
-	public UDAR(){
+	public UDAR(I2C i2c2){
 
-		i2c = new I2C(I2C.Port.kOnboard, 168); // Initialize I2C
+		this.i2c = i2c; // Initialize I2C
 	}
 	
 }
