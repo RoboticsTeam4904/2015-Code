@@ -163,7 +163,8 @@ public class Robot extends SampleRobot {
 				for(Updatable update : toUpdate){
 					update.update();
 				}
-				Timer.delay(desiredTime-time());//Wait until the time that this tick should end
+				double toWait=desiredTime-time();
+				Timer.delay(toWait);//Wait until the time that this tick should end
 				desiredTime+=updateSpeed;//Next tick should end updatePeriod seconds in the future
 			}
 		}
