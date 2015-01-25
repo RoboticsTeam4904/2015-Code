@@ -1,9 +1,16 @@
 package org.usfirst.frc.team4904.robot.input;
 
 
-import java.io.*;
-import java.util.*;
-import javax.comm.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Enumeration;
+import java.util.TooManyListenersException;
+import javax.comm.CommPortIdentifier;
+import javax.comm.PortInUseException;
+import javax.comm.SerialPort;
+import javax.comm.SerialPortEvent;
+import javax.comm.SerialPortEventListener;
+import javax.comm.UnsupportedCommOperationException;
 
 public class SimpleRead implements Runnable, SerialPortEventListener {
 	static javax.comm.CommPortIdentifier portId;
