@@ -13,7 +13,6 @@ import org.usfirst.frc.team4904.robot.operator.OperatorGriffin;
 import org.usfirst.frc.team4904.robot.output.Grabber;
 import org.usfirst.frc.team4904.robot.output.Mecanum;
 import org.usfirst.frc.team4904.robot.output.Winch;
-import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.SampleRobot;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.Timer;
@@ -33,7 +32,6 @@ public class Robot extends SampleRobot {
 	private final LogitechJoystick stick; // the X3D Extreme3DPro Logitech joystick (right hand) - operator
 	private final XboxController xboxController; // the Xbox 360 controller - driver
 	// Input devices
-	private I2C i2c;
 	private final UDAR udar; // the UDAR (ultrasonic detection and ranging)
 	private final IMU imu;
 	private final LIDAR lidar;
@@ -56,11 +54,11 @@ public class Robot extends SampleRobot {
 	// Update system
 	private final double fastUpdatePeriod = 0.005; // update every 0.005 seconds/5 milliseconds (200Hz)
 	private final double slowUpdatePeriod = 0.5; // update every 0.005 seconds/5 milliseconds (200Hz)
-	
+
 	private enum RobotState {
 		DISABLED, OPERATOR, AUTONOMOUS
 	}
-	
+
 	public Robot() {
 		System.out.println("*** INITIALIZING ROBOT ***");
 		// Initialize movement controllers
@@ -76,9 +74,8 @@ public class Robot extends SampleRobot {
 		stick = new LogitechJoystick(JOYSTICK_PORT);
 		xboxController = new XboxController(CONTROLLER_PORT);
 		// Initialize sensors
-		i2c = new I2C(I2C.Port.kOnboard, 168); // Initalize I2C
-		imu = new IMU(i2c); // Initialize IMU
-		udar = new UDAR(i2c); // Initialize UDAR
+		imu = new IMU(); // Initialize IMU
+		udar = new UDAR(); // Initialize UDAR
 		lidar = new LIDAR(); // Initalize LIDAR
 		// Initalize subsystems
 		align = new AutoAlign(mecanumDrive, udar, lidar, imu, grabber); // Initialize AutoAlign system
@@ -88,7 +85,8 @@ public class Robot extends SampleRobot {
 		autonomousOperator = new OperatorAutonomous(winch, align, controller);
 		autonomousDriver = new DriverAutonomous(mecanumDrive, controller, align);
 	}
-	
+
+	@Override
 	public void disabled() {
 		System.out.println("*** DISABLED ***");
 		while (isDisabled()) {
@@ -96,7 +94,7 @@ public class Robot extends SampleRobot {
 			Timer.delay(0.01);
 		}
 	}
-	
+
 	private void disableMotors() {
 		winch.set(0);
 		grabber.set(0);
@@ -105,7 +103,8 @@ public class Robot extends SampleRobot {
 		backLeftWheel.set(0);
 		backRightWheel.set(0);
 	}
-	
+
+	@Override
 	public void autonomous() {
 		System.out.println("*** AUTONOMOUS ***");
 		operator = autonomousOperator;
@@ -117,7 +116,8 @@ public class Robot extends SampleRobot {
 			Timer.delay(0.01);
 		}
 	}
-	
+
+	@Override
 	public void operatorControl() {
 		System.out.println("*** TELEOPERATED ***");
 		operator = humanOperator;
@@ -129,7 +129,7 @@ public class Robot extends SampleRobot {
 			Timer.delay(0.01);
 		}
 	}
-	
+
 	private RobotState getRobotState() {
 		if (isDisabled()) {
 			return RobotState.DISABLED;
@@ -142,22 +142,23 @@ public class Robot extends SampleRobot {
 		}
 		return RobotState.DISABLED;
 	}
-	
+
 	private static double time() {
 		return ((double) System.currentTimeMillis()) / 1000;
 	}
-	
+
 	private class Updater extends Thread { // Function to update automatically in a new thread
 		private final RobotState robotState;
 		private final Updatable[] toUpdate;
 		private final double updateSpeed;
-		
+
 		public Updater(RobotState state, Updatable[] toUpdate, double updateSpeed) {
 			this.robotState = state;
 			this.toUpdate = toUpdate;
 			this.updateSpeed = updateSpeed;
 		}
-		
+
+		@Override
 		public void run() {
 			double desiredTime = time() + updateSpeed; // Sync with clock to ensure that update interval is consistant regardless of how long each update takes
 			while (getRobotState() == robotState) {

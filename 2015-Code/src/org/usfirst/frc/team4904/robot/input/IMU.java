@@ -1,15 +1,14 @@
 package org.usfirst.frc.team4904.robot.input;
 
+
 import org.usfirst.frc.team4904.robot.Updatable;
 
-import edu.wpi.first.wpilibj.I2C;
-
 public class IMU implements Updatable {
-	private I2C i2c;
+	private MPU9150 mpu9150;
+	private double[] data = new double[9];
 
-	public IMU(I2C i2c) {
-		this.i2c = i2c; // Initialize I2C
-
+	public IMU() {
+		this.mpu9150 = new MPU9150();
 		this.zero();
 	}
 
@@ -21,7 +20,6 @@ public class IMU implements Updatable {
 	public void zero() {
 		// TODO set current orientation as "forward"
 		this.update();
-
 	}
 
 	public synchronized void update() {
@@ -32,9 +30,8 @@ public class IMU implements Updatable {
 	private void readData() {
 		// TODO only read data if enough data is available, otherwise return so
 		// that this function is always fast
-
+		this.data = this.mpu9150.read();
 	}
 
-	private void updateKalman() {
-	}
+	private void updateKalman() {}
 }

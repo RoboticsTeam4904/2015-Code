@@ -1,9 +1,11 @@
 package org.usfirst.frc.team4904.robot.input;
 
+
+import edu.wpi.first.wpilibj.I2C;
+
 public class MPU9150 {
 	// taken from http://playground.arduino.cc/Main/MPU-9150
 	// modified to be Java syntax
-	
 	private final int MPU9150_SELF_TEST_X_2 = 0x0D; // R/W
 	private final int MPU9150_SELF_TEST_Y = 0x0E; // R/W
 	private final int MPU9150_SELF_TEST_X = 0x0F; // R/W
@@ -94,7 +96,7 @@ public class MPU9150 {
 	private final int MPU9150_FIFO_COUNTL = 0x73; // R/W
 	private final int MPU9150_FIFO_R_W = 0x74; // R/W
 	private final int MPU9150_WHO_AM_I = 0x75; // R
-	
+	// ////////////////////////////////////////////////
 	// MPU9150 Compass
 	private final int MPU9150_CMPS_XOUT_L = 0x4A; // R
 	private final int MPU9150_CMPS_XOUT_H = 0x4B; // R
@@ -102,30 +104,74 @@ public class MPU9150 {
 	private final int MPU9150_CMPS_YOUT_H = 0x4D; // R
 	private final int MPU9150_CMPS_ZOUT_L = 0x4E; // R
 	private final int MPU9150_CMPS_ZOUT_H = 0x4F; // R
-	private final int MPU9150_I2C_ADDRESS = 0x68;
-
-	private int cmps[3];
-	private int accl[3];
-	private int gyro[3];
+	// ////////////////////////////////////////////////
+	private int[] cmps = new int[3];
+	private int[] accl = new int[3];
+	private int[] gyro = new int[3];
 	private int temp;
+	// I2C objects
+	private I2C accelMag;
+	private I2C compass;
 	
 	public void MPU9150() {
-
+		// Initialize I2C
+		this.accelMag = new I2C(I2C.Port.kOnboard, 0x0C);
+		this.compass = new I2C(I2C.Port.kOnboard, 0x68);
+		this.accelMag.write(MPU9150_PWR_MGMT_1, 0);
+		this.setup();
+	}
+	
+	public double[] read() {
+		return new double[9];
+	}
+	
+	private void setup() {
+		// Extremely modified from http://playground.arduino.cc/Main/MPU-9150
+		// Mag setup
+		this.compass.write(0x0A, 0x00); // PowerDownMode
+		this.compass.write(0x0A, 0x0F); // SelfTest
+		this.compass.write(0x0A, 0x00); // PowerDownMode
+		// Gyro setup
+		this.accelMag.write(0x24, 0x40); // Wait for Data at Slave0
+		this.accelMag.write(0x25, 0x8C); // Set i2c address at slave0 at 0x0C
+		this.accelMag.write(0x26, 0x02); // Set where reading at slave 0 starts
+		this.accelMag.write(0x27, 0x88); // set offset at start reading and enable
+		this.accelMag.write(0x28, 0x0C); // set i2c address at slv1 at 0x0C
+		this.accelMag.write(0x29, 0x0A); // Set where reading at slave 1 starts
+		this.accelMag.write(0x2A, 0x81); // Enable at set length to 1
+		this.accelMag.write(0x64, 0x01); // overvride register
+		this.accelMag.write(0x67, 0x03); // set delay rate
+		this.accelMag.write(0x01, 0x80);
+		this.accelMag.write(0x34, 0x04); // set i2c slv4 delay
+		this.accelMag.write(0x64, 0x00); // override register
+		this.accelMag.write(0x6A, 0x00); // clear usr setting
+		this.accelMag.write(0x64, 0x01); // override register
+		this.accelMag.write(0x6A, 0x20); // enable master i2c mode
+		this.accelMag.write(0x34, 0x13); // disable slv4
 	}
 
-	public void readAcc() {
+	public void readAcc() {}
 
+	// ///////////////////////////
+	// Low level I2C functions //
+	// ///////////////////////////
+	private int readCompass(int addrL, int addrH) {
+		return 0;
 	}
 
-	private int readSensor(int addrL, int addrH) {
-
+	private int readCompass(int addr) {
+		return 0;
+	}
+	
+	private int readAccGyro(int addrL, int addrH) {
+		return 0;
 	}
 
-	private int readSensor(int addr) {
-
+	private int readAccGyro(int addr) {
+		return 0;
 	}
 
-	private void writeSensor(int addr,int data) {
-
-	}
+	private void writeAccGyro(int addr, int data) {}
+	
+	private void writeCompass(int addr, int data) {}
 }
