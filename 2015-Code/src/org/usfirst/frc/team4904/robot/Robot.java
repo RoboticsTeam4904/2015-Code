@@ -135,10 +135,13 @@ public class Robot extends SampleRobot {
 		}
 	}
 	private RobotState getRobotState() {
-		if (isEnabled() && isOperatorControl()) {
+		if(isDisabled()){
+			return RobotState.DISABLED;
+		}
+		if (isOperatorControl()) {
 			return RobotState.OPERATOR;
 		}
-		if (isEnabled() && isAutonomous()) {
+		if (isAutonomous()) {
 			return RobotState.AUTONOMOUS;
 		}
 		return RobotState.DISABLED;
