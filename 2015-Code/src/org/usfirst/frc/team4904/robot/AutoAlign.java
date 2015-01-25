@@ -1,5 +1,11 @@
 package org.usfirst.frc.team4904.robot;
 
+import org.usfirst.frc.team4904.robot.input.IMU;
+import org.usfirst.frc.team4904.robot.input.LIDAR;
+import org.usfirst.frc.team4904.robot.input.UDAR;
+import org.usfirst.frc.team4904.robot.output.Grabber;
+import org.usfirst.frc.team4904.robot.output.Mecanum;
+
 public class AutoAlign implements Updatable{
 	private final Mecanum mecanum;
 	private final UDAR udar;

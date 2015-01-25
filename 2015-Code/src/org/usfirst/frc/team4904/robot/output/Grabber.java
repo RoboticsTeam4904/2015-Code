@@ -1,5 +1,7 @@
-package org.usfirst.frc.team4904.robot;
+package org.usfirst.frc.team4904.robot.output;
 
+
+import org.usfirst.frc.team4904.robot.Operator;
 
 import edu.wpi.first.wpilibj.Talon;
 

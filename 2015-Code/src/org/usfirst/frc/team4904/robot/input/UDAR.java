@@ -1,4 +1,4 @@
-package org.usfirst.frc.team4904.robot;
+package org.usfirst.frc.team4904.robot.input;
 
 import edu.wpi.first.wpilibj.I2C;
 

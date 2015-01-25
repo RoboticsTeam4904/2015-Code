@@ -1,4 +1,9 @@
-package org.usfirst.frc.team4904.robot;
+package org.usfirst.frc.team4904.robot.operator;
+
+import org.usfirst.frc.team4904.robot.AutoAlign;
+import org.usfirst.frc.team4904.robot.AutonomousController;
+import org.usfirst.frc.team4904.robot.Operator;
+import org.usfirst.frc.team4904.robot.output.Winch;
 
 public class OperatorAutonomous extends Operator{
 	private final AutonomousController controller;

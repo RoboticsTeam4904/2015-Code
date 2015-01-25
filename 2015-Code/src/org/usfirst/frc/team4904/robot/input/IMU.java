@@ -1,4 +1,6 @@
-package org.usfirst.frc.team4904.robot;
+package org.usfirst.frc.team4904.robot.input;
+
+import org.usfirst.frc.team4904.robot.Updatable;
 
 public class IMU implements Updatable{
 	public IMU() {

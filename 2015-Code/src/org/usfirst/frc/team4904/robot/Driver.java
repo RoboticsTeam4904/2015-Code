@@ -1,5 +1,7 @@
 package org.usfirst.frc.team4904.robot;
 
+import org.usfirst.frc.team4904.robot.output.Mecanum;
+
 public abstract class Driver implements Updatable{
 	
 	public Driver(Mecanum mecanumDrive, AutoAlign align){

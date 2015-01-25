@@ -1,4 +1,4 @@
-package org.usfirst.frc.team4904.robot;
+package org.usfirst.frc.team4904.robot.output;
 
 /*
  * Mecanum Drive Library
@@ -14,6 +14,8 @@ package org.usfirst.frc.team4904.robot;
  * Changelog:
  * Fixed Turn Function - S
  */
+
+import org.usfirst.frc.team4904.robot.Updatable;
 
 import edu.wpi.first.wpilibj.SpeedController;
 

@@ -1,15 +1,17 @@
 package org.usfirst.frc.team4904.robot;
 
+import org.usfirst.frc.team4904.robot.output.Winch;
+
 public abstract class Operator implements Updatable{
 	
 	
 	private final Winch winch;
 	private final AutoAlign align;
 	private volatile int winchTimer;
-	protected static final int MODE_THIN_TOTE = 0;
-	protected static final int MODE_WIDE_TOTE = 1;
-	protected static final int MODE_CAN = 2;
-	protected static final int MODE_EMPTY = 3;
+	public static final int MODE_THIN_TOTE = 0;
+	public static final int MODE_WIDE_TOTE = 1;
+	public static final int MODE_CAN = 2;
+	public static final int MODE_EMPTY = 3;
 	
 	public Operator(Winch winch, AutoAlign align){
 		this.winch = winch;

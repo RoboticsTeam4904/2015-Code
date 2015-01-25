@@ -1,4 +1,9 @@
-package org.usfirst.frc.team4904.robot;
+package org.usfirst.frc.team4904.robot.driver;
+
+import org.usfirst.frc.team4904.robot.AutoAlign;
+import org.usfirst.frc.team4904.robot.AutonomousController;
+import org.usfirst.frc.team4904.robot.Driver;
+import org.usfirst.frc.team4904.robot.output.Mecanum;
 
 public class DriverAutonomous extends Driver{
 	private final AutonomousController controller;

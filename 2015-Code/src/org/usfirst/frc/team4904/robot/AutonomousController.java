@@ -1,5 +1,11 @@
 package org.usfirst.frc.team4904.robot;
 
+import org.usfirst.frc.team4904.robot.driver.DriverAutonomous;
+import org.usfirst.frc.team4904.robot.input.IMU;
+import org.usfirst.frc.team4904.robot.input.LIDAR;
+import org.usfirst.frc.team4904.robot.input.UDAR;
+import org.usfirst.frc.team4904.robot.operator.OperatorAutonomous;
+
 public class AutonomousController implements Updatable{//This needs to be a seperate class because it cant extend both Operator and Driver
 	private OperatorAutonomous operator=null;
 	private DriverAutonomous driver=null;

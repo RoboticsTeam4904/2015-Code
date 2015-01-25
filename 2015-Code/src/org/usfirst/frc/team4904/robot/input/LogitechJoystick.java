@@ -1,4 +1,4 @@
-package org.usfirst.frc.team4904.robot;
+package org.usfirst.frc.team4904.robot.input;
 
 
 import edu.wpi.first.wpilibj.Joystick;
@@ -7,18 +7,18 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
 
 public class LogitechJoystick extends Joystick{
 	
-	Button x1;
-	Button x2;
-	Button x3;
-	Button x4;
-	Button x5;
-	Button x6;
-	Button x7;
-	Button x8;
-	Button x9;
-	Button x10;
-	Button x11;
-	Button x12;
+	public Button x1;
+	public Button x2;
+	public Button x3;
+	public Button x4;
+	public Button x5;
+	public Button x6;
+	public Button x7;
+	public Button x8;
+	public Button x9;
+	public Button x10;
+	public Button x11;
+	public Button x12;
 	
 	public LogitechJoystick(int port) {
 		super(port);
