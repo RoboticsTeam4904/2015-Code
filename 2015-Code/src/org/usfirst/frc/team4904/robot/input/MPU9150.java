@@ -1,9 +1,9 @@
 package org.usfirst.frc.team4904.robot.input;
 
+
 public class MPU9150 {
 	// taken from http://playground.arduino.cc/Main/MPU-9150
 	// modified to be Java syntax
-
 	private final int MPU9150_SELF_TEST_X_2 = 0x0D; // R/W
 	private final int MPU9150_SELF_TEST_Y = 0x0E; // R/W
 	private final int MPU9150_SELF_TEST_X = 0x0F; // R/W
@@ -94,7 +94,6 @@ public class MPU9150 {
 	private final int MPU9150_FIFO_COUNTL = 0x73; // R/W
 	private final int MPU9150_FIFO_R_W = 0x74; // R/W
 	private final int MPU9150_WHO_AM_I = 0x75; // R
-
 	// MPU9150 Compass
 	private final int MPU9150_CMPS_XOUT_L = 0x4A; // R
 	private final int MPU9150_CMPS_XOUT_H = 0x4B; // R
@@ -102,5 +101,4 @@ public class MPU9150 {
 	private final int MPU9150_CMPS_YOUT_H = 0x4D; // R
 	private final int MPU9150_CMPS_ZOUT_L = 0x4E; // R
 	private final int MPU9150_CMPS_ZOUT_H = 0x4F; // R
-
 }
