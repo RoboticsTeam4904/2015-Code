@@ -39,7 +39,7 @@ public class XboxController extends Joystick{
 	}
 	
 	public boolean get(int button) {
-		if (button < 1 || button > buttons.length + 1) {
+		if (button < 1 || button >= buttons.length + 1) {
 			return false;
 		}
 		
