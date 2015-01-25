@@ -20,7 +20,7 @@ public class OperatorAutonomous extends Operator{
 		case MODE_CAN:
 			grab(MODE_CAN);
 			break;
-		case 4:
+		case MODE_EMPTY:
 			release();
 			break;
 		}
