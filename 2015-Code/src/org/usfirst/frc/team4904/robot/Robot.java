@@ -109,8 +109,8 @@ public class Robot extends SampleRobot {
 		System.out.println("*** AUTONOMOUS ***");
 		operator = autonomousOperator;
 		driver = autonomousDriver;
-		new Updater(2,new Updatable[]{controller,align},slowUpdatePeriod).start();
-		new Updater(2,new Updatable[]{imu,driver,operator,mecanumDrive},fastUpdatePeriod).start();
+		new Updater(2,new Updatable[]{controller,align},slowUpdatePeriod).start(); // Controller and align are potentially slower
+		new Updater(2,new Updatable[]{imu,driver,operator,mecanumDrive},fastUpdatePeriod).start(); // These should have fast updates
 		while(getRobotState()==2){
 			Timer.delay(0.01);
 		}
@@ -120,8 +120,8 @@ public class Robot extends SampleRobot {
 		System.out.println("*** TELEOPERATED ***");
 		operator = humanOperator;
 		driver = humanDriver;
-		new Updater(1,new Updatable[]{controller,align},slowUpdatePeriod).start();
-		new Updater(1,new Updatable[]{imu,driver,operator,mecanumDrive},fastUpdatePeriod).start();
+		new Updater(1,new Updatable[]{controller,align},slowUpdatePeriod).start(); // Controller and align are potentially slower
+		new Updater(1,new Updatable[]{imu,driver,operator,mecanumDrive},fastUpdatePeriod).start(); // These should have fast updates
 		while (getRobotState()==1) {
 			Timer.delay(0.01);
 		}
