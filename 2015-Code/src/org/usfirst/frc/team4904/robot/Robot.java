@@ -116,9 +116,6 @@ public class Robot extends SampleRobot {
 		RobotState state=RobotState.AUTONOMOUS;
 		new Updater(state,new Updatable[]{controller,align},slowUpdatePeriod).start(); // Controller and align are potentially slower
 		new Updater(state,new Updatable[]{imu,driver,operator,mecanumDrive},fastUpdatePeriod).start(); // These should have fast updates
-		while(getRobotState()==state){
-			Timer.delay(0.01);
-		}
 	}
 
 	public void operatorControl() {
@@ -128,9 +125,6 @@ public class Robot extends SampleRobot {
 		RobotState state=RobotState.OPERATOR;
 		new Updater(state,new Updatable[]{controller,align},slowUpdatePeriod).start(); // Controller and align are potentially slower
 		new Updater(state,new Updatable[]{imu,driver,operator,mecanumDrive},fastUpdatePeriod).start(); // These should have fast updates
-		while (getRobotState()==state) {
-			Timer.delay(0.01);
-		}
 	}
 	private RobotState getRobotState() {
 		if (isEnabled() && isOperatorControl()) {
