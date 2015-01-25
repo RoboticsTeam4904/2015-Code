@@ -7,16 +7,16 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
 
 public class XboxController extends Joystick{
 	
-	protected Button aButton;
-	private volatile Button bButton;
-	protected final transient Button xButton;
-	private final Button yButton;
-	protected volatile Button leftBumper;
-	private transient Button rightBumper;
-	protected final Button backButton;
-	private volatile Button startButton;
-	protected transient Button leftStick;
-	private Button rightStick;
+	public Button aButton;
+	public Button bButton;
+	public Button xButton;
+	public Button yButton;
+	public Button leftBumper;
+	public Button rightBumper;
+	public Button backButton;
+	public Button startButton;
+	public Button leftStick;
+	public Button rightStick;
 	
 	public XboxController(int port) {
 		super(port);
@@ -30,5 +30,10 @@ public class XboxController extends Joystick{
 		startButton = new JoystickButton(this, 8); // Start button
 		leftStick = new JoystickButton(this, 9); // Left stick
 		rightStick = new JoystickButton(this, 10); // Right stick
-	}	
+	}
+	
+	public boolean get(){
+		
+		return false;
+	}
 }
