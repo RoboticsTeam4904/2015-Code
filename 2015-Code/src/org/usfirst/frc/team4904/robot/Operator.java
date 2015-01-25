@@ -44,7 +44,15 @@ public abstract class Operator {
 	}
 	protected void updateWinch(){
 		if (winchTimer > 0) winchTimer--; // Winch can move over multiple cycles, so set a countdown
-		else winch.set(0); // If the countdown is done, stop the winch
+		else
+		{
+			if(winchTimer==0){
+			winch.set(0); // If the countdown is done, stop the winch
+			winchTimer=-1; //But only once
+			}
+		
+		
+		}
 	}
 	protected boolean isGrabberEmpty(){//Wrapper function -- references to align and winch are private not protected so subclasses cant access them
 		return align.isGrabberEmpty();

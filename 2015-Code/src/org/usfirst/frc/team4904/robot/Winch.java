@@ -14,7 +14,6 @@ public class Winch extends Talon{
 	public void set(int height){ // Set winch to specific height
 		if (height > MAX_HEIGHT) height = MAX_HEIGHT;
 		else if (height < 0) height = 0;
-		
 	}
 	
 	public void move(double speed){ // Move winch at speed
