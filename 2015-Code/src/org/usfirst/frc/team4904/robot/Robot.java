@@ -122,23 +122,23 @@ public class Robot extends SampleRobot {
 		driver = humanDriver;
 		new Updater(1,new Updatable[]{controller,align},slowUpdatePeriod).start();
 		new Updater(1,new Updatable[]{imu,driver,operator,mecanumDrive},fastUpdatePeriod).start();
-		while(getRobotState()==1){
+		while (getRobotState()==1) {
 			Timer.delay(0.01);
 		}
 	}
-	private int getRobotState(){
-		if(isEnabled() && isOperatorControl()){
+	private int getRobotState() {
+		if (isEnabled() && isOperatorControl()) {
 			return 1;
 		}
-		if(isEnabled() && isAutonomous()) {
+		if (isEnabled() && isAutonomous()) {
 			return 2;
 		}
 		return 0;
 	}
-	private static double time(){
-		return ((double)System.currentTimeMillis())/1000;
+	private static double time() {
+		return ((double) System.currentTimeMillis()) / 1000;
 	}
-	private class Updater extends Thread{ // Function to update automatically in a new thread
+	private class Updater extends Thread { // Function to update automatically in a new thread
 		private final int state;
 		private final Updatable[] toUpdate;
 		private final double updateSpeed;
@@ -149,10 +149,10 @@ public class Robot extends SampleRobot {
 			this.updateSpeed=updateSpeed;
 		}
 		
-		public void run(){
+		public void run() {
 			double desiredTime=time()+updateSpeed;	// Sync with clock to ensure that update interval is consistant regardless of how long each update takes
 			while (getRobotState()==state) {
-				for(Updatable update : toUpdate){
+				for (Updatable update : toUpdate) {
 					update.update();
 				}
 				Timer.delay(desiredTime-time());	// Wait until the time that this tick should end
