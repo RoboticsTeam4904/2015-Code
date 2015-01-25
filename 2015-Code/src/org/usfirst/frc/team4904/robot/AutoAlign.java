@@ -21,6 +21,7 @@ public class AutoAlign {
 		this.imu = imu;
 		this.grabber = grabber;
 		this.lidar=lidar;
+		this.currentState = State.EMPTY;
 	}
 	public void grabTote (boolean wide) { 
 		if (currentState != State.EMPTY) {
@@ -40,18 +41,20 @@ public class AutoAlign {
 	private void releaseTote (boolean wide) {
 		// TODO put alignment code
 		// If we are putting the tote on top of a stack, we need to align before releasing
+		// TODO set state to ALIGNING_TO_RELEASE_THIN/WIDE_TOTE
 		currentState = State.EMPTY;
 	}
 	
 	private void releaseCan() {
 		// TODO put alignment code
 		// If we are putting the can on top of a stack, we need to align before releasing
+		// TODO set state to ALIGNING_TO_RELEASE_CAN
 		currentState = State.EMPTY;
 	}
 	private void doAligningTick() {
 		// TODO put alignment code
 	}
-	public void update() {
+	public synchronized void update() {
 		grabber.setWidth(getDesiredGrabberState());
 		if (isCurrentlyAligning()) {
 			doAligningTick();
@@ -67,7 +70,7 @@ public class AutoAlign {
 			return false;
 		}
 	}
-	private int getDesiredGrabberState () {
+	private int getDesiredGrabberState () {//What state should the grabber be in
 		switch (currentState) {
 		case ALIGNING_WITH_CAN:
 			return Operator.MODE_CAN + 10;
@@ -84,10 +87,14 @@ public class AutoAlign {
 		case EMPTY:
 			return 3;// TODO put default empty state here
 		default:
-			throw new Error("Current state of AutoAlign does not exist");
+			throw new Error("Current state of AutoAlign does not exist/is null");
 		}
 	}
 	public void release () {
+		if(isCurrentlyAligning()){//Cancelling alignment, e.g. in case it isn't working
+			currentState=State.EMPTY;
+			return;
+		}
 		switch (currentState) {
 		case HOLDING_WIDE_TOTE:
 			releaseTote(true);
@@ -102,7 +109,7 @@ public class AutoAlign {
 			// You pressed the release button when you aren't holding anything
 		}
 	}
-	public boolean isEmpty(){
+	public boolean isGrabberEmpty(){
 		return currentState==State.EMPTY;
 	}
 }

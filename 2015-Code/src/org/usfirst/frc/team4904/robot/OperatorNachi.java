@@ -10,6 +10,9 @@ public class OperatorNachi extends Operator {
 	}
 	
 	public synchronized void update() {
+		// Pressing the button will probably toggle grabbing maybe a dozen times
+		// because this function is called many times a second
+		// TODO fix this
 		if (stick.x1.get()){ // When button 1 is pressed, toggle tote grabbing
 			if(isGrabberEmpty()) grab(MODE_WIDE_TOTE);
 			else release();

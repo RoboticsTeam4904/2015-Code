@@ -51,7 +51,7 @@ public class Robot extends SampleRobot {
 		
 		//Initialize movement controllers
 		winch = new Winch(WINCH_PORT);			// Initialize Winch control
-		grabber = new Grabber(GRABBER_PORT);	// Initialize Grabber control
+		grabber = new Grabber(GRABBER_PORT);	// Initialize Grabber control -- only autoalign has access to this, by design
 		// Initialize motor controllers with default ports
 		frontLeftWheel = new VictorSP(FRONT_LEFT_WHEEL_PORT);
 		frontRightWheel = new VictorSP(FRONT_RIGHT_WHEEL_PORT);
@@ -89,7 +89,6 @@ public class Robot extends SampleRobot {
 		frontRightWheel.set(0);
 		backLeftWheel.set(0);
 		backRightWheel.set(0);
-		// TODO This function also should disable the mecanum drives
 	}
 	
 	public void autonomous(){
@@ -111,7 +110,7 @@ public class Robot extends SampleRobot {
 			updateAll();
 		}
 	}
-	public void updateAll(){
+	public void updateAll(){//This order of updating is important by the way
 		imu.update();
 		controller.update();
 		driver.update();
