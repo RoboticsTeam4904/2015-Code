@@ -59,7 +59,11 @@ public class Robot extends SampleRobot {
 	// Update system
 	private final double fastUpdatePeriod = 0.005; // update every 0.005 seconds/5 milliseconds (200Hz)
 	private final double slowUpdatePeriod = 0.5; // update every 0.005 seconds/5 milliseconds (200Hz)
-	
+	private enum RobotState{
+		DISABLED,
+		OPERATOR,
+		AUTONOMOUS
+	}
 	public Robot() {
 		System.out.println("*** INITIALIZING ROBOT ***");
 		
@@ -109,9 +113,10 @@ public class Robot extends SampleRobot {
 		System.out.println("*** AUTONOMOUS ***");
 		operator = autonomousOperator;
 		driver = autonomousDriver;
-		new Updater(2,new Updatable[]{controller,align},slowUpdatePeriod).start(); // Controller and align are potentially slower
-		new Updater(2,new Updatable[]{imu,driver,operator,mecanumDrive},fastUpdatePeriod).start(); // These should have fast updates
-		while(getRobotState()==2){
+		RobotState state=RobotState.AUTONOMOUS;
+		new Updater(state,new Updatable[]{controller,align},slowUpdatePeriod).start(); // Controller and align are potentially slower
+		new Updater(state,new Updatable[]{imu,driver,operator,mecanumDrive},fastUpdatePeriod).start(); // These should have fast updates
+		while(getRobotState()==state){
 			Timer.delay(0.01);
 		}
 	}
@@ -120,38 +125,39 @@ public class Robot extends SampleRobot {
 		System.out.println("*** TELEOPERATED ***");
 		operator = humanOperator;
 		driver = humanDriver;
-		new Updater(1,new Updatable[]{controller,align},slowUpdatePeriod).start(); // Controller and align are potentially slower
-		new Updater(1,new Updatable[]{imu,driver,operator,mecanumDrive},fastUpdatePeriod).start(); // These should have fast updates
-		while (getRobotState()==1) {
+		RobotState state=RobotState.OPERATOR;
+		new Updater(state,new Updatable[]{controller,align},slowUpdatePeriod).start(); // Controller and align are potentially slower
+		new Updater(state,new Updatable[]{imu,driver,operator,mecanumDrive},fastUpdatePeriod).start(); // These should have fast updates
+		while (getRobotState()==state) {
 			Timer.delay(0.01);
 		}
 	}
-	private int getRobotState() {
+	private RobotState getRobotState() {
 		if (isEnabled() && isOperatorControl()) {
-			return 1;
+			return RobotState.OPERATOR;
 		}
 		if (isEnabled() && isAutonomous()) {
-			return 2;
+			return RobotState.AUTONOMOUS;
 		}
-		return 0;
+		return RobotState.DISABLED;
 	}
 	private static double time() {
 		return ((double) System.currentTimeMillis()) / 1000;
 	}
 	private class Updater extends Thread { // Function to update automatically in a new thread
-		private final int state;
+		private final RobotState robotState;
 		private final Updatable[] toUpdate;
 		private final double updateSpeed;
 		
-		public Updater(int state, Updatable[] toUpdate, double updateSpeed){
-			this.state=state;
+		public Updater(RobotState state, Updatable[] toUpdate, double updateSpeed){
+			this.robotState=state;
 			this.toUpdate=toUpdate;
 			this.updateSpeed=updateSpeed;
 		}
 		
 		public void run() {
 			double desiredTime=time()+updateSpeed;	// Sync with clock to ensure that update interval is consistant regardless of how long each update takes
-			while (getRobotState()==state) {
+			while (getRobotState()==robotState) {
 				for (Updatable update : toUpdate) {
 					update.update();
 				}
