@@ -96,8 +96,10 @@ public class Robot extends SampleRobot {
 	
 	public void disabled(){
 		System.out.println("*** DISABLED ***");
-		
-		disableMotors(); // Disable all motors
+		while(isDisabled()){
+			disableMotors(); // Disable all motors
+			Timer.delay(0.01);
+		}
 	}
 	
 	private void disableMotors(){
