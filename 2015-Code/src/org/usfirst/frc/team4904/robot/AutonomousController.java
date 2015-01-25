@@ -9,10 +9,10 @@ import org.usfirst.frc.team4904.robot.operator.OperatorAutonomous;
 public class AutonomousController implements Updatable{//This needs to be a seperate class because it cant extend both Operator and Driver
 	private OperatorAutonomous operator=null;
 	private DriverAutonomous driver=null;
-	private volatile int desiredWinchAction=0;
-	private volatile double angle=0;
-	private volatile double speed=0;
-	private volatile double turnSpeed=0;
+	private int desiredWinchAction=0;
+	private double angle=0;
+	private double speed=0;
+	private double turnSpeed=0;
 	private final UDAR udar;
 	private final IMU imu;
 	private final LIDAR lidar;

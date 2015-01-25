@@ -57,7 +57,8 @@ public class Robot extends SampleRobot {
 	private final AutoAlign align;		// the AutoAlign class contains code to align the robot with totes and cans
 	
 	// Update system
-	private final double updatePeriod = 0.005; // update every 0.005 seconds/5 milliseconds (200Hz)
+	private final double fastUpdatePeriod = 0.005; // update every 0.005 seconds/5 milliseconds (200Hz)
+	private final double slowUpdatePeriod = 0.5; // update every 0.005 seconds/5 milliseconds (200Hz)
 	
 	public Robot() {
 		System.out.println("*** INITIALIZING ROBOT ***");
@@ -108,11 +109,21 @@ public class Robot extends SampleRobot {
 		System.out.println("*** AUTONOMOUS ***");
 		operator = autonomousOperator;
 		driver = autonomousDriver;
-		double desiredTime=time()+updatePeriod;
+		new Thread(){
+			public void run(){
+				double desiredTime=time()+slowUpdatePeriod;
+				while (isEnabled() && isAutonomous()) {
+					updateSlow();
+					Timer.delay(desiredTime-time());//Wait until the time that this tick should end
+					desiredTime+=slowUpdatePeriod;//Next tick should end updatePeriod seconds in the future
+				}
+			}
+		}.start();
+		double desiredTime=time()+fastUpdatePeriod;
 		while (isEnabled() && isAutonomous()) {
-			updateAll();
+			updateFast();
 			Timer.delay(desiredTime-time());//Wait until the time that this tick should end
-			desiredTime+=updatePeriod;//Next tick should end updatePeriod seconds in the future
+			desiredTime+=fastUpdatePeriod;//Next tick should end updatePeriod seconds in the future
 		}
 	}
 
@@ -120,20 +131,32 @@ public class Robot extends SampleRobot {
 		System.out.println("*** TELEOPERATED ***");
 		operator = humanOperator;
 		driver = humanDriver;
-		double desiredTime=time()+updatePeriod;
+		new Thread(){
+			public void run(){
+				double desiredTime=time()+slowUpdatePeriod;
+				while (isEnabled() && isOperatorControl()) {
+					updateSlow();
+					Timer.delay(desiredTime-time());//Wait until the time that this tick should end
+					desiredTime+=slowUpdatePeriod;//Next tick should end updatePeriod seconds in the future
+				}
+			}
+		}.start();
+		double desiredTime=time()+fastUpdatePeriod;
 		while (isEnabled() && isOperatorControl()) {
-			updateAll();
+			updateFast();
 			Timer.delay(desiredTime-time());//Wait until the time that this tick should end
-			desiredTime+=updatePeriod;//Next tick should end updatePeriod seconds in the future
+			desiredTime+=fastUpdatePeriod;//Next tick should end updatePeriod seconds in the future
 		}
 	}
-	private void updateAll(){//This order of updating is important by the way
-		// TODO Make this multithreaded, and improve timing
-		imu.update();
+	
+	private void updateSlow(){
 		controller.update();
+		align.update();
+	}
+	private void updateFast(){
+		imu.update();
 		driver.update();
 		operator.update();
-		align.update();
 		mecanumDrive.update();
 	}
 	private static double time(){
