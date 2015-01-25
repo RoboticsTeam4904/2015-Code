@@ -38,20 +38,23 @@ public class XboxController extends Joystick{
 		}
 	}
 	
-	public boolean get(int button){
-		boolean button_val = false;
-		
-		button_val = buttons[button-1].get();
-		if (pressed[button - 1] && button_val) {
-			button_val = false;
+	public boolean get(int button) {
+		if (button < 1 || button > buttons.length + 1) {
+			return false;
 		}
-		else if (pressed[button - 1] && !button_val) {
+		
+		boolean buttonVal = buttons[button-1].get();
+		
+		if (pressed[button - 1] && buttonVal) {
+			buttonVal = false;
+		}
+		else if (pressed[button - 1] && !buttonVal) {
 			pressed[button - 1] = false;
 		}
-		else if (!pressed[button - 1] && button_val) {
+		else if (!pressed[button - 1] && buttonVal) {
 			pressed[button - 1] = true;
 		}
 		
-		return button_val;
+		return buttonVal;
 	}
 }
