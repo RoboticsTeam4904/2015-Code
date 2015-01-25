@@ -110,7 +110,7 @@ public class Robot extends SampleRobot {
 			updateAll();
 		}
 	}
-	public void updateAll(){//This order of updating is important by the way
+	private void updateAll(){//This order of updating is important by the way
 		// TODO Make this multithreaded, and improve timing
 		imu.update();
 		controller.update();
