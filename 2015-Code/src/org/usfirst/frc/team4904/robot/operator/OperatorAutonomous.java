@@ -15,7 +15,6 @@ public class OperatorAutonomous extends Operator {
 		controller.setOperator(this);
 	}
 	
-	@Override
 	public synchronized void update() {
 		int action = controller.getDesiredWinchAction();
 		switch (action) {// TODO improve this (terrible) system or create a WinchAction class/enum

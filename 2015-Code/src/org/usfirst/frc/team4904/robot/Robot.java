@@ -89,7 +89,6 @@ public class Robot extends SampleRobot {
 		autonomousDriver = new DriverAutonomous(mecanumDrive, controller, align);
 	}
 	
-	@Override
 	public void disabled() {
 		System.out.println("*** DISABLED ***");
 		while (isDisabled()) {
@@ -107,7 +106,6 @@ public class Robot extends SampleRobot {
 		backRightWheel.set(0);
 	}
 	
-	@Override
 	public void autonomous() {
 		System.out.println("*** AUTONOMOUS ***");
 		operator = autonomousOperator;
@@ -120,7 +118,6 @@ public class Robot extends SampleRobot {
 		}
 	}
 	
-	@Override
 	public void operatorControl() {
 		System.out.println("*** TELEOPERATED ***");
 		operator = humanOperator;
@@ -161,7 +158,6 @@ public class Robot extends SampleRobot {
 			this.updateSpeed = updateSpeed;
 		}
 		
-		@Override
 		public void run() {
 			double desiredTime = time() + updateSpeed; // Sync with clock to ensure that update interval is consistent regardless of how long each update takes
 			while (getRobotState() == robotState) {
