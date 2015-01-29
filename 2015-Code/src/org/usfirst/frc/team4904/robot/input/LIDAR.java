@@ -3,11 +3,15 @@ package org.usfirst.frc.team4904.robot.input;
 
 import java.math.BigInteger;
 import org.usfirst.frc.team4904.robot.Updatable;
+import org.usfirst.frc.team4904.robot.output.LIDARMotor;
 
 public class LIDAR implements Updatable {
 	int[] Dists = new int[360];
+	LIDARMotor motor;
 	
-	public LIDAR() {}
+	public LIDAR(int motorport) {
+		motor = new LIDARMotor(6);
+	}
 	
 	public int connect() {
 		// TODO add RS-232 connect
