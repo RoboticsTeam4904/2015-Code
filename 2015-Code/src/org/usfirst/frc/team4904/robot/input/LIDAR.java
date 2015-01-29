@@ -3,14 +3,14 @@ package org.usfirst.frc.team4904.robot.input;
 
 import java.math.BigInteger;
 import org.usfirst.frc.team4904.robot.Updatable;
-import org.usfirst.frc.team4904.robot.output.LIDARMotor;
+import edu.wpi.first.wpilibj.Talon;
 
 public class LIDAR implements Updatable {
 	int[] Dists = new int[360];
-	LIDARMotor motor;
+	public Talon motor;
 	
 	public LIDAR(int motorport) {
-		motor = new LIDARMotor(6);
+		motor = new Talon(motorport);
 	}
 	
 	public int connect() {
@@ -90,6 +90,7 @@ public class LIDAR implements Updatable {
 		catch (Exception e) {
 			System.out.println("Exception: " + e);
 		}
+		motor.set(0.25);
 	}
 	
 	public int clean() {
