@@ -1,6 +1,8 @@
 package org.usfirst.frc.team4904.robot.input;
 
 
+import edu.wpi.first.wpilibj.I2C;
+
 public class MPU9150 {
 	// taken from http://playground.arduino.cc/Main/MPU-9150
 	// modified to be Java syntax
@@ -94,6 +96,7 @@ public class MPU9150 {
 	private final int MPU9150_FIFO_COUNTL = 0x73; // R/W
 	private final int MPU9150_FIFO_R_W = 0x74; // R/W
 	private final int MPU9150_WHO_AM_I = 0x75; // R
+	// ////////////////////////////////////////////////
 	// MPU9150 Compass
 	private final int MPU9150_CMPS_XOUT_L = 0x4A; // R
 	private final int MPU9150_CMPS_XOUT_H = 0x4B; // R
@@ -101,4 +104,84 @@ public class MPU9150 {
 	private final int MPU9150_CMPS_YOUT_H = 0x4D; // R
 	private final int MPU9150_CMPS_ZOUT_L = 0x4E; // R
 	private final int MPU9150_CMPS_ZOUT_H = 0x4F; // R
+	// ////////////////////////////////////////////////
+	private int[] cmps = new int[3];
+	private int[] accl = new int[3];
+	private int[] gyro = new int[3];
+	private int temp;
+	// I2C objects
+	private I2C accelMag;
+	private I2C compass;
+	
+	public void MPU9150() {
+		// Initialize I2C
+		this.accelMag = new I2C(I2C.Port.kOnboard, 0x0C);
+		this.compass = new I2C(I2C.Port.kOnboard, 0x68);
+		this.accelMag.write(MPU9150_PWR_MGMT_1, 0);
+		this.setup();
+	}
+	
+	public int[] read() {
+		int[] data = new int[10];
+		double dT = (this.readSensor(MPU9150_TEMP_OUT_L, MPU9150_TEMP_OUT_H) + 12412.0) / 340.0;
+		System.out.print(dT);
+		System.out.print("  ");
+		System.out.print(this.readSensor(MPU9150_CMPS_XOUT_L, MPU9150_CMPS_XOUT_H));
+		System.out.print("  ");
+		System.out.print(this.readSensor(MPU9150_CMPS_YOUT_L, MPU9150_CMPS_YOUT_H));
+		System.out.print("  ");
+		System.out.print(this.readSensor(MPU9150_CMPS_ZOUT_L, MPU9150_CMPS_ZOUT_H));
+		System.out.print("  ");
+		System.out.print(this.readSensor(MPU9150_GYRO_XOUT_L, MPU9150_GYRO_XOUT_H));
+		System.out.print("  ");
+		System.out.print(this.readSensor(MPU9150_GYRO_YOUT_L, MPU9150_GYRO_YOUT_H));
+		System.out.print("  ");
+		System.out.print(this.readSensor(MPU9150_GYRO_ZOUT_L, MPU9150_GYRO_ZOUT_H));
+		System.out.print("  ");
+		System.out.print(this.readSensor(MPU9150_ACCEL_XOUT_L, MPU9150_ACCEL_XOUT_H));
+		System.out.print("  ");
+		System.out.print(this.readSensor(MPU9150_ACCEL_YOUT_L, MPU9150_ACCEL_YOUT_H));
+		System.out.print("  ");
+		System.out.print(this.readSensor(MPU9150_ACCEL_ZOUT_L, MPU9150_ACCEL_ZOUT_H));
+		System.out.println();
+		return new int[10];
+	}
+	
+	private void setup() {
+		// Extremely modified from http://playground.arduino.cc/Main/MPU-9150
+		// Mag setup
+		this.compass.write(0x0A, 0x00); // PowerDownMode
+		this.compass.write(0x0A, 0x0F); // SelfTest
+		this.compass.write(0x0A, 0x00); // PowerDownMode
+		// Gyro setup
+		this.accelMag.write(0x24, 0x40); // Wait for Data at Slave0
+		this.accelMag.write(0x25, 0x8C); // Set i2c address at slave0 at 0x0C
+		this.accelMag.write(0x26, 0x02); // Set where reading at slave 0 starts
+		this.accelMag.write(0x27, 0x88); // set offset at start reading and enable
+		this.accelMag.write(0x28, 0x0C); // set i2c address at slv1 at 0x0C
+		this.accelMag.write(0x29, 0x0A); // Set where reading at slave 1 starts
+		this.accelMag.write(0x2A, 0x81); // Enable at set length to 1
+		this.accelMag.write(0x64, 0x01); // overvride register
+		this.accelMag.write(0x67, 0x03); // set delay rate
+		this.accelMag.write(0x01, 0x80);
+		this.accelMag.write(0x34, 0x04); // set i2c slv4 delay
+		this.accelMag.write(0x64, 0x00); // override register
+		this.accelMag.write(0x6A, 0x00); // clear usr setting
+		this.accelMag.write(0x64, 0x01); // override register
+		this.accelMag.write(0x6A, 0x20); // enable master i2c mode
+		this.accelMag.write(0x34, 0x13); // disable slv4
+	}
+
+	public void readAcc() {}
+
+	// ///////////////////////////
+	// Low level I2C functions //
+	// ///////////////////////////
+	private int readSensor(int addrL, int addrH) {
+		byte[] H = new byte[1];
+		byte[] L = new byte[1];
+		if (!this.accelMag.read(addrH, 1, H)) return -1;
+		if (!this.accelMag.read(addrL, 1, L)) return -1;
+		return (H[0] << 8) + L[0];
+	}
 }
