@@ -8,29 +8,31 @@ import edu.wpi.first.wpilibj.Talon;
 public class LIDAR implements Updatable {
 	int[] Dists = new int[360];
 	public Talon motor;
-	
+
 	public LIDAR(int motorport) {
 		motor = new Talon(motorport);
 	}
-	
+
 	public int connect() {
 		// TODO add RS-232 connect
 		return 0;
 	}
-	
+
 	private byte[] read(int bytes) throws Exception {
 		// TODO RS-232 read
 		byte b[] = new byte[bytes];
 		return b;
 	}
-	
+
 	private int[] scanline_b(byte angle) throws Exception {
 		boolean insync = false;
 		while (!insync) { // Wait until beginning of distance data
 			byte header = read(1)[0]; // Header is one byte
 			if (header == (byte) 0xFA) {
 				byte scan = read(1)[0];
-				if (scan == angle) insync = true;
+				if (scan == angle) {
+					insync = true;
+				}
 			}
 		}
 		if (insync) {
@@ -47,16 +49,17 @@ public class LIDAR implements Updatable {
 		}
 		return null;
 	}
-	
+
 	public int[] getDists() {
 		return Dists;
 	}
-	
+
 	public int bytesCurrentlyAvailable() {
 		return 0;
 	}
-	
+
 	public void update() {
+		motor.set(0.25);
 		if (bytesCurrentlyAvailable() < 1000) {
 			return;
 		}
@@ -64,35 +67,46 @@ public class LIDAR implements Updatable {
 		try {
 			for (int i = 0; i < 90; i++) { // Reading in chunks of 4, so only 90 steps
 				int[] scanrange = scanline_b(scanhdr);
-				int degree = 4 * ((int) (scanhdr - ((byte) 0xA0)));
+				int degree = 4 * (scanhdr - ((byte) 0xA0));
 				if (scanrange != null) {
 					for (int j = 0; j < 4; j++) {
-						if (scanrange[j] != 53) Dists[degree + j] = scanrange[0]; // No one knows why we are comparing scanrange[j] to 53, so I am too scared to change it
-						else Dists[degree + j] = 0;
+						if (scanrange[j] != 53) {
+							Dists[degree + j] = scanrange[0]; // No one knows why we are comparing scanrange[j] to 53, so I am too scared to change it
+						} else {
+							Dists[degree + j] = 0;
+						}
 					}
 				}
-				if (scanhdr == (byte) 0xF9) scanhdr = (byte) 0xA0;
-				else scanhdr += 1;
+				if (scanhdr == (byte) 0xF9) {
+					scanhdr = (byte) 0xA0;
+				} else {
+					scanhdr += 1;
+				}
 			}
 			for (int i = 0; i < 90; i++) { // Do it again for redundancy
 				int[] scanrange = scanline_b(scanhdr);
-				int degree = 4 * ((int) (scanhdr - ((byte) 0xA0)));
+				int degree = 4 * (scanhdr - ((byte) 0xA0));
 				if (scanrange != null) {
 					for (int j = 0; j < 4; j++) {
-						if (scanrange[j] != 53) Dists[degree + j] = scanrange[0];
-						else Dists[degree + j] = 0;
+						if (scanrange[j] != 53) {
+							Dists[degree + j] = scanrange[0];
+						} else {
+							Dists[degree + j] = 0;
+						}
 					}
 				}
-				if (scanhdr == (byte) 0xF9) scanhdr = (byte) 0xA0;
-				else scanhdr += 1;
+				if (scanhdr == (byte) 0xF9) {
+					scanhdr = (byte) 0xA0;
+				} else {
+					scanhdr += 1;
+				}
 			}
 		}
 		catch (Exception e) {
 			System.out.println("Exception: " + e);
 		}
-		motor.set(0.25);
 	}
-	
+
 	public int clean() {
 		// TODO add RS-232 cleanup port
 		return 0;

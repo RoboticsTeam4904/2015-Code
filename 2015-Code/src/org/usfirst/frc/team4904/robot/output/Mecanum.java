@@ -44,14 +44,22 @@ public class Mecanum implements Updatable {
 		double backLeft = desiredSpeed * Math.cos(desiredAngle + Math.PI / 4) + turnSpeed;
 		double backRight = desiredSpeed * Math.sin(desiredAngle + Math.PI / 4) - turnSpeed;
 		double scaleFactor = Math.max(Math.max(Math.max(Math.abs(frontLeft), Math.abs(frontRight)), Math.abs(backLeft)), Math.abs(backRight));
+		if (scaleFactor < 1) {
+			scaleFactor = 1;
+		}
 		frontLeftWheel.set(frontLeft / scaleFactor);
 		frontRightWheel.set(frontRight / scaleFactor);
 		backLeftWheel.set(backLeft / scaleFactor);
 		backRightWheel.set(backRight / scaleFactor);
+		System.out.println("Backleft" + (backLeft / scaleFactor));
+		System.out.println("Backright" + (backRight / scaleFactor));
+		System.out.println("Frontleft" + (frontLeft / scaleFactor));
+		System.out.println("Frontright" + (frontRight / scaleFactor));
 	}
 	
 	public synchronized void update() {
-		this.move(this.desiredSpeed, this.desiredAngle, this.desiredTurnSpeed);// This system allows for different updating times and rates
+		System.out.println("Desired speed: " + desiredTurnSpeed + "\tDesired angle: " + desiredAngle + "\tDisired speed: " + desiredSpeed);
+		move(desiredSpeed, desiredAngle, desiredTurnSpeed);// This system allows for different updating times and rates
 	}
 	
 	public void setDesiredSpeedDirection(double desiredSpeed, double desiredAngle) {
@@ -60,6 +68,6 @@ public class Mecanum implements Updatable {
 	}
 	
 	public void setDesiredTurnSpeed(double turnSpeed) {
-		this.desiredTurnSpeed = turnSpeed;
+		desiredTurnSpeed = turnSpeed;
 	}
 }
