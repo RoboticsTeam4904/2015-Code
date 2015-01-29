@@ -9,6 +9,7 @@ public class IMU implements Updatable {
 
 	public IMU() {
 		this.mpu9150 = new MPU9150();
+		this.mpu9150.init();
 		this.zero();
 	}
 
