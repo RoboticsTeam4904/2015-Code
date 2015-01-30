@@ -6,7 +6,7 @@ import org.usfirst.frc.team4904.robot.Updatable;
 import edu.wpi.first.wpilibj.Talon;
 
 public class LIDAR implements Updatable {
-	int[] Dists = new int[360];
+	int[] dists = new int[360];
 	public Talon motor;
 	
 	public LIDAR(int motorport) {
@@ -51,10 +51,15 @@ public class LIDAR implements Updatable {
 	}
 	
 	public int[] getDists() {
-		return Dists;
+		return dists;
 	}
 	
-	public int bytesCurrentlyAvailable() {
+	public int[] getLines() {
+		// TODO actually get lines
+		return new int[] {0, 0, 0, 0};
+	}
+	
+	private int bytesCurrentlyAvailable() {
 		return 0;
 	}
 	
@@ -72,9 +77,9 @@ public class LIDAR implements Updatable {
 				if (scanrange != null) {
 					for (int j = 0; j < 4; j++) {
 						if (scanrange[j] != 53) {
-							Dists[degree + j] = scanrange[0]; // No one knows why we are comparing scanrange[j] to 53, so I am too scared to change it
+							dists[degree + j] = scanrange[0]; // No one knows why we are comparing scanrange[j] to 53, so I am too scared to change it
 						} else {
-							Dists[degree + j] = 0;
+							dists[degree + j] = 0;
 						}
 					}
 				}
@@ -90,9 +95,9 @@ public class LIDAR implements Updatable {
 				if (scanrange != null) {
 					for (int j = 0; j < 4; j++) {
 						if (scanrange[j] != 53) {
-							Dists[degree + j] = scanrange[0];
+							dists[degree + j] = scanrange[0];
 						} else {
-							Dists[degree + j] = 0;
+							dists[degree + j] = 0;
 						}
 					}
 				}

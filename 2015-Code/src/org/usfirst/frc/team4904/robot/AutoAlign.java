@@ -40,6 +40,9 @@ public class AutoAlign implements Updatable {
 	}
 	
 	public void grabCan() {
+		if (currentState != State.EMPTY) {
+			return;
+		}
 		if (currentState == State.EMPTY) {// Don't do anything if grabber isn't empty
 			currentState = State.ALIGNING_WITH_CAN; // NOTE: Setting the grabber is NOT done in these functions and is instead done the next time update is called
 		}
@@ -47,14 +50,18 @@ public class AutoAlign implements Updatable {
 	
 	private void releaseTote(boolean wide) {
 		// TODO put alignment code
-		// If we are putting the tote on top of a stack, we need to align before releasing
+		if (lidar.getDists()[90] < 200) { // If there is a tote in front of us, align with it
+			// If we are putting the tote on top of a stack, we need to align before releasing
+		}
 		// TODO set state to ALIGNING_TO_RELEASE_THIN/WIDE_TOTE so that alignment takes place in doAligningTick
 		currentState = State.EMPTY;
 	}
 	
 	private void releaseCan() {
 		// TODO put alignment code
-		// If we are putting the can on top of a stack, we need to align before releasing
+		if (lidar.getDists()[90] < 200) { // If there is a tote in front of us, align with it
+			// If we are putting the tote on top of a stack, we need to align before releasing
+		}
 		// TODO set state to ALIGNING_TO_RELEASE_CAN so that alignment takes place in doAligningTick
 		currentState = State.EMPTY;
 	}
@@ -71,12 +78,32 @@ public class AutoAlign implements Updatable {
 		}
 	}
 	
-	private void doAligningTick() {
-		// currentState = State.EMPTY;
+	private void alignWithTote() {
+		int[] LIDARLines = lidar.getLines();
+		// TODO do something with LIDARlines;
+		// For now, stop the robot
 		winch.move(0);
 		mecanum.setDesiredSpeedDirection(0, 0);
 		mecanum.setDesiredTurnSpeed(0);// Stop the robot, otherwise it would just keep going in the same speed and direction it was when grab was called
-		// TODO put alignment code
+	}
+	
+	private void doAligningTick() {
+		switch (currentState) {
+			case ALIGNING_WITH_CAN:
+				alignWithCan();
+				return;
+			case ALIGNING_WITH_THIN_TOTE:
+				alignWithTote(); // LIDAR Auto align does not differentiate wide from thin totes
+				return;
+			case ALIGNING_WITH_WIDE_TOTE:
+				alignWithTote();
+				return;
+			default: // Should never reach here
+				winch.move(0);
+				mecanum.setDesiredSpeedDirection(0, 0);
+				mecanum.setDesiredTurnSpeed(0);// Stop the robot, otherwise it would just keep going in the same speed and direction it was when grab was called
+				return;
+		}
 	}
 	
 	public synchronized void update() {
