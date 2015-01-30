@@ -39,7 +39,7 @@ public class OperatorNachi extends Operator {
 			raise(1); // When button 4 is pressed, raise the winch one level
 		}
 		if (stick.buttons[2].get()) {
-			lower(1); // When button 3 is pressed, lower the winch one level
+			// lower(1); // When button 3 is pressed, lower the winch one level
 		}
 		if (stick.buttons[5].get()) {
 			raise(10); // When button 6 is pressed, raise the winch all the way
@@ -47,7 +47,12 @@ public class OperatorNachi extends Operator {
 		if (stick.buttons[4].get()) {
 			lower(10); // When button 5 is pressed, lower the winch all the way
 		}
-		adjust(stick.getZ()); // Always adjust by Z axis
+		if (stick.buttons[2].getRaw()) {
+			adjust(stick.getY()); // When button 2 is pressed, adjust the winch
+		} else {
+			adjust(0);
+		}
+		// adjust(stick.getZ()); // Always adjust by Z axis
 		updateWinch();
 	}
 }

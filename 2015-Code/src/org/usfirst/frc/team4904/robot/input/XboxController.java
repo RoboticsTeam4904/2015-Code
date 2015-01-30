@@ -18,14 +18,14 @@ public class XboxController extends Joystick {
 	public final static int Y_STICK = 1; // Left y
 	public final static int TWIST_STICK = 2; // Button pair on front. Left is twist, trying to determine right
 	private SuperButton[] buttons = new SuperButton[10];
-	
+
 	public XboxController(int port) {
 		super(port);
 		for (int i = 0; i < 10; i++) {
 			buttons[i] = new SuperButton(this, i + 1);
 		}
 	}
-	
+
 	public double getValue(int axis) {
 		double value = 0;
 		if (axis == X_STICK) {
@@ -33,7 +33,7 @@ public class XboxController extends Joystick {
 		} else if (axis == Y_STICK) {
 			value = this.getY(); // Ditto above
 		} else if (axis == TWIST_STICK) {
-			value = this.getRawAxis(5); // Stick mappings here: http://www.chiefdelphi.com/forums/showpost.php?p=1003245&postcount=8
+			value = getRawAxis(4); // Stick mappings here: http://www.chiefdelphi.com/forums/showpost.php?p=1003245&postcount=8
 		}
 		if (Math.abs(value) < 0.1) { // Xbox does not go perfectly to zero when released
 			value = 0.0; // Do it ourselves
