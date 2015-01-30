@@ -15,7 +15,7 @@ public class AutoAlign implements Updatable {
 	private final Grabber grabber;
 
 	private enum State {
-		DISABLED, EMPTY, ALIGNING_WITH_WIDE_TOTE, ALIGNING_WITH_THIN_TOTE, ALIGNING_WITH_CAN, HOLDING_CAN, HOLDING_THIN_TOTE, HOLDING_WIDE_TOTE
+		EMPTY, ALIGNING_WITH_WIDE_TOTE, ALIGNING_WITH_THIN_TOTE, ALIGNING_WITH_CAN, HOLDING_CAN, HOLDING_THIN_TOTE, HOLDING_WIDE_TOTE
 	}
 	private volatile State currentState;
 
@@ -96,7 +96,6 @@ public class AutoAlign implements Updatable {
 			case HOLDING_WIDE_TOTE:
 				return Operator.MODE_WIDE_TOTE;
 			case EMPTY:
-			case DISABLED:
 				return Operator.MODE_EMPTY;
 			default:
 				throw new Error("Current state of AutoAlign does not exist/is null");
@@ -126,12 +125,8 @@ public class AutoAlign implements Updatable {
 	public boolean isGrabberEmpty() {
 		return currentState == State.EMPTY;
 	}
-
-	public void disable() {
-		currentState = State.DISABLED;
-	}
-
-	public void enable() {
+	
+	public void forceRelease() {
 		currentState = State.EMPTY;
 	}
 }
