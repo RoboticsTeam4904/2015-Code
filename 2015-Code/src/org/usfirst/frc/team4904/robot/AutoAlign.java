@@ -66,37 +66,63 @@ public class AutoAlign implements Updatable {
 		currentState = State.EMPTY;
 	}
 	
-	private void alignWithCan() {
+	private void alignWithCanTick() {
 		int[] UDARdists = udar.getDists();
 		if (UDARdists[2] > 1000) {
 			return;
 		}
 		if (UDARdists[1] > UDARdists[3]) { // If right sensor detects can, turn right
-			mecanum.setDesiredTurnSpeed(1);
+			mecanum.setDesiredTurnSpeed(0.5);
 		} else { // Otherwise, turn left
-			mecanum.setDesiredTurnSpeed(-1);
+			mecanum.setDesiredTurnSpeed(-0.5);
 		}
 	}
 	
-	private void alignWithTote() {
+	private void alignWithToteTick() {
 		int[] LIDARLines = lidar.getLines();
-		// TODO do something with LIDARlines;
-		// For now, stop the robot
-		winch.move(0);
-		mecanum.setDesiredSpeedDirection(0, 0);
-		mecanum.setDesiredTurnSpeed(0);// Stop the robot, otherwise it would just keep going in the same speed and direction it was when grab was called
+		int[] toteFront = new int[4];
+		for (int i = 0; i < LIDARLines.length; i += 4) {
+			if (LIDARLines[i] < 0 && LIDARLines[i + 2] > 0) {
+				for (int j = 0; j < 4; j++) {
+					toteFront[i] = LIDARLines[i + j];
+				}
+				i = LIDARLines.length;
+			} else if (LIDARLines[i + 2] < 0 && LIDARLines[i] > 0) {
+				for (int j = 0; j < 2; j++) { // Switch order of assignment so line is from left to right. My first language is English.
+					toteFront[i + j + 2] = LIDARLines[i + 2 + j];
+				}
+				for (int j = 0; j < 2; j++) {
+					toteFront[i + j] = LIDARLines[i + j];
+				}
+				i = LIDARLines.length;
+			}
+		}
+		double angle = Math.atan2(toteFront[3] - toteFront[1], toteFront[2] - toteFront[0]); // Angle of the tote relative to the X axis (us)
+		if (angle > Math.PI / 60) {
+			winch.set(0);
+			mecanum.setDesiredSpeedDirection(1, 90);
+			mecanum.setDesiredTurnSpeed(0);
+		} else {
+			winch.move(0);
+			mecanum.setDesiredSpeedDirection(1, angle);
+			if (angle > 0) {
+				mecanum.setDesiredTurnSpeed(0.25);
+			} else {
+				mecanum.setDesiredTurnSpeed(-0.25);
+			}
+		}
 	}
 	
 	private void doAligningTick() {
 		switch (currentState) {
 			case ALIGNING_WITH_CAN:
-				alignWithCan();
+				alignWithCanTick();
 				return;
 			case ALIGNING_WITH_THIN_TOTE:
-				alignWithTote(); // LIDAR Auto align does not differentiate wide from thin totes
+				alignWithToteTick(); // LIDAR Auto align does not differentiate wide from thin totes
 				return;
 			case ALIGNING_WITH_WIDE_TOTE:
-				alignWithTote();
+				alignWithToteTick();
 				return;
 			default: // Should never reach here
 				winch.move(0);
