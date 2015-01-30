@@ -8,8 +8,8 @@ public class IMU implements Updatable {
 	private int[] rawData = new int[10];
 
 	public IMU() {
-		this.mpu9150 = new MPU9150();
-		this.mpu9150.init();
+		mpu9150 = new MPU9150(1);
+		mpu9150.init();
 		zero();
 	}
 
@@ -24,14 +24,14 @@ public class IMU implements Updatable {
 	}
 
 	public synchronized void update() {
-		// readData();
-		// updateKalman();
+		readData();
+		updateKalman();
 	}
 
 	private void readData() {
 		// TODO only read data if enough data is available, otherwise return so
 		// that this function is always fast
-		this.rawData = mpu9150.read();
+		rawData = mpu9150.read();
 	}
 
 	private void updateKalman() {}

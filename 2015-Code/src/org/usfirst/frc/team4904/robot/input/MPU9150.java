@@ -113,35 +113,35 @@ public class MPU9150 {
 	private I2C accelMag;
 	private I2C compass;
 
-	public void MPU9150() {
+	public MPU9150(int f) {
 		// Initialize I2C
-		this.accelMag = new I2C(I2C.Port.kOnboard, 0x0C);
-		this.compass = new I2C(I2C.Port.kOnboard, 0x68);
-		this.accelMag.write(MPU9150_PWR_MGMT_1, 0);
+		accelMag = new I2C(I2C.Port.kOnboard, 0x0C);
+		compass = new I2C(I2C.Port.kOnboard, 0x68);
+		accelMag.write(MPU9150_PWR_MGMT_1, 0);
 	}
 
 	public int[] read() {
 		int[] data = new int[10];
-		double dT = (this.readSensor(MPU9150_TEMP_OUT_L, MPU9150_TEMP_OUT_H) + 12412.0) / 340.0;
+		double dT = (readSensor(MPU9150_TEMP_OUT_L, MPU9150_TEMP_OUT_H) + 12412.0) / 340.0;
 		System.out.print(dT);
 		System.out.print("  ");
-		System.out.print(this.readSensor(MPU9150_CMPS_XOUT_L, MPU9150_CMPS_XOUT_H));
+		System.out.print(readSensor(MPU9150_CMPS_XOUT_L, MPU9150_CMPS_XOUT_H));
 		System.out.print("  ");
-		System.out.print(this.readSensor(MPU9150_CMPS_YOUT_L, MPU9150_CMPS_YOUT_H));
+		System.out.print(readSensor(MPU9150_CMPS_YOUT_L, MPU9150_CMPS_YOUT_H));
 		System.out.print("  ");
-		System.out.print(this.readSensor(MPU9150_CMPS_ZOUT_L, MPU9150_CMPS_ZOUT_H));
+		System.out.print(readSensor(MPU9150_CMPS_ZOUT_L, MPU9150_CMPS_ZOUT_H));
 		System.out.print("  ");
-		System.out.print(this.readSensor(MPU9150_GYRO_XOUT_L, MPU9150_GYRO_XOUT_H));
+		System.out.print(readSensor(MPU9150_GYRO_XOUT_L, MPU9150_GYRO_XOUT_H));
 		System.out.print("  ");
-		System.out.print(this.readSensor(MPU9150_GYRO_YOUT_L, MPU9150_GYRO_YOUT_H));
+		System.out.print(readSensor(MPU9150_GYRO_YOUT_L, MPU9150_GYRO_YOUT_H));
 		System.out.print("  ");
-		System.out.print(this.readSensor(MPU9150_GYRO_ZOUT_L, MPU9150_GYRO_ZOUT_H));
+		System.out.print(readSensor(MPU9150_GYRO_ZOUT_L, MPU9150_GYRO_ZOUT_H));
 		System.out.print("  ");
-		System.out.print(this.readSensor(MPU9150_ACCEL_XOUT_L, MPU9150_ACCEL_XOUT_H));
+		System.out.print(readSensor(MPU9150_ACCEL_XOUT_L, MPU9150_ACCEL_XOUT_H));
 		System.out.print("  ");
-		System.out.print(this.readSensor(MPU9150_ACCEL_YOUT_L, MPU9150_ACCEL_YOUT_H));
+		System.out.print(readSensor(MPU9150_ACCEL_YOUT_L, MPU9150_ACCEL_YOUT_H));
 		System.out.print("  ");
-		System.out.print(this.readSensor(MPU9150_ACCEL_ZOUT_L, MPU9150_ACCEL_ZOUT_H));
+		System.out.print(readSensor(MPU9150_ACCEL_ZOUT_L, MPU9150_ACCEL_ZOUT_H));
 		System.out.println();
 		return new int[10];
 	}
@@ -149,26 +149,26 @@ public class MPU9150 {
 	public void init() {
 		// Extremely modified from http://playground.arduino.cc/Main/MPU-9150
 		// Mag setup
-		this.compass.write(0x0A, 0x00); // PowerDownMode
-		this.compass.write(0x0A, 0x0F); // SelfTest
-		this.compass.write(0x0A, 0x00); // PowerDownMode
+		compass.write(0x0A, 0x00); // PowerDownMode
+		compass.write(0x0A, 0x0F); // SelfTest
+		compass.write(0x0A, 0x00); // PowerDownMode
 		// Gyro setup
-		this.accelMag.write(0x24, 0x40); // Wait for Data at Slave0
-		this.accelMag.write(0x25, 0x8C); // Set i2c address at slave0 at 0x0C
-		this.accelMag.write(0x26, 0x02); // Set where reading at slave 0 starts
-		this.accelMag.write(0x27, 0x88); // set offset at start reading and enable
-		this.accelMag.write(0x28, 0x0C); // set i2c address at slv1 at 0x0C
-		this.accelMag.write(0x29, 0x0A); // Set where reading at slave 1 starts
-		this.accelMag.write(0x2A, 0x81); // Enable at set length to 1
-		this.accelMag.write(0x64, 0x01); // overvride register
-		this.accelMag.write(0x67, 0x03); // set delay rate
-		this.accelMag.write(0x01, 0x80);
-		this.accelMag.write(0x34, 0x04); // set i2c slv4 delay
-		this.accelMag.write(0x64, 0x00); // override register
-		this.accelMag.write(0x6A, 0x00); // clear usr setting
-		this.accelMag.write(0x64, 0x01); // override register
-		this.accelMag.write(0x6A, 0x20); // enable master i2c mode
-		this.accelMag.write(0x34, 0x13); // disable slv4
+		accelMag.write(0x24, 0x40); // Wait for Data at Slave0
+		accelMag.write(0x25, 0x8C); // Set i2c address at slave0 at 0x0C
+		accelMag.write(0x26, 0x02); // Set where reading at slave 0 starts
+		accelMag.write(0x27, 0x88); // set offset at start reading and enable
+		accelMag.write(0x28, 0x0C); // set i2c address at slv1 at 0x0C
+		accelMag.write(0x29, 0x0A); // Set where reading at slave 1 starts
+		accelMag.write(0x2A, 0x81); // Enable at set length to 1
+		accelMag.write(0x64, 0x01); // overvride register
+		accelMag.write(0x67, 0x03); // set delay rate
+		accelMag.write(0x01, 0x80);
+		accelMag.write(0x34, 0x04); // set i2c slv4 delay
+		accelMag.write(0x64, 0x00); // override register
+		accelMag.write(0x6A, 0x00); // clear usr setting
+		accelMag.write(0x64, 0x01); // override register
+		accelMag.write(0x6A, 0x20); // enable master i2c mode
+		accelMag.write(0x34, 0x13); // disable slv4
 	}
 	
 	public void readAcc() {}
@@ -179,8 +179,12 @@ public class MPU9150 {
 	private int readSensor(int addrL, int addrH) {
 		byte[] H = new byte[1];
 		byte[] L = new byte[1];
-		if (!this.accelMag.read(addrH, 1, H)) return -1;
-		if (!this.accelMag.read(addrL, 1, L)) return -1;
+		if (!accelMag.read(addrH, 1, H)) {
+			return -1;
+		}
+		if (!accelMag.read(addrL, 1, L)) {
+			return -1;
+		}
 		return (H[0] << 8) + L[0];
 	}
 }
