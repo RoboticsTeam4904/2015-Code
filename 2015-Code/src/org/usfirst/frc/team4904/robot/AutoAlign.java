@@ -6,6 +6,7 @@ import org.usfirst.frc.team4904.robot.input.LIDAR;
 import org.usfirst.frc.team4904.robot.input.UDAR;
 import org.usfirst.frc.team4904.robot.output.Grabber;
 import org.usfirst.frc.team4904.robot.output.Mecanum;
+import org.usfirst.frc.team4904.robot.output.Winch;
 
 public class AutoAlign implements Updatable {
 	private final Mecanum mecanum;
@@ -13,21 +14,23 @@ public class AutoAlign implements Updatable {
 	private final IMU imu;
 	private final LIDAR lidar;
 	private final Grabber grabber;
-
+	private final Winch winch;
+	
 	private enum State {
 		EMPTY, ALIGNING_WITH_WIDE_TOTE, ALIGNING_WITH_THIN_TOTE, ALIGNING_WITH_CAN, HOLDING_CAN, HOLDING_THIN_TOTE, HOLDING_WIDE_TOTE
 	}
 	private volatile State currentState;
-
-	public AutoAlign(Mecanum mecanum, UDAR udar, LIDAR lidar, IMU imu, Grabber grabber) {
+	
+	public AutoAlign(Mecanum mecanum, UDAR udar, LIDAR lidar, IMU imu, Grabber grabber, Winch winch) {
 		this.mecanum = mecanum;
 		this.udar = udar;
 		this.imu = imu;
 		this.grabber = grabber;
 		this.lidar = lidar;
+		this.winch = winch;
 		currentState = State.EMPTY;
 	}
-
+	
 	public void grabTote(boolean wide) {
 		if (currentState != State.EMPTY) {// Don't do anything if grabber isn't empty
 			return;
@@ -35,41 +38,42 @@ public class AutoAlign implements Updatable {
 		// TODO set "wide" boolean based on sensor data in case wring button pressed
 		currentState = wide ? State.ALIGNING_WITH_WIDE_TOTE : State.ALIGNING_WITH_THIN_TOTE;
 	}
-
+	
 	public void grabCan() {
 		if (currentState == State.EMPTY) {// Don't do anything if grabber isn't empty
 			currentState = State.ALIGNING_WITH_CAN; // NOTE: Setting the grabber is NOT done in these functions and is instead done the next time update is called
 		}
 	}
-
+	
 	private void releaseTote(boolean wide) {
 		// TODO put alignment code
 		// If we are putting the tote on top of a stack, we need to align before releasing
 		// TODO set state to ALIGNING_TO_RELEASE_THIN/WIDE_TOTE so that alignment takes place in doAligningTick
 		currentState = State.EMPTY;
 	}
-
+	
 	private void releaseCan() {
 		// TODO put alignment code
 		// If we are putting the can on top of a stack, we need to align before releasing
 		// TODO set state to ALIGNING_TO_RELEASE_CAN so that alignment takes place in doAligningTick
 		currentState = State.EMPTY;
 	}
-
+	
 	private void doAligningTick() {
 		// currentState = State.EMPTY;
+		winch.set(0);
 		mecanum.setDesiredSpeedDirection(0, 0);
 		mecanum.setDesiredTurnSpeed(0);// Stop the robot, otherwise it would just keep going in the same speed and direction it was when grab was called
 		// TODO put alignment code
 	}
-
+	
 	public synchronized void update() {
 		grabber.setWidth(getDesiredGrabberState());// This is (on purpose) the only place that grabber.setWidth is ever called (other than in disableMotors())
 		if (isCurrentlyAligning()) {
 			doAligningTick();
 		}
 	}
-
+	
 	public boolean isCurrentlyAligning() {
 		switch (currentState) {
 			case ALIGNING_WITH_CAN:
@@ -80,7 +84,7 @@ public class AutoAlign implements Updatable {
 				return false;
 		}
 	}
-
+	
 	private int getDesiredGrabberState() {// What state should the grabber be in
 		switch (currentState) {
 			case ALIGNING_WITH_CAN:
@@ -101,7 +105,7 @@ public class AutoAlign implements Updatable {
 				throw new Error("Current state of AutoAlign does not exist/is null");
 		}
 	}
-
+	
 	public void release() {
 		if (isCurrentlyAligning()) {// Canceling alignment, e.g. in case it isn't working
 			currentState = State.EMPTY;
@@ -121,11 +125,11 @@ public class AutoAlign implements Updatable {
 				// You pressed the release button when you aren't holding anything
 		}
 	}
-
+	
 	public boolean isGrabberEmpty() {
 		return currentState == State.EMPTY;
 	}
-	
+
 	public void forceRelease() {
 		currentState = State.EMPTY;
 	}
