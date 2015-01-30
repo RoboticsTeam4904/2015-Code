@@ -21,13 +21,17 @@ public abstract class Operator implements Updatable {
 	public abstract void update();
 	
 	protected void raise(int levels) {
-		winch.set(1);
-		winchTimer = 5;
+		if (isInControl()) {
+			winch.set(1);
+			winchTimer = 5;
+		}
 	}
 	
 	protected void lower(int levels) {
-		winch.set(-1);// TODO Made moving the winch a little more accurate than moving at a certain speed for 5 ticks
-		winchTimer = 5;
+		if (isInControl()) {
+			winch.set(-1);// TODO Made moving the winch a little more accurate than moving at a certain speed for 5 ticks
+			winchTimer = 5;
+		}
 	}
 	
 	protected void grab(int mode) {
@@ -41,10 +45,13 @@ public abstract class Operator implements Updatable {
 	}
 	
 	protected void adjust(double value) {
-		winch.set(value); // Sets winch motor speed
+		if (isInControl()) winch.set(value); // Sets winch motor speed
 	}
 	
 	protected void updateWinch() {
+		if (!isInControl()) {
+			return;
+		}
 		if (winchTimer > 0) winchTimer--; // Winch can move over multiple cycles, so set a countdown
 		else {
 			if (winchTimer == 0) {
@@ -56,5 +63,9 @@ public abstract class Operator implements Updatable {
 	
 	protected boolean isGrabberEmpty() {// Wrapper function -- references to align and winch are private not protected so subclasses can't access them
 		return align.isGrabberEmpty();
+	}
+	
+	private boolean isInControl() {
+		return !align.isCurrentlyAligning();
 	}
 }
