@@ -17,7 +17,7 @@ public class AutoAlign implements Updatable {
 	private final Winch winch;
 	
 	private enum State {
-		EMPTY, ALIGNING_WITH_WIDE_TOTE, ALIGNING_WITH_THIN_TOTE, ALIGNING_WITH_CAN, HOLDING_CAN, HOLDING_THIN_TOTE, HOLDING_WIDE_TOTE
+		EMPTY, ALIGNING_WITH_WIDE_TOTE, ALIGNING_WITH_THIN_TOTE, ALIGNING_WITH_CAN, HOLDING_CAN, HOLDING_THIN_TOTE, HOLDING_WIDE_TOTE, RELEASING_CAN, RELEASING_THIN_TOTE, RELEASING_WIDE_TOTE
 	}
 	private volatile State currentState;
 	
@@ -73,8 +73,16 @@ public class AutoAlign implements Updatable {
 		}
 		if (UDARdists[1] > UDARdists[3]) { // If right sensor detects can, turn right
 			mecanum.setDesiredTurnSpeed(0.5);
-		} else { // Otherwise, turn left
+		} else if (UDARdists[3] > UDARdists[1]) { // Otherwise, turn left
 			mecanum.setDesiredTurnSpeed(-0.5);
+		} else {
+			mecanum.setDesiredTurnSpeed(0);
+			if (UDARdists[2] > 100) {
+				mecanum.setDesiredSpeedDirection(1, Math.PI / 2);
+			} else {
+				mecanum.setDesiredSpeedDirection(0, Math.PI / 2);
+				currentState = State.HOLDING_CAN;
+			}
 		}
 	}
 	
@@ -98,10 +106,20 @@ public class AutoAlign implements Updatable {
 			}
 		}
 		double angle = Math.atan2(toteFront[3] - toteFront[1], toteFront[2] - toteFront[0]); // Angle of the tote relative to the X axis (us)
-		if (angle > Math.PI / 60) {
+		if (angle < Math.PI / 60) {
 			winch.set(0);
-			mecanum.setDesiredSpeedDirection(1, Math.PI / 2);
 			mecanum.setDesiredTurnSpeed(0);
+			if (lidar.getDists()[90] > 100) {
+				mecanum.setDesiredSpeedDirection(1, Math.PI / 2);
+			} else {
+				mecanum.setDesiredSpeedDirection(0, Math.PI / 2);
+				double width = toteFront[2] - toteFront[0];
+				if (Math.abs(width - Grabber.THIN_TOTE_WIDTH) < Math.abs(width - Grabber.WIDE_TOTE_WIDTH)) {
+					currentState = State.HOLDING_THIN_TOTE;
+				} else {
+					currentState = State.HOLDING_WIDE_TOTE;
+				}
+			}
 		} else {
 			winch.move(0);
 			mecanum.setDesiredSpeedDirection(1, angle);
@@ -166,6 +184,12 @@ public class AutoAlign implements Updatable {
 				return Operator.MODE_THIN_TOTE;
 			case HOLDING_WIDE_TOTE:
 				return Operator.MODE_WIDE_TOTE;
+			case RELEASING_CAN:
+				return Operator.MODE_CAN;
+			case RELEASING_THIN_TOTE:
+				return Operator.MODE_THIN_TOTE;
+			case RELEASING_WIDE_TOTE:
+				return Operator.MODE_WIDE_TOTE;
 			case EMPTY:
 				return Operator.MODE_EMPTY;
 			default:
@@ -189,6 +213,7 @@ public class AutoAlign implements Updatable {
 				releaseCan();
 				return;
 			default:
+				System.out.println("User error");
 				// You pressed the release button when you aren't holding anything
 		}
 	}
