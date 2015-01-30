@@ -16,7 +16,7 @@ public class XboxController extends Joystick {
 	public final static int RIGHT_STICK = 10;
 	public final static int X_STICK = 0; // Left x
 	public final static int Y_STICK = 1; // Left y
-	public final static int TWIST_STICK = 2; // Button pair on front
+	public final static int TWIST_STICK = 2; // Button pair on front. Left is twist, trying to determine right
 	private SuperButton[] buttons = new SuperButton[10];
 	
 	public XboxController(int port) {
@@ -33,11 +33,12 @@ public class XboxController extends Joystick {
 		} else if (axis == Y_STICK) {
 			value = this.getY(); // Ditto above
 		} else if (axis == TWIST_STICK) {
-			value = this.getTwist(); // Xbox has twist
+			value += this.getTwist(); // Xbox has twist
+			value += this.getThrottle(); // Maybe this is other twist?
 		}
 		if (Math.abs(value) < 0.1) { // Xbox does not go perfectly to zero when released
 			value = 0.0; // Do it ourselves
-		} // Software over hardware! Programmers for the win!
+		} // Software to solve hardware problems. Maybe not great.
 		return value;
 	}
 }
