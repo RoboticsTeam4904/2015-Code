@@ -112,14 +112,14 @@ public class MPU9150 {
 	// I2C objects
 	private I2C accelMag;
 	private I2C compass;
-
+	
 	public MPU9150() {
 		// Initialize I2C
 		accelMag = new I2C(I2C.Port.kOnboard, 0x0C);
 		compass = new I2C(I2C.Port.kOnboard, 0x68);
 		accelMag.write(MPU9150_PWR_MGMT_1, 0);
 	}
-
+	
 	public double[] read() {
 		double[] data = new double[10];
 		data[0] = (this.readSensor(MPU9150_TEMP_OUT_L, MPU9150_TEMP_OUT_H) + 12412.0) / 340.0;
@@ -134,7 +134,7 @@ public class MPU9150 {
 		data[9] = this.readSensor(MPU9150_ACCEL_ZOUT_L, MPU9150_ACCEL_ZOUT_H);
 		return data;
 	}
-
+	
 	public void init() {
 		// Extremely modified from http://playground.arduino.cc/Main/MPU-9150
 		// Mag setup
@@ -159,21 +159,23 @@ public class MPU9150 {
 		accelMag.write(0x6A, 0x20); // enable master i2c mode
 		accelMag.write(0x34, 0x13); // disable slv4
 	}
-
-	public boolean test() {
+	
+	public byte test() {
 		byte[] data = new byte[1];
 		data[0] = (byte) 0x68;
+		byte[] response = new byte[1];
 		try {
-			return accelMag.verifySensor(0x75, 1, data);
+			accelMag.read(0x75, 1, response);
+			return response[0];
 		}
 		catch (Exception e) {
 			e.printStackTrace();
-			return false;
+			return 0;
 		}
 	}
-	
+
 	public void readAcc() {}
-	
+
 	// //////////////////////////
 	// Low level I2C functions //
 	// //////////////////////////

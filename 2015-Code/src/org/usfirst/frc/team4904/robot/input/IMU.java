@@ -18,7 +18,7 @@ public class IMU implements Updatable {
 		zero();
 	}
 
-	public boolean test() {
+	public int test() {
 		return mpu9150.test();
 	}
 
