@@ -55,13 +55,13 @@ public class Robot extends SampleRobot {
 	// Update system
 	private final double fastUpdatePeriod = 0.015; // update every 0.005 seconds/5 milliseconds (200Hz)
 	private final double slowUpdatePeriod = 0.2; // update every 0.2 seconds/200 milliseconds (5Hz)
-	
+
 	private enum RobotState {
 		DISABLED, OPERATOR, AUTONOMOUS
 	}
-	
+
 	public Robot() {
-		System.out.println("*** INITIALIZING ROBOT ***");
+		System.out.println("*** CONSTRUCTING ROBOT ***");
 		// Initialize sensors
 		imu = new IMU(); // Initialize IMU
 		udar = new UDAR(); // Initialize UDAR
@@ -86,8 +86,11 @@ public class Robot extends SampleRobot {
 		autonomousOperator = new OperatorAutonomous(winch, align, controller);
 		autonomousDriver = new DriverAutonomous(mecanumDrive, controller, align);
 	}
-	
-	@Override
+
+	public void robotInit() {
+		System.out.println("*** INITIALIZING ***");
+	}
+
 	public void disabled() {
 		System.out.println("*** DISABLED ***");
 		RobotState state = RobotState.DISABLED;
@@ -98,7 +101,7 @@ public class Robot extends SampleRobot {
 			Timer.delay(0.01);
 		}
 	}
-	
+
 	private void disableMotors() {
 		winch.set(0);
 		grabber.set(0);
@@ -108,8 +111,7 @@ public class Robot extends SampleRobot {
 		backRightWheel.set(0);
 		lidar.motor.set(0);
 	}
-	
-	@Override
+
 	public void autonomous() {
 		System.out.println("*** AUTONOMOUS ***");
 		operator = autonomousOperator;
@@ -121,8 +123,7 @@ public class Robot extends SampleRobot {
 			Timer.delay(0.01);
 		}
 	}
-	
-	@Override
+
 	public void operatorControl() {
 		System.out.println("*** TELEOPERATED ***");
 		operator = humanOperator;
@@ -134,7 +135,7 @@ public class Robot extends SampleRobot {
 			Timer.delay(0.01);
 		}
 	}
-	
+
 	private RobotState getRobotState() {
 		if (isDisabled()) {
 			return RobotState.DISABLED;
@@ -147,23 +148,22 @@ public class Robot extends SampleRobot {
 		}
 		return RobotState.DISABLED;
 	}
-	
+
 	public static double time() {
 		return (double) System.currentTimeMillis() / 1000;
 	}
-	
+
 	private class Updater extends Thread { // Function to update automatically in a new thread
 		private final RobotState robotState;
 		private final Updatable[] toUpdate;
 		private final double updateSpeed;
-		
+
 		public Updater(RobotState state, Updatable[] toUpdate, double updateSpeed) {
 			robotState = state;
 			this.toUpdate = toUpdate;
 			this.updateSpeed = updateSpeed;
 		}
-		
-		@Override
+
 		public void run() {
 			double desiredTime = time() + updateSpeed; // Sync with clock to ensure that update interval is consistent regardless of how long each update takes
 			System.out.println("Starting");
