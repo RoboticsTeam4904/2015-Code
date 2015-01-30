@@ -11,18 +11,18 @@ public class IMU implements Updatable {
 	public double[] rawData = new double[10];
 	private double startTime;
 	private long updates = 0;
-
+	
 	public IMU() {
 		mpu9150 = new MPU9150();
 		mpu9150.init();
 		zero();
 	}
-
-	public float getAngle() {
-		// TODO return current robot angle relative to zero point (0 - 360)
-		return 0F;
+	
+	public double getAngle() {
+		// TODO return current robot angle relative to beginning of match (0 - 2pi)
+		return 0D;
 	}
-
+	
 	public void zero() {
 		// TODO set current orientation as "forward"
 		update();
@@ -30,12 +30,12 @@ public class IMU implements Updatable {
 		this.startTime = Robot.time();
 		this.updates = 0;
 	}
-
+	
 	public synchronized void update() {
 		readData();
 		updateKalman();
 	}
-
+	
 	private void readData() {
 		updates++;
 		// TODO only read data if enough data is available, otherwise return so
@@ -46,6 +46,6 @@ public class IMU implements Updatable {
 			System.out.println(Arrays.toString(rawData));
 		}
 	}
-
+	
 	private void updateKalman() {}
 }
