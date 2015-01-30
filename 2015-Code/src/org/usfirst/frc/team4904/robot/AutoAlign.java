@@ -61,7 +61,7 @@ public class AutoAlign implements Updatable {
 	
 	private void doAligningTick() {
 		// currentState = State.EMPTY;
-		winch.set(0);
+		winch.move(0);
 		mecanum.setDesiredSpeedDirection(0, 0);
 		mecanum.setDesiredTurnSpeed(0);// Stop the robot, otherwise it would just keep going in the same speed and direction it was when grab was called
 		// TODO put alignment code
