@@ -88,8 +88,11 @@ public class Robot extends SampleRobot {
 		autonomousDriver = new DriverAutonomous(mecanumDrive, controller, align);
 	}
 
+	@Override
 	public void disabled() {
 		System.out.println("*** DISABLED ***");
+		RobotState state = RobotState.DISABLED;
+		new Updater(state, new Updatable[] {imu}, fastUpdatePeriod).start(); // These should have fast updates
 		while (isDisabled()) {
 			disableMotors(); // Disable all motors
 			align.forceRelease();
@@ -107,6 +110,7 @@ public class Robot extends SampleRobot {
 		lidar.motor.set(0);
 	}
 
+	@Override
 	public void autonomous() {
 		System.out.println("*** AUTONOMOUS ***");
 		operator = autonomousOperator;
@@ -119,6 +123,7 @@ public class Robot extends SampleRobot {
 		}
 	}
 
+	@Override
 	public void operatorControl() {
 		System.out.println("*** TELEOPERATED ***");
 		operator = humanOperator;
@@ -159,6 +164,7 @@ public class Robot extends SampleRobot {
 			this.updateSpeed = updateSpeed;
 		}
 
+		@Override
 		public void run() {
 			double desiredTime = time() + updateSpeed; // Sync with clock to ensure that update interval is consistent regardless of how long each update takes
 			while (getRobotState() == robotState) {
