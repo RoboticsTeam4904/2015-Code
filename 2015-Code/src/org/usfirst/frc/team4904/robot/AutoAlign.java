@@ -59,6 +59,18 @@ public class AutoAlign implements Updatable {
 		currentState = State.EMPTY;
 	}
 	
+	private void alignWithCan() {
+		int[] UDARdists = udar.getDists();
+		if (UDARdists[2] > 1000) {
+			return;
+		}
+		if (UDARdists[1] > UDARdists[3]) { // If right sensor detects can, turn right
+			mecanum.setDesiredTurnSpeed(1);
+		} else { // Otherwise, turn left
+			mecanum.setDesiredTurnSpeed(-1);
+		}
+	}
+	
 	private void doAligningTick() {
 		// currentState = State.EMPTY;
 		winch.move(0);
@@ -129,7 +141,7 @@ public class AutoAlign implements Updatable {
 	public boolean isGrabberEmpty() {
 		return currentState == State.EMPTY;
 	}
-
+	
 	public void forceRelease() {
 		currentState = State.EMPTY;
 	}
