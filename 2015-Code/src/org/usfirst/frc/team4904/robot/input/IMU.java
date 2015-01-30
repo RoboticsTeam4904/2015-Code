@@ -18,9 +18,13 @@ public class IMU implements Updatable {
 		zero();
 	}
 
-	public float getAngle() {
-		// TODO return current robot angle relative to zero point (0 - 360)
-		return 0F;
+	public boolean test() {
+		return mpu9150.test();
+	}
+
+	public double getAngle() {
+		// TODO return current robot angle relative to beginning of match (0 - 2pi)
+		return 0D;
 	}
 
 	public void zero() {
@@ -41,7 +45,8 @@ public class IMU implements Updatable {
 		// TODO only read data if enough data is available, otherwise return so
 		// that this function is always fast
 		rawData = this.mpu9150.read();
-		if (this.updates % 200 == 0) {
+		if (this.updates % 60 == 0) {
+			System.out.print("test result: " + test());
 			System.out.print(updates / (Robot.time() - startTime) + " hz ");
 			System.out.println(Arrays.toString(rawData));
 		}

@@ -62,6 +62,10 @@ public class Robot extends SampleRobot {
 	
 	public Robot() {
 		System.out.println("*** INITIALIZING ROBOT ***");
+		// Initialize sensors
+		imu = new IMU(); // Initialize IMU
+		udar = new UDAR(); // Initialize UDAR
+		lidar = new LIDAR(LIDAR_MOTOR_PORT); // Initialize LIDAR
 		// Initialize movement controllers
 		winch = new Winch(WINCH_PORT); // Initialize Winch control
 		grabber = new Grabber(GRABBER_PORT); // Initialize Grabber control -- only autoalign has access to this, by design
@@ -70,15 +74,10 @@ public class Robot extends SampleRobot {
 		frontRightWheel = new VictorSP(FRONT_RIGHT_WHEEL_PORT);
 		backLeftWheel = new VictorSP(BACK_LEFT_WHEEL_PORT);
 		backRightWheel = new VictorSP(BACK_RIGHT_WHEEL_PORT);
-		mecanumDrive = new Mecanum(frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel); // Initialize Mecanum control
+		mecanumDrive = new Mecanum(frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel, imu); // Initialize Mecanum control
 		// Initialize joysticks (numbers correspond to value set by driver station)
 		stick = new LogitechJoystick(JOYSTICK_PORT);
 		xboxController = new XboxController(CONTROLLER_PORT);
-		// Initialize sensors
-		// Initialize subsystems
-		imu = new IMU(); // Initialize IMU
-		udar = new UDAR(); // Initialize UDAR
-		lidar = new LIDAR(LIDAR_MOTOR_PORT); // Initialize LIDAR
 		// Initalize subsystems
 		align = new AutoAlign(mecanumDrive, udar, lidar, imu, grabber, winch); // Initialize AutoAlign system
 		humanOperator = new OperatorNachi(stick, winch, align);
