@@ -92,6 +92,7 @@ public class Robot extends SampleRobot {
 		System.out.println("*** DISABLED ***");
 		while (isDisabled()) {
 			disableMotors(); // Disable all motors
+			align.disable();
 			Timer.delay(0.01);
 		}
 	}
@@ -115,6 +116,7 @@ public class Robot extends SampleRobot {
 		new Updater(state, new Updatable[] {imu, driver, operator, mecanumDrive, lidar}, fastUpdatePeriod).start(); // These should have fast updates
 		while (getRobotState() == state) {
 			Timer.delay(0.01);
+			align.enable();
 		}
 	}
 
@@ -127,6 +129,7 @@ public class Robot extends SampleRobot {
 		new Updater(state, new Updatable[] {imu, driver, operator, mecanumDrive, lidar}, fastUpdatePeriod).start(); // These should have fast updates
 		while (getRobotState() == state) {
 			Timer.delay(0.01);
+			align.enable();
 		}
 	}
 
