@@ -26,7 +26,7 @@ public class Mecanum implements Updatable {
 	private volatile double desiredSpeed;
 	private volatile double desiredAngle;
 	private volatile double desiredTurnSpeed;
-	
+
 	public Mecanum(SpeedController frontLeftWheel, SpeedController frontRightWheel, SpeedController backLeftWheel, SpeedController backRightWheel) {
 		// Initialize motor controllers with default ports
 		this.frontLeftWheel = frontLeftWheel;
@@ -34,7 +34,7 @@ public class Mecanum implements Updatable {
 		this.backLeftWheel = backLeftWheel;
 		this.backRightWheel = backRightWheel;
 	}
-	
+
 	private void move(double desiredSpeed, double desiredAngle, double turnSpeed) {
 		// @param desiredSpeed double between 0 and 1 specifying wanted movement speed
 		// @param desiredAngle double between 0 and 2pi specifying wanted movement angle in radians
@@ -51,22 +51,22 @@ public class Mecanum implements Updatable {
 		frontRightWheel.set(frontRight / scaleFactor);
 		backLeftWheel.set(backLeft / scaleFactor);
 		backRightWheel.set(backRight / scaleFactor);
-		System.out.println("Backleft" + (backLeft / scaleFactor));
-		System.out.println("Backright" + (backRight / scaleFactor));
-		System.out.println("Frontleft" + (frontLeft / scaleFactor));
-		System.out.println("Frontright" + (frontRight / scaleFactor));
+		// System.out.println("Backleft" + (backLeft / scaleFactor));
+		// System.out.println("Backright" + (backRight / scaleFactor));
+		// System.out.println("Frontleft" + (frontLeft / scaleFactor));
+		// System.out.println("Frontright" + (frontRight / scaleFactor));
 	}
-	
+
 	public synchronized void update() {
-		System.out.println("Desired speed: " + desiredTurnSpeed + "\tDesired angle: " + desiredAngle + "\tDisired speed: " + desiredSpeed);
+		// System.out.println("Desired speed: " + desiredTurnSpeed + "\tDesired angle: " + desiredAngle + "\tDisired speed: " + desiredSpeed);
 		move(desiredSpeed, desiredAngle, desiredTurnSpeed);// This system allows for different updating times and rates
 	}
-	
+
 	public void setDesiredSpeedDirection(double desiredSpeed, double desiredAngle) {
 		this.desiredAngle = desiredAngle;
 		this.desiredSpeed = desiredSpeed;
 	}
-	
+
 	public void setDesiredTurnSpeed(double turnSpeed) {
 		desiredTurnSpeed = turnSpeed;
 	}
