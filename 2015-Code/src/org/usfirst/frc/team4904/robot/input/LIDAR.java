@@ -8,22 +8,22 @@ import edu.wpi.first.wpilibj.Talon;
 public class LIDAR implements Updatable {
 	int[] Dists = new int[360];
 	public Talon motor;
-
+	
 	public LIDAR(int motorport) {
 		motor = new Talon(motorport);
 	}
-
+	
 	public int connect() {
 		// TODO add RS-232 connect
 		return 0;
 	}
-
+	
 	private byte[] read(int bytes) throws Exception {
 		// TODO RS-232 read
 		byte b[] = new byte[bytes];
 		return b;
 	}
-
+	
 	private int[] scanline_b(byte angle) throws Exception {
 		boolean insync = false;
 		while (!insync) { // Wait until beginning of distance data
@@ -49,20 +49,21 @@ public class LIDAR implements Updatable {
 		}
 		return null;
 	}
-
+	
 	public int[] getDists() {
 		return Dists;
 	}
-
+	
 	public int bytesCurrentlyAvailable() {
 		return 0;
 	}
-
+	
 	public void update() {
 		motor.set(0.25);
-		if (bytesCurrentlyAvailable() < 1000) {
+		if (bytesCurrentlyAvailable() < 10000) {
 			return;
 		}
+		System.out.println("Reading from LIDAR");
 		byte scanhdr = (byte) 0xA0;
 		try {
 			for (int i = 0; i < 90; i++) { // Reading in chunks of 4, so only 90 steps
@@ -106,7 +107,7 @@ public class LIDAR implements Updatable {
 			System.out.println("Exception: " + e);
 		}
 	}
-
+	
 	public int clean() {
 		// TODO add RS-232 cleanup port
 		return 0;
