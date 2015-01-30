@@ -159,6 +159,12 @@ public class MPU9150 {
 		accelMag.write(0x6A, 0x20); // enable master i2c mode
 		accelMag.write(0x34, 0x13); // disable slv4
 	}
+	
+	public boolean test() {
+		byte[] data = new byte[1];
+		data[0] = (byte) 0x68;
+		return accelMag.verifySensor(0x75, 1, data);
+	}
 
 	public void readAcc() {}
 
