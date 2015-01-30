@@ -100,7 +100,7 @@ public class AutoAlign implements Updatable {
 		double angle = Math.atan2(toteFront[3] - toteFront[1], toteFront[2] - toteFront[0]); // Angle of the tote relative to the X axis (us)
 		if (angle > Math.PI / 60) {
 			winch.set(0);
-			mecanum.setDesiredSpeedDirection(1, 90);
+			mecanum.setDesiredSpeedDirection(1, Math.PI / 2);
 			mecanum.setDesiredTurnSpeed(0);
 		} else {
 			winch.move(0);
@@ -142,7 +142,9 @@ public class AutoAlign implements Updatable {
 	public boolean isCurrentlyAligning() {
 		switch (currentState) {
 			case ALIGNING_WITH_CAN:
+				return true;
 			case ALIGNING_WITH_THIN_TOTE:
+				return true;
 			case ALIGNING_WITH_WIDE_TOTE:
 				return true;
 			default:
