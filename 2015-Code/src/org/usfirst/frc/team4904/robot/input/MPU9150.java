@@ -120,30 +120,22 @@ public class MPU9150 {
 		this.accelMag.write(MPU9150_PWR_MGMT_1, 0);
 	}
 
-	public int[] read() {
-		int[] data = new int[10];
-		double dT = (this.readSensor(MPU9150_TEMP_OUT_L, MPU9150_TEMP_OUT_H) + 12412.0) / 340.0;
-		System.out.print(dT);
-		System.out.print("  ");
-		System.out.print(this.readSensor(MPU9150_CMPS_XOUT_L, MPU9150_CMPS_XOUT_H));
-		System.out.print("  ");
-		System.out.print(this.readSensor(MPU9150_CMPS_YOUT_L, MPU9150_CMPS_YOUT_H));
-		System.out.print("  ");
-		System.out.print(this.readSensor(MPU9150_CMPS_ZOUT_L, MPU9150_CMPS_ZOUT_H));
-		System.out.print("  ");
-		System.out.print(this.readSensor(MPU9150_GYRO_XOUT_L, MPU9150_GYRO_XOUT_H));
-		System.out.print("  ");
-		System.out.print(this.readSensor(MPU9150_GYRO_YOUT_L, MPU9150_GYRO_YOUT_H));
-		System.out.print("  ");
-		System.out.print(this.readSensor(MPU9150_GYRO_ZOUT_L, MPU9150_GYRO_ZOUT_H));
-		System.out.print("  ");
-		System.out.print(this.readSensor(MPU9150_ACCEL_XOUT_L, MPU9150_ACCEL_XOUT_H));
-		System.out.print("  ");
-		System.out.print(this.readSensor(MPU9150_ACCEL_YOUT_L, MPU9150_ACCEL_YOUT_H));
-		System.out.print("  ");
-		System.out.print(this.readSensor(MPU9150_ACCEL_ZOUT_L, MPU9150_ACCEL_ZOUT_H));
-		System.out.println();
-		return new int[10];
+	public double[] read() {
+		double[] data = new double[10];
+		data[0] = (this.readSensor(MPU9150_TEMP_OUT_L, MPU9150_TEMP_OUT_H) + 12412.0) / 340.0;
+		data[1] = this.readSensor(MPU9150_CMPS_XOUT_L, MPU9150_CMPS_XOUT_H);
+		data[2] = this.readSensor(MPU9150_CMPS_YOUT_L, MPU9150_CMPS_YOUT_H);
+		data[3] = this.readSensor(MPU9150_CMPS_ZOUT_L, MPU9150_CMPS_ZOUT_H);
+		data[4] = this.readSensor(MPU9150_GYRO_XOUT_L, MPU9150_GYRO_XOUT_H);
+		data[5] = this.readSensor(MPU9150_GYRO_YOUT_L, MPU9150_GYRO_YOUT_H);
+		data[6] = this.readSensor(MPU9150_GYRO_ZOUT_L, MPU9150_GYRO_ZOUT_H);
+		data[7] = this.readSensor(MPU9150_ACCEL_XOUT_L, MPU9150_ACCEL_XOUT_H);
+		data[8] = this.readSensor(MPU9150_ACCEL_YOUT_L, MPU9150_ACCEL_YOUT_H);
+		data[9] = this.readSensor(MPU9150_ACCEL_ZOUT_L, MPU9150_ACCEL_ZOUT_H);
+		/*
+		 * System.out.print(dT); System.out.print("  "); System.out.print(this.readSensor(MPU9150_CMPS_XOUT_L, MPU9150_CMPS_XOUT_H)); System.out.print("  "); System.out.print(this.readSensor(MPU9150_CMPS_YOUT_L, MPU9150_CMPS_YOUT_H)); System.out.print("  "); System.out.print(this.readSensor(MPU9150_CMPS_ZOUT_L, MPU9150_CMPS_ZOUT_H)); System.out.print("  "); System.out.print(this.readSensor(MPU9150_GYRO_XOUT_L, MPU9150_GYRO_XOUT_H)); System.out.print("  "); System.out.print(this.readSensor(MPU9150_GYRO_YOUT_L, MPU9150_GYRO_YOUT_H)); System.out.print("  "); System.out.print(this.readSensor(MPU9150_GYRO_ZOUT_L, MPU9150_GYRO_ZOUT_H)); System.out.print("  "); System.out.print(this.readSensor(MPU9150_ACCEL_XOUT_L, MPU9150_ACCEL_XOUT_H)); System.out.print("  "); System.out.print(this.readSensor(MPU9150_ACCEL_YOUT_L, MPU9150_ACCEL_YOUT_H)); System.out.print("  "); System.out.print(this.readSensor(MPU9150_ACCEL_ZOUT_L, MPU9150_ACCEL_ZOUT_H)); System.out.println();
+		 */
+		return data;
 	}
 
 	public void init() {
