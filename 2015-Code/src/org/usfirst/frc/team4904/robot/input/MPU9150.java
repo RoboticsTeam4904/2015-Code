@@ -113,7 +113,7 @@ public class MPU9150 {
 	private I2C accelMag;
 	private I2C compass;
 	
-	public MPU9150(int f) {
+	public MPU9150() {
 		// Initialize I2C
 		accelMag = new I2C(I2C.Port.kOnboard, 0x0C);
 		compass = new I2C(I2C.Port.kOnboard, 0x68);
@@ -132,9 +132,6 @@ public class MPU9150 {
 		data[7] = this.readSensor(MPU9150_ACCEL_XOUT_L, MPU9150_ACCEL_XOUT_H);
 		data[8] = this.readSensor(MPU9150_ACCEL_YOUT_L, MPU9150_ACCEL_YOUT_H);
 		data[9] = this.readSensor(MPU9150_ACCEL_ZOUT_L, MPU9150_ACCEL_ZOUT_H);
-		/*
-		 * System.out.print(dT); System.out.print("  "); System.out.print(this.readSensor(MPU9150_CMPS_XOUT_L, MPU9150_CMPS_XOUT_H)); System.out.print("  "); System.out.print(this.readSensor(MPU9150_CMPS_YOUT_L, MPU9150_CMPS_YOUT_H)); System.out.print("  "); System.out.print(this.readSensor(MPU9150_CMPS_ZOUT_L, MPU9150_CMPS_ZOUT_H)); System.out.print("  "); System.out.print(this.readSensor(MPU9150_GYRO_XOUT_L, MPU9150_GYRO_XOUT_H)); System.out.print("  "); System.out.print(this.readSensor(MPU9150_GYRO_YOUT_L, MPU9150_GYRO_YOUT_H)); System.out.print("  "); System.out.print(this.readSensor(MPU9150_GYRO_ZOUT_L, MPU9150_GYRO_ZOUT_H)); System.out.print("  "); System.out.print(this.readSensor(MPU9150_ACCEL_XOUT_L, MPU9150_ACCEL_XOUT_H)); System.out.print("  "); System.out.print(this.readSensor(MPU9150_ACCEL_YOUT_L, MPU9150_ACCEL_YOUT_H)); System.out.print("  "); System.out.print(this.readSensor(MPU9150_ACCEL_ZOUT_L, MPU9150_ACCEL_ZOUT_H)); System.out.println();
-		 */
 		return data;
 	}
 	
