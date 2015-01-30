@@ -37,13 +37,13 @@ public class IMU implements Updatable {
 	}
 
 	private void readData() {
-		this.updates++;
+		updates++;
 		// TODO only read data if enough data is available, otherwise return so
 		// that this function is always fast
 		rawData = this.mpu9150.read();
 		if (this.updates % 200 == 0) {
-			System.out.print(this.updates / (Robot.time() - this.startTime) + " hz ");
-			System.out.println(Arrays.toString(this.rawData));
+			System.out.print(updates / (Robot.time() - startTime) + " hz ");
+			System.out.println(Arrays.toString(rawData));
 		}
 	}
 
