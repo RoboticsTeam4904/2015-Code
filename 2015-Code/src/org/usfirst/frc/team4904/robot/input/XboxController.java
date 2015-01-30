@@ -34,7 +34,7 @@ public class XboxController extends Joystick {
 			value = this.getY(); // Ditto above
 		} else if (axis == TWIST_STICK) {
 			value += this.getTwist(); // Xbox has twist
-			value += this.getThrottle(); // Maybe this is other twist?
+			value -= this.getThrottle(); // Maybe this is other twist?
 		}
 		if (Math.abs(value) < 0.1) { // Xbox does not go perfectly to zero when released
 			value = 0.0; // Do it ourselves
