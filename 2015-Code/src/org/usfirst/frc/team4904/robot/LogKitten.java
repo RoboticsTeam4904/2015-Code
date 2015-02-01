@@ -7,8 +7,9 @@ import java.io.IOException;
 import java.util.Date;
 
 public class LogKitten {
-	FileOutputStream fileOutput;
-	int level;
+	private FileOutputStream fileOutput;
+	private File file;
+	private int level;
 	public final static int LEVEL_FATAL = 0;
 	public final static int LEVEL_ERROR = 1;
 	public final static int LEVEL_WARN = 2;
@@ -16,10 +17,9 @@ public class LogKitten {
 	public final static int LEVEL_DEBUG = 4;
 	
 	public LogKitten(String identifier, int logLevel) {
-		this.level = logLevel;
+		level = logLevel;
 		String filePath;
-		File file;
-		filePath = "/home/lvuser/logs/" + identifier + " " + Long.toString(new Date().getTime()) + ".log"; // Set this sessions log to /home/lvuser/logs/[current time].log
+		filePath = "/home/lvuser/logs/" + identifier + "-" + new Date().getTime() + ".log"; // Set this sessions log to /home/lvuser/logs/[current time].log
 		file = new File(filePath);
 		try {
 			// Create new file if it doesn't exist (this should happen)
@@ -40,8 +40,7 @@ public class LogKitten {
 			return;
 		}
 		try {
-			String content = "FATAL: ";
-			content += tag + ": " + message + "\n";
+			String content = "FATAL: " + tag + ": " + message + " " + new Date().getTime() + "\n";
 			fileOutput.write(content.getBytes());
 			fileOutput.flush();
 		}
@@ -56,8 +55,7 @@ public class LogKitten {
 			return;
 		}
 		try {
-			String content = "ERROR: ";
-			content += tag + ": " + message + "\n";
+			String content = "ERROR: " + tag + ": " + message + " " + new Date().getTime() + "\n";
 			fileOutput.write(content.getBytes());
 			fileOutput.flush();
 		}
@@ -72,8 +70,7 @@ public class LogKitten {
 			return;
 		}
 		try {
-			String content = "WARN: ";
-			content += tag + ": " + message + "\n";
+			String content = "WARN: " + tag + ": " + message + " " + new Date().getTime() + "\n";
 			fileOutput.write(content.getBytes());
 			fileOutput.flush();
 		}
@@ -88,8 +85,7 @@ public class LogKitten {
 			return;
 		}
 		try {
-			String content = "VERBOSE: ";
-			content += tag + ": " + message + "\n";
+			String content = "VERBOSE: " + tag + ": " + message + " " + new Date().getTime() + "\n";
 			fileOutput.write(content.getBytes());
 			fileOutput.flush();
 		}
@@ -104,8 +100,7 @@ public class LogKitten {
 			return;
 		}
 		try {
-			String content = "DEBUG: ";
-			content += tag + ": " + message + "\n";
+			String content = "DEBUG: " + tag + ": " + message + " " + new Date().getTime() + "\n";
 			fileOutput.write(content.getBytes());
 			fileOutput.flush();
 		}
