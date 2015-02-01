@@ -40,7 +40,7 @@ public class LogKitten {
 			return;
 		}
 		try {
-			String content = timestamp() + "FATAL: " + tag + ": " + message + " " + "\n";
+			String content = timestamp() + " FATAL: " + tag + ": " + message + " " + "\n";
 			fileOutput.write(content.getBytes());
 			fileOutput.flush();
 		}
@@ -55,7 +55,7 @@ public class LogKitten {
 			return;
 		}
 		try {
-			String content = timestamp() + "ERROR: " + tag + ": " + message + " " + "\n";
+			String content = timestamp() + " ERROR: " + tag + ": " + message + " " + "\n";
 			fileOutput.write(content.getBytes());
 			fileOutput.flush();
 		}
@@ -70,7 +70,7 @@ public class LogKitten {
 			return;
 		}
 		try {
-			String content = timestamp() + "WARN: " + tag + ": " + message + " " + "\n";
+			String content = timestamp() + " WARN: " + tag + ": " + message + " " + "\n";
 			fileOutput.write(content.getBytes());
 			fileOutput.flush();
 		}
@@ -85,7 +85,7 @@ public class LogKitten {
 			return;
 		}
 		try {
-			String content = timestamp() + "VERBOSE: " + tag + ": " + message + " " + "\n";
+			String content = timestamp() + " VERBOSE: " + tag + ": " + message + " " + "\n";
 			fileOutput.write(content.getBytes());
 			fileOutput.flush();
 		}
@@ -100,7 +100,7 @@ public class LogKitten {
 			return;
 		}
 		try {
-			String content = timestamp() + "DEBUG: " + tag + ": " + message + " " + "\n";
+			String content = timestamp() + " DEBUG: " + tag + ": " + message + " " + "\n";
 			fileOutput.write(content.getBytes());
 			fileOutput.flush();
 		}
