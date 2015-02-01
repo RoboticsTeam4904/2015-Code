@@ -15,12 +15,12 @@ public class AutoAlign implements Updatable {
 	private final LIDAR lidar;
 	private final Grabber grabber;
 	private final Winch winch;
-	
+
 	private enum State {
 		EMPTY, ALIGNING_WITH_WIDE_TOTE, ALIGNING_WITH_THIN_TOTE, ALIGNING_WITH_CAN, HOLDING_CAN, HOLDING_THIN_TOTE, HOLDING_WIDE_TOTE, RELEASING_CAN, RELEASING_THIN_TOTE, RELEASING_WIDE_TOTE
 	}
 	private volatile State currentState;
-	
+
 	public AutoAlign(Mecanum mecanum, UDAR udar, LIDAR lidar, IMU imu, Grabber grabber, Winch winch) {
 		this.mecanum = mecanum;
 		this.udar = udar;
@@ -30,7 +30,7 @@ public class AutoAlign implements Updatable {
 		this.winch = winch;
 		currentState = State.EMPTY;
 	}
-	
+
 	public void grabTote(boolean wide) {
 		if (currentState != State.EMPTY) {// Don't do anything if grabber isn't empty
 			return;
@@ -38,7 +38,7 @@ public class AutoAlign implements Updatable {
 		// TODO set "wide" boolean based on sensor data in case wring button pressed
 		currentState = wide ? State.ALIGNING_WITH_WIDE_TOTE : State.ALIGNING_WITH_THIN_TOTE;
 	}
-	
+
 	public void grabCan() {
 		if (currentState != State.EMPTY) {
 			return;
@@ -47,7 +47,7 @@ public class AutoAlign implements Updatable {
 			currentState = State.ALIGNING_WITH_CAN; // NOTE: Setting the grabber is NOT done in these functions and is instead done the next time update is called
 		}
 	}
-	
+
 	private void releaseTote(boolean wide) {
 		if (lidar.getDists()[90] < 200) { // If there is a tote in front of us, align with it
 			currentState = wide ? State.RELEASING_WIDE_TOTE : State.RELEASING_THIN_TOTE;
@@ -55,7 +55,7 @@ public class AutoAlign implements Updatable {
 		}
 		currentState = State.EMPTY;
 	}
-	
+
 	private void releaseCan() {
 		if (lidar.getDists()[90] < 200) { // If there is a tote in front of us, align with it
 			currentState = State.RELEASING_CAN;
@@ -63,7 +63,7 @@ public class AutoAlign implements Updatable {
 		}
 		currentState = State.EMPTY;
 	}
-	
+
 	private void alignWithCanTick(boolean grab) {
 		int[] UDARdists = udar.getDists();
 		if (UDARdists[2] > 1000) {
@@ -87,7 +87,7 @@ public class AutoAlign implements Updatable {
 			}
 		}
 	}
-	
+
 	private void alignWithToteTick(boolean grab) {
 		int[] LIDARLines = lidar.getLines();
 		int[] toteFront = new int[4];
@@ -140,7 +140,7 @@ public class AutoAlign implements Updatable {
 			}
 		}
 	}
-	
+
 	private void doAligningTick(boolean grab) {
 		switch (currentState) {
 			case ALIGNING_WITH_CAN:
@@ -159,7 +159,7 @@ public class AutoAlign implements Updatable {
 				return;
 		}
 	}
-	
+
 	public synchronized void update() {
 		grabber.setWidth(getDesiredGrabberState());// This is (on purpose) the only place that grabber.setWidth is ever called (other than in disableMotors())
 		if (isCurrentlyAligning()) {
@@ -168,7 +168,7 @@ public class AutoAlign implements Updatable {
 			doAligningTick(false);
 		}
 	}
-	
+
 	public boolean isCurrentlyAligning() {
 		switch (currentState) {
 			case ALIGNING_WITH_CAN:
@@ -181,7 +181,7 @@ public class AutoAlign implements Updatable {
 				return false;
 		}
 	}
-	
+
 	public boolean isCurrentlyReleasing() {
 		switch (currentState) {
 			case RELEASING_CAN:
@@ -194,7 +194,7 @@ public class AutoAlign implements Updatable {
 				return false;
 		}
 	}
-	
+
 	private int getDesiredGrabberState() {// What state should the grabber be in
 		switch (currentState) {
 			case ALIGNING_WITH_CAN:
@@ -221,7 +221,7 @@ public class AutoAlign implements Updatable {
 				throw new Error("Current state of AutoAlign does not exist/is null");
 		}
 	}
-	
+
 	public void release() {
 		if (isCurrentlyAligning()) {// Canceling alignment, e.g. in case it isn't working
 			currentState = State.EMPTY;
@@ -242,11 +242,11 @@ public class AutoAlign implements Updatable {
 				// You pressed the release button when you aren't holding anything
 		}
 	}
-	
+
 	public boolean isGrabberEmpty() {
 		return currentState == State.EMPTY;
 	}
-	
+
 	public void forceRelease() {
 		currentState = State.EMPTY;
 	}
