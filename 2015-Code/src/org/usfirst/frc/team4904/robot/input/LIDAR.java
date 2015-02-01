@@ -64,7 +64,7 @@ public class LIDAR implements Updatable {
 	}
 	
 	public void update() {
-		motor.set(0.25);
+		motor.set(0.14);
 		if (bytesCurrentlyAvailable() < 10000) {
 			return;
 		}
