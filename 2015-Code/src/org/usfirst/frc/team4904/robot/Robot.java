@@ -55,13 +55,18 @@ public class Robot extends SampleRobot {
 	// Update system
 	private final double fastUpdatePeriod = 0.015; // update every 0.005 seconds/5 milliseconds (200Hz)
 	private final double slowUpdatePeriod = 0.2; // update every 0.2 seconds/200 milliseconds (5Hz)
-
+	// Logging system
+	private final LogKitten logger;
+	
 	private enum RobotState {
 		DISABLED, OPERATOR, AUTONOMOUS
 	}
-
+	
 	public Robot() {
 		System.out.println("*** CONSTRUCTING ROBOT ***");
+		// Initializing logging
+		logger = new LogKitten("Robot", LogKitten.LEVEL_WARN);
+		logger.v("Constructing", "Constructing");
 		// Initialize sensors
 		imu = new IMU(); // Initialize IMU
 		udar = new UDAR(); // Initialize UDAR
@@ -86,13 +91,15 @@ public class Robot extends SampleRobot {
 		autonomousOperator = new OperatorAutonomous(winch, align, controller);
 		autonomousDriver = new DriverAutonomous(mecanumDrive, controller, align);
 	}
-
+	
 	public void robotInit() {
 		System.out.println("*** INITIALIZING ***");
+		logger.v("Initializing", "Initializing");
 	}
-
+	
 	public void disabled() {
 		System.out.println("*** DISABLED ***");
+		logger.v("Disabled", "Disabled");
 		RobotState state = RobotState.DISABLED;
 		new Updater(state, new Updatable[] {imu}, fastUpdatePeriod).start(); // These should have fast updates
 		while (isDisabled()) {
@@ -101,7 +108,7 @@ public class Robot extends SampleRobot {
 			Timer.delay(0.01);
 		}
 	}
-
+	
 	private void disableMotors() {
 		winch.set(0);
 		grabber.set(0);
@@ -111,9 +118,10 @@ public class Robot extends SampleRobot {
 		backRightWheel.set(0);
 		lidar.motor.set(0);
 	}
-
+	
 	public void autonomous() {
 		System.out.println("*** AUTONOMOUS ***");
+		logger.v("Autonomous", "Autonomous");
 		operator = autonomousOperator;
 		driver = autonomousDriver;
 		RobotState state = RobotState.AUTONOMOUS;
@@ -123,9 +131,10 @@ public class Robot extends SampleRobot {
 			Timer.delay(0.01);
 		}
 	}
-
+	
 	public void operatorControl() {
 		System.out.println("*** TELEOPERATED ***");
+		logger.v("Teleoperated", "Teleoperated");
 		operator = humanOperator;
 		driver = humanDriver;
 		RobotState state = RobotState.OPERATOR;
@@ -135,7 +144,7 @@ public class Robot extends SampleRobot {
 			Timer.delay(0.01);
 		}
 	}
-
+	
 	private RobotState getRobotState() {
 		if (isDisabled()) {
 			return RobotState.DISABLED;
@@ -148,22 +157,22 @@ public class Robot extends SampleRobot {
 		}
 		return RobotState.DISABLED;
 	}
-
+	
 	public static double time() {
 		return (double) System.currentTimeMillis() / 1000;
 	}
-
+	
 	private class Updater extends Thread { // Function to update automatically in a new thread
 		private final RobotState robotState;
 		private final Updatable[] toUpdate;
 		private final double updateSpeed;
-
+		
 		public Updater(RobotState state, Updatable[] toUpdate, double updateSpeed) {
 			robotState = state;
 			this.toUpdate = toUpdate;
 			this.updateSpeed = updateSpeed;
 		}
-
+		
 		public void run() {
 			double desiredTime = time() + updateSpeed; // Sync with clock to ensure that update interval is consistent regardless of how long each update takes
 			System.out.println("Starting");
@@ -176,12 +185,13 @@ public class Robot extends SampleRobot {
 					Timer.delay(delay); // Wait until the time that this tick should end
 				} else {
 					if (delay < -0.1) {
-						System.out.println("Delay is " + delay + " seconds for " + updateSpeed);
+						logger.v("Run", "Delay is " + delay + " seconds for " + updateSpeed);
 					}
 				}
 				desiredTime += updateSpeed; // Next tick should end updatePeriod seconds in the future
 			}
 			System.out.println("Terminating");
+			logger.v("Run", "Terminating");
 		}
 	}
 }
