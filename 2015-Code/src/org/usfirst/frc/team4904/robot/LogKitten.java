@@ -4,7 +4,7 @@ package org.usfirst.frc.team4904.robot;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Date;
+import java.util.Calendar;
 
 public class LogKitten {
 	private FileOutputStream fileOutput;
@@ -19,7 +19,7 @@ public class LogKitten {
 	public LogKitten(String identifier, int logLevel) {
 		level = logLevel;
 		String filePath;
-		filePath = "/home/lvuser/logs/" + identifier + "-" + new Date().getTime() + ".log"; // Set this sessions log to /home/lvuser/logs/[current time].log
+		filePath = "/home/lvuser/logs/" + identifier + "-" + timestamp() + ".log"; // Set this sessions log to /home/lvuser/logs/[current time].log
 		file = new File(filePath);
 		try {
 			// Create new file if it doesn't exist (this should happen)
@@ -40,7 +40,7 @@ public class LogKitten {
 			return;
 		}
 		try {
-			String content = "FATAL: " + tag + ": " + message + " " + new Date().getTime() + "\n";
+			String content = "FATAL: " + tag + ": " + message + " " + timestamp() + "\n";
 			fileOutput.write(content.getBytes());
 			fileOutput.flush();
 		}
@@ -55,7 +55,7 @@ public class LogKitten {
 			return;
 		}
 		try {
-			String content = "ERROR: " + tag + ": " + message + " " + new Date().getTime() + "\n";
+			String content = "ERROR: " + tag + ": " + message + " " + timestamp() + "\n";
 			fileOutput.write(content.getBytes());
 			fileOutput.flush();
 		}
@@ -70,7 +70,7 @@ public class LogKitten {
 			return;
 		}
 		try {
-			String content = "WARN: " + tag + ": " + message + " " + new Date().getTime() + "\n";
+			String content = "WARN: " + tag + ": " + message + " " + timestamp() + "\n";
 			fileOutput.write(content.getBytes());
 			fileOutput.flush();
 		}
@@ -85,7 +85,7 @@ public class LogKitten {
 			return;
 		}
 		try {
-			String content = "VERBOSE: " + tag + ": " + message + " " + new Date().getTime() + "\n";
+			String content = "VERBOSE: " + tag + ": " + message + " " + timestamp() + "\n";
 			fileOutput.write(content.getBytes());
 			fileOutput.flush();
 		}
@@ -100,7 +100,7 @@ public class LogKitten {
 			return;
 		}
 		try {
-			String content = "DEBUG: " + tag + ": " + message + " " + new Date().getTime() + "\n";
+			String content = "DEBUG: " + tag + ": " + message + " " + timestamp() + "\n";
 			fileOutput.write(content.getBytes());
 			fileOutput.flush();
 		}
@@ -118,5 +118,16 @@ public class LogKitten {
 			System.out.println("Could not close logfile output. This should never happen");
 			ioe.printStackTrace();
 		}
+	}
+	
+	private String timestamp() {
+		Calendar now = Calendar.getInstance();
+		String timestamp = Integer.toString(now.get(Calendar.YEAR));
+		timestamp += "-" + Integer.toString(now.get(Calendar.MONTH) + 1);
+		timestamp += "-" + Integer.toString(now.get(Calendar.DATE));
+		timestamp += "_" + Integer.toString(now.get(Calendar.HOUR_OF_DAY));
+		timestamp += ":" + Integer.toString(now.get(Calendar.MINUTE));
+		timestamp += ":" + Integer.toString(now.get(Calendar.SECOND));
+		return timestamp;
 	}
 }
