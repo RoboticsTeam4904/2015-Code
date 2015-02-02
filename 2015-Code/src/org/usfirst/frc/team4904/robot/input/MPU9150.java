@@ -115,8 +115,8 @@ public class MPU9150 {
 	
 	public MPU9150() {
 		// Initialize I2C
-		accelMag = new I2C(I2C.Port.kOnboard, 0x0C);
-		compass = new I2C(I2C.Port.kOnboard, 0x68);
+		accelMag = new I2C(I2C.Port.kOnboard, 0x68);
+		compass = new I2C(I2C.Port.kOnboard, 0x0C);
 		accelMag.write(MPU9150_PWR_MGMT_1, 0);
 	}
 	
@@ -174,9 +174,9 @@ public class MPU9150 {
 			return -1;
 		}
 	}
-
+	
 	public void readAcc() {}
-
+	
 	// //////////////////////////
 	// Low level I2C functions //
 	// //////////////////////////
