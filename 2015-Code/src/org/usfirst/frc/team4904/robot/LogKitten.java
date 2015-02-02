@@ -8,14 +8,14 @@ import java.util.Calendar;
 
 public class LogKitten {
 	private FileOutputStream fileOutput;
-	private File file;
-	private int level;
+	private final File file;
+	private final int level;
 	public final static int LEVEL_FATAL = 0;
 	public final static int LEVEL_ERROR = 1;
 	public final static int LEVEL_WARN = 2;
 	public final static int LEVEL_VERBOSE = 3;
 	public final static int LEVEL_DEBUG = 4;
-	
+
 	public LogKitten(String identifier, int logLevel) {
 		level = logLevel;
 		String filePath;
@@ -34,7 +34,7 @@ public class LogKitten {
 			ioe.printStackTrace();
 		}
 	}
-	
+
 	public void f(String tag, String message) { // Log error message
 		if (level < LEVEL_FATAL) {
 			return;
@@ -49,7 +49,7 @@ public class LogKitten {
 			ioe.printStackTrace();
 		}
 	}
-	
+
 	public void e(String tag, String message) { // Log error message
 		if (level < LEVEL_ERROR) {
 			return;
@@ -64,7 +64,7 @@ public class LogKitten {
 			ioe.printStackTrace();
 		}
 	}
-	
+
 	public void w(String tag, String message) { // Log error message
 		if (level < LEVEL_WARN) {
 			return;
@@ -79,7 +79,7 @@ public class LogKitten {
 			ioe.printStackTrace();
 		}
 	}
-	
+
 	public void v(String tag, String message) { // Log verbose message
 		if (level < LEVEL_VERBOSE) {
 			return;
@@ -94,7 +94,7 @@ public class LogKitten {
 			ioe.printStackTrace();
 		}
 	}
-	
+
 	public void d(String tag, String message) { // Log debug message
 		if (level < LEVEL_DEBUG) {
 			return;
@@ -109,7 +109,7 @@ public class LogKitten {
 			ioe.printStackTrace();
 		}
 	}
-	
+
 	public void clean() {
 		try {
 			fileOutput.close();
@@ -119,7 +119,7 @@ public class LogKitten {
 			ioe.printStackTrace();
 		}
 	}
-	
+
 	private String timestamp() {
 		Calendar now = Calendar.getInstance();
 		String timestamp = Integer.toString(now.get(Calendar.YEAR));
