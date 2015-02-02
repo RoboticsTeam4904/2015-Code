@@ -11,29 +11,29 @@ public abstract class Operator implements Updatable {
 	public static final int MODE_WIDE_TOTE = 1;
 	public static final int MODE_CAN = 2;
 	public static final int MODE_EMPTY = 3;
-
+	
 	public Operator(Winch winch, AutoAlign align) {
 		this.winch = winch;
 		this.align = align;
 		winchTimer = 0;
 	}
-
+	
 	public abstract void update();
-
+	
 	protected void raise(int levels) {
 		if (isInControl()) {
 			winch.set(1);
 			winchTimer = 5;
 		}
 	}
-
+	
 	protected void lower(int levels) {
 		if (isInControl()) {
 			winch.set(-1);// TODO Made moving the winch a little more accurate than moving at a certain speed for 5 ticks
 			winchTimer = 5;
 		}
 	}
-
+	
 	protected void grab(int mode) {
 		if (mode == MODE_THIN_TOTE) {
 			align.grabTote(false);
@@ -43,17 +43,17 @@ public abstract class Operator implements Updatable {
 			align.grabCan();
 		}
 	}
-
+	
 	protected void release() {
 		align.release();
 	}
-
+	
 	protected void adjust(double value) {
 		if (isInControl()) {
 			winch.move(value); // Sets winch motor speed
 		}
 	}
-
+	
 	protected void updateWinch() {
 		if (!isInControl()) {
 			return;
@@ -67,12 +67,12 @@ public abstract class Operator implements Updatable {
 			}
 		}
 	}
-
+	
 	protected boolean isGrabberEmpty() {// Wrapper function -- references to align and winch are private not protected so subclasses can't access them
 		return align.isGrabberEmpty();
 	}
-
+	
 	private boolean isInControl() {
-		return !align.isCurrentlyAligning();
+		return !align.isDriverLockedOut();
 	}
 }
