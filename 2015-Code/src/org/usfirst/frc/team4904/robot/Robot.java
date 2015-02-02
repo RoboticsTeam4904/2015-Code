@@ -110,7 +110,7 @@ public class Robot extends SampleRobot {
 	}
 	
 	private void disableMotors() {
-		winch.set(0);
+		winch.move(0);
 		grabber.set(0);
 		frontLeftWheel.set(0);
 		frontRightWheel.set(0);

@@ -9,8 +9,10 @@ public class Winch extends Talon {
 	public Winch(int channel) {
 		super(channel);
 	}
-	
-	public void set(int height) { // Set winch to specific height
+	private void set(double speed){
+		
+	}
+	public void setHeight(int height) { // Set winch to specific height
 		if (height > MAX_HEIGHT) height = MAX_HEIGHT;
 		else if (height < 0) height = 0;
 	}

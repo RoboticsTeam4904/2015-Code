@@ -22,14 +22,14 @@ public abstract class Operator implements Updatable {
 	
 	protected void raise(int levels) {
 		if (isInControl()) {
-			winch.set(1);
+			winch.setHeight(1);
 			winchTimer = 5;
 		}
 	}
 	
 	protected void lower(int levels) {
 		if (isInControl()) {
-			winch.set(-1);// TODO Made moving the winch a little more accurate than moving at a certain speed for 5 ticks
+			winch.setHeight(-1);// TODO Made moving the winch a little more accurate than moving at a certain speed for 5 ticks
 			winchTimer = 5;
 		}
 	}
