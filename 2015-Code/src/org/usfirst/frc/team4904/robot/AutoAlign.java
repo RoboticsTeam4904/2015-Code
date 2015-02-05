@@ -5,6 +5,7 @@ import org.usfirst.frc.team4904.robot.input.IMU;
 import org.usfirst.frc.team4904.robot.input.LIDAR;
 import org.usfirst.frc.team4904.robot.input.UDAR;
 import org.usfirst.frc.team4904.robot.output.Grabber;
+import org.usfirst.frc.team4904.robot.output.Grabber.GrabberState;
 import org.usfirst.frc.team4904.robot.output.Mecanum;
 import org.usfirst.frc.team4904.robot.output.Winch;
 
@@ -15,9 +16,11 @@ public class AutoAlign implements Updatable {
 	private final LIDAR lidar;
 	private final Grabber grabber;
 	private final Winch winch;
+	private final int THIN_TOTE_WIDTH = 100;
+	private final int WIDE_TOTE_WIDTH = 200;
 	
 	private enum State {
-		EMPTY, ALIGNING_WITH_WIDE_TOTE, ALIGNING_WITH_THIN_TOTE, ALIGNING_WITH_CAN, HOLDING_CAN, HOLDING_THIN_TOTE, HOLDING_WIDE_TOTE, RELEASING_CAN, RELEASING_THIN_TOTE, RELEASING_WIDE_TOTE
+		EMPTY, ALIGNING_WITH_TOTE, ALIGNING_WITH_CAN, HOLDING_CAN, HOLDING_TOTE, RELEASING_CAN, RELEASING_TOTE
 	}
 	private volatile State currentState;
 	
@@ -31,12 +34,11 @@ public class AutoAlign implements Updatable {
 		currentState = State.EMPTY;
 	}
 	
-	public void grabTote(boolean wide) {
+	public void grabTote() {
 		if (currentState != State.EMPTY) {// Don't do anything if grabber isn't empty
 			return;
 		}
-		// TODO set "wide" boolean based on sensor data in case wring button pressed
-		currentState = wide ? State.ALIGNING_WITH_WIDE_TOTE : State.ALIGNING_WITH_THIN_TOTE;
+		currentState = State.ALIGNING_WITH_TOTE;
 	}
 	
 	public void grabCan() {
@@ -48,7 +50,7 @@ public class AutoAlign implements Updatable {
 	
 	private void releaseTote(boolean wide) {
 		if (shouldAlignBeforeReleasing()) { // If there is a tote in front of us, align with it
-			currentState = wide ? State.RELEASING_WIDE_TOTE : State.RELEASING_THIN_TOTE;
+			currentState = State.RELEASING_TOTE;
 			return;
 		}
 		currentState = State.EMPTY;
@@ -61,11 +63,11 @@ public class AutoAlign implements Updatable {
 		}
 		currentState = State.EMPTY;
 	}
-
+	
 	private boolean shouldAlignBeforeReleasing() {
 		return lidar.getDists()[90] < 200;
 	}
-
+	
 	private void alignWithCanTick(boolean grab) {
 		int[] UDARdists = udar.getDists();
 		if (UDARdists[2] > 1000) {
@@ -118,18 +120,10 @@ public class AutoAlign implements Updatable {
 			} else {
 				mecanum.setDesiredSpeedDirection(0, Math.PI / 2);
 				double width = toteFront[2] - toteFront[0];
-				if (Math.abs(width - Grabber.THIN_TOTE_WIDTH) < Math.abs(width - Grabber.WIDE_TOTE_WIDTH)) {
-					if (grab) {
-						currentState = State.HOLDING_THIN_TOTE;
-					} else {
-						currentState = State.EMPTY;
-					}
+				if (grab) {
+					currentState = State.HOLDING_TOTE;
 				} else {
-					if (grab) {
-						currentState = State.HOLDING_WIDE_TOTE;
-					} else {
-						currentState = State.EMPTY;
-					}
+					currentState = State.EMPTY;
 				}
 			}
 		} else {
@@ -148,8 +142,7 @@ public class AutoAlign implements Updatable {
 			case ALIGNING_WITH_CAN:
 				alignWithCanTick(grab);
 				return;
-			case ALIGNING_WITH_WIDE_TOTE:
-			case ALIGNING_WITH_THIN_TOTE:
+			case ALIGNING_WITH_TOTE:
 				alignWithToteTick(grab); // LIDAR Auto align does not differentiate wide from thin totes
 				return;
 			default: // Should never reach here
@@ -161,7 +154,7 @@ public class AutoAlign implements Updatable {
 	}
 	
 	public synchronized void update() {
-		grabber.setWidth(getDesiredGrabberState());// This is (on purpose) the only place that grabber.setWidth is ever called (other than in disableMotors())
+		grabber.set(getDesiredGrabberState());// This is (on purpose) the only place that grabber.setWidth is ever called (other than in disableMotors())
 		if (isCurrentlyAligning()) {
 			doAligningTick(true); // Do aligning tick and grab
 		} else if (isCurrentlyReleasing()) {
@@ -172,8 +165,8 @@ public class AutoAlign implements Updatable {
 	public boolean isCurrentlyAligning() {
 		switch (currentState) {
 			case ALIGNING_WITH_CAN:
-			case ALIGNING_WITH_THIN_TOTE:
-			case ALIGNING_WITH_WIDE_TOTE:
+				return true;
+			case ALIGNING_WITH_TOTE:
 				return true;
 			default:
 				return false;
@@ -183,33 +176,30 @@ public class AutoAlign implements Updatable {
 	public boolean isCurrentlyReleasing() {
 		switch (currentState) {
 			case RELEASING_CAN:
-			case RELEASING_THIN_TOTE:
-			case RELEASING_WIDE_TOTE:
+				return true;
+			case RELEASING_TOTE:
 				return true;
 			default:
 				return false;
 		}
 	}
 	
-	private int getDesiredGrabberState() {// What state should the grabber be in
+	private GrabberState getDesiredGrabberState() {// What state should the grabber be in
 		switch (currentState) {
 			case ALIGNING_WITH_CAN:
-				return Operator.MODE_CAN + 10;
-			case ALIGNING_WITH_THIN_TOTE:
-				return Operator.MODE_THIN_TOTE + 10;
-			case ALIGNING_WITH_WIDE_TOTE:
-				return Operator.MODE_WIDE_TOTE + 10;
+				return Grabber.GrabberState.OPEN;
+			case ALIGNING_WITH_TOTE:
+				return Grabber.GrabberState.OPEN;
 			case HOLDING_CAN:
+				return Grabber.GrabberState.CLOSED;
 			case RELEASING_CAN:
-				return Operator.MODE_CAN;
-			case RELEASING_THIN_TOTE:
-			case HOLDING_THIN_TOTE:
-				return Operator.MODE_THIN_TOTE;
-			case HOLDING_WIDE_TOTE:
-			case RELEASING_WIDE_TOTE:
-				return Operator.MODE_WIDE_TOTE;
+				return Grabber.GrabberState.OPEN;
+			case HOLDING_TOTE:
+				return Grabber.GrabberState.CLOSED;
+			case RELEASING_TOTE:
+				return Grabber.GrabberState.OPEN;
 			case EMPTY:
-				return Operator.MODE_EMPTY;
+				return Grabber.GrabberState.OPEN;
 			default:
 				throw new Error("Current state of AutoAlign does not exist/is null");
 		}
@@ -221,11 +211,8 @@ public class AutoAlign implements Updatable {
 			return;
 		}
 		switch (currentState) {
-			case HOLDING_WIDE_TOTE:
+			case HOLDING_TOTE:
 				releaseTote(true);
-				return;
-			case HOLDING_THIN_TOTE:
-				releaseTote(false);
 				return;
 			case HOLDING_CAN:
 				releaseCan();
@@ -243,7 +230,7 @@ public class AutoAlign implements Updatable {
 	public void forceRelease() {
 		currentState = State.EMPTY;
 	}
-
+	
 	public boolean isDriverLockedOut() {
 		return isCurrentlyAligning() || isCurrentlyReleasing();
 	}

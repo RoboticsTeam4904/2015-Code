@@ -36,9 +36,9 @@ public abstract class Operator implements Updatable {
 	
 	protected void grab(int mode) {
 		if (mode == MODE_THIN_TOTE) {
-			align.grabTote(false);
+			align.grabTote();
 		} else if (mode == MODE_WIDE_TOTE) {
-			align.grabTote(true);
+			align.grabTote();
 		} else if (mode == MODE_CAN) {
 			align.grabCan();
 		}
