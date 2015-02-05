@@ -32,7 +32,6 @@ public class Mecanum implements Updatable {
 	private volatile double previousTurnSpeed;
 	private volatile double previousTime;
 	private volatile boolean absolute;
-	public static final double maxAccel = 0.0002;// Maximum motor output change per second
 	private final IMU imu;
 	
 	public Mecanum(SpeedController frontLeftWheel, SpeedController frontRightWheel, SpeedController backLeftWheel, SpeedController backRightWheel, IMU imu) {
@@ -72,42 +71,33 @@ public class Mecanum implements Updatable {
 		// System.out.println("Frontleft" + (frontLeft / scaleFactor));
 		// System.out.println("Frontright" + (frontRight / scaleFactor));
 	}
-	
+
 	public static double time() {
 		return ((double) System.currentTimeMillis()) / 1000;
 	}
-	
+
 	public synchronized void update() {
 		double currentTime = time();
 		double timeDifference = currentTime - previousTime;
-		double maxChange = maxAccel * timeDifference;// The maximum amount any variable can change this tick
-		double newSpeed = adjust(previousSpeed, currentSpeed, maxChange);
-		double newAngle = adjust(previousAngle, currentAngle, maxChange);
-		double newTurnSpeed = adjust(previousTurnSpeed, currentTurnSpeed, maxChange);
+		double newSpeed = adjust(previousSpeed, currentSpeed, 2 * timeDifference);
+		double newAngle = adjust(previousAngle, currentAngle, 30 * timeDifference);
+		double newTurnSpeed = adjust(previousTurnSpeed, currentTurnSpeed, timeDifference);
+		currentSpeed = newSpeed;
+		currentAngle = newAngle;
+		currentTurnSpeed = newTurnSpeed;
 		previousSpeed = currentSpeed;
 		previousAngle = currentAngle;
 		previousTurnSpeed = currentTurnSpeed;
 		previousTime = currentTime;
-		currentSpeed = newSpeed;
-		currentAngle = newAngle;
-		currentTurnSpeed = newTurnSpeed;
 		// System.out.println("Desired speed: " + desiredTurnSpeed + "\tDesired angle: " + desiredAngle + "\tDisired speed: " + desiredSpeed);
 		move(currentSpeed, currentAngle, currentTurnSpeed, absolute); // This system allows for different updating times and rates
 	}
 	
 	public static double adjust(double prevValue, double currentValue, double maxChange) {// Dampen or don't dampen
 		if (currentValue < prevValue) {// Deaccelerating
-			if (prevValue - currentValue < maxChange) {
-				return currentValue;// Not dampening
-			} else {
-				return prevValue - maxChange;// Dampening
-			}
+			return Math.max(currentValue, prevValue - maxChange);
 		} else {// Accelerating
-			if (currentValue - prevValue < maxChange) {
-				return currentValue;// Not dampening
-			} else {
-				return prevValue + maxChange;// Dampening
-			}
+			return Math.min(currentValue, prevValue + maxChange);
 		}
 	}
 	
@@ -119,7 +109,7 @@ public class Mecanum implements Updatable {
 	public void setDesiredTurnSpeed(double desiredTurnSpeed) {
 		currentTurnSpeed = desiredTurnSpeed;
 	}
-	
+
 	public void setAbsolute(boolean absolute) {
 		this.absolute = absolute;
 	}
