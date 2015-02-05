@@ -34,7 +34,7 @@ public class Mecanum implements Updatable {
 	private volatile boolean absolute;
 	public static final double maxAccel = 2;// Maximum motor output change per second
 	private final IMU imu;
-	
+
 	public Mecanum(SpeedController frontLeftWheel, SpeedController frontRightWheel, SpeedController backLeftWheel, SpeedController backRightWheel, IMU imu) {
 		// Initialize motor controllers with default ports
 		this.frontLeftWheel = frontLeftWheel;
@@ -43,7 +43,7 @@ public class Mecanum implements Updatable {
 		this.backRightWheel = backRightWheel;
 		this.imu = imu;
 	}
-	
+
 	private void move(double desiredSpeed, double desiredAngle, double turnSpeed, boolean absolute) {
 		// @param desiredSpeed double between 0 and 1 specifying wanted movement speed
 		// @param desiredAngle double between 0 and 2pi specifying wanted movement angle in radians
@@ -72,11 +72,11 @@ public class Mecanum implements Updatable {
 		// System.out.println("Frontleft" + (frontLeft / scaleFactor));
 		// System.out.println("Frontright" + (frontRight / scaleFactor));
 	}
-
+	
 	public static double time() {
 		return (double) System.currentTimeMillis() / 1000;
 	}
-
+	
 	public synchronized void update() {
 		double currentTime = time();
 		double timeDifference = currentTime - previousTime;
@@ -87,6 +87,7 @@ public class Mecanum implements Updatable {
 		previousSpeed = currentSpeed;
 		previousAngle = currentAngle;
 		previousTurnSpeed = currentTurnSpeed;
+		previousTime = currentTime;
 		currentSpeed = newSpeed;
 		currentAngle = newAngle;
 		currentTurnSpeed = newTurnSpeed;
@@ -94,7 +95,7 @@ public class Mecanum implements Updatable {
 		// System.out.println("Desired speed: " + desiredTurnSpeed + "\tDesired angle: " + desiredAngle + "\tDisired speed: " + desiredSpeed);
 		move(currentSpeed, currentAngle, currentTurnSpeed, absolute); // This system allows for different updating times and rates
 	}
-	
+
 	public static double adjust(double prevValue, double currentValue, double maxChange) {
 		if (currentValue < prevValue) {
 			if (prevValue - currentValue < maxChange) {
@@ -110,16 +111,16 @@ public class Mecanum implements Updatable {
 			}
 		}
 	}
-	
+
 	public void setDesiredSpeedDirection(double desiredSpeed, double desiredAngle) {
 		this.currentAngle = desiredAngle;
 		this.currentSpeed = desiredSpeed;
 	}
-	
+
 	public void setDesiredTurnSpeed(double desiredTurnSpeed) {
 		this.currentTurnSpeed = desiredTurnSpeed;
 	}
-
+	
 	public void setAbsolute(boolean absolute) {
 		this.absolute = absolute;
 	}
