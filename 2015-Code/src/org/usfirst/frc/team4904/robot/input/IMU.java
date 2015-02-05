@@ -47,9 +47,8 @@ public class IMU implements Updatable {
 		updates++;
 		// TODO only read data if enough data is available, otherwise return so
 		// that this function is always fast
-		rawData = this.mpu9150.read();
-		if (this.updates % 60 == 0) {
-			logger.d("readData", "test result: " + test());
+		rawData = mpu9150.read();
+		if (updates % 30 == 0) {
 			logger.d("readData", updates / (Robot.time() - startTime) + " hz ");
 			logger.d("readData", Arrays.toString(rawData));
 		}
