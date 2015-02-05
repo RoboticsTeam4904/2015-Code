@@ -80,7 +80,7 @@ public class Mecanum implements Updatable {
 	public synchronized void update() {
 		double currentTime = time();
 		double timeDifference = currentTime - previousTime;
-		double maxChange = maxAccel * timeDifference;
+		double maxChange = maxAccel * timeDifference;// The maximum amount any variable can change this tick
 		double newSpeed = adjust(previousSpeed, currentSpeed, maxChange);
 		double newAngle = adjust(previousAngle, currentAngle, maxChange);
 		double newTurnSpeed = adjust(previousTurnSpeed, currentTurnSpeed, maxChange);
@@ -91,12 +91,11 @@ public class Mecanum implements Updatable {
 		currentSpeed = newSpeed;
 		currentAngle = newAngle;
 		currentTurnSpeed = newTurnSpeed;
-		// TODO SPEED CONTROLLING GOES HERE
 		// System.out.println("Desired speed: " + desiredTurnSpeed + "\tDesired angle: " + desiredAngle + "\tDisired speed: " + desiredSpeed);
 		move(currentSpeed, currentAngle, currentTurnSpeed, absolute); // This system allows for different updating times and rates
 	}
 	
-	public static double adjust(double prevValue, double currentValue, double maxChange) {
+	public static double adjust(double prevValue, double currentValue, double maxChange) {// Dampen or don't dampen
 		if (currentValue < prevValue) {// Deaccelerating
 			if (prevValue - currentValue < maxChange) {
 				return currentValue;// Not dampening
