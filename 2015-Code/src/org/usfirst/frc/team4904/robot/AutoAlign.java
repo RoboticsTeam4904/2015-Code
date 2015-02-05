@@ -49,7 +49,7 @@ public class AutoAlign implements Updatable {
 	}
 	
 	private void releaseTote(boolean wide) {
-		if (shouldAlignBeforeReleasing()) { // If there is a tote in front of us, align with it
+		if (shouldAlignToteBeforeReleasing()) { // If there is a tote in front of us, align with it
 			currentState = State.RELEASING_TOTE;
 			return;
 		}
@@ -57,15 +57,19 @@ public class AutoAlign implements Updatable {
 	}
 	
 	private void releaseCan() {
-		if (shouldAlignBeforeReleasing()) { // If there is a tote in front of us, align with it
+		if (shouldAlignCanBeforeReleasing()) { // If there is a can in front of us, align with it
 			currentState = State.RELEASING_CAN;
 			return;
 		}
 		currentState = State.EMPTY;
 	}
 	
-	private boolean shouldAlignBeforeReleasing() {
+	private boolean shouldAlignToteBeforeReleasing() {
 		return lidar.getDists()[90] < 200;
+	}
+	
+	private boolean shouldAlignCanBeforeReleasing() {
+		return udar.getDists()[2] < 200;
 	}
 	
 	private void alignWithCanTick(boolean grab) {

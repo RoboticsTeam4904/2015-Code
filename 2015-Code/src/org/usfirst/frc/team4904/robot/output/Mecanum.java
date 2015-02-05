@@ -8,7 +8,7 @@ package org.usfirst.frc.team4904.robot.output;
  * For FRC or related use only
  * Adapted and modified by team 4904 for 2015
  *
- * Created by AI Robotics #4529
+ * Created by AI Robotics #4529 Heavily modified (at this point) by #4904
  * www.ai-robotics.com.au
  * info@ai-robotics.com
  *
@@ -34,7 +34,7 @@ public class Mecanum implements Updatable {
 	private volatile boolean absolute;
 	public static final double maxAccel = 0.0002;// Maximum motor output change per second
 	private final IMU imu;
-
+	
 	public Mecanum(SpeedController frontLeftWheel, SpeedController frontRightWheel, SpeedController backLeftWheel, SpeedController backRightWheel, IMU imu) {
 		// Initialize motor controllers with default ports
 		this.frontLeftWheel = frontLeftWheel;
@@ -43,7 +43,7 @@ public class Mecanum implements Updatable {
 		this.backRightWheel = backRightWheel;
 		this.imu = imu;
 	}
-
+	
 	private void move(double desiredSpeed, double desiredAngle, double turnSpeed, boolean absolute) {
 		// @param desiredSpeed double between 0 and 1 specifying wanted movement speed
 		// @param desiredAngle double between 0 and 2pi specifying wanted movement angle in radians
@@ -94,7 +94,7 @@ public class Mecanum implements Updatable {
 		// System.out.println("Desired speed: " + desiredTurnSpeed + "\tDesired angle: " + desiredAngle + "\tDisired speed: " + desiredSpeed);
 		move(currentSpeed, currentAngle, currentTurnSpeed, absolute); // This system allows for different updating times and rates
 	}
-
+	
 	public static double adjust(double prevValue, double currentValue, double maxChange) {// Dampen or don't dampen
 		if (currentValue < prevValue) {// Deaccelerating
 			if (prevValue - currentValue < maxChange) {
@@ -110,12 +110,12 @@ public class Mecanum implements Updatable {
 			}
 		}
 	}
-
+	
 	public void setDesiredSpeedDirection(double desiredSpeed, double desiredAngle) {
 		currentAngle = desiredAngle;
 		currentSpeed = desiredSpeed;
 	}
-
+	
 	public void setDesiredTurnSpeed(double desiredTurnSpeed) {
 		currentTurnSpeed = desiredTurnSpeed;
 	}
