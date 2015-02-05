@@ -29,7 +29,7 @@ public class Mecanum implements Updatable {
 	private volatile double desiredTurnSpeed;
 	private volatile boolean absolute;
 	private final IMU imu;
-
+	
 	public Mecanum(SpeedController frontLeftWheel, SpeedController frontRightWheel, SpeedController backLeftWheel, SpeedController backRightWheel, IMU imu) {
 		// Initialize motor controllers with default ports
 		this.frontLeftWheel = frontLeftWheel;
@@ -38,7 +38,7 @@ public class Mecanum implements Updatable {
 		this.backRightWheel = backRightWheel;
 		this.imu = imu;
 	}
-
+	
 	private void move(double desiredSpeed, double desiredAngle, double turnSpeed, boolean absolute) {
 		// @param desiredSpeed double between 0 and 1 specifying wanted movement speed
 		// @param desiredAngle double between 0 and 2pi specifying wanted movement angle in radians
@@ -58,30 +58,30 @@ public class Mecanum implements Updatable {
 		if (scaleFactor < 1) {
 			scaleFactor = 1;
 		}
-		frontLeftWheel.set(frontLeft / scaleFactor);
-		frontRightWheel.set(frontRight / scaleFactor);
-		backLeftWheel.set(backLeft / scaleFactor);
-		backRightWheel.set(backRight / scaleFactor);
+		frontLeftWheel.set(frontLeft / scaleFactor); // Negated because of motors being of the inside of chassis
+		frontRightWheel.set(-frontRight / scaleFactor);
+		backLeftWheel.set(backLeft / scaleFactor); // Negated because of motors being of the inside of chassis
+		backRightWheel.set(-backRight / scaleFactor);
 		// System.out.println("Backleft" + (backLeft / scaleFactor));
 		// System.out.println("Backright" + (backRight / scaleFactor));
 		// System.out.println("Frontleft" + (frontLeft / scaleFactor));
 		// System.out.println("Frontright" + (frontRight / scaleFactor));
 	}
-
+	
 	public synchronized void update() {
 		// System.out.println("Desired speed: " + desiredTurnSpeed + "\tDesired angle: " + desiredAngle + "\tDisired speed: " + desiredSpeed);
 		move(desiredSpeed, desiredAngle, desiredTurnSpeed, absolute); // This system allows for different updating times and rates
 	}
-
+	
 	public void setDesiredSpeedDirection(double desiredSpeed, double desiredAngle) {
 		this.desiredAngle = desiredAngle;
 		this.desiredSpeed = desiredSpeed;
 	}
-
+	
 	public void setDesiredTurnSpeed(double desiredTurnSpeed) {
 		this.desiredTurnSpeed = desiredTurnSpeed;
 	}
-	
+
 	public void setAbsolute(boolean absolute) {
 		this.absolute = absolute;
 	}

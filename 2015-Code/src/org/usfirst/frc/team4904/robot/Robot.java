@@ -174,6 +174,12 @@ public class Robot extends SampleRobot {
 		}
 
 		public void run() {
+			if (toUpdate.length > 1) {
+				for (Updatable u : toUpdate) {
+					new Updater(robotState, new Updatable[] {u}, updateSpeed).start();
+				}
+				return;
+			}
 			double desiredTime = time() + updateSpeed; // Sync with clock to ensure that update interval is consistent regardless of how long each update takes
 			System.out.println("Starting");
 			while (getRobotState() == robotState) {
