@@ -7,9 +7,9 @@ import edu.wpi.first.wpilibj.VictorSP;
 
 public class EncodedMotor extends VictorSP implements Updatable {
 	private volatile double target;
-	private volatile double derivative;
+	private volatile double previousError;
 	private volatile double integralSum;
-	private volatile double prev;
+	private volatile double motorOutput;
 	private final Encoder encoder;
 	private final double P = 0.01;
 	private final double I = 0.01;
@@ -30,11 +30,11 @@ public class EncodedMotor extends VictorSP implements Updatable {
 		double speed = currentEncoderSpeed();
 		double error = target - speed;
 		double pComponent = error * P;
-		double dComponent = (error - derivative) * D;
-		derivative = error;
+		double dComponent = (error - previousError) * D;
+		previousError = error;
 		double iComponent = (integralSum += error) * I;
-		prev += pComponent + iComponent + dComponent;
-		super.set(prev);
+		motorOutput += pComponent + iComponent + dComponent;
+		super.set(motorOutput);
 	}
 	
 	private double currentEncoderSpeed() {
