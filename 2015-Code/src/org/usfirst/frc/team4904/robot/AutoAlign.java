@@ -84,9 +84,9 @@ public class AutoAlign implements Updatable {
 		} else {
 			mecanum.setDesiredTurnSpeed(0);
 			if (UDARdists[2] > 100) {
-				mecanum.setDesiredSpeedDirection(1, Math.PI / 2);
+				mecanum.setDesiredXYSpeed(0, 1);
 			} else {
-				mecanum.setDesiredSpeedDirection(0, Math.PI / 2);
+				mecanum.setDesiredXYSpeed(0, 0);
 				if (grab) {
 					currentState = State.HOLDING_CAN;
 				} else {
@@ -120,9 +120,9 @@ public class AutoAlign implements Updatable {
 			winch.move(0);
 			mecanum.setDesiredTurnSpeed(0);
 			if (lidar.getDists()[90] > 100) {
-				mecanum.setDesiredSpeedDirection(1, Math.PI / 2);
+				mecanum.setDesiredXYSpeed(0, 1);
 			} else {
-				mecanum.setDesiredSpeedDirection(0, Math.PI / 2);
+				mecanum.setDesiredXYSpeed(0, 0);
 				double width = toteFront[2] - toteFront[0];
 				if (grab) {
 					currentState = State.HOLDING_TOTE;
@@ -132,7 +132,9 @@ public class AutoAlign implements Updatable {
 			}
 		} else {
 			winch.move(0);
-			mecanum.setDesiredSpeedDirection(1, angle);
+			double x = Math.cos(angle);
+			double y = Math.sin(angle);
+			mecanum.setDesiredXYSpeed(x, y);
 			if (angle > 0) {
 				mecanum.setDesiredTurnSpeed(0.25);
 			} else {
@@ -151,7 +153,7 @@ public class AutoAlign implements Updatable {
 				return;
 			default: // Should never reach here
 				winch.move(0);
-				mecanum.setDesiredSpeedDirection(0, 0);
+				mecanum.setDesiredXYSpeed(0, 0);
 				mecanum.setDesiredTurnSpeed(0);// Stop the robot, otherwise it would just keep going in the same speed and direction it was when grab was called
 				return;
 		}

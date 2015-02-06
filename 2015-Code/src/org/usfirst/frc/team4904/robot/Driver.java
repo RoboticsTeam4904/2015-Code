@@ -10,21 +10,21 @@ public abstract class Driver implements Updatable {
 	}
 	protected final Mecanum mecanumDrive;
 	private final AutoAlign align;
-
+	
 	public abstract void update();
-
-	protected void setMovement(double speed, double angle) {// All movement passes through here so that autoalign has precedence
+	
+	protected void setMovement(double x, double y) {// All movement passes through here so that autoalign has precedence
 		if (isInControl()) {
-			mecanumDrive.setDesiredSpeedDirection(speed, angle);
+			mecanumDrive.setDesiredXYSpeed(x, y);
 		}
 	}
-
+	
 	protected void setTurn(double speed) {
 		if (isInControl()) {
 			mecanumDrive.setDesiredTurnSpeed(speed);
 		}
 	}
-
+	
 	private boolean isInControl() {
 		return !align.isDriverLockedOut();
 	}

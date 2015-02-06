@@ -15,11 +15,8 @@ public class DriverNathan extends Driver {
 	}
 	
 	public synchronized void update() {
-		// System.out.println("X: " + xboxController.getX() + " Y: " + xboxController.getY());
-		double angle = Math.atan2(xboxController.getValue(XboxController.X_STICK), -xboxController.getValue(XboxController.Y_STICK));
-		double speed = Math.sqrt(xboxController.getValue(XboxController.Y_STICK) * xboxController.getValue(XboxController.Y_STICK) + xboxController.getValue(XboxController.X_STICK) * xboxController.getValue(XboxController.X_STICK)); // TODO Fix because that is not how trig works
-		setMovement(speed * .5, angle);
-		double turnSpeed = xboxController.getValue(XboxController.TWIST_STICK) / 2; // Turns way too fast otherwise
+		setMovement(xboxController.getValue(XboxController.X_STICK), xboxController.getValue(XboxController.Y_STICK));
+		double turnSpeed = xboxController.getValue(XboxController.TWIST_STICK) / 2; // Turns way too fast oYherwise
 		setTurn(turnSpeed); // Actually do the turning
 	}
 }

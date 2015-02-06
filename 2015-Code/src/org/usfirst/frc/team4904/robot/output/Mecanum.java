@@ -24,11 +24,11 @@ public class Mecanum implements Updatable {
 	private final SpeedController frontRightWheel;
 	private final SpeedController backLeftWheel;
 	private final SpeedController backRightWheel;
-	private volatile double currentSpeed;
-	private volatile double currentAngle;
+	private volatile double currentXSpeed;
+	private volatile double currentYSpeed;
 	private volatile double currentTurnSpeed;
-	private volatile double previousSpeed;
-	private volatile double previousAngle;
+	private volatile double previousXSpeed;
+	private volatile double previousYSpeed;
 	private volatile double previousTurnSpeed;
 	private volatile double previousTime;
 	private volatile boolean absolute;
@@ -71,24 +71,26 @@ public class Mecanum implements Updatable {
 		// System.out.println("Frontleft" + (frontLeft / scaleFactor));
 		// System.out.println("Frontright" + (frontRight / scaleFactor));
 	}
-
+	
 	public static double time() {
 		return ((double) System.currentTimeMillis()) / 1000;
 	}
-
+	
 	public synchronized void update() {
 		double currentTime = time();
 		double timeDifference = currentTime - previousTime;
-		double newSpeed = adjust(previousSpeed, currentSpeed, 2 * timeDifference);
-		double newAngle = adjust(previousAngle, currentAngle, 30 * timeDifference);
+		double newXSpeed = adjust(previousXSpeed, currentXSpeed, 2 * timeDifference);
+		double newYSpeed = adjust(previousYSpeed, currentYSpeed, 30 * timeDifference);
 		double newTurnSpeed = adjust(previousTurnSpeed, currentTurnSpeed, timeDifference);
-		currentSpeed = newSpeed;
-		currentAngle = newAngle;
+		previousXSpeed = newXSpeed;
+		previousYSpeed = newYSpeed;
 		currentTurnSpeed = newTurnSpeed;
-		previousSpeed = currentSpeed;
-		previousAngle = currentAngle;
+		currentXSpeed = newXSpeed;
+		currentYSpeed = newYSpeed;
 		previousTurnSpeed = currentTurnSpeed;
 		previousTime = currentTime;
+		double currentSpeed = Math.sqrt(newXSpeed * newXSpeed + newYSpeed * newYSpeed);
+		double currentAngle = Math.atan2(newYSpeed, newXSpeed);
 		// System.out.println("Desired speed: " + desiredTurnSpeed + "\tDesired angle: " + desiredAngle + "\tDisired speed: " + desiredSpeed);
 		move(currentSpeed, currentAngle, currentTurnSpeed, absolute); // This system allows for different updating times and rates
 	}
@@ -101,15 +103,15 @@ public class Mecanum implements Updatable {
 		}
 	}
 	
-	public void setDesiredSpeedDirection(double desiredSpeed, double desiredAngle) {
-		currentAngle = desiredAngle;
-		currentSpeed = desiredSpeed;
+	public void setDesiredXYSpeed(double desiredXSpeed, double desiredYSpeed) {
+		currentXSpeed = desiredXSpeed;
+		currentYSpeed = desiredYSpeed;
 	}
 	
 	public void setDesiredTurnSpeed(double desiredTurnSpeed) {
 		currentTurnSpeed = desiredTurnSpeed;
 	}
-
+	
 	public void setAbsolute(boolean absolute) {
 		this.absolute = absolute;
 	}
