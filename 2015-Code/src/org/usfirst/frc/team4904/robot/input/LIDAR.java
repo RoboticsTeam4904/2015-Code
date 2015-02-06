@@ -2,30 +2,28 @@ package org.usfirst.frc.team4904.robot.input;
 
 
 import java.math.BigInteger;
-import org.usfirst.frc.team4904.robot.Robot;
 import org.usfirst.frc.team4904.robot.Updatable;
-import edu.wpi.first.wpilibj.Joystick.RumbleType;
 import edu.wpi.first.wpilibj.Talon;
 
 public class LIDAR implements Updatable {
 	int[] dists = new int[360];
 	public Talon motor;
-
+	
 	public LIDAR(int motorport) {
 		motor = new Talon(motorport);
 	}
-
+	
 	public int connect() {
 		// TODO add RS-232 connect
 		return 0;
 	}
-
+	
 	private byte[] read(int bytes) throws Exception {
 		// TODO RS-232 read
 		byte b[] = new byte[bytes];
 		return b;
 	}
-
+	
 	private int[] scanline_b(byte angle) throws Exception {
 		boolean insync = false;
 		while (!insync) { // Wait until beginning of distance data
@@ -51,33 +49,23 @@ public class LIDAR implements Updatable {
 		}
 		return null;
 	}
-
+	
 	public int[] getDists() {
 		return dists;
 	}
-
+	
 	public int[] getLines() {
 		// TODO actually get lines
 		return new int[] {0, 0, 0, 0};
 	}
-
+	
 	private int bytesCurrentlyAvailable() {
 		return 0;
 	}
 	boolean toggle = false;
 	
 	public void update() {
-		if (Robot.getA()) {
-			toggle = !toggle;
-		}
-		if (toggle) {
-			Robot.R_U_OEDDY_2_RAMMBBALL(RumbleType.kLeftRumble, 1);
-			Robot.R_U_OEDDY_2_RAMMBBALL(RumbleType.kRightRumble, 1);
-		} else {
-			Robot.R_U_OEDDY_2_RAMMBBALL(RumbleType.kLeftRumble, 0);
-			Robot.R_U_OEDDY_2_RAMMBBALL(RumbleType.kRightRumble, 0);
-		}
-		motor.set(toggle ? 0.5 : 0);
+		motor.set(0.5);
 		if (bytesCurrentlyAvailable() < 10000) {
 			return;
 		}
@@ -109,8 +97,6 @@ public class LIDAR implements Updatable {
 					for (int j = 0; j < 4; j++) {
 						if (scanrange[j] != 53) {
 							dists[degree + j] = scanrange[0];
-						} else {
-							dists[degree + j] = 0;
 						}
 					}
 				}
@@ -125,7 +111,7 @@ public class LIDAR implements Updatable {
 			System.out.println("Exception: " + e);
 		}
 	}
-
+	
 	public int clean() {
 		// TODO add RS-232 cleanup port
 		return 0;

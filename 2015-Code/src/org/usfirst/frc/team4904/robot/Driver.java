@@ -13,6 +13,8 @@ public abstract class Driver implements Updatable {
 	
 	public abstract void update();
 	
+	public abstract void disable();
+	
 	protected void setMovement(double x, double y) {// All movement passes through here so that autoalign has precedence
 		if (isInControl()) {
 			mecanumDrive.setDesiredXYSpeed(x, y);

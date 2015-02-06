@@ -41,7 +41,7 @@ public class XboxController extends Joystick {
 		return value;
 	}
 	
-	public boolean getA() {
-		return buttons[0].get();
+	public boolean getButton(int button) {
+		return buttons[button].get();
 	}
 }

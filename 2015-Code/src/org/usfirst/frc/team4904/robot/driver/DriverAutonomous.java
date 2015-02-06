@@ -21,4 +21,8 @@ public class DriverAutonomous extends Driver {
 		setMovement(movement[0], movement[1]);
 		setTurn(movement[2]);
 	}
+	
+	public void disable() {
+		// TODO Auto-generated method stub
+	}
 }
