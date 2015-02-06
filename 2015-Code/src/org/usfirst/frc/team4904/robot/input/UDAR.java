@@ -6,7 +6,6 @@ import org.usfirst.frc.team4904.robot.SuperI2C;
 import edu.wpi.first.wpilibj.I2C;
 
 public class UDAR extends SuperI2C {
-	private I2C i2c;
 	private final int numSensors = 3;
 	
 	public UDAR() {
