@@ -34,11 +34,12 @@ public class IMU implements Updatable {
 		// TODO set current orientation as "forward"
 		update();
 		Date date = new java.util.Date();
-		this.startTime = Robot.time();
-		this.updates = 0;
+		startTime = Robot.time();
+		updates = 0;
 	}
 	
 	public synchronized void update() {
+		mpu9150.update();
 		readData();
 		updateKalman();
 	}

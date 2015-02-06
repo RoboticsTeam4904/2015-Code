@@ -1,9 +1,10 @@
 package org.usfirst.frc.team4904.robot.input;
 
 
+import org.usfirst.frc.team4904.robot.Port;
 import edu.wpi.first.wpilibj.I2C;
 
-public class MPU9150 {
+public class MPU9150 extends Port {
 	// taken from http://playground.arduino.cc/Main/MPU-9150
 	// modified to be Java syntax
 	private final int MPU9150_SELF_TEST_X_2 = 0x0D; // R/W
@@ -112,29 +113,16 @@ public class MPU9150 {
 	// I2C objects
 	private I2C accelMag;
 	private I2C compass;
-	
+
 	public MPU9150() {
 		// Initialize I2C
 		accelMag = new I2C(I2C.Port.kOnboard, 0x68);
 		compass = new I2C(I2C.Port.kOnboard, 0x0C);
 		accelMag.write(MPU9150_PWR_MGMT_1, 0);
+		// Data variable
+		data = new double[10];
 	}
-	
-	public double[] read() {
-		double[] data = new double[10];
-		data[0] = (readSensor(MPU9150_TEMP_OUT_L, MPU9150_TEMP_OUT_H) + 12412.0) / 340.0;
-		data[1] = readSensor(MPU9150_CMPS_XOUT_L, MPU9150_CMPS_XOUT_H);
-		data[2] = readSensor(MPU9150_CMPS_YOUT_L, MPU9150_CMPS_YOUT_H);
-		data[3] = readSensor(MPU9150_CMPS_ZOUT_L, MPU9150_CMPS_ZOUT_H);
-		data[4] = readSensor(MPU9150_GYRO_XOUT_L, MPU9150_GYRO_XOUT_H);
-		data[5] = readSensor(MPU9150_GYRO_YOUT_L, MPU9150_GYRO_YOUT_H);
-		data[6] = readSensor(MPU9150_GYRO_ZOUT_L, MPU9150_GYRO_ZOUT_H);
-		data[7] = readSensor(MPU9150_ACCEL_XOUT_L, MPU9150_ACCEL_XOUT_H);
-		data[8] = readSensor(MPU9150_ACCEL_YOUT_L, MPU9150_ACCEL_YOUT_H);
-		data[9] = readSensor(MPU9150_ACCEL_ZOUT_L, MPU9150_ACCEL_ZOUT_H);
-		return data;
-	}
-	
+
 	public void init() {
 		// Extremely modified from http://playground.arduino.cc/Main/MPU-9150
 		// Mag setup
@@ -159,7 +147,7 @@ public class MPU9150 {
 		accelMag.write(0x6A, 0x20); // enable master i2c mode
 		accelMag.write(0x34, 0x13); // disable slv4
 	}
-	
+
 	public byte test() {
 		byte[] data = new byte[1];
 		data[0] = (byte) 0x68;
@@ -174,9 +162,9 @@ public class MPU9150 {
 			return -1;
 		}
 	}
-	
+
 	public void readAcc() {}
-	
+
 	// //////////////////////////
 	// Low level I2C functions //
 	// //////////////////////////
@@ -190,5 +178,18 @@ public class MPU9150 {
 			return -1;
 		}
 		return (H[0] << 8) + L[0];
+	}
+
+	public void update() {
+		data[0] = (readSensor(MPU9150_TEMP_OUT_L, MPU9150_TEMP_OUT_H) + 12412.0) / 340.0;
+		data[1] = readSensor(MPU9150_CMPS_XOUT_L, MPU9150_CMPS_XOUT_H);
+		data[2] = readSensor(MPU9150_CMPS_YOUT_L, MPU9150_CMPS_YOUT_H);
+		data[3] = readSensor(MPU9150_CMPS_ZOUT_L, MPU9150_CMPS_ZOUT_H);
+		data[4] = readSensor(MPU9150_GYRO_XOUT_L, MPU9150_GYRO_XOUT_H);
+		data[5] = readSensor(MPU9150_GYRO_YOUT_L, MPU9150_GYRO_YOUT_H);
+		data[6] = readSensor(MPU9150_GYRO_ZOUT_L, MPU9150_GYRO_ZOUT_H);
+		data[7] = readSensor(MPU9150_ACCEL_XOUT_L, MPU9150_ACCEL_XOUT_H);
+		data[8] = readSensor(MPU9150_ACCEL_YOUT_L, MPU9150_ACCEL_YOUT_H);
+		data[9] = readSensor(MPU9150_ACCEL_ZOUT_L, MPU9150_ACCEL_ZOUT_H);
 	}
 }
