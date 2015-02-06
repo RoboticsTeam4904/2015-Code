@@ -18,14 +18,14 @@ public class XboxController extends Joystick {
 	public final static int Y_STICK = 1; // Left y
 	public final static int TWIST_STICK = 2; // Button pair on front. Left is twist, trying to determine right
 	private SuperButton[] buttons = new SuperButton[10];
-
+	
 	public XboxController(int port) {
 		super(port);
 		for (int i = 0; i < 10; i++) {
 			buttons[i] = new SuperButton(this, i + 1);
 		}
 	}
-
+	
 	public double getValue(int axis) {
 		double value = 0;
 		if (axis == X_STICK) {
@@ -39,5 +39,9 @@ public class XboxController extends Joystick {
 			value = 0.0; // Do it ourselves
 		} // Software to solve hardware problems. Maybe not great.
 		return value;
+	}
+	
+	public boolean getA() {
+		return buttons[0].get();
 	}
 }
