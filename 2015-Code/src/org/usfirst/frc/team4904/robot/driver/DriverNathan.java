@@ -15,7 +15,7 @@ public class DriverNathan extends Driver {
 	}
 	
 	public synchronized void update() {
-		setMovement(xboxController.getValue(XboxController.X_STICK), xboxController.getValue(XboxController.Y_STICK));
+		setMovement(-xboxController.getValue(XboxController.Y_STICK), -xboxController.getValue(XboxController.X_STICK));
 		double turnSpeed = xboxController.getValue(XboxController.TWIST_STICK) / 2; // Turns way too fast oYherwise
 		setTurn(turnSpeed); // Actually do the turning
 	}

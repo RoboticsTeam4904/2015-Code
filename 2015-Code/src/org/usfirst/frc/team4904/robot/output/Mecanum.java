@@ -90,7 +90,7 @@ public class Mecanum implements Updatable {
 		previousTurnSpeed = currentTurnSpeed;
 		previousTime = currentTime;
 		double currentSpeed = Math.sqrt(newXSpeed * newXSpeed + newYSpeed * newYSpeed);
-		double currentAngle = Math.atan2(newXSpeed, newYSpeed);
+		double currentAngle = Math.atan2(newYSpeed, newXSpeed);
 		// System.out.println("Desired speed: " + desiredTurnSpeed + "\tDesired angle: " + desiredAngle + "\tDisired speed: " + desiredSpeed);
 		move(currentSpeed, currentAngle, currentTurnSpeed, absolute); // This system allows for different updating times and rates
 	}
