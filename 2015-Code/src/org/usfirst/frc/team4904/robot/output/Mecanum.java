@@ -73,7 +73,7 @@ public class Mecanum implements Updatable {
 	}
 	
 	public static double time() {
-		return ((double) System.currentTimeMillis()) / 1000;
+		return (double) System.currentTimeMillis() / 1000;
 	}
 	
 	public synchronized void update() {
@@ -84,15 +84,17 @@ public class Mecanum implements Updatable {
 		double newTurnSpeed = adjust(previousTurnSpeed, currentTurnSpeed, timeDifference);
 		previousXSpeed = newXSpeed;
 		previousYSpeed = newYSpeed;
-		currentTurnSpeed = newTurnSpeed;
-		currentXSpeed = newXSpeed;
-		currentYSpeed = newYSpeed;
-		previousTurnSpeed = currentTurnSpeed;
+		previousTurnSpeed = newTurnSpeed;
+		// currentTurnSpeed = newTurnSpeed;
+		// currentXSpeed = newXSpeed;
+		// currentYSpeed = newYSpeed;
+		// When these lines ^^ are commented out, the effect is that the target speed (currentSpeed) does not change
+		// currentSpeed can be set once, and as this function is called, previousSpeed is slowly moved up to that speed
 		previousTime = currentTime;
 		double currentSpeed = Math.sqrt(newXSpeed * newXSpeed + newYSpeed * newYSpeed);
 		double currentAngle = Math.atan2(newYSpeed, newXSpeed);
 		// System.out.println("Desired speed: " + desiredTurnSpeed + "\tDesired angle: " + desiredAngle + "\tDisired speed: " + desiredSpeed);
-		move(currentSpeed, currentAngle, currentTurnSpeed, absolute); // This system allows for different updating times and rates
+		move(currentSpeed, currentAngle, newTurnSpeed, absolute); // This system allows for different updating times and rates
 	}
 	
 	public static double adjust(double prevValue, double currentValue, double maxChange) {// Dampen or don't dampen
