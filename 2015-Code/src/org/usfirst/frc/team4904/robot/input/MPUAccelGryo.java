@@ -170,4 +170,6 @@ public class MPUAccelGryo extends SuperI2C {
 		data[8] = read(MPU9150_ACCEL_YOUT_L, MPU9150_ACCEL_YOUT_H);
 		data[9] = read(MPU9150_ACCEL_ZOUT_L, MPU9150_ACCEL_ZOUT_H);
 	}
+	
+	public void disable() {}
 }

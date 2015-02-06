@@ -37,8 +37,7 @@ public class MPU9150 extends Port {
 	
 	public void readAcc() {}
 	
-	// //////////////////////////
-	// Low level I2C functions //
-	// //////////////////////////
 	public void update() {}
+	
+	public void disable() {}
 }

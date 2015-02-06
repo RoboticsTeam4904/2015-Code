@@ -39,4 +39,8 @@ public class OperatorAutonomous extends Operator {
 		}
 		updateWinch();
 	}
+	
+	public void disable() {
+		// TODO Auto-generated method stub
+	}
 }

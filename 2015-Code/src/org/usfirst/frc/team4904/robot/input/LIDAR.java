@@ -62,7 +62,6 @@ public class LIDAR implements Updatable {
 	private int bytesCurrentlyAvailable() {
 		return 0;
 	}
-	boolean toggle = false;
 	
 	public void update() {
 		motor.set(0.5);
@@ -110,6 +109,10 @@ public class LIDAR implements Updatable {
 		catch (Exception e) {
 			System.out.println("Exception: " + e);
 		}
+	}
+	
+	public void disable() {
+		motor.set(0);
 	}
 	
 	public int clean() {

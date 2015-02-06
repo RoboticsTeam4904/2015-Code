@@ -26,4 +26,6 @@ public class UDAR extends SuperI2C {
 			}
 		}
 	}
+	
+	public void disable() {}
 }

@@ -18,12 +18,12 @@ public class AutoAlign implements Updatable {
 	private final Winch winch;
 	private final int THIN_TOTE_WIDTH = 100;
 	private final int WIDE_TOTE_WIDTH = 200;
-
+	
 	private enum State {
 		EMPTY, ALIGNING_WITH_TOTE, ALIGNING_WITH_CAN, HOLDING_CAN, HOLDING_TOTE, RELEASING_CAN, RELEASING_TOTE
 	}
 	private volatile State currentState;
-
+	
 	public AutoAlign(Mecanum mecanum, UDAR udar, LIDAR lidar, IMU imu, Grabber grabber, Winch winch) {
 		this.mecanum = mecanum;
 		this.udar = udar;
@@ -33,21 +33,21 @@ public class AutoAlign implements Updatable {
 		this.winch = winch;
 		currentState = State.EMPTY;
 	}
-
+	
 	public void grabTote() {
 		if (currentState != State.EMPTY) {// Don't do anything if grabber isn't empty
 			return;
 		}
 		currentState = State.ALIGNING_WITH_TOTE;
 	}
-
+	
 	public void grabCan() {
 		if (currentState != State.EMPTY) {// Don't do anything if grabber isn't empty
 			return;
 		}
 		currentState = State.ALIGNING_WITH_CAN; // NOTE: Setting the grabber is NOT done in these functions and is instead done the next time update is called
 	}
-
+	
 	private void releaseTote(boolean wide) {
 		if (shouldAlignToteBeforeReleasing()) { // If there is a tote in front of us, align with it
 			currentState = State.RELEASING_TOTE;
@@ -55,7 +55,7 @@ public class AutoAlign implements Updatable {
 		}
 		currentState = State.EMPTY;
 	}
-
+	
 	private void releaseCan() {
 		if (shouldAlignCanBeforeReleasing()) { // If there is a can in front of us, align with it
 			currentState = State.RELEASING_CAN;
@@ -63,15 +63,15 @@ public class AutoAlign implements Updatable {
 		}
 		currentState = State.EMPTY;
 	}
-
+	
 	private boolean shouldAlignToteBeforeReleasing() {
 		return lidar.getDists()[90] < 200;
 	}
-
+	
 	private boolean shouldAlignCanBeforeReleasing() {
 		return udar.read()[2] < 200;
 	}
-
+	
 	private void alignWithCanTick(boolean grab) {
 		double[] UDARdists = udar.read();
 		if (UDARdists[2] > 1000) {
@@ -95,7 +95,7 @@ public class AutoAlign implements Updatable {
 			}
 		}
 	}
-
+	
 	private void alignWithToteTick(boolean grab) {
 		int[] LIDARLines = lidar.getLines();
 		int[] toteFront = new int[4];
@@ -142,7 +142,7 @@ public class AutoAlign implements Updatable {
 			}
 		}
 	}
-
+	
 	private void doAligningTick(boolean grab) {
 		switch (State.EMPTY) {// ****************************************************************************************************************
 			case ALIGNING_WITH_CAN:
@@ -158,7 +158,7 @@ public class AutoAlign implements Updatable {
 				return;
 		}
 	}
-
+	
 	public synchronized void update() {
 		grabber.set(getDesiredGrabberState());// This is (on purpose) the only place that grabber.setWidth is ever called (other than in disableMotors())
 		if (isCurrentlyAligning()) {
@@ -167,7 +167,7 @@ public class AutoAlign implements Updatable {
 			doAligningTick(false);
 		}
 	}
-
+	
 	public boolean isCurrentlyAligning() {
 		switch (currentState) {
 			case ALIGNING_WITH_CAN:
@@ -178,7 +178,7 @@ public class AutoAlign implements Updatable {
 				return false;
 		}
 	}
-
+	
 	public boolean isCurrentlyReleasing() {
 		switch (currentState) {
 			case RELEASING_CAN:
@@ -189,7 +189,7 @@ public class AutoAlign implements Updatable {
 				return false;
 		}
 	}
-
+	
 	private GrabberState getDesiredGrabberState() {// What state should the grabber be in
 		switch (currentState) {
 			case ALIGNING_WITH_CAN:
@@ -210,7 +210,7 @@ public class AutoAlign implements Updatable {
 				throw new Error("Current state of AutoAlign does not exist/is null");
 		}
 	}
-
+	
 	public void release() {
 		if (isCurrentlyAligning()) {// Canceling alignment, e.g. in case it isn't working
 			currentState = State.EMPTY;
@@ -228,16 +228,18 @@ public class AutoAlign implements Updatable {
 				// You pressed the release button when you aren't holding anything
 		}
 	}
-
+	
 	public boolean isGrabberEmpty() {
 		return currentState == State.EMPTY;
 	}
-
+	
 	public void forceRelease() {
 		currentState = State.EMPTY;
 	}
-
+	
 	public boolean isDriverLockedOut() {
 		return isCurrentlyAligning() || isCurrentlyReleasing();
 	}
+	
+	public void disable() {}
 }

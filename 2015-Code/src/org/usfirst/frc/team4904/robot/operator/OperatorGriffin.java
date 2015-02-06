@@ -52,4 +52,6 @@ public class OperatorGriffin extends Operator {
 		}
 		updateWinch();
 	}
+	
+	public void disable() {}
 }

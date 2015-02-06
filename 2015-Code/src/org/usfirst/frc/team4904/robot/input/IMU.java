@@ -56,4 +56,6 @@ public class IMU implements Updatable {
 	}
 	
 	private void updateKalman() {}
+	
+	public void disable() {}
 }
