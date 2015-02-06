@@ -2,7 +2,6 @@ package org.usfirst.frc.team4904.robot.input;
 
 
 import org.usfirst.frc.team4904.robot.Port;
-import edu.wpi.first.wpilibj.I2C;
 
 public class MPU9150 extends Port {
 	// taken from http://playground.arduino.cc/Main/MPU-9150
@@ -109,77 +108,39 @@ public class MPU9150 extends Port {
 	private int[] cmps = new int[3];
 	private int[] accl = new int[3];
 	private int[] gyro = new int[3];
-	private int temp;
+	private int temp; // Temperature, not temporary. Don't kill Erik.
 	// I2C objects
-	private I2C accelMag;
-	private I2C compass;
-
+	private MPUAccelGryo accelGryo;
+	private MPUComp compass;
+	
 	public MPU9150() {
 		// Initialize I2C
-		accelMag = new I2C(I2C.Port.kOnboard, 0x68);
-		compass = new I2C(I2C.Port.kOnboard, 0x0C);
-		accelMag.write(MPU9150_PWR_MGMT_1, 0);
+		accelGryo = new MPUAccelGryo(0x68);
+		compass = new MPUComp(0x0C);
+		accelGryo.write(MPU9150_PWR_MGMT_1, 0);
 		// Data variable
 		data = new double[10];
 	}
-
+	
 	public void init() {
 		// Extremely modified from http://playground.arduino.cc/Main/MPU-9150
-		// Mag setup
-		compass.write(0x0A, 0x00); // PowerDownMode
-		compass.write(0x0A, 0x0F); // SelfTest
-		compass.write(0x0A, 0x00); // PowerDownMode
-		// Gyro setup
-		accelMag.write(0x24, 0x40); // Wait for Data at Slave0
-		accelMag.write(0x25, 0x8C); // Set i2c address at slave0 at 0x0C
-		accelMag.write(0x26, 0x02); // Set where reading at slave 0 starts
-		accelMag.write(0x27, 0x88); // set offset at start reading and enable
-		accelMag.write(0x28, 0x0C); // set i2c address at slv1 at 0x0C
-		accelMag.write(0x29, 0x0A); // Set where reading at slave 1 starts
-		accelMag.write(0x2A, 0x81); // Enable at set length to 1
-		accelMag.write(0x64, 0x01); // overvride register
-		accelMag.write(0x67, 0x03); // set delay rate
-		accelMag.write(0x01, 0x80);
-		accelMag.write(0x34, 0x04); // set i2c slv4 delay
-		accelMag.write(0x64, 0x00); // override register
-		accelMag.write(0x6A, 0x00); // clear usr setting
-		accelMag.write(0x64, 0x01); // override register
-		accelMag.write(0x6A, 0x20); // enable master i2c mode
-		accelMag.write(0x34, 0x13); // disable slv4
+		accelGryo.init();
+		compass.init();
 	}
-
+	
 	public byte test() {
-		byte[] data = new byte[1];
-		data[0] = (byte) 0x68;
-		byte[] response = new byte[1];
-		response[0] = -1;
-		try {
-			accelMag.read(0x75, 1, response);
-			return response[0];
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-			return -1;
-		}
+		return accelGryo.test();
 	}
-
+	
 	public void readAcc() {}
-
+	
 	// //////////////////////////
 	// Low level I2C functions //
 	// //////////////////////////
 	private int readSensor(int addrL, int addrH) {
-		byte[] H = new byte[1];
-		byte[] L = new byte[1];
-		if (!accelMag.read(addrH, 1, H)) {
-			return -1;
-		}
-		if (!accelMag.read(addrL, 1, L)) {
-			return -1;
-		}
-		return (H[0] << 8) + L[0];
+		return accelGryo.read(addrL, addrH);
 	}
-
+	
 	public void update() {
 		data[0] = (readSensor(MPU9150_TEMP_OUT_L, MPU9150_TEMP_OUT_H) + 12412.0) / 340.0;
 		data[1] = readSensor(MPU9150_CMPS_XOUT_L, MPU9150_CMPS_XOUT_H);
