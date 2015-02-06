@@ -37,7 +37,7 @@ public class Robot extends SampleRobot {
 	private static final int RIGHT_OUTER_SWITCH_PORT = 2;
 	private static final int LEFT_OUTER_SWITCH_PORT = 3;
 	private final LogitechJoystick stick; // the X3D Extreme3DPro Logitech joystick (right hand) - operator
-	private static XboxController xboxController; // the Xbox 360 controller - driver
+	private final XboxController xboxController; // the Xbox 360 controller - driver
 	// Input devices
 	private final UDAR udar; // the UDAR (ultrasonic detection and ranging)
 	private final IMU imu;
@@ -115,7 +115,7 @@ public class Robot extends SampleRobot {
 		new Updater(state, new Updatable[] {imu}, fastUpdatePeriod).start(); // These should have fast updates
 		while (isDisabled()) {
 			disableMotors(); // Disable all motors
-			driver.disable();
+			// humanDriver.disable();
 			align.forceRelease();
 			Timer.delay(0.01);
 		}
