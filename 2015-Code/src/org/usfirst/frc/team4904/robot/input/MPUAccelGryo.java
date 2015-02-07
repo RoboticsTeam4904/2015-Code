@@ -101,12 +101,12 @@ public class MPUAccelGryo extends SuperI2C {
 	public final int MPU9150_CMPS_YOUT_H = 0x4D; // R
 	public final int MPU9150_CMPS_ZOUT_L = 0x4E; // R
 	public final int MPU9150_CMPS_ZOUT_H = 0x4F; // R
-	
+
 	// ////////////////////////////////////////////////
 	public MPUAccelGryo(int port) {
 		i2c = new I2C(I2C.Port.kOnboard, port);
 	}
-	
+
 	public void init() {
 		// Gyro setup
 		i2c.write(0x24, 0x40); // Wait for Data at Slave0
@@ -126,11 +126,11 @@ public class MPUAccelGryo extends SuperI2C {
 		i2c.write(0x6A, 0x20); // enable master i2c mode
 		i2c.write(0x34, 0x13); // disable slv4
 	}
-	
+
 	public void write(int registerAddress, int data) {
 		i2c.write(registerAddress, data);
 	}
-	
+
 	public byte test() {
 		byte[] data = new byte[1];
 		data[0] = (byte) 0x68;
@@ -145,7 +145,7 @@ public class MPUAccelGryo extends SuperI2C {
 			return -1;
 		}
 	}
-	
+
 	public int read(int addrL, int addrH) {
 		byte[] H = new byte[1];
 		byte[] L = new byte[1];
@@ -157,7 +157,7 @@ public class MPUAccelGryo extends SuperI2C {
 		}
 		return (H[0] << 8) + L[0];
 	}
-	
+
 	public void update() {
 		data[0] = (read(MPU9150_TEMP_OUT_L, MPU9150_TEMP_OUT_H) + 12412.0) / 340.0;
 		data[1] = read(MPU9150_CMPS_XOUT_L, MPU9150_CMPS_XOUT_H);
@@ -170,6 +170,4 @@ public class MPUAccelGryo extends SuperI2C {
 		data[8] = read(MPU9150_ACCEL_YOUT_L, MPU9150_ACCEL_YOUT_H);
 		data[9] = read(MPU9150_ACCEL_ZOUT_L, MPU9150_ACCEL_ZOUT_H);
 	}
-	
-	public void disable() {}
 }

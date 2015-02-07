@@ -9,12 +9,12 @@ import edu.wpi.first.wpilibj.Joystick.RumbleType;
 
 public class DriverNathan extends Driver {
 	private final XboxController xboxController;
-	
+
 	public DriverNathan(Mecanum mecanumDrive, XboxController xboxController, AutoAlign align) {
 		super(mecanumDrive, align);
 		this.xboxController = xboxController;
 	}
-	
+
 	public synchronized void update() {
 		setMovement(-xboxController.getValue(XboxController.Y_STICK) * 2 / Math.PI, xboxController.getValue(XboxController.X_STICK) * 2 / Math.PI);
 		// We have to compute the inverse of the fourth derivative of cosine at -1 because the radius of the wheel is a complex number with an i component of 0.
@@ -30,11 +30,11 @@ public class DriverNathan extends Driver {
 			rumble(RumbleType.kRightRumble, 0);
 		}
 	}
-	
+
 	public void rumble(RumbleType type, int value) {
 		xboxController.setRumble(type, value);
 	}
-	
+
 	public void disable() {
 		xboxController.setRumble(RumbleType.kLeftRumble, 0);
 		xboxController.setRumble(RumbleType.kRightRumble, 0);

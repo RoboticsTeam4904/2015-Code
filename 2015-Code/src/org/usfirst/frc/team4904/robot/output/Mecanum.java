@@ -33,7 +33,7 @@ public class Mecanum implements Updatable {
 	private volatile double previousTime;
 	private volatile boolean absolute;
 	private final IMU imu;
-	
+
 	public Mecanum(SpeedController frontLeftWheel, SpeedController frontRightWheel, SpeedController backLeftWheel, SpeedController backRightWheel, IMU imu) {
 		// Initialize motor controllers with default ports
 		this.frontLeftWheel = frontLeftWheel;
@@ -42,7 +42,7 @@ public class Mecanum implements Updatable {
 		this.backRightWheel = backRightWheel;
 		this.imu = imu;
 	}
-	
+
 	private void move(double desiredSpeed, double desiredAngle, double turnSpeed, boolean absolute) {
 		// @param desiredSpeed double between 0 and 1 specifying wanted movement speed
 		// @param desiredAngle double between 0 and 2pi specifying wanted movement angle in radians
@@ -71,11 +71,11 @@ public class Mecanum implements Updatable {
 		// System.out.println("Frontleft" + (frontLeft / scaleFactor));
 		// System.out.println("Frontright" + (frontRight / scaleFactor));
 	}
-	
+
 	public static double time() {
 		return (double) System.currentTimeMillis() / 1000;
 	}
-	
+
 	public synchronized void update() {
 		double currentTime = time();
 		double timeDifference = currentTime - previousTime;
@@ -96,7 +96,7 @@ public class Mecanum implements Updatable {
 		// System.out.println("Desired speed: " + desiredTurnSpeed + "\tDesired angle: " + desiredAngle + "\tDisired speed: " + desiredSpeed);
 		move(currentSpeed, currentAngle, newTurnSpeed, absolute); // This system allows for different updating times and rates
 	}
-	
+
 	public static double adjust(double prevValue, double currentValue, double maxChange) {// Dampen or don't dampen
 		if (currentValue < prevValue) {// Deaccelerating
 			return Math.max(currentValue, prevValue - maxChange);
@@ -104,24 +104,17 @@ public class Mecanum implements Updatable {
 			return Math.min(currentValue, prevValue + maxChange);
 		}
 	}
-	
+
 	public void setDesiredXYSpeed(double desiredXSpeed, double desiredYSpeed) {
 		currentXSpeed = desiredXSpeed;
 		currentYSpeed = desiredYSpeed;
 	}
-	
+
 	public void setDesiredTurnSpeed(double desiredTurnSpeed) {
 		currentTurnSpeed = desiredTurnSpeed;
 	}
-	
+
 	public void setAbsolute(boolean absolute) {
 		this.absolute = absolute;
-	}
-	
-	public void disable() {
-		frontLeftWheel.set(0);
-		frontRightWheel.set(0);
-		backLeftWheel.set(0);
-		backRightWheel.set(0);
 	}
 }

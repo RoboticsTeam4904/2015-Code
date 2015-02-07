@@ -7,16 +7,16 @@ import edu.wpi.first.wpilibj.I2C;
 
 public class UDAR extends SuperI2C {
 	private final int numSensors = 3;
-	
+
 	public UDAR() {
 		i2c = new I2C(I2C.Port.kOnboard, 2); // Initialize I2C
 		data = new double[3];
 	}
-	
+
 	private int bytesCurrentlyAvailable() {
 		return 0;
 	}
-	
+
 	public void update() {
 		if (bytesCurrentlyAvailable() < numSensors * 2) {
 			byte[] I2CData = new byte[numSensors];
@@ -26,6 +26,4 @@ public class UDAR extends SuperI2C {
 			}
 		}
 	}
-	
-	public void disable() {}
 }

@@ -67,6 +67,7 @@ public class Robot extends SampleRobot {
 	private final double slowUpdatePeriod = 0.2; // update every 0.2 seconds/200 milliseconds (5Hz)
 	// Logging system
 	private final LogKitten logger;
+	private final ImplementsDisable[] toDisable;
 	
 	private enum RobotState {
 		DISABLED, OPERATOR, AUTONOMOUS
@@ -104,6 +105,9 @@ public class Robot extends SampleRobot {
 		controller = new AutonomousController(udar, imu, lidar);
 		autonomousOperator = new OperatorAutonomous(winch, align, controller);
 		autonomousDriver = new DriverAutonomous(mecanumDrive, controller, align);
+		driver = humanDriver;
+		operator = humanOperator;
+		toDisable = new ImplementsDisable[] {winch, grabber, lidar, driver, frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel};
 	}
 	
 	public void robotInit() {
@@ -117,23 +121,11 @@ public class Robot extends SampleRobot {
 		RobotState state = RobotState.DISABLED;
 		new Updater(state, new Updatable[] {imu}, fastUpdatePeriod).start(); // These should have fast updates
 		while (isDisabled()) {
-			disableMotors(); // Disable all motors
-			if (driver != null) {
-				driver.disable();
+			for (ImplementsDisable implementsdisable : toDisable) {
+				implementsdisable.disable();
 			}
-			align.forceRelease();
 			Timer.delay(0.01);
 		}
-	}
-	
-	private void disableMotors() {
-		winch.disable();
-		grabber.disable();
-		frontLeftWheel.disable();
-		frontRightWheel.disable();
-		backLeftWheel.disable();
-		backRightWheel.disable();
-		lidar.disable();
 	}
 	
 	public void autonomous() {

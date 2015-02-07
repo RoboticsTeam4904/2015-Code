@@ -8,12 +8,12 @@ import org.usfirst.frc.team4904.robot.output.Winch;
 
 public class OperatorGriffin extends Operator {
 	private final LogitechJoystick stick;
-	
+
 	public OperatorGriffin(LogitechJoystick stick, Winch winch, AutoAlign align) {
 		super(winch, align);
 		this.stick = stick;
 	}
-	
+
 	public synchronized void update() {
 		if (stick.buttons[1].getRaw()) {
 			adjust(stick.getY()); // When button 2 is pressed, adjust the winch
@@ -52,6 +52,4 @@ public class OperatorGriffin extends Operator {
 		}
 		updateWinch();
 	}
-	
-	public void disable() {}
 }

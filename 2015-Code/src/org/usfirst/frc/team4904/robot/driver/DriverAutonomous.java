@@ -22,7 +22,5 @@ public class DriverAutonomous extends Driver {
 		setTurn(movement[2]);
 	}
 	
-	public void disable() {
-		// TODO Auto-generated method stub
-	}
+	public void disable() {}
 }

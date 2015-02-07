@@ -239,13 +239,7 @@ public class AutoAlign implements Updatable {
 		return currentState == State.EMPTY;
 	}
 	
-	public void forceRelease() {
-		currentState = State.EMPTY;
-	}
-	
 	public boolean isDriverLockedOut() {
 		return isCurrentlyAligning() || isCurrentlyReleasing();
 	}
-	
-	public void disable() {}
 }

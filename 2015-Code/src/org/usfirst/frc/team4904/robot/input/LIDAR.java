@@ -2,23 +2,24 @@ package org.usfirst.frc.team4904.robot.input;
 
 
 import java.math.BigInteger;
+import org.usfirst.frc.team4904.robot.ImplementsDisable;
 import org.usfirst.frc.team4904.robot.LogKitten;
 import org.usfirst.frc.team4904.robot.Updatable;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.Talon;
 
-public class LIDAR implements Updatable {
+public class LIDAR implements ImplementsDisable, Updatable {
 	int[] dists = new int[360];
 	private final Talon motor;
 	private SerialPort port;
 	private final LogKitten logger;
-	
+
 	public LIDAR(int motorport) {
 		motor = new Talon(motorport);
 		// port = new SerialPort(9600, SerialPort.Port.kOnboard);
 		logger = new LogKitten("LIDAR", LogKitten.LEVEL_DEBUG);
 	}
-	
+
 	private byte[] read(int bytes) throws Exception {
 		byte[] b = new byte[bytes];
 		// b = port.read(bytes);
@@ -27,7 +28,7 @@ public class LIDAR implements Updatable {
 		}
 		return b;
 	}
-	
+
 	private int[] scanline_b(byte angle) throws Exception {
 		boolean insync = false;
 		while (!insync) { // Wait until beginning of distance data
@@ -53,21 +54,21 @@ public class LIDAR implements Updatable {
 		}
 		return null;
 	}
-	
+
 	public int[] getDists() {
 		return dists;
 	}
-	
+
 	public int[] getLines() {
 		// TODO actually get lines
 		return new int[] {0, 0, 0, 0};
 	}
-	
+
 	private int bytesCurrentlyAvailable() {
 		return 0;
 		// return port.getBytesReceived();
 	}
-	
+
 	public void update() {
 		motor.set(0.5);
 		if (bytesCurrentlyAvailable() < 10000) {
@@ -115,11 +116,11 @@ public class LIDAR implements Updatable {
 			System.out.println("Exception: " + e);
 		}
 	}
-	
+
 	public void disable() {
 		motor.set(0);
 	}
-	
+
 	public int clean() {
 		// port.free();
 		return 0;

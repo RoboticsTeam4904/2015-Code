@@ -19,6 +19,4 @@ public class MPUComp extends SuperI2C {
 	public void update() {
 		// TODO Auto-generated method stub
 	}
-	
-	public void disable() {}
 }

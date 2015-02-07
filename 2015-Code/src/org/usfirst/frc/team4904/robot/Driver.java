@@ -3,7 +3,7 @@ package org.usfirst.frc.team4904.robot;
 
 import org.usfirst.frc.team4904.robot.output.Mecanum;
 
-public abstract class Driver implements Updatable {
+public abstract class Driver implements ImplementsDisable, Updatable {
 	public Driver(Mecanum mecanumDrive, AutoAlign align) {
 		this.mecanumDrive = mecanumDrive;
 		this.align = align;
@@ -12,9 +12,7 @@ public abstract class Driver implements Updatable {
 	private final AutoAlign align;
 	
 	public abstract void update();
-	
-	public abstract void disable();
-	
+
 	protected void setMovement(double x, double y) {// All movement passes through here so that autoalign has precedence
 		if (isInControl()) {
 			mecanumDrive.setDesiredXYSpeed(x, y);
