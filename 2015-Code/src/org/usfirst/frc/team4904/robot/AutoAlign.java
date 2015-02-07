@@ -144,12 +144,18 @@ public class AutoAlign implements Updatable {
 	}
 	
 	private void doAligningTick(boolean grab) {
-		switch (State.EMPTY) {// ****************************************************************************************************************
+		switch (currentState) {// ****************************************************************************************************************
 			case ALIGNING_WITH_CAN:
-				alignWithCanTick(grab);
+				// alignWithCanTick(grab);
+				currentState = State.HOLDING_CAN;
 				return;
 			case ALIGNING_WITH_TOTE:
-				alignWithToteTick(grab); // LIDAR Auto align does not differentiate wide from thin totes
+				currentState = State.HOLDING_TOTE;
+				// alignWithToteTick(grab); // LIDAR Auto align does not differentiate wide from thin totes
+				return;
+			case RELEASING_CAN:
+			case RELEASING_TOTE:
+				currentState = State.EMPTY;
 				return;
 			default: // Should never reach here
 				winch.move(0);
