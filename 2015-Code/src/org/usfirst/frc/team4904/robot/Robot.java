@@ -6,6 +6,7 @@ import org.usfirst.frc.team4904.robot.driver.DriverNathan;
 import org.usfirst.frc.team4904.robot.input.IMU;
 import org.usfirst.frc.team4904.robot.input.LIDAR;
 import org.usfirst.frc.team4904.robot.input.LogitechJoystick;
+import org.usfirst.frc.team4904.robot.input.SuperEncoder;
 import org.usfirst.frc.team4904.robot.input.UDAR;
 import org.usfirst.frc.team4904.robot.input.XboxController;
 import org.usfirst.frc.team4904.robot.operator.OperatorAutonomous;
@@ -18,6 +19,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.SampleRobot;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.VictorSP;
 
 public class Robot extends SampleRobot {
 	// Default ports for joystick/controller
@@ -47,6 +49,10 @@ public class Robot extends SampleRobot {
 	private final IMU imu;
 	private final LIDAR lidar;
 	private final DigitalInput limitSwitches[] = new DigitalInput[4];
+	private final SuperEncoder frontLeftEncoder;
+	private final SuperEncoder frontRightEncoder;
+	private final SuperEncoder backLeftEncoder;
+	private final SuperEncoder backRightEncoder;
 	// movement controllers
 	private final Winch winch; // the Winch class takes care of moving to specific heights
 	private final Grabber grabber; // the grabber class takes care of opening and closing the grabber
@@ -68,7 +74,7 @@ public class Robot extends SampleRobot {
 	private final double slowUpdatePeriod = 0.2; // update every 0.2 seconds/200 milliseconds (5Hz)
 	// Logging system
 	private final LogKitten logger;
-	private final ImplementsDisable[] toDisable;
+	private final Disablable[] toDisable;
 	
 	private enum RobotState {
 		DISABLED, OPERATOR, AUTONOMOUS
@@ -87,14 +93,19 @@ public class Robot extends SampleRobot {
 		limitSwitches[Grabber.LEFT_INNER_SWITCH] = new DigitalInput(LEFT_INNER_SWITCH_PORT);
 		limitSwitches[Grabber.RIGHT_OUTER_SWITCH] = new DigitalInput(RIGHT_OUTER_SWITCH_PORT);
 		limitSwitches[Grabber.LEFT_OUTER_SWITCH] = new DigitalInput(LEFT_OUTER_SWITCH_PORT);
+		// Initialize Encoders
+		frontLeftEncoder = new SuperEncoder(FRONT_LEFT_I2C_PORT);
+		frontRightEncoder = new SuperEncoder(FRONT_RIGHT_I2C_PORT);
+		backLeftEncoder = new SuperEncoder(BACK_LEFT_I2C_PORT);
+		backRightEncoder = new SuperEncoder(BACK_RIGHT_I2C_PORT);
 		// Initialize movement controllers
 		winch = new Winch(WINCH_PORT); // Initialize Winch control
 		grabber = new Grabber(GRABBER_PORT, limitSwitches); // Initialize Grabber control -- only autoalign has access to this, by design
 		// Initialize motor controllers with default ports
-		frontLeftWheel = new EncodedMotor(FRONT_LEFT_WHEEL_PORT, FRONT_LEFT_I2C_PORT);
-		frontRightWheel = new EncodedMotor(FRONT_RIGHT_WHEEL_PORT, FRONT_RIGHT_I2C_PORT);
-		backLeftWheel = new EncodedMotor(BACK_LEFT_WHEEL_PORT, BACK_LEFT_I2C_PORT);
-		backRightWheel = new EncodedMotor(BACK_RIGHT_WHEEL_PORT, BACK_RIGHT_I2C_PORT);
+		frontLeftWheel = new EncodedMotor(FRONT_LEFT_WHEEL_PORT, frontLeftEncoder);
+		frontRightWheel = new VictorSP(FRONT_RIGHT_WHEEL_PORT/* , FRONT_RIGHT_I2C_PORT */);
+		backLeftWheel = new VictorSP(BACK_LEFT_WHEEL_PORT/* , BACK_LEFT_I2C_PORT */);
+		backRightWheel = new VictorSP(BACK_RIGHT_WHEEL_PORT/* , BACK_RIGHT_I2C_PORT */);
 		mecanumDrive = new Mecanum(frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel, imu); // Initialize Mecanum control
 		// Initialize joysticks (numbers correspond to value set by driver station)
 		stick = new LogitechJoystick(JOYSTICK_PORT);
@@ -108,7 +119,7 @@ public class Robot extends SampleRobot {
 		autonomousDriver = new DriverAutonomous(mecanumDrive, controller, align);
 		driver = humanDriver;
 		operator = humanOperator;
-		toDisable = new ImplementsDisable[] {winch, grabber, lidar, driver, frontLeftWheel};
+		toDisable = new Disablable[] {winch, grabber, lidar, driver, frontLeftWheel};
 	}
 	
 	public void robotInit() {
@@ -122,7 +133,7 @@ public class Robot extends SampleRobot {
 		RobotState state = RobotState.DISABLED;
 		new Updater(state, new Updatable[] {imu}, fastUpdatePeriod).start(); // These should have fast updates
 		while (isDisabled()) {
-			for (ImplementsDisable implementsdisable : toDisable) {
+			for (Disablable implementsdisable : toDisable) {
 				implementsdisable.disable();
 			}
 			frontRightWheel.set(0);

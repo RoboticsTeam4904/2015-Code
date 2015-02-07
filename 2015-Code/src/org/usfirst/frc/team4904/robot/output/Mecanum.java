@@ -1,20 +1,6 @@
 package org.usfirst.frc.team4904.robot.output;
 
 
-/*
- * Mecanum Drive Library
- * Designed 2014
- * Version: 2.0.1b
- * For FRC or related use only
- * Adapted and modified by team 4904 for 2015
- *
- * Created by AI Robotics #4529 Heavily modified (at this point) by #4904
- * www.ai-robotics.com.au
- * info@ai-robotics.com
- *
- * Changelog:
- * Fixed Turn Function - S
- */
 import org.usfirst.frc.team4904.robot.Updatable;
 import org.usfirst.frc.team4904.robot.input.IMU;
 import edu.wpi.first.wpilibj.SpeedController;
@@ -33,7 +19,7 @@ public class Mecanum implements Updatable {
 	private volatile double previousTime;
 	private volatile boolean absolute;
 	private final IMU imu;
-
+	
 	public Mecanum(SpeedController frontLeftWheel, SpeedController frontRightWheel, SpeedController backLeftWheel, SpeedController backRightWheel, IMU imu) {
 		// Initialize motor controllers with default ports
 		this.frontLeftWheel = frontLeftWheel;
@@ -42,7 +28,7 @@ public class Mecanum implements Updatable {
 		this.backRightWheel = backRightWheel;
 		this.imu = imu;
 	}
-
+	
 	private void move(double desiredSpeed, double desiredAngle, double turnSpeed, boolean absolute) {
 		// @param desiredSpeed double between 0 and 1 specifying wanted movement speed
 		// @param desiredAngle double between 0 and 2pi specifying wanted movement angle in radians
@@ -66,16 +52,12 @@ public class Mecanum implements Updatable {
 		frontRightWheel.set(-frontRight / scaleFactor);
 		backLeftWheel.set(backLeft / scaleFactor); // Negated because of motors being of the inside of chassis
 		backRightWheel.set(-backRight / scaleFactor);
-		// System.out.println("Backleft" + (backLeft / scaleFactor));
-		// System.out.println("Backright" + (backRight / scaleFactor));
-		// System.out.println("Frontleft" + (frontLeft / scaleFactor));
-		// System.out.println("Frontright" + (frontRight / scaleFactor));
 	}
-
+	
 	public static double time() {
 		return (double) System.currentTimeMillis() / 1000;
 	}
-
+	
 	public synchronized void update() {
 		double currentTime = time();
 		double timeDifference = currentTime - previousTime;
@@ -85,35 +67,29 @@ public class Mecanum implements Updatable {
 		previousXSpeed = newXSpeed;
 		previousYSpeed = newYSpeed;
 		previousTurnSpeed = newTurnSpeed;
-		// currentTurnSpeed = newTurnSpeed;
-		// currentXSpeed = newXSpeed;
-		// currentYSpeed = newYSpeed;
-		// When these lines ^^ are commented out, the effect is that the target speed (currentSpeed) does not change
-		// currentSpeed can be set once, and as this function is called, previousSpeed is slowly moved up to that speed
 		previousTime = currentTime;
 		double currentSpeed = Math.sqrt(newXSpeed * newXSpeed + newYSpeed * newYSpeed);
 		double currentAngle = Math.atan2(newYSpeed, newXSpeed);
-		// System.out.println("Desired speed: " + desiredTurnSpeed + "\tDesired angle: " + desiredAngle + "\tDisired speed: " + desiredSpeed);
 		move(currentSpeed, currentAngle, newTurnSpeed, absolute); // This system allows for different updating times and rates
 	}
-
+	
 	public static double adjust(double prevValue, double currentValue, double maxChange) {// Dampen or don't dampen
-		if (currentValue < prevValue) {// Deaccelerating
+		if (currentValue < prevValue) { // Deaccelerating
 			return Math.max(currentValue, prevValue - maxChange);
-		} else {// Accelerating
+		} else { // Accelerating
 			return Math.min(currentValue, prevValue + maxChange);
 		}
 	}
-
+	
 	public void setDesiredXYSpeed(double desiredXSpeed, double desiredYSpeed) {
 		currentXSpeed = desiredXSpeed;
 		currentYSpeed = desiredYSpeed;
 	}
-
+	
 	public void setDesiredTurnSpeed(double desiredTurnSpeed) {
 		currentTurnSpeed = desiredTurnSpeed;
 	}
-
+	
 	public void setAbsolute(boolean absolute) {
 		this.absolute = absolute;
 	}
