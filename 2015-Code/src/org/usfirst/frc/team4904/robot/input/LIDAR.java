@@ -59,9 +59,32 @@ public class LIDAR implements Disablable, Updatable {
 		return dists;
 	}
 	
-	public int[] getLines() {
-		// TODO actually get lines
-		return new int[] {0, 0, 0, 0};
+	public int[] getLine() {
+		double[] xs = new double[180];
+		double[] ys = new double[180];
+		for (int i = 0; i < 180; i++) {
+			xs[i] = dists[i] * Math.cos((double) i);
+			ys[i] = dists[i] * Math.sin((double) i);
+		}
+		double angle = Math.atan2(ys[90], xs[90]);
+		int startIter = 90;
+		int endIter = 90;
+		for (int i = 0; i < 180; i++) {
+			double thisAngle = Math.atan2(ys[i], xs[i]);
+			if (Math.abs(thisAngle - angle) < 5) {
+				if (i < startIter) {
+					startIter = i;
+				} else if (i > endIter) {
+					endIter = i;
+				}
+			}
+		}
+		int[] line = new int[4];
+		line[0] = (int) xs[startIter];
+		line[1] = (int) ys[startIter];
+		line[2] = (int) xs[endIter];
+		line[3] = (int) ys[endIter];
+		return line;
 	}
 	
 	private int bytesCurrentlyAvailable() {
