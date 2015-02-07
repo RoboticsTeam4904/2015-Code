@@ -11,9 +11,9 @@ public class EncodedMotor extends VictorSP implements Updatable {
 	private volatile double previousError;
 	private volatile double integralSum;
 	private volatile double motorOutput;
-	private final double P = 0.01;// Assuming max speed is 4200 ticks and this is updated at 200Hz, this should result in 0.5 seconds to full speed
-	private final double I = 0.01;
-	private final double D = 0.01;
+	private final double P = 0.01;// ticks per second Assuming this is updated at 200Hz, this should result in 0.5 seconds to full speed
+	private final double I = 0.003;// ticks
+	private final double D = 0.003;// ticks per second per second
 	private final I2C encoder;
 	private int previousNumTicks;
 	private double previousTime;
@@ -32,6 +32,12 @@ public class EncodedMotor extends VictorSP implements Updatable {
 	public void set(double value) {
 		integralSum = 0;
 		target = value;
+		if (target > 1) {
+			target = 1;
+		}
+		if (target < -1) {
+			target = -1;
+		}
 	}
 
 	public void update() {
@@ -53,7 +59,7 @@ public class EncodedMotor extends VictorSP implements Updatable {
 		double timeSincePrev = time - previousTime;
 		previousTime = time;
 		double speed = ticksSincePrev / timeSincePrev;
-		return speed / 4200;
+		return speed / 4500;
 	}
 	
 	private int getTicks() {
@@ -64,5 +70,19 @@ public class EncodedMotor extends VictorSP implements Updatable {
 
 	public static double time() {
 		return (double) System.currentTimeMillis() / 1000;
+	}
+	
+	public void disable() {
+		super.set(0);
+		previousNumTicks = getTicks();
+		previousTime = time();
+		target = 0;
+		previousError = 0;
+		integralSum = 0;
+		motorOutput = 0;
+	}
+
+	public double getRumble() {
+		return Math.abs(previousError) / 2;
 	}
 }

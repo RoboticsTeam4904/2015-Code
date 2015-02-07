@@ -9,9 +9,9 @@ import edu.wpi.first.wpilibj.Talon;
 
 public class LIDAR implements Updatable {
 	int[] dists = new int[360];
-	public Talon motor;
-	SerialPort port;
-	LogKitten logger;
+	private final Talon motor;
+	private SerialPort port;
+	private final LogKitten logger;
 	
 	public LIDAR(int motorport) {
 		motor = new Talon(motorport);
@@ -78,7 +78,7 @@ public class LIDAR implements Updatable {
 		try {
 			for (int i = 0; i < 90; i++) { // Reading in chunks of 4, so only 90 steps
 				int[] scanrange = scanline_b(scanhdr);
-				int degree = 4 * (scanhdr - ((byte) 0xA0));
+				int degree = 4 * (scanhdr - (byte) 0xA0);
 				if (scanrange != null) {
 					for (int j = 0; j < 4; j++) {
 						if (scanrange[j] != 53) {
@@ -96,7 +96,7 @@ public class LIDAR implements Updatable {
 			}
 			for (int i = 0; i < 90; i++) { // Do it again for redundancy
 				int[] scanrange = scanline_b(scanhdr);
-				int degree = 4 * (scanhdr - ((byte) 0xA0));
+				int degree = 4 * (scanhdr - (byte) 0xA0);
 				if (scanrange != null) {
 					for (int j = 0; j < 4; j++) {
 						if (scanrange[j] != 53) {

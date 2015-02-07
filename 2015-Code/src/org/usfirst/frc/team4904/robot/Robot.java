@@ -10,14 +10,13 @@ import org.usfirst.frc.team4904.robot.input.UDAR;
 import org.usfirst.frc.team4904.robot.input.XboxController;
 import org.usfirst.frc.team4904.robot.operator.OperatorAutonomous;
 import org.usfirst.frc.team4904.robot.operator.OperatorNachi;
+import org.usfirst.frc.team4904.robot.output.EncodedMotor;
 import org.usfirst.frc.team4904.robot.output.Grabber;
 import org.usfirst.frc.team4904.robot.output.Mecanum;
 import org.usfirst.frc.team4904.robot.output.Winch;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.SampleRobot;
-import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.VictorSP;
 
 public class Robot extends SampleRobot {
 	// Default ports for joystick/controller
@@ -36,6 +35,10 @@ public class Robot extends SampleRobot {
 	private static final int LEFT_INNER_SWITCH_PORT = 1;
 	private static final int RIGHT_OUTER_SWITCH_PORT = 2;
 	private static final int LEFT_OUTER_SWITCH_PORT = 3;
+	private static final int FRONT_LEFT_I2C_PORT = 10;
+	private static final int FRONT_RIGHT_I2C_PORT = 11;
+	private static final int BACK_LEFT_I2C_PORT = 12;
+	private static final int BACK_RIGHT_I2C_PORT = 13;
 	private final LogitechJoystick stick; // the X3D Extreme3DPro Logitech joystick (right hand) - operator
 	private final XboxController xboxController; // the Xbox 360 controller - driver
 	// Input devices
@@ -47,10 +50,10 @@ public class Robot extends SampleRobot {
 	private final Winch winch; // the Winch class takes care of moving to specific heights
 	private final Grabber grabber; // the grabber class takes care of opening and closing the grabber
 	private final Mecanum mecanumDrive; // the Mecanum class that takes care of the math required to use mecanum drive
-	private final SpeedController frontLeftWheel;
-	private final SpeedController frontRightWheel;
-	private final SpeedController backLeftWheel;
-	private final SpeedController backRightWheel;
+	private final EncodedMotor frontLeftWheel;
+	private final EncodedMotor frontRightWheel;
+	private final EncodedMotor backLeftWheel;
+	private final EncodedMotor backRightWheel;
 	private Driver driver;
 	private Operator operator;
 	private final Driver humanDriver;
@@ -86,10 +89,10 @@ public class Robot extends SampleRobot {
 		winch = new Winch(WINCH_PORT); // Initialize Winch control
 		grabber = new Grabber(GRABBER_PORT, limitSwitches); // Initialize Grabber control -- only autoalign has access to this, by design
 		// Initialize motor controllers with default ports
-		frontLeftWheel = new VictorSP(FRONT_LEFT_WHEEL_PORT);
-		frontRightWheel = new VictorSP(FRONT_RIGHT_WHEEL_PORT);
-		backLeftWheel = new VictorSP(BACK_LEFT_WHEEL_PORT);
-		backRightWheel = new VictorSP(BACK_RIGHT_WHEEL_PORT);
+		frontLeftWheel = new EncodedMotor(FRONT_LEFT_WHEEL_PORT, FRONT_LEFT_I2C_PORT);
+		frontRightWheel = new EncodedMotor(FRONT_RIGHT_WHEEL_PORT, FRONT_RIGHT_I2C_PORT);
+		backLeftWheel = new EncodedMotor(BACK_LEFT_WHEEL_PORT, BACK_LEFT_I2C_PORT);
+		backRightWheel = new EncodedMotor(BACK_RIGHT_WHEEL_PORT, BACK_RIGHT_I2C_PORT);
 		mecanumDrive = new Mecanum(frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel, imu); // Initialize Mecanum control
 		// Initialize joysticks (numbers correspond to value set by driver station)
 		stick = new LogitechJoystick(JOYSTICK_PORT);
@@ -124,13 +127,13 @@ public class Robot extends SampleRobot {
 	}
 	
 	private void disableMotors() {
-		winch.move(0);
-		grabber.set(0);
-		frontLeftWheel.set(0);
-		frontRightWheel.set(0);
-		backLeftWheel.set(0);
-		backRightWheel.set(0);
-		lidar.motor.set(0);
+		winch.disable();
+		grabber.disable();
+		frontLeftWheel.disable();
+		frontRightWheel.disable();
+		backLeftWheel.disable();
+		backRightWheel.disable();
+		lidar.disable();
 	}
 	
 	public void autonomous() {
@@ -141,6 +144,7 @@ public class Robot extends SampleRobot {
 		RobotState state = RobotState.AUTONOMOUS;
 		new Updater(state, new Updatable[] {controller, align}, slowUpdatePeriod).start(); // Controller and align are potentially slower
 		new Updater(state, new Updatable[] {imu, driver, operator, mecanumDrive, lidar, grabber}, fastUpdatePeriod).start(); // These should have fast updates
+		new Updater(state, new Updatable[] {frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel}, fastUpdatePeriod);
 		while (getRobotState() == state) {
 			Timer.delay(0.01);
 		}
@@ -154,6 +158,7 @@ public class Robot extends SampleRobot {
 		RobotState state = RobotState.OPERATOR;
 		new Updater(state, new Updatable[] {controller, align}, slowUpdatePeriod).start(); // Controller and align are potentially slower
 		new Updater(state, new Updatable[] {imu, driver, operator, mecanumDrive, lidar, grabber}, fastUpdatePeriod).start(); // These should have fast updates
+		new Updater(state, new Updatable[] {frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel}, fastUpdatePeriod);
 		while (getRobotState() == state) {
 			Timer.delay(0.01);
 		}
