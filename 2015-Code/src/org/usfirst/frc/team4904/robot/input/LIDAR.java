@@ -13,13 +13,13 @@ public class LIDAR implements ImplementsDisable, Updatable {
 	private final Talon motor;
 	private SerialPort port;
 	private final LogKitten logger;
-
+	
 	public LIDAR(int motorport) {
 		motor = new Talon(motorport);
 		// port = new SerialPort(9600, SerialPort.Port.kOnboard);
 		logger = new LogKitten("LIDAR", LogKitten.LEVEL_DEBUG);
 	}
-
+	
 	private byte[] read(int bytes) throws Exception {
 		byte[] b = new byte[bytes];
 		// b = port.read(bytes);
@@ -28,7 +28,7 @@ public class LIDAR implements ImplementsDisable, Updatable {
 		}
 		return b;
 	}
-
+	
 	private int[] scanline_b(byte angle) throws Exception {
 		boolean insync = false;
 		while (!insync) { // Wait until beginning of distance data
@@ -54,21 +54,21 @@ public class LIDAR implements ImplementsDisable, Updatable {
 		}
 		return null;
 	}
-
+	
 	public int[] getDists() {
 		return dists;
 	}
-
+	
 	public int[] getLines() {
 		// TODO actually get lines
 		return new int[] {0, 0, 0, 0};
 	}
-
+	
 	private int bytesCurrentlyAvailable() {
 		return 0;
 		// return port.getBytesReceived();
 	}
-
+	
 	public void update() {
 		motor.set(0.5);
 		if (bytesCurrentlyAvailable() < 10000) {
@@ -116,11 +116,11 @@ public class LIDAR implements ImplementsDisable, Updatable {
 			System.out.println("Exception: " + e);
 		}
 	}
-
+	
 	public void disable() {
 		motor.set(0);
 	}
-
+	
 	public int clean() {
 		// port.free();
 		return 0;
