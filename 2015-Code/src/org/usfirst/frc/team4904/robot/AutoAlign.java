@@ -97,24 +97,7 @@ public class AutoAlign implements Updatable {
 	}
 	
 	private void alignWithToteTick(boolean grab) {
-		int[] LIDARLines = lidar.getLines();
-		int[] toteFront = new int[4];
-		for (int i = 0; i < LIDARLines.length; i += 4) {
-			if (LIDARLines[i] < 0 && LIDARLines[i + 2] > 0) {
-				for (int j = 0; j < 4; j++) {
-					toteFront[i] = LIDARLines[i + j];
-				}
-				break;
-			} else if (LIDARLines[i + 2] < 0 && LIDARLines[i] > 0) {
-				for (int j = 0; j < 2; j++) { // Switch order of assignment so line is from left to right. My first language is English.
-					toteFront[i + j + 2] = LIDARLines[i + 2 + j];
-				}
-				for (int j = 0; j < 2; j++) {
-					toteFront[i + j] = LIDARLines[i + j];
-				}
-				break;
-			}
-		}
+		int[] toteFront = lidar.getLine();
 		double angle = Math.atan2(toteFront[3] - toteFront[1], toteFront[2] - toteFront[0]); // Angle of the tote relative to the X axis (us)
 		if (angle < Math.PI / 60) {
 			winch.move(0);
