@@ -2,25 +2,29 @@ package org.usfirst.frc.team4904.robot.input;
 
 
 import java.math.BigInteger;
+import org.usfirst.frc.team4904.robot.LogKitten;
 import org.usfirst.frc.team4904.robot.Updatable;
+import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.Talon;
 
 public class LIDAR implements Updatable {
 	int[] dists = new int[360];
 	public Talon motor;
+	SerialPort port;
+	LogKitten logger;
 	
 	public LIDAR(int motorport) {
 		motor = new Talon(motorport);
-	}
-	
-	public int connect() {
-		// TODO add RS-232 connect
-		return 0;
+		port = new SerialPort(9600, SerialPort.Port.kOnboard);
+		logger = new LogKitten("LIDAR", LogKitten.LEVEL_DEBUG);
 	}
 	
 	private byte[] read(int bytes) throws Exception {
-		// TODO RS-232 read
-		byte b[] = new byte[bytes];
+		byte[] b = new byte[bytes];
+		b = port.read(bytes);
+		for (int i = 0; i < bytes; i++) {
+			logger.d("read", Integer.toString(i) + " " + Byte.toString(b[i]));
+		}
 		return b;
 	}
 	
@@ -60,7 +64,7 @@ public class LIDAR implements Updatable {
 	}
 	
 	private int bytesCurrentlyAvailable() {
-		return 0;
+		return port.getBytesReceived();
 	}
 	
 	public void update() {
@@ -116,7 +120,7 @@ public class LIDAR implements Updatable {
 	}
 	
 	public int clean() {
-		// TODO add RS-232 cleanup port
+		port.free();
 		return 0;
 	}
 }
