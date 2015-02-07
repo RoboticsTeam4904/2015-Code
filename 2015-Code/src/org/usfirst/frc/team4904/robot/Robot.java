@@ -16,6 +16,7 @@ import org.usfirst.frc.team4904.robot.output.Mecanum;
 import org.usfirst.frc.team4904.robot.output.Winch;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.SampleRobot;
+import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.Timer;
 
 public class Robot extends SampleRobot {
@@ -51,9 +52,9 @@ public class Robot extends SampleRobot {
 	private final Grabber grabber; // the grabber class takes care of opening and closing the grabber
 	private final Mecanum mecanumDrive; // the Mecanum class that takes care of the math required to use mecanum drive
 	private final EncodedMotor frontLeftWheel;
-	private final EncodedMotor frontRightWheel;
-	private final EncodedMotor backLeftWheel;
-	private final EncodedMotor backRightWheel;
+	private final SpeedController frontRightWheel;
+	private final SpeedController backLeftWheel;
+	private final SpeedController backRightWheel;
 	private Driver driver;
 	private Operator operator;
 	private final Driver humanDriver;
@@ -107,7 +108,7 @@ public class Robot extends SampleRobot {
 		autonomousDriver = new DriverAutonomous(mecanumDrive, controller, align);
 		driver = humanDriver;
 		operator = humanOperator;
-		toDisable = new ImplementsDisable[] {winch, grabber, lidar, driver, frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel};
+		toDisable = new ImplementsDisable[] {winch, grabber, lidar, driver, frontLeftWheel};
 	}
 	
 	public void robotInit() {
@@ -124,6 +125,9 @@ public class Robot extends SampleRobot {
 			for (ImplementsDisable implementsdisable : toDisable) {
 				implementsdisable.disable();
 			}
+			frontRightWheel.set(0);
+			backLeftWheel.set(0);
+			backRightWheel.set(0);
 			Timer.delay(0.01);
 		}
 	}
@@ -136,7 +140,7 @@ public class Robot extends SampleRobot {
 		RobotState state = RobotState.AUTONOMOUS;
 		new Updater(state, new Updatable[] {controller, align}, slowUpdatePeriod).start(); // Controller and align are potentially slower
 		new Updater(state, new Updatable[] {imu, driver, operator, mecanumDrive, lidar, grabber}, fastUpdatePeriod).start(); // These should have fast updates
-		new Updater(state, new Updatable[] {frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel}, fastUpdatePeriod).start();
+		new Updater(state, new Updatable[] {frontLeftWheel}, fastUpdatePeriod).start();
 		while (getRobotState() == state) {
 			Timer.delay(0.01);
 		}
@@ -150,7 +154,7 @@ public class Robot extends SampleRobot {
 		RobotState state = RobotState.OPERATOR;
 		new Updater(state, new Updatable[] {controller, align}, slowUpdatePeriod).start(); // Controller and align are potentially slower
 		new Updater(state, new Updatable[] {imu, driver, operator, mecanumDrive, lidar, grabber}, fastUpdatePeriod).start(); // These should have fast updates
-		new Updater(state, new Updatable[] {frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel}, fastUpdatePeriod).start();
+		new Updater(state, new Updatable[] {frontLeftWheel}, fastUpdatePeriod).start();
 		while (getRobotState() == state) {
 			Timer.delay(0.01);
 		}
