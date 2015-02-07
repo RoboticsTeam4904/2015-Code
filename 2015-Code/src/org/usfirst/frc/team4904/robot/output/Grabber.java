@@ -25,14 +25,23 @@ public class Grabber extends Talon implements Updatable {
 
 	public void setDesiredGrabberState(GrabberState state) {
 		if (state == grabberState) {
+			// System.out.println("Not changing state");
 			return;
 		}
 		switch (state) {
 			case OPEN:
+				if (grabberState == GrabberState.OPENING) {
+					break;
+				}
 				grabberState = GrabberState.OPENING;
+				System.out.println("Setting state to opening");
 				break;
 			case CLOSED:
-				grabberState = GrabberState.OPENING;
+				if (grabberState == GrabberState.CLOSING) {
+					break;
+				}
+				grabberState = GrabberState.CLOSING;
+				System.out.println("Setting state to closing");
 				break;
 		}
 	}
