@@ -11,7 +11,6 @@ import org.usfirst.frc.team4904.robot.input.UDAR;
 import org.usfirst.frc.team4904.robot.input.XboxController;
 import org.usfirst.frc.team4904.robot.operator.OperatorAutonomous;
 import org.usfirst.frc.team4904.robot.operator.OperatorNachi;
-import org.usfirst.frc.team4904.robot.output.EncodedMotor;
 import org.usfirst.frc.team4904.robot.output.Grabber;
 import org.usfirst.frc.team4904.robot.output.Mecanum;
 import org.usfirst.frc.team4904.robot.output.Winch;
@@ -57,7 +56,7 @@ public class Robot extends SampleRobot {
 	private final Winch winch; // the Winch class takes care of moving to specific heights
 	private final Grabber grabber; // the grabber class takes care of opening and closing the grabber
 	private final Mecanum mecanumDrive; // the Mecanum class that takes care of the math required to use mecanum drive
-	private final EncodedMotor frontLeftWheel;
+	private final SpeedController frontLeftWheel;
 	private final SpeedController frontRightWheel;
 	private final SpeedController backLeftWheel;
 	private final SpeedController backRightWheel;
@@ -102,7 +101,7 @@ public class Robot extends SampleRobot {
 		winch = new Winch(WINCH_PORT); // Initialize Winch control
 		grabber = new Grabber(GRABBER_PORT, limitSwitches); // Initialize Grabber control -- only autoalign has access to this, by design
 		// Initialize motor controllers with default ports
-		frontLeftWheel = new EncodedMotor(FRONT_LEFT_WHEEL_PORT, frontLeftEncoder);
+		frontLeftWheel = new VictorSP(FRONT_LEFT_WHEEL_PORT/* , frontLeftEncoder */);
 		frontRightWheel = new VictorSP(FRONT_RIGHT_WHEEL_PORT/* , FRONT_RIGHT_I2C_PORT */);
 		backLeftWheel = new VictorSP(BACK_LEFT_WHEEL_PORT/* , BACK_LEFT_I2C_PORT */);
 		backRightWheel = new VictorSP(BACK_RIGHT_WHEEL_PORT/* , BACK_RIGHT_I2C_PORT */);
@@ -119,7 +118,7 @@ public class Robot extends SampleRobot {
 		autonomousDriver = new DriverAutonomous(mecanumDrive, controller, align);
 		driver = humanDriver;
 		operator = humanOperator;
-		toDisable = new Disablable[] {winch, grabber, lidar, driver, frontLeftWheel};
+		toDisable = new Disablable[] {winch, grabber, lidar, driver};
 	}
 	
 	public void robotInit() {
@@ -151,7 +150,7 @@ public class Robot extends SampleRobot {
 		RobotState state = RobotState.AUTONOMOUS;
 		new Updater(state, new Updatable[] {controller, align}, slowUpdatePeriod).start(); // Controller and align are potentially slower
 		new Updater(state, new Updatable[] {imu, driver, operator, mecanumDrive, lidar, grabber}, fastUpdatePeriod).start(); // These should have fast updates
-		new Updater(state, new Updatable[] {frontLeftWheel}, fastUpdatePeriod).start();
+		new Updater(state, new Updatable[] {}, fastUpdatePeriod).start();
 		while (getRobotState() == state) {
 			Timer.delay(0.01);
 		}
@@ -165,7 +164,7 @@ public class Robot extends SampleRobot {
 		RobotState state = RobotState.OPERATOR;
 		new Updater(state, new Updatable[] {controller, align}, slowUpdatePeriod).start(); // Controller and align are potentially slower
 		new Updater(state, new Updatable[] {imu, driver, operator, mecanumDrive, lidar, grabber}, fastUpdatePeriod).start(); // These should have fast updates
-		new Updater(state, new Updatable[] {frontLeftWheel}, fastUpdatePeriod).start();
+		new Updater(state, new Updatable[] {}, fastUpdatePeriod).start();
 		while (getRobotState() == state) {
 			Timer.delay(0.01);
 		}
