@@ -1,6 +1,6 @@
 package org.usfirst.frc.team4904.robot;
 
 
-public interface ImplementsDisable {
+public interface Disablable {
 	public void disable();
 }

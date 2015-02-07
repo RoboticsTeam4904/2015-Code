@@ -2,13 +2,13 @@ package org.usfirst.frc.team4904.robot.input;
 
 
 import java.math.BigInteger;
-import org.usfirst.frc.team4904.robot.ImplementsDisable;
+import org.usfirst.frc.team4904.robot.Disablable;
 import org.usfirst.frc.team4904.robot.LogKitten;
 import org.usfirst.frc.team4904.robot.Updatable;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.Talon;
 
-public class LIDAR implements ImplementsDisable, Updatable {
+public class LIDAR implements Disablable, Updatable {
 	int[] dists = new int[360];
 	private final Talon motor;
 	private SerialPort port;

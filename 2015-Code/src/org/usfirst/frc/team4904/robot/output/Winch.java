@@ -1,10 +1,10 @@
 package org.usfirst.frc.team4904.robot.output;
 
 
-import org.usfirst.frc.team4904.robot.ImplementsDisable;
+import org.usfirst.frc.team4904.robot.Disablable;
 import edu.wpi.first.wpilibj.Talon;
 
-public class Winch extends Talon implements ImplementsDisable {
+public class Winch extends Talon implements Disablable {
 	private static transient final int MAX_HEIGHT = 10;
 
 	public Winch(int channel) {

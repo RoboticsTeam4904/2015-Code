@@ -1,12 +1,12 @@
 package org.usfirst.frc.team4904.robot.output;
 
 
-import org.usfirst.frc.team4904.robot.ImplementsDisable;
+import org.usfirst.frc.team4904.robot.Disablable;
 import org.usfirst.frc.team4904.robot.Updatable;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Talon;
 
-public class Grabber extends Talon implements ImplementsDisable, Updatable {
+public class Grabber extends Talon implements Disablable, Updatable {
 	public static final int RIGHT_INNER_SWITCH = 0;
 	public static final int LEFT_INNER_SWITCH = 1;
 	public static final int RIGHT_OUTER_SWITCH = 2;
