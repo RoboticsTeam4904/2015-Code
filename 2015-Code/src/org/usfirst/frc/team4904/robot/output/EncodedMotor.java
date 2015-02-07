@@ -15,13 +15,13 @@ public class EncodedMotor extends VictorSP implements ImplementsDisable, Updatab
 	private final double P = 0.01;// ticks per second Assuming this is updated at 200Hz, this should result in 0.5 seconds to full speed
 	private final double I = 0.003;// ticks
 	private final double D = 0.003;// ticks per second per second
-	private final I2C encoder;
+	private I2C encoder;
 	private int previousNumTicks;
 	private double previousTime;
-
+	
 	public EncodedMotor(int channel, int i2cAddr) {
 		super(channel);
-		this.encoder = new I2C(I2C.Port.kOnboard, i2cAddr);
+		encoder = new I2C(I2C.Port.kOnboard, i2cAddr);
 		previousNumTicks = getTicks();
 		previousTime = time();
 		target = 0;
@@ -62,7 +62,7 @@ public class EncodedMotor extends VictorSP implements ImplementsDisable, Updatab
 		double speed = ticksSincePrev / timeSincePrev;
 		return speed / 4500;
 	}
-
+	
 	private int getTicks() {
 		byte[] toRecieve = new byte[4];
 		encoder.transaction(null, 0, toRecieve, 4);
@@ -72,7 +72,7 @@ public class EncodedMotor extends VictorSP implements ImplementsDisable, Updatab
 	public static double time() {
 		return (double) System.currentTimeMillis() / 1000;
 	}
-
+	
 	public void disable() {
 		super.set(0);
 		previousNumTicks = getTicks();
