@@ -11,36 +11,62 @@ public class Grabber extends Talon implements Updatable {
 	public static final int RIGHT_OUTER_SWITCH = 2;
 	public static final int LEFT_OUTER_SWITCH = 3;
 	DigitalInput[] limitSwitches = new DigitalInput[4];
-	
+
 	public enum GrabberState {
-		OPEN, CLOSED
+		OPEN, CLOSED, OPENING, CLOSING, DISABLED
 	}
 	GrabberState grabberState;
-	
+
 	public Grabber(int channel, DigitalInput[] limitSwitches) {
 		super(channel);
 		this.limitSwitches = limitSwitches;
 		grabberState = GrabberState.OPEN;
 	}
-	
+
 	public void set(GrabberState state) {
+		if (state == grabberState) {
+			return;
+		}
+		switch (state) {
+			case OPEN:
+				grabberState = GrabberState.OPENING;
+			case CLOSED:
+				grabberState = GrabberState.OPENING;
+		}
 		grabberState = state;
 	}
-	
+
 	public void move(double speed) {
 		super.set(speed);
 	}
-	
+
 	public void update() {
 		switch (grabberState) {
 			case OPEN:
+				move(0);// Dont go too far
+				return;
+			case OPENING:
 				move(0.5);
 				return;
 			case CLOSED:
+				move(-0.25);// Dont grab too hard
+				return;
+			case CLOSING:
 				move(-0.5);
 				return;
 			default:
+				move(0);
 				return;
 		}
+	}
+	
+	private void checkLimitSwitches() {
+		switch (grabberState) {
+			case OPENING:
+		}
+	}
+	
+	public void disable() {
+		grabberState = GrabberState.DISABLED;
 	}
 }

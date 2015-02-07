@@ -15,13 +15,13 @@ public class LIDAR implements Updatable {
 	
 	public LIDAR(int motorport) {
 		motor = new Talon(motorport);
-		port = new SerialPort(9600, SerialPort.Port.kOnboard);
+		// port = new SerialPort(9600, SerialPort.Port.kOnboard);
 		logger = new LogKitten("LIDAR", LogKitten.LEVEL_DEBUG);
 	}
 	
 	private byte[] read(int bytes) throws Exception {
 		byte[] b = new byte[bytes];
-		b = port.read(bytes);
+		// b = port.read(bytes);
 		for (int i = 0; i < bytes; i++) {
 			logger.d("read", Integer.toString(i) + " " + Byte.toString(b[i]));
 		}
@@ -64,7 +64,8 @@ public class LIDAR implements Updatable {
 	}
 	
 	private int bytesCurrentlyAvailable() {
-		return port.getBytesReceived();
+		return 0;
+		// return port.getBytesReceived();
 	}
 	
 	public void update() {
@@ -120,7 +121,7 @@ public class LIDAR implements Updatable {
 	}
 	
 	public int clean() {
-		port.free();
+		// port.free();
 		return 0;
 	}
 }
