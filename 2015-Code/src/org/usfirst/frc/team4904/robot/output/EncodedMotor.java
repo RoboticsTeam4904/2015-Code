@@ -11,13 +11,13 @@ public class EncodedMotor extends VictorSP implements Updatable {
 	private volatile double previousError;
 	private volatile double integralSum;
 	private volatile double motorOutput;
-	private final double P = 0.01 * 1 / 4200;// Assuming max speed is 4200 ticks and this is updated at 200Hz, this should result in 0.5 seconds to full speed
-	private final double I = 0.01 * 1 / 4200;
-	private final double D = 0.01 * 1 / 4200;
+	private final double P = 0.01;// Assuming max speed is 4200 ticks and this is updated at 200Hz, this should result in 0.5 seconds to full speed
+	private final double I = 0.01;
+	private final double D = 0.01;
 	private final I2C encoder;
 	private int previousNumTicks;
 	private double previousTime;
-
+	
 	public EncodedMotor(int channel, int i2cAddr) {
 		super(channel);
 		this.encoder = new I2C(I2C.Port.kOnboard, i2cAddr);
@@ -28,12 +28,12 @@ public class EncodedMotor extends VictorSP implements Updatable {
 		integralSum = 0;
 		motorOutput = 0;
 	}
-	
+
 	public void set(double value) {
 		integralSum = 0;
 		target = value;
 	}
-	
+
 	public void update() {
 		double speed = currentEncoderSpeed();
 		double error = target - speed;
@@ -44,7 +44,7 @@ public class EncodedMotor extends VictorSP implements Updatable {
 		motorOutput += pComponent + iComponent + dComponent;
 		super.set(motorOutput);
 	}
-	
+
 	private double currentEncoderSpeed() {// Should return ticks per second
 		int ticks = getTicks();
 		int ticksSincePrev = ticks - previousNumTicks;
@@ -53,15 +53,15 @@ public class EncodedMotor extends VictorSP implements Updatable {
 		double timeSincePrev = time - previousTime;
 		previousTime = time;
 		double speed = ticksSincePrev / timeSincePrev;
-		return speed;
+		return speed / 4200;
 	}
-
+	
 	private int getTicks() {
 		byte[] toRecieve = new byte[4];
 		encoder.transaction(null, 0, toRecieve, 4);
 		return new BigInteger(toRecieve).intValue();
 	}
-	
+
 	public static double time() {
 		return (double) System.currentTimeMillis() / 1000;
 	}
