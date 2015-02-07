@@ -160,7 +160,7 @@ public class AutoAlign implements Updatable {
 	}
 	
 	public synchronized void update() {
-		grabber.set(getDesiredGrabberState());// This is (on purpose) the only place that grabber.setWidth is ever called (other than in disableMotors())
+		grabber.setDesiredGrabberState(getDesiredGrabberState());// This is (on purpose) the only place that grabber.setWidth is ever called (other than in disableMotors())
 		if (isCurrentlyAligning()) {
 			doAligningTick(true); // Do aligning tick and grab
 		} else if (isCurrentlyReleasing()) {

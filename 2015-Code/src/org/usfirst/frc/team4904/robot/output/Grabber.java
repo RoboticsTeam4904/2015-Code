@@ -22,18 +22,19 @@ public class Grabber extends Talon implements Updatable {
 		this.limitSwitches = limitSwitches;
 		grabberState = GrabberState.OPEN;
 	}
-
-	public void set(GrabberState state) {
+	
+	public void setDesiredGrabberState(GrabberState state) {
 		if (state == grabberState) {
 			return;
 		}
 		switch (state) {
 			case OPEN:
 				grabberState = GrabberState.OPENING;
+				break;
 			case CLOSED:
 				grabberState = GrabberState.OPENING;
+				break;
 		}
-		grabberState = state;
 	}
 
 	public void move(double speed) {
@@ -41,6 +42,7 @@ public class Grabber extends Talon implements Updatable {
 	}
 
 	public void update() {
+		checkLimitSwitches();
 		switch (grabberState) {
 			case OPEN:
 				move(0);// Dont go too far
@@ -63,6 +65,16 @@ public class Grabber extends Talon implements Updatable {
 	private void checkLimitSwitches() {
 		switch (grabberState) {
 			case OPENING:
+				if (limitSwitches[RIGHT_OUTER_SWITCH].get() || limitSwitches[LEFT_OUTER_SWITCH].get()) {
+					grabberState = GrabberState.OPEN;// Don't go too far
+				}
+				return;
+			case CLOSING:
+				if (limitSwitches[RIGHT_INNER_SWITCH].get() || limitSwitches[LEFT_INNER_SWITCH].get()) {
+					grabberState = GrabberState.CLOSED;
+				}
+				return;
+			default:
 		}
 	}
 	
