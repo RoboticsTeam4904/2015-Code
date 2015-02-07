@@ -11,18 +11,18 @@ public class Grabber extends Talon implements Updatable {
 	public static final int RIGHT_OUTER_SWITCH = 2;
 	public static final int LEFT_OUTER_SWITCH = 3;
 	DigitalInput[] limitSwitches = new DigitalInput[4];
-
+	
 	public enum GrabberState {
 		OPEN, CLOSED, OPENING, CLOSING, DISABLED
 	}
 	GrabberState grabberState;
-
+	
 	public Grabber(int channel, DigitalInput[] limitSwitches) {
 		super(channel);
 		this.limitSwitches = limitSwitches;
 		grabberState = GrabberState.OPEN;
 	}
-	
+
 	public void setDesiredGrabberState(GrabberState state) {
 		if (state == grabberState) {
 			return;
@@ -36,11 +36,11 @@ public class Grabber extends Talon implements Updatable {
 				break;
 		}
 	}
-
+	
 	public void move(double speed) {
 		super.set(speed);
 	}
-
+	
 	public void update() {
 		checkLimitSwitches();
 		switch (grabberState) {
@@ -61,23 +61,33 @@ public class Grabber extends Talon implements Updatable {
 				return;
 		}
 	}
-	
+
 	private void checkLimitSwitches() {
 		switch (grabberState) {
 			case OPENING:
-				if (limitSwitches[RIGHT_OUTER_SWITCH].get() || limitSwitches[LEFT_OUTER_SWITCH].get()) {
+				if (!limitSwitches[RIGHT_OUTER_SWITCH].get()) {
+					System.out.println("Right outer switch");
+					grabberState = GrabberState.OPEN;// Don't go too far
+				}
+				if (!limitSwitches[LEFT_OUTER_SWITCH].get()) {
+					System.out.println("Left outer switch");
 					grabberState = GrabberState.OPEN;// Don't go too far
 				}
 				return;
 			case CLOSING:
-				if (limitSwitches[RIGHT_INNER_SWITCH].get() || limitSwitches[LEFT_INNER_SWITCH].get()) {
+				if (!limitSwitches[RIGHT_INNER_SWITCH].get()) {
+					System.out.println("Right inner switch");
+					grabberState = GrabberState.CLOSED;
+				}
+				if (!limitSwitches[LEFT_INNER_SWITCH].get()) {
+					System.out.println("Left inner switch");
 					grabberState = GrabberState.CLOSED;
 				}
 				return;
 			default:
 		}
 	}
-	
+
 	public void disable() {
 		grabberState = GrabberState.DISABLED;
 	}
