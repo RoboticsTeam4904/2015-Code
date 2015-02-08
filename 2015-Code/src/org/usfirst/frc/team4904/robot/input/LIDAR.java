@@ -16,13 +16,13 @@ public class LIDAR implements Disablable, Updatable {
 	
 	public LIDAR(int motorport) {
 		motor = new Talon(motorport);
-		// port = new SerialPort(9600, SerialPort.Port.kOnboard);
+		port = new SerialPort(115200, SerialPort.Port.kMXP);
 		logger = new LogKitten("LIDAR", LogKitten.LEVEL_DEBUG);
 	}
 	
 	private byte[] read(int bytes) throws Exception {
 		byte[] b = new byte[bytes];
-		// b = port.read(bytes);
+		b = port.read(bytes);
 		for (int i = 0; i < bytes; i++) {
 			logger.d("read", Integer.toString(i) + " " + Byte.toString(b[i]));
 		}
@@ -63,14 +63,14 @@ public class LIDAR implements Disablable, Updatable {
 		double[] xs = new double[180];
 		double[] ys = new double[180];
 		for (int i = 0; i < 180; i++) {
-			xs[i] = dists[i] * Math.cos(i);
-			ys[i] = dists[i] * Math.sin(i);
+			xs[i] = dists[i] * Math.cos(Math.toRadians(i));
+			ys[i] = dists[i] * Math.sin(Math.toRadians(i));
 		}
-		double angle = Math.atan2(ys[90], xs[90]);
+		double angle = Math.atan2(ys[90] - ys[91], xs[90] - xs[91]);
 		int startIter = 90;
 		int endIter = 90;
 		for (int i = 0; i < 180; i++) {
-			double thisAngle = Math.atan2(ys[i], xs[i]);
+			double thisAngle = Math.atan2(ys[i] - ys[i + 1], xs[i] - xs[i + 1]);
 			if (Math.abs(thisAngle - angle) < 5) {
 				if (i < startIter) {
 					startIter = i;
@@ -88,8 +88,7 @@ public class LIDAR implements Disablable, Updatable {
 	}
 	
 	private int bytesCurrentlyAvailable() {
-		return 0;
-		// return port.getBytesReceived();
+		return port.getBytesReceived();
 	}
 	
 	public void update() {
@@ -145,7 +144,7 @@ public class LIDAR implements Disablable, Updatable {
 	}
 	
 	public int clean() {
-		// port.free();
+		port.free();
 		return 0;
 	}
 }
