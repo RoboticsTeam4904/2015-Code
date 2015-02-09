@@ -1,6 +1,7 @@
 package org.usfirst.frc.team4904.robot;
 
 
+import org.usfirst.frc.team4904.robot.driver.AutoDriver;
 import org.usfirst.frc.team4904.robot.input.IMU;
 import org.usfirst.frc.team4904.robot.input.LIDAR;
 import org.usfirst.frc.team4904.robot.input.LogitechJoystick;
@@ -65,6 +66,7 @@ public class Robot extends SampleRobot {
 	private Driver driver;
 	private Operator operator;
 	private AutoOperator autoOperator;
+	private AutoDriver autoDriver;
 	private Autonomous autonomous;
 	private final AutoAlign align; // the AutoAlign class contains code to align the robot with totes and cans
 	// Update system
@@ -113,8 +115,9 @@ public class Robot extends SampleRobot {
 		// Initialize managers
 		driverManager = new DriverManager(mecanumDrive, xboxController, align);
 		operatorManager = new OperatorManager(stick, winch, align);
+		autoDriver = new AutoDriver(mecanumDrive, align);
 		autoOperator = new AutoOperator(winch, align);
-		autonomousManager = new AutonomousManager(mecanumDrive, autoOperator, align);
+		autonomousManager = new AutonomousManager(autoDriver, autoOperator);
 		// Drivers, operators, autonomous
 		operator = operatorManager.getOperator();
 		driver = driverManager.getDriver();
@@ -147,6 +150,8 @@ public class Robot extends SampleRobot {
 		System.out.println("*** AUTONOMOUS ***");
 		logger.v("Autonomous", "Autonomous");
 		RobotState state = RobotState.AUTONOMOUS;
+		driver = autoDriver;
+		operator = autoOperator;
 		autonomous = autonomousManager.getAutonomous();
 		new Updater(state, new Updatable[] {autonomous, align}, slowUpdatePeriod).start(); // Controller and align are potentially slower
 		new Updater(state, new Updatable[] {imu, mecanumDrive, lidar, grabber}, fastUpdatePeriod).start(); // These should have fast updates

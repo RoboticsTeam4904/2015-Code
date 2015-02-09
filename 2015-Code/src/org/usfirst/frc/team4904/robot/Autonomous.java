@@ -1,14 +1,19 @@
 package org.usfirst.frc.team4904.robot;
 
 
+import org.usfirst.frc.team4904.robot.driver.AutoDriver;
 import org.usfirst.frc.team4904.robot.operator.AutoOperator;
-import org.usfirst.frc.team4904.robot.output.Mecanum;
 
-public abstract class Autonomous extends Driver {
+public abstract class Autonomous implements Updatable, Disablable {
 	private AutoOperator operator;
+	private AutoDriver driver;
 	
-	public Autonomous(Mecanum mecanumDrive, AutoOperator operator, AutoAlign align) {
-		super(mecanumDrive, align);
+	public Autonomous(AutoDriver driver, AutoOperator operator) {
 		this.operator = operator;
+		this.driver = driver;
 	}
+	
+	public void update() {}
+	
+	public void disable() {}
 }
