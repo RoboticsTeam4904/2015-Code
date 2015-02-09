@@ -1,16 +1,16 @@
 package org.usfirst.frc.team4904.robot.autonomous;
 
 
-import org.usfirst.frc.team4904.robot.Autonomous;
-
-public class AutonomousType1 extends Autonomous {
-	public void update() {}
-
-	public void disable() {}
+public class AutonomousType1 extends SimpleAutonomous {
+	public void update() {
+		desiredXMovement = 1;
+		desiredYMovement = 1;
+		desiredTurnSpeed = 1;
+	}
 	
-	@Override
-	public double[] getDesiredMovement() {
-		// TODO Auto-generated method stub
-		return null;
+	public void disable() {
+		desiredXMovement = 0;
+		desiredYMovement = 0;
+		desiredTurnSpeed = 0;
 	}
 }
