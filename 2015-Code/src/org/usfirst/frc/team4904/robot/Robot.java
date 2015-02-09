@@ -1,14 +1,12 @@
 package org.usfirst.frc.team4904.robot;
 
 
-import org.usfirst.frc.team4904.robot.driver.AutoDriver;
 import org.usfirst.frc.team4904.robot.input.IMU;
 import org.usfirst.frc.team4904.robot.input.LIDAR;
 import org.usfirst.frc.team4904.robot.input.LogitechJoystick;
 import org.usfirst.frc.team4904.robot.input.SuperEncoder;
 import org.usfirst.frc.team4904.robot.input.UDAR;
 import org.usfirst.frc.team4904.robot.input.XboxController;
-import org.usfirst.frc.team4904.robot.operator.AutoOperator;
 import org.usfirst.frc.team4904.robot.output.Grabber;
 import org.usfirst.frc.team4904.robot.output.Mecanum;
 import org.usfirst.frc.team4904.robot.output.Winch;
@@ -59,14 +57,12 @@ public class Robot extends SampleRobot {
 	private final SpeedController backLeftWheel;
 	private final SpeedController backRightWheel;
 	// Managers
-	private DriverManager driverManager;
-	private OperatorManager operatorManager;
-	private AutonomousManager autonomousManager;
+	private final DriverManager driverManager;
+	private final OperatorManager operatorManager;
+	private final AutonomousManager autonomousManager;
 	// Drivers and operators
 	private Driver driver;
 	private Operator operator;
-	private AutoOperator autoOperator;
-	private AutoDriver autoDriver;
 	private Autonomous autonomous;
 	private final AutoAlign align; // the AutoAlign class contains code to align the robot with totes and cans
 	// Update system
@@ -75,11 +71,11 @@ public class Robot extends SampleRobot {
 	// Logging system
 	private final LogKitten logger;
 	private final Disablable[] toDisable;
-	
+
 	private enum RobotState {
 		DISABLED, OPERATOR, AUTONOMOUS
 	}
-	
+
 	public Robot() {
 		System.out.println("*** CONSTRUCTING ROBOT ***");
 		// Initializing logging
@@ -115,21 +111,17 @@ public class Robot extends SampleRobot {
 		// Initialize managers
 		driverManager = new DriverManager(mecanumDrive, xboxController, align);
 		operatorManager = new OperatorManager(stick, winch, align);
-		autoDriver = new AutoDriver(mecanumDrive, align);
-		autoOperator = new AutoOperator(winch, align);
-		autonomousManager = new AutonomousManager(autoDriver, autoOperator);
+		autonomousManager = new AutonomousManager(mecanumDrive, winch, align);
 		// Drivers, operators, autonomous
-		operator = operatorManager.getOperator();
-		driver = driverManager.getDriver();
 		autonomous = autonomousManager.getAutonomous();
 		toDisable = new Disablable[] {winch, grabber, lidar, driver, operator, autonomous};
 	}
-	
+
 	public void robotInit() {
 		System.out.println("*** INITIALIZING ***");
 		logger.v("Initializing", "Initializing");
 	}
-	
+
 	public void disabled() {
 		System.out.println("*** DISABLED ***");
 		logger.v("Disabled", "Disabled");
@@ -137,30 +129,33 @@ public class Robot extends SampleRobot {
 		new Updater(state, new Updatable[] {imu}, fastUpdatePeriod).start(); // These should have fast updates
 		while (isDisabled()) {
 			for (Disablable implementsdisable : toDisable) {
-				implementsdisable.disable();
+				if (implementsdisable != null) {
+					implementsdisable.disable();
+				}
 			}
+			frontLeftWheel.set(0);
 			frontRightWheel.set(0);
 			backLeftWheel.set(0);
 			backRightWheel.set(0);
 			Timer.delay(0.01);
 		}
 	}
-	
+
 	public void autonomous() {
 		System.out.println("*** AUTONOMOUS ***");
 		logger.v("Autonomous", "Autonomous");
 		RobotState state = RobotState.AUTONOMOUS;
-		driver = autoDriver;
-		operator = autoOperator;
 		autonomous = autonomousManager.getAutonomous();
+		driver = autonomous.getAutoDriver();
+		operator = autonomous.getAutoOperator();
 		new Updater(state, new Updatable[] {autonomous, align}, slowUpdatePeriod).start(); // Controller and align are potentially slower
-		new Updater(state, new Updatable[] {imu, mecanumDrive, lidar, grabber}, fastUpdatePeriod).start(); // These should have fast updates
+		new Updater(state, new Updatable[] {imu, driver, operator, mecanumDrive, lidar, grabber}, fastUpdatePeriod).start(); // These should have fast updates
 		new Updater(state, new Updatable[] {}, fastUpdatePeriod).start();
 		while (getRobotState() == state) {
 			Timer.delay(0.01);
 		}
 	}
-	
+
 	public void operatorControl() {
 		System.out.println("*** TELEOPERATED ***");
 		logger.v("Teleoperated", "Teleoperated");
@@ -174,7 +169,7 @@ public class Robot extends SampleRobot {
 			Timer.delay(0.01);
 		}
 	}
-	
+
 	private RobotState getRobotState() {
 		if (isDisabled()) {
 			return RobotState.DISABLED;
@@ -187,22 +182,22 @@ public class Robot extends SampleRobot {
 		}
 		return RobotState.DISABLED;
 	}
-	
+
 	public static double time() {
 		return (double) System.currentTimeMillis() / 1000;
 	}
-	
+
 	private class Updater extends Thread { // Function to update automatically in a new thread
 		private final RobotState robotState;
 		private final Updatable[] toUpdate;
 		private final double updateSpeed;
-		
+
 		public Updater(RobotState state, Updatable[] toUpdate, double updateSpeed) {
 			robotState = state;
 			this.toUpdate = toUpdate;
 			this.updateSpeed = updateSpeed;
 		}
-		
+
 		public void run() {
 			if (toUpdate.length > 1) {
 				for (Updatable u : toUpdate) {
