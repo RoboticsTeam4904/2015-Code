@@ -3,7 +3,7 @@ package org.usfirst.frc.team4904.robot;
 
 import org.usfirst.frc.team4904.robot.output.Winch;
 
-public abstract class Operator implements Updatable {
+public abstract class Operator implements Disablable, Updatable {
 	private final Winch winch;
 	private final AutoAlign align;
 	private volatile int winchTimer;

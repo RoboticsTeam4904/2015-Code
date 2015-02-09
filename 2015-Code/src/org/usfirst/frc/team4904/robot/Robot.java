@@ -1,16 +1,12 @@
 package org.usfirst.frc.team4904.robot;
 
 
-import org.usfirst.frc.team4904.robot.driver.DriverAutonomous;
-import org.usfirst.frc.team4904.robot.driver.DriverNathan;
 import org.usfirst.frc.team4904.robot.input.IMU;
 import org.usfirst.frc.team4904.robot.input.LIDAR;
 import org.usfirst.frc.team4904.robot.input.LogitechJoystick;
 import org.usfirst.frc.team4904.robot.input.SuperEncoder;
 import org.usfirst.frc.team4904.robot.input.UDAR;
 import org.usfirst.frc.team4904.robot.input.XboxController;
-import org.usfirst.frc.team4904.robot.operator.OperatorAutonomous;
-import org.usfirst.frc.team4904.robot.operator.OperatorNachi;
 import org.usfirst.frc.team4904.robot.output.Grabber;
 import org.usfirst.frc.team4904.robot.output.Mecanum;
 import org.usfirst.frc.team4904.robot.output.Winch;
@@ -60,13 +56,14 @@ public class Robot extends SampleRobot {
 	private final SpeedController frontRightWheel;
 	private final SpeedController backLeftWheel;
 	private final SpeedController backRightWheel;
+	// Managers
+	private DriverManager driverManager;
+	private OperatorManager operatorManager;
+	private AutonomousManager autonomousManager;
+	// Drivers and operators
 	private Driver driver;
 	private Operator operator;
-	private final Driver humanDriver;
-	private final Operator humanOperator;
-	private final Driver autonomousDriver;
-	private final Operator autonomousOperator;
-	private final AutonomousController controller;
+	private Autonomous autonomous;
 	private final AutoAlign align; // the AutoAlign class contains code to align the robot with totes and cans
 	// Update system
 	private final double fastUpdatePeriod = 0.015; // update every 0.005 seconds/5 milliseconds (200Hz)
@@ -111,14 +108,15 @@ public class Robot extends SampleRobot {
 		xboxController = new XboxController(CONTROLLER_PORT);
 		// Initalize subsystems
 		align = new AutoAlign(mecanumDrive, udar, lidar, imu, grabber, winch); // Initialize AutoAlign system
-		humanOperator = new OperatorNachi(stick, winch, align);
-		humanDriver = new DriverNathan(mecanumDrive, xboxController, align);
-		controller = new AutonomousController(udar, imu, lidar);
-		autonomousOperator = new OperatorAutonomous(winch, align, controller);
-		autonomousDriver = new DriverAutonomous(mecanumDrive, controller, align);
-		driver = humanDriver;
-		operator = humanOperator;
-		toDisable = new Disablable[] {winch, grabber, lidar, driver};
+		// Initialize managers
+		driverManager = new DriverManager(mecanumDrive, xboxController, align);
+		operatorManager = new OperatorManager(stick, winch, align);
+		autonomousManager = new AutonomousManager(mecanumDrive, winch, align);
+		// Drivers, operators, autonomous
+		operator = operatorManager.getOperator();
+		driver = driverManager.getDriver();
+		autonomous = autonomousManager.getAutonomous();
+		toDisable = new Disablable[] {winch, grabber, lidar, driver, operator, autonomous};
 	}
 	
 	public void robotInit() {
@@ -145,10 +143,9 @@ public class Robot extends SampleRobot {
 	public void autonomous() {
 		System.out.println("*** AUTONOMOUS ***");
 		logger.v("Autonomous", "Autonomous");
-		operator = autonomousOperator;
-		driver = autonomousDriver;
 		RobotState state = RobotState.AUTONOMOUS;
-		new Updater(state, new Updatable[] {controller, align}, slowUpdatePeriod).start(); // Controller and align are potentially slower
+		autonomous = autonomousManager.getAutonomous();
+		new Updater(state, new Updatable[] {autonomous, align}, slowUpdatePeriod).start(); // Controller and align are potentially slower
 		new Updater(state, new Updatable[] {imu, driver, operator, mecanumDrive, lidar, grabber}, fastUpdatePeriod).start(); // These should have fast updates
 		new Updater(state, new Updatable[] {}, fastUpdatePeriod).start();
 		while (getRobotState() == state) {
@@ -159,10 +156,10 @@ public class Robot extends SampleRobot {
 	public void operatorControl() {
 		System.out.println("*** TELEOPERATED ***");
 		logger.v("Teleoperated", "Teleoperated");
-		operator = humanOperator;
-		driver = humanDriver;
 		RobotState state = RobotState.OPERATOR;
-		new Updater(state, new Updatable[] {controller, align}, slowUpdatePeriod).start(); // Controller and align are potentially slower
+		operator = operatorManager.getOperator();
+		driver = driverManager.getDriver();
+		new Updater(state, new Updatable[] {align}, slowUpdatePeriod).start(); // Controller and align are potentially slower
 		new Updater(state, new Updatable[] {imu, driver, operator, mecanumDrive, lidar, grabber}, fastUpdatePeriod).start(); // These should have fast updates
 		new Updater(state, new Updatable[] {}, fastUpdatePeriod).start();
 		while (getRobotState() == state) {

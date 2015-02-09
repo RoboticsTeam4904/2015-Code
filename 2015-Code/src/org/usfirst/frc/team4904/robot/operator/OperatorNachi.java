@@ -8,12 +8,12 @@ import org.usfirst.frc.team4904.robot.output.Winch;
 
 public class OperatorNachi extends Operator {
 	private final LogitechJoystick stick;
-
+	
 	public OperatorNachi(LogitechJoystick stick, Winch winch, AutoAlign align) {
 		super(winch, align);
 		this.stick = stick;
 	}
-
+	
 	public synchronized void update() {
 		if (stick.buttons[0].get()) { // When button 1 is pressed, toggle tote grabbing
 			System.out.print("TOTE");
@@ -52,7 +52,11 @@ public class OperatorNachi extends Operator {
 		} else {
 			adjust(0);
 		}
-		// adjust(stick.getZ()); // Always adjust by Z axis
+		adjust(stick.getZ()); // Always adjust by Z axis
 		updateWinch();
+	}
+	
+	public void disable() {
+		adjust(0);
 	}
 }
