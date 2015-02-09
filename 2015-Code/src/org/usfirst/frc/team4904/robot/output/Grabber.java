@@ -11,12 +11,12 @@ public class Grabber extends Talon implements Disablable, Updatable {
 	public static final int LEFT_INNER_SWITCH = 1;
 	public static final int RIGHT_OUTER_SWITCH = 2;
 	public static final int LEFT_OUTER_SWITCH = 3;
-	DigitalInput[] limitSwitches = new DigitalInput[4];
+	private final DigitalInput[] limitSwitches;
 	
 	public enum GrabberState {
 		OPEN, CLOSED, OPENING, CLOSING, DISABLED
 	}
-	GrabberState grabberState;
+	private volatile GrabberState grabberState;
 	
 	public Grabber(int channel, DigitalInput[] limitSwitches) {
 		super(channel);
