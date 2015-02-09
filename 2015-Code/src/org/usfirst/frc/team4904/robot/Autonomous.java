@@ -8,33 +8,27 @@ public abstract class Autonomous implements Updatable, Disablable {
 	private AutoOperator operator = null;
 	private AutoDriver driver = null;
 
-	public Autonomous() {}
-	
 	public AutoDriver getAutoDriver() {
 		return driver;
 	}
-	
+
 	public AutoOperator getAutoOperator() {
 		return operator;
 	}
-	
+
 	public void setAutoOperator(AutoOperator operator) {
 		if (this.operator != null) {
 			throw new Error("Operator already set");
 		}
 		this.operator = operator;
 	}
-	
+
 	public void setAutoDriver(AutoDriver driver) {
 		if (this.driver != null) {
 			throw new Error("Driver already set");
 		}
 		this.driver = driver;
 	}
-	
+
 	public abstract double[] getDesiredMovement();
-
-	public void update() {}
-
-	public void disable() {}
 }
