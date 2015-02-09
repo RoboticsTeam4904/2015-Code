@@ -66,8 +66,8 @@ public class Robot extends SampleRobot {
 	private Autonomous autonomous;
 	private final AutoAlign align; // the AutoAlign class contains code to align the robot with totes and cans
 	// Update system
-	private final double fastUpdatePeriod = 0.015; // update every 0.005 seconds/5 milliseconds (200Hz)
-	private final double slowUpdatePeriod = 0.2; // update every 0.2 seconds/200 milliseconds (5Hz)
+	public static final double fastUpdatePeriod = 0.015; // update every 0.005 seconds/5 milliseconds (200Hz)
+	public static final double slowUpdatePeriod = 0.2; // update every 0.2 seconds/200 milliseconds (5Hz)
 	// Logging system
 	private final LogKitten logger;
 	private final Disablable[] toDisable;
