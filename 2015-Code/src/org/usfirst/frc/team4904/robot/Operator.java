@@ -75,4 +75,8 @@ public abstract class Operator implements Disablable, Updatable {
 	private boolean isInControl() {
 		return !align.isDriverLockedOut();
 	}
+	
+	public void disable() {
+		winch.move(0);
+	}
 }

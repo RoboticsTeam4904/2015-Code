@@ -6,6 +6,7 @@ import org.usfirst.frc.team4904.robot.operator.OperatorGriffin;
 import org.usfirst.frc.team4904.robot.operator.OperatorNachi;
 import org.usfirst.frc.team4904.robot.output.Winch;
 import edu.wpi.first.wpilibj.networktables.NetworkTable;
+import edu.wpi.first.wpilibj.networktables2.type.NumberArray;
 
 public class OperatorManager {
 	private NetworkTable operatorTable;
@@ -21,8 +22,8 @@ public class OperatorManager {
 	}
 	
 	public Operator getOperator() {
-		int operatorNum = 0;
-		operatorTable.retrieveValue("OPERATOR", operatorNum);
-		return operators[operatorNum];
+		NumberArray values = new NumberArray();
+		operatorTable.retrieveValue("DRIVER", values);
+		return operators[(int) values.get(0)];
 	}
 }

@@ -5,6 +5,7 @@ import org.usfirst.frc.team4904.robot.driver.DriverNathan;
 import org.usfirst.frc.team4904.robot.input.XboxController;
 import org.usfirst.frc.team4904.robot.output.Mecanum;
 import edu.wpi.first.wpilibj.networktables.NetworkTable;
+import edu.wpi.first.wpilibj.networktables2.type.NumberArray;
 
 public class DriverManager {
 	private NetworkTable driverTable;
@@ -18,8 +19,8 @@ public class DriverManager {
 	}
 	
 	public Driver getDriver() {
-		int driverNum = 0;
-		driverTable.retrieveValue("DRIVER", driverNum);
-		return drivers[driverNum];
+		NumberArray values = new NumberArray();
+		driverTable.retrieveValue("DRIVER", values);
+		return drivers[(int) values.get(0)];
 	}
 }

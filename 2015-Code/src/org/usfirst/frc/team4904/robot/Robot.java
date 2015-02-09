@@ -7,6 +7,7 @@ import org.usfirst.frc.team4904.robot.input.LogitechJoystick;
 import org.usfirst.frc.team4904.robot.input.SuperEncoder;
 import org.usfirst.frc.team4904.robot.input.UDAR;
 import org.usfirst.frc.team4904.robot.input.XboxController;
+import org.usfirst.frc.team4904.robot.operator.AutoOperator;
 import org.usfirst.frc.team4904.robot.output.Grabber;
 import org.usfirst.frc.team4904.robot.output.Mecanum;
 import org.usfirst.frc.team4904.robot.output.Winch;
@@ -63,6 +64,7 @@ public class Robot extends SampleRobot {
 	// Drivers and operators
 	private Driver driver;
 	private Operator operator;
+	private AutoOperator autoOperator;
 	private Autonomous autonomous;
 	private final AutoAlign align; // the AutoAlign class contains code to align the robot with totes and cans
 	// Update system
@@ -111,7 +113,8 @@ public class Robot extends SampleRobot {
 		// Initialize managers
 		driverManager = new DriverManager(mecanumDrive, xboxController, align);
 		operatorManager = new OperatorManager(stick, winch, align);
-		autonomousManager = new AutonomousManager(mecanumDrive, winch, align);
+		autoOperator = new AutoOperator(winch, align);
+		autonomousManager = new AutonomousManager(mecanumDrive, autoOperator, align);
 		// Drivers, operators, autonomous
 		operator = operatorManager.getOperator();
 		driver = driverManager.getDriver();
@@ -146,7 +149,7 @@ public class Robot extends SampleRobot {
 		RobotState state = RobotState.AUTONOMOUS;
 		autonomous = autonomousManager.getAutonomous();
 		new Updater(state, new Updatable[] {autonomous, align}, slowUpdatePeriod).start(); // Controller and align are potentially slower
-		new Updater(state, new Updatable[] {imu, driver, operator, mecanumDrive, lidar, grabber}, fastUpdatePeriod).start(); // These should have fast updates
+		new Updater(state, new Updatable[] {imu, mecanumDrive, lidar, grabber}, fastUpdatePeriod).start(); // These should have fast updates
 		new Updater(state, new Updatable[] {}, fastUpdatePeriod).start();
 		while (getRobotState() == state) {
 			Timer.delay(0.01);

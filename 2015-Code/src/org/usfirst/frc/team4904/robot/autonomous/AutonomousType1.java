@@ -3,12 +3,12 @@ package org.usfirst.frc.team4904.robot.autonomous;
 
 import org.usfirst.frc.team4904.robot.AutoAlign;
 import org.usfirst.frc.team4904.robot.Autonomous;
+import org.usfirst.frc.team4904.robot.operator.AutoOperator;
 import org.usfirst.frc.team4904.robot.output.Mecanum;
-import org.usfirst.frc.team4904.robot.output.Winch;
 
 public class AutonomousType1 extends Autonomous {
-	public AutonomousType1(Mecanum mecanumDrive, Winch winch, AutoAlign align) {
-		super(mecanumDrive, winch, align);
+	public AutonomousType1(Mecanum mecanumDrive, AutoOperator operator, AutoAlign align) {
+		super(mecanumDrive, operator, align);
 	}
 	
 	public void update() {
