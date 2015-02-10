@@ -1,17 +1,36 @@
 
-#define I2C_SLAVE_BASE_ADDRESS 0x4 // the 7-bit address (remember to change this when adapting this example)
+#define I2C_SLAVE_BASE_ADDRESS 10 // the 7-bit address (remember to change this when adapting this example)
 #define ENCODER_NUM 0
 #include <TinyWireS.h>
 
 
 #include "avr/interrupt.h"
 
-byte count = 0;
+long count = 0;
+byte byteNum = 0;
 
 
-
-void requestEvent() {  
-  TinyWireS.send(count);
+void requestEvent() {
+  byte lowByte = (byte) (count & 0xff);
+  byte highByte = (byte) ((count >> 8) & 0xff);
+  
+  switch (byteNum) {
+    case 1:
+    TinyWireS.send(highByte);
+    byteNum++;
+    break;
+    
+    default:
+    byteNum = 0;
+    case 0:
+    TinyWireS.send(lowByte);
+    byteNum++;
+    break;
+  }
+  
+  //TinyWireS.send((byte)(count>>8));
+  //TinyWireS.send((byte)(count>>16));
+  //TinyWireS.send((byte)(count>>24));
 }
 
 /**
@@ -29,7 +48,7 @@ void setup() {
   pinMode(1, INPUT); // OC1A, also The only HW-PWM -pin supported by the tiny core analogWrite
 
 
-  TinyWireS.begin(I2C_SLAVE_ADDRESS+ENCODER_NUM);
+  TinyWireS.begin(I2C_SLAVE_BASE_ADDRESS+ENCODER_NUM);
   TinyWireS.onReceive(receiveEvent);
   TinyWireS.onRequest(requestEvent);
 
@@ -40,8 +59,8 @@ void setup() {
 }
 
 ISR(PCINT0_vect) {
-  if (digitalRead(3)) count++;
-  else count--;
+  if (digitalRead(3) && digitalRead(4)) count++;
+  else if(digitalRead(4)) count--;
 }
 
 void loop() {
