@@ -2,13 +2,13 @@ package org.usfirst.frc.team4904.robot.autonomous;
 
 
 import org.usfirst.frc.team4904.robot.output.GrabRelease;
-import org.usfirst.frc.team4904.robot.output.WinchAction;
+import org.usfirst.frc.team4904.robot.output.WinchGrabberAction;
 
 public class AutonomousGrab2Totes extends SimpleAutonomous {
 	public void update() {
 		desiredXMovement = 1;
 		desiredYMovement = 1;
 		desiredTurnSpeed = 1;
-		winchAction = new WinchAction[] {new GrabRelease(true, true)};
+		winchAction = new WinchGrabberAction[] {new GrabRelease(true, true)};
 	}
 }

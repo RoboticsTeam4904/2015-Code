@@ -5,15 +5,18 @@ package org.usfirst.frc.team4904.robot.autonomous;
 
 
 import org.usfirst.frc.team4904.robot.input.Camera;
+import org.usfirst.frc.team4904.robot.output.GrabRelease;
+import org.usfirst.frc.team4904.robot.output.MoveWinch;
+import org.usfirst.frc.team4904.robot.output.WinchGrabberAction;
 
 public class YellowToteStack extends SimpleAutonomous {
-	private int step;
+	private final int step;
 	private Camera camera;
-	
+
 	public YellowToteStack(Camera camera) {
 		step = 0;
 	}
-	
+
 	private void step0() {
 		desiredYMovement = 1;
 		desiredTurnSpeed = 0;
@@ -25,9 +28,14 @@ public class YellowToteStack extends SimpleAutonomous {
 			desiredXMovement = 0;
 		}
 	}
-	
-	private void step1() {}
-	
+
+	private void step1() {
+		desiredXMovement = 0;
+		desiredYMovement = 0;
+		desiredTurnSpeed = 0;
+		winchAction = new WinchGrabberAction[] {new GrabRelease(true, true), new MoveWinch(1, true)};
+	}
+
 	public void update() {
 		switch (step) {
 			case 0:

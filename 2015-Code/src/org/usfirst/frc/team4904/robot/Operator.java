@@ -2,7 +2,7 @@ package org.usfirst.frc.team4904.robot;
 
 
 import org.usfirst.frc.team4904.robot.output.Winch;
-import org.usfirst.frc.team4904.robot.output.WinchAction;
+import org.usfirst.frc.team4904.robot.output.WinchGrabberAction;
 
 public abstract class Operator implements Disablable, Updatable {
 	private final Winch winch;
@@ -64,7 +64,7 @@ public abstract class Operator implements Disablable, Updatable {
 		return !align.isDriverLockedOut();
 	}
 	
-	protected void run(WinchAction action) {
+	protected void run(WinchGrabberAction action) {
 		if (isInControl()) {
 			action.run(align, winch);
 		}
