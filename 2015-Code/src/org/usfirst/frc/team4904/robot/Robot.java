@@ -1,6 +1,7 @@
 package org.usfirst.frc.team4904.robot;
 
 
+import org.usfirst.frc.team4904.robot.input.Camera;
 import org.usfirst.frc.team4904.robot.input.IMU;
 import org.usfirst.frc.team4904.robot.input.LIDAR;
 import org.usfirst.frc.team4904.robot.input.LogitechJoystick;
@@ -48,6 +49,7 @@ public class Robot extends SampleRobot {
 	private final SuperEncoder frontRightEncoder;
 	private final SuperEncoder backLeftEncoder;
 	private final SuperEncoder backRightEncoder;
+	private final Camera camera;
 	// movement controllers
 	private final Winch winch; // the Winch class takes care of moving to specific heights
 	private final Grabber grabber; // the grabber class takes care of opening and closing the grabber
@@ -89,6 +91,7 @@ public class Robot extends SampleRobot {
 		limitSwitches[Grabber.LEFT_INNER_SWITCH] = new DigitalInput(LEFT_INNER_SWITCH_PORT);
 		limitSwitches[Grabber.RIGHT_OUTER_SWITCH] = new DigitalInput(RIGHT_OUTER_SWITCH_PORT);
 		limitSwitches[Grabber.LEFT_OUTER_SWITCH] = new DigitalInput(LEFT_OUTER_SWITCH_PORT);
+		camera = new Camera();
 		// Initialize Encoders
 		frontLeftEncoder = new SuperEncoder(FRONT_LEFT_I2C_PORT);
 		frontRightEncoder = new SuperEncoder(FRONT_RIGHT_I2C_PORT);
@@ -111,7 +114,7 @@ public class Robot extends SampleRobot {
 		// Initialize managers
 		driverManager = new DriverManager(mecanumDrive, xboxController, align);
 		operatorManager = new OperatorManager(stick, winch, align);
-		autonomousManager = new AutonomousManager(mecanumDrive, winch, align);
+		autonomousManager = new AutonomousManager(mecanumDrive, winch, align, camera);
 		// Drivers, operators, autonomous
 		autonomous = autonomousManager.getAutonomous();
 		toDisable = new Disablable[] {winch, grabber, lidar, driver, operator, autonomous};

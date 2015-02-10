@@ -8,16 +8,18 @@ import org.usfirst.frc.team4904.robot.output.Winch;
 
 public class OperatorNachi extends Operator {
 	private final LogitechJoystick stick;
+	private final AutoAlign align;
 	
 	public OperatorNachi(LogitechJoystick stick, Winch winch, AutoAlign align) {
 		super(winch, align);
 		this.stick = stick;
+		this.align = align;
 	}
 	
 	public synchronized void update() {
 		if (stick.buttons[0].get()) { // When button 1 is pressed, toggle tote grabbing
 			System.out.print("TOTE");
-			if (isGrabberEmpty()) {
+			if (align.isGrabberEmpty()) {
 				System.out.println("Grab");
 				grab(MODE_WIDE_TOTE);
 			} else {
@@ -27,7 +29,7 @@ public class OperatorNachi extends Operator {
 		}
 		if (stick.buttons[1].get()) { // When button 2 is pressed, toggle can grabbing
 			System.out.print("CAN");
-			if (isGrabberEmpty()) {
+			if (align.isGrabberEmpty()) {
 				System.out.println("Grab");
 				grab(MODE_CAN);
 			} else {

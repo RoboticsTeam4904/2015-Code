@@ -32,11 +32,12 @@ public class YellowToteStack extends SimpleAutonomous {
 		switch (step) {
 			case 0:
 				step0();
+				return;
 			case 1:
-				step(1);
+				step1();
+				return;
+			default:
+				return;
 		}
-		desiredXMovement = 1;
-		desiredYMovement = 1;
-		desiredTurnSpeed = 1;
 	}
 }
