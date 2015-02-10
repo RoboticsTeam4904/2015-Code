@@ -6,20 +6,20 @@ package org.usfirst.frc.team4904.robot.autonomous;
 
 import org.usfirst.frc.team4904.robot.AutoAlign;
 import org.usfirst.frc.team4904.robot.input.Camera;
-import org.usfirst.frc.team4904.robot.output.MoveWinch;
+import org.usfirst.frc.team4904.robot.output.WinchAction;
 import edu.wpi.first.wpilibj.Timer;
 
 public class YellowToteStack extends SimpleAutonomous {
 	private final int step;
 	private final Camera camera;
 	private final AutoAlign align;
-
+	
 	public YellowToteStack(Camera camera, AutoAlign align) {
 		step = 0;
 		this.align = align;
 		this.camera = camera;
 	}
-
+	
 	public void run() {
 		while (true) {
 			desiredYMovement = 1;
@@ -40,6 +40,6 @@ public class YellowToteStack extends SimpleAutonomous {
 		while (!align.isCurrentlyAligning()) {// Wait until aligning finishes
 			Timer.delay(0.1);
 		}
-		setWinchGrabberAction(new MoveWinch(1, true));// Move the winch up 1
+		setWinchGrabberAction(new WinchAction(1, true));// Move the winch up 1
 	}
 }
