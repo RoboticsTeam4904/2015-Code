@@ -3,7 +3,7 @@ package org.usfirst.frc.team4904.robot.output;
 
 import org.usfirst.frc.team4904.robot.AutoAlign;
 
-public class GrabRelease extends WinchAction {
+public class GrabRelease implements WinchAction {
 	public final boolean grab;
 	public final boolean tote;
 	

@@ -12,9 +12,9 @@ public class EncodedMotor extends VictorSP implements Disablable, Updatable {
 	private volatile double previousError;
 	private volatile double integralSum;
 	private volatile double motorOutput;
-	private final double P = 1 / Robot.fastUpdatePeriod;// ticks per second Assuming this is updated at 200Hz, this should result in 0.5 seconds to full speed
-	private final double I = 0.3 * P;// ticks
-	private final double D = 0.3 * P;// ticks per second per second
+	private final double P = 1 / Robot.fastUpdatePeriod; // ticks per second Assuming this is updated at 200Hz, this should result in 0.5 seconds to full speed
+	private final double I = 0.3 * P; // ticks
+	private final double D = 0.3 * P; // ticks per second per second
 	private final SuperEncoder encoder;
 
 	public EncodedMotor(int channel, SuperEncoder encoder) {
@@ -54,9 +54,5 @@ public class EncodedMotor extends VictorSP implements Disablable, Updatable {
 		previousError = 0;
 		integralSum = 0;
 		motorOutput = 0;
-	}
-
-	public double getRumble() {
-		return Math.abs(previousError) / 2;
 	}
 }

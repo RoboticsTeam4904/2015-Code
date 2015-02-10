@@ -19,8 +19,6 @@ public abstract class Operator implements Disablable, Updatable {
 		winchTimer = 0;
 	}
 
-	public abstract void update();
-
 	protected void raise(int levels) {
 		if (isInControl()) {
 			winch.setHeight(1);
@@ -51,7 +49,7 @@ public abstract class Operator implements Disablable, Updatable {
 
 	protected void adjust(double value) {
 		if (isInControl()) {
-			winch.move(value); // Sets winch motor speed
+			winch.set(value); // Sets winch motor speed
 		}
 	}
 
@@ -59,21 +57,10 @@ public abstract class Operator implements Disablable, Updatable {
 		if (!isInControl()) {
 			return;
 		}
-		if (winchTimer > 0) {
-			winchTimer--; // Winch can move over multiple cycles, so set a countdown
-		} else {
-			if (winchTimer == 0) {
-				winch.move(0); // If the countdown is done, stop the winch
-				winchTimer = -1; // But only once
-			}
-		}
+		// TODO use PID loop to move winch
 	}
 
-	protected boolean isGrabberEmpty() {// Wrapper function -- references to align and winch are private not protected so subclasses can't access them
-		return align.isGrabberEmpty();
-	}
-
-	private boolean isInControl() {
+	protected boolean isInControl() {
 		return !align.isDriverLockedOut();
 	}
 	
@@ -84,6 +71,6 @@ public abstract class Operator implements Disablable, Updatable {
 	}
 	
 	public void disable() {
-		winch.move(0);
+		winch.set(0);
 	}
 }
