@@ -38,7 +38,14 @@ public abstract class Autonomous implements Updatable, Disablable {
 	}
 	
 	public void update() {
-		step += steps[step].run();
+		boolean increase = steps[step].run();
+		this.desiredTurnSpeed = steps[step].desiredTurnSpeed;
+		this.desiredWinchHeight = steps[step].desiredWinchHeight;
+		this.desiredXMovement = steps[step].desiredXMovement;
+		this.desiredYMovement = steps[step].desiredYMovement;
+		if (increase) {
+			step++;
+		}
 	}
 	
 	public double[] getDesiredMovement() {

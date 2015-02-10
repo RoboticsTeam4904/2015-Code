@@ -1,12 +1,11 @@
 package org.usfirst.frc.team4904.robot.autonomous.autosteps;
 
 
-import org.usfirst.frc.team4904.robot.Autonomous;
 import org.usfirst.frc.team4904.robot.autonomous.Step;
 import org.usfirst.frc.team4904.robot.input.Camera;
 import org.usfirst.frc.team4904.robot.input.LIDAR;
 
-public class ApproachYellowTote extends Autonomous implements Step {
+public class ApproachYellowTote extends Step {
 	private Camera camera;
 	private LIDAR lidar;
 	
@@ -15,7 +14,7 @@ public class ApproachYellowTote extends Autonomous implements Step {
 		this.lidar = lidar;
 	}
 	
-	public int run() {
+	public boolean run() {
 		desiredYMovement = 1;
 		desiredTurnSpeed = 0;
 		if (camera.getYellowTote()[0] < 0) {
@@ -27,9 +26,9 @@ public class ApproachYellowTote extends Autonomous implements Step {
 			desiredYMovement = 0;
 		}
 		if (lidar.getXY(90)[1] < 100 && lidar.getXY(89)[1] < 100 && lidar.getXY(91)[1] < 100) { // There is probably a better way to do this
-			return 0;
+			return false;
 		} else {
-			return 1;
+			return true;
 		}
 	}
 }
