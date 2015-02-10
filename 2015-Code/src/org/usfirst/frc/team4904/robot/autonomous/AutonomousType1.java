@@ -7,10 +7,4 @@ public class AutonomousType1 extends SimpleAutonomous {
 		desiredYMovement = 1;
 		desiredTurnSpeed = 1;
 	}
-	
-	public void disable() {
-		desiredXMovement = 0;
-		desiredYMovement = 0;
-		desiredTurnSpeed = 0;
-	}
 }

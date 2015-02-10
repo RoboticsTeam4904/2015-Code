@@ -5,6 +5,7 @@ import org.usfirst.frc.team4904.robot.AutoAlign;
 import org.usfirst.frc.team4904.robot.Autonomous;
 import org.usfirst.frc.team4904.robot.Operator;
 import org.usfirst.frc.team4904.robot.output.Winch;
+import org.usfirst.frc.team4904.robot.output.WinchAction;
 
 public class AutoOperator extends Operator {
 	private final Autonomous auto;
@@ -15,6 +16,9 @@ public class AutoOperator extends Operator {
 	}
 	
 	public void update() {
-		// TODO auto.getDesiredWinchAction().do()
+		WinchAction[] actions = auto.getDesiredWinchActions();
+		for (WinchAction action : actions) {
+			run(action);
+		}
 	}
 }

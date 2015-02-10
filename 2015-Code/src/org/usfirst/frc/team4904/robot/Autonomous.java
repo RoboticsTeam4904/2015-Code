@@ -3,6 +3,7 @@ package org.usfirst.frc.team4904.robot;
 
 import org.usfirst.frc.team4904.robot.driver.AutoDriver;
 import org.usfirst.frc.team4904.robot.operator.AutoOperator;
+import org.usfirst.frc.team4904.robot.output.WinchAction;
 
 public abstract class Autonomous implements Updatable, Disablable {
 	private AutoOperator operator = null;
@@ -31,4 +32,6 @@ public abstract class Autonomous implements Updatable, Disablable {
 	}
 
 	public abstract double[] getDesiredMovement();
+
+	public abstract WinchAction[] getDesiredWinchActions();
 }

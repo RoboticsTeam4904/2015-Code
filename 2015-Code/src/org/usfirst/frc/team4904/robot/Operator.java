@@ -2,6 +2,7 @@ package org.usfirst.frc.team4904.robot;
 
 
 import org.usfirst.frc.team4904.robot.output.Winch;
+import org.usfirst.frc.team4904.robot.output.WinchAction;
 
 public abstract class Operator implements Disablable, Updatable {
 	private final Winch winch;
@@ -11,29 +12,29 @@ public abstract class Operator implements Disablable, Updatable {
 	public static final int MODE_WIDE_TOTE = 1;
 	public static final int MODE_CAN = 2;
 	public static final int MODE_EMPTY = 3;
-	
+
 	public Operator(Winch winch, AutoAlign align) {
 		this.winch = winch;
 		this.align = align;
 		winchTimer = 0;
 	}
-	
+
 	public abstract void update();
-	
+
 	protected void raise(int levels) {
 		if (isInControl()) {
 			winch.setHeight(1);
 			winchTimer = 5;
 		}
 	}
-	
+
 	protected void lower(int levels) {
 		if (isInControl()) {
 			winch.setHeight(-1);// TODO Made moving the winch a little more accurate than moving at a certain speed for 5 ticks
 			winchTimer = 5;
 		}
 	}
-	
+
 	protected void grab(int mode) {
 		if (mode == MODE_THIN_TOTE) {
 			align.grabTote();
@@ -43,17 +44,17 @@ public abstract class Operator implements Disablable, Updatable {
 			align.grabCan();
 		}
 	}
-	
+
 	protected void release() {
 		align.release();
 	}
-	
+
 	protected void adjust(double value) {
 		if (isInControl()) {
 			winch.move(value); // Sets winch motor speed
 		}
 	}
-	
+
 	protected void updateWinch() {
 		if (!isInControl()) {
 			return;
@@ -67,13 +68,19 @@ public abstract class Operator implements Disablable, Updatable {
 			}
 		}
 	}
-	
+
 	protected boolean isGrabberEmpty() {// Wrapper function -- references to align and winch are private not protected so subclasses can't access them
 		return align.isGrabberEmpty();
 	}
-	
+
 	private boolean isInControl() {
 		return !align.isDriverLockedOut();
+	}
+	
+	protected void run(WinchAction action) {
+		if (isInControl()) {
+			action.run(align, winch);
+		}
 	}
 	
 	public void disable() {
