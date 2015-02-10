@@ -27,7 +27,7 @@ public class SuperEncoder {
 	
 	public int getTicks() {
 		byte[] toRecieve = new byte[4];
-		i2c.transaction(null, 0, toRecieve, 4);
+		// i2c.transaction(null, 0, toRecieve, 4);
 		return new BigInteger(toRecieve).intValue();
 	}
 	
