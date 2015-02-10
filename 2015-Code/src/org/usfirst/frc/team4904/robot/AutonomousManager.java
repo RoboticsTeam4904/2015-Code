@@ -14,6 +14,7 @@ public class AutonomousManager {
 	private final Mecanum mecanumDrive;
 	private final Winch winch;
 	private final AutoAlign align;
+	private final LogKitten logger;
 	
 	public AutonomousManager(Mecanum mecanumDrive, Winch winch, AutoAlign align) {
 		autonomouses[AUTONOMOUS_TYPE_1] = new AutonomousType1();
@@ -23,6 +24,7 @@ public class AutonomousManager {
 		for (Autonomous auto : autonomouses) {
 			registerAutonomous(auto);
 		}
+		logger = new LogKitten("AutonomousManager", LogKitten.LEVEL_VERBOSE);
 	}
 	
 	public Autonomous getAutonomous() {
@@ -30,6 +32,7 @@ public class AutonomousManager {
 		if (autoMode > 0) {
 			autoMode = 0;
 		}
+		logger.v("getAutonomous", "Auto mode " + Integer.toString(autoMode));
 		return autonomouses[autoMode];
 	}
 	
