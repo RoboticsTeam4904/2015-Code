@@ -20,7 +20,7 @@ public abstract class Operator implements Disablable, Updatable {
 	
 	protected void changeHeight(int levels) {
 		if (align.isInControl()) {
-			winch.changeHeight(levels);// TODO Made moving the winch a little more accurate than moving at a certain speed for 5 ticks
+			winch.setHeight(levels + winch.getHeight());// TODO Made moving the winch a little more accurate than moving at a certain speed for 5 ticks
 			winchTimer = 5;
 		}
 	}
@@ -51,17 +51,13 @@ public abstract class Operator implements Disablable, Updatable {
 		}
 		// TODO use PID loop to move winch
 	}
-
-	protected void setWinch(int height, boolean absolute) {
+	
+	public void setWinch(int height) {
 		if (align.isInControl()) {
-			winch.setHeight(height, absolute);
+			winch.setHeight(height);
 		}
 	}
-
-	protected void setWinch(int height) {
-		this.setWinch(height, false);
-	}
-
+	
 	public void disable() {
 		winch.set(0);
 	}
