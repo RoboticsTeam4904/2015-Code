@@ -5,25 +5,24 @@ import org.usfirst.frc.team4904.robot.input.LogitechJoystick;
 import org.usfirst.frc.team4904.robot.operator.OperatorGriffin;
 import org.usfirst.frc.team4904.robot.operator.OperatorNachi;
 import org.usfirst.frc.team4904.robot.output.Winch;
-import edu.wpi.first.wpilibj.networktables.NetworkTable;
-import edu.wpi.first.wpilibj.networktables2.type.NumberArray;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class OperatorManager {
-	private NetworkTable operatorTable;
 	private Operator[] operators;
 	public final int OPERATOR_GRIFFIN = 0;
 	public final int OPERATOR_NACHI = 1;
 	
 	public OperatorManager(LogitechJoystick stick, Winch winch, AutoAlign align) {
-		operatorTable = NetworkTable.getTable("DB");
-		this.operators = new Operator[2];
+		operators = new Operator[2];
 		operators[OPERATOR_GRIFFIN] = new OperatorGriffin(stick, winch, align);
 		operators[OPERATOR_NACHI] = new OperatorNachi(stick, winch, align);
 	}
 	
 	public Operator getOperator() {
-		NumberArray values = new NumberArray();
-		operatorTable.retrieveValue("Button 2", values);
-		return operators[(int) values.get(0)];
+		int operatorMode = (int) SmartDashboard.getNumber("DB/Slider 1", 0);
+		if (operatorMode > 1) {
+			operatorMode = 1;
+		}
+		return operators[operatorMode];
 	}
 }
