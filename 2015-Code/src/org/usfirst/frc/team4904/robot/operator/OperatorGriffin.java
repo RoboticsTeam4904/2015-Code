@@ -8,12 +8,12 @@ import org.usfirst.frc.team4904.robot.output.Winch;
 
 public class OperatorGriffin extends Operator {
 	private final LogitechJoystick stick;
-	
+
 	public OperatorGriffin(LogitechJoystick stick, Winch winch, AutoAlign align) {
 		super(winch, align);
 		this.stick = stick;
 	}
-	
+
 	public synchronized void update() {
 		if (stick.buttons[1].getRaw()) {
 			adjust(stick.getY()); // When button 2 is pressed, adjust the winch
@@ -21,16 +21,16 @@ public class OperatorGriffin extends Operator {
 			adjust(0);
 		}
 		if (stick.buttons[3].get()) {
-			raise(1); // When button 4 is pressed, raise the winch one level
+			changeHeight(1); // When button 4 is pressed, raise the winch one level
 		}
 		if (stick.buttons[2].get()) {
-			lower(1); // When button 3 is pressed, lower the winch one level
+			changeHeight(-1); // When button 3 is pressed, lower the winch one level
 		}
 		if (stick.buttons[5].get()) {
-			raise(10); // When button 6 is pressed, raise the winch all the way
+			changeHeight(10); // When button 6 is pressed, raise the winch all the way
 		}
 		if (stick.buttons[4].get()) {
-			lower(10); // When button 5 is pressed, lower the winch all the way
+			changeHeight(-10); // When button 5 is pressed, lower the winch all the way
 		}
 		if (stick.buttons[11].get()) {
 			grab(MODE_THIN_TOTE); // When button 12 is pressed, grab a thin tote
@@ -52,7 +52,7 @@ public class OperatorGriffin extends Operator {
 		}
 		updateWinch();
 	}
-	
+
 	public void disable() {
 		adjust(0);
 	}
