@@ -9,7 +9,7 @@ public class AutonomousGrab2Totes extends SimpleAutonomous {
 	public AutonomousGrab2Totes(AutoAlign align) {
 		this.align = align;
 	}
-	
+
 	public void run() {
 		desiredXMovement = 1;
 		desiredYMovement = 1;
