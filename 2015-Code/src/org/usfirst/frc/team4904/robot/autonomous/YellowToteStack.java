@@ -13,8 +13,6 @@ import org.usfirst.frc.team4904.robot.input.LIDAR;
 
 public class YellowToteStack extends Autonomous {
 	public YellowToteStack(Camera camera, AutoAlign align, LIDAR lidar) {
-		Step approachYellowTote = new ApproachYellowTote(camera, lidar);
-		Step grabTote = new GrabTote(align);
-		steps = new Step[] {approachYellowTote, grabTote};
+		super(new Step[] {new ApproachYellowTote(camera, lidar), new GrabTote(align)});
 	}
 }
