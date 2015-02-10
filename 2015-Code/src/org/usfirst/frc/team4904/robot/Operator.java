@@ -2,7 +2,6 @@ package org.usfirst.frc.team4904.robot;
 
 
 import org.usfirst.frc.team4904.robot.output.Winch;
-import org.usfirst.frc.team4904.robot.output.WinchAction;
 
 public abstract class Operator implements Disablable, Updatable {
 	private final Winch winch;
@@ -21,14 +20,14 @@ public abstract class Operator implements Disablable, Updatable {
 	
 	protected void raise(int levels) {
 		if (align.isInControl()) {
-			winch.setHeight(1);
+			winch.setHeight(1, false);
 			winchTimer = 5;
 		}
 	}
 	
 	protected void lower(int levels) {
 		if (align.isInControl()) {
-			winch.setHeight(-1);// TODO Made moving the winch a little more accurate than moving at a certain speed for 5 ticks
+			winch.setHeight(-1, false);// TODO Made moving the winch a little more accurate than moving at a certain speed for 5 ticks
 			winchTimer = 5;
 		}
 	}
@@ -59,13 +58,17 @@ public abstract class Operator implements Disablable, Updatable {
 		}
 		// TODO use PID loop to move winch
 	}
-
-	protected void run(WinchAction action) {
+	
+	protected void setWinch(int height, boolean absolute) {
 		if (align.isInControl()) {
-			action.run(align, winch);
+			winch.setHeight(height, absolute);
 		}
 	}
-
+	
+	protected void setWinch(int height) {
+		this.setWinch(height, false);
+	}
+	
 	public void disable() {
 		winch.set(0);
 	}

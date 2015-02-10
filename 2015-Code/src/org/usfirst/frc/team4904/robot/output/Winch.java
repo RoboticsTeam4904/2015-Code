@@ -7,25 +7,34 @@ import edu.wpi.first.wpilibj.Talon;
 public class Winch extends Talon implements Disablable {
 	private static final int MAX_HEIGHT = 12;
 	private int currentHeight;
-
+	
 	public Winch(int channel) {
 		super(channel);
 		currentHeight = 0;
 	}
-
-	public void setHeight(int height) { // Set winch to specific height
-		if (height > MAX_HEIGHT) {
-			height = MAX_HEIGHT;
-		} else if (height < 0) {
-			height = 0;
+	
+	public void setHeight(int height, boolean absolute) { // Set winch to specific height
+		if (!absolute) {
+			if (currentHeight + height > MAX_HEIGHT) {
+				currentHeight = MAX_HEIGHT;
+				return;
+			} else if (currentHeight + height < 0) {
+				currentHeight = 0;
+				return;
+			}
+			currentHeight += height;
+		} else {
+			if (height > MAX_HEIGHT) {
+				currentHeight = MAX_HEIGHT;
+				return;
+			} else if (height < 0) {
+				currentHeight = 0;
+				return;
+			}
+			currentHeight = height;
 		}
-		currentHeight = height;
 	}
-
-	public void changeHeight(int heightChange) {
-		setHeight(currentHeight + heightChange);
-	}
-
+	
 	public void disable() {
 		set(0);
 	}
