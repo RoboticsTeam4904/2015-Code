@@ -20,14 +20,14 @@ public abstract class Operator implements Disablable, Updatable {
 	}
 
 	protected void raise(int levels) {
-		if (isInControl()) {
+		if (align.isInControl()) {
 			winch.setHeight(1);
 			winchTimer = 5;
 		}
 	}
 
 	protected void lower(int levels) {
-		if (isInControl()) {
+		if (align.isInControl()) {
 			winch.setHeight(-1);// TODO Made moving the winch a little more accurate than moving at a certain speed for 5 ticks
 			winchTimer = 5;
 		}
@@ -48,24 +48,20 @@ public abstract class Operator implements Disablable, Updatable {
 	}
 
 	protected void adjust(double value) {
-		if (isInControl()) {
+		if (align.isInControl()) {
 			winch.set(value); // Sets winch motor speed
 		}
 	}
 
 	protected void updateWinch() {
-		if (!isInControl()) {
+		if (!align.isInControl()) {
 			return;
 		}
 		// TODO use PID loop to move winch
 	}
-
-	protected boolean isInControl() {
-		return !align.isDriverLockedOut();
-	}
 	
 	protected void run(WinchGrabberAction action) {
-		if (isInControl()) {
+		if (align.isInControl()) {
 			action.run(align, winch);
 		}
 	}
