@@ -25,4 +25,8 @@ public abstract class SimpleAutonomous extends Autonomous {
 		winchAction = new WinchGrabberAction[0];// Reset so things don't happen lots of times
 		return actions;
 	}
+
+	protected void setWinchGrabberAction(WinchGrabberAction action) {
+		winchAction = new WinchGrabberAction[] {action};// Hope that there isn't already one queued up
+	}
 }
