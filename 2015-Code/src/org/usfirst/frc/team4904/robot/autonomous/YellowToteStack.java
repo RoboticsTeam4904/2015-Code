@@ -6,53 +6,13 @@ package org.usfirst.frc.team4904.robot.autonomous;
 
 import org.usfirst.frc.team4904.robot.AutoAlign;
 import org.usfirst.frc.team4904.robot.Autonomous;
+import org.usfirst.frc.team4904.robot.autonomous.autosteps.ApproachYellowTote;
+import org.usfirst.frc.team4904.robot.autonomous.autosteps.GrabTote;
 import org.usfirst.frc.team4904.robot.input.Camera;
-import org.usfirst.frc.team4904.robot.output.WinchAction;
-import edu.wpi.first.wpilibj.Timer;
+import org.usfirst.frc.team4904.robot.input.LIDAR;
 
 public class YellowToteStack extends Autonomous {
-	private final int step;
-	private final Camera camera;
-	private final AutoAlign align;
-	
-	public YellowToteStack(Camera camera, AutoAlign align) {
-		step = 0;
-		this.align = align;
-		this.camera = camera;
-	}
-	
-	public void run() {
-		while (running) {
-			desiredYMovement = 1;
-			desiredTurnSpeed = 0;
-			if (camera.getYellowTote()[0] < 0) {
-				desiredXMovement = 0.5;
-			} else if (camera.getYellowTote()[0] > 0) {
-				desiredXMovement = -0.5;
-			} else {
-				desiredXMovement = 0;
-				desiredYMovement = 0;
-				break;
-			}
-			Timer.delay(0.1);
-		}
-		if (!running) {
-			return;
-		}
-		align.grabTote();// Grab the tote
-		if (!running) {
-			return;
-		}
-		Timer.delay(0.1);
-		if (!running) {
-			return;
-		}
-		while (!align.isCurrentlyAligning() && running) {// Wait until aligning finishes
-			Timer.delay(0.1);
-		}
-		if (!running) {
-			return;
-		}
-		setWinchGrabberAction(new WinchAction(1, true));// Move the winch up 1
+	public YellowToteStack(Camera camera, AutoAlign align, LIDAR lidar) {
+		super(new Step[] {new ApproachYellowTote(camera, lidar), new GrabTote(align)});
 	}
 }

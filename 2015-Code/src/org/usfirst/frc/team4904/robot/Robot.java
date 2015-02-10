@@ -114,7 +114,7 @@ public class Robot extends SampleRobot {
 		// Initialize managers
 		driverManager = new DriverManager(mecanumDrive, xboxController, align);
 		operatorManager = new OperatorManager(stick, winch, align);
-		autonomousManager = new AutonomousManager(mecanumDrive, winch, align, camera);
+		autonomousManager = new AutonomousManager(mecanumDrive, winch, align, camera, lidar);
 		// Drivers, operators, autonomous
 		autonomous = autonomousManager.getAutonomous();
 		toDisable = new Disablable[] {winch, grabber, lidar, driver, operator, autonomous};
@@ -151,14 +151,12 @@ public class Robot extends SampleRobot {
 		autonomous = autonomousManager.getAutonomous();
 		driver = autonomous.getAutoDriver();
 		operator = autonomous.getAutoOperator();
-		new Updater(state, new Updatable[] {align}, slowUpdatePeriod).start(); // Controller and align are potentially slower
+		new Updater(state, new Updatable[] {align, autonomous}, slowUpdatePeriod).start(); // Controller and align are potentially slower
 		new Updater(state, new Updatable[] {imu, driver, operator, mecanumDrive, lidar, grabber}, fastUpdatePeriod).start(); // These should have fast updates
 		new Updater(state, new Updatable[] {}, fastUpdatePeriod).start();
-		autonomous.start();
 		while (getRobotState() == state) {
 			Timer.delay(0.01);
 		}
-		autonomous.disable();
 	}
 
 	public void operatorControl() {

@@ -171,7 +171,6 @@ public class AutoAlign implements Updatable {
 	public boolean isCurrentlyAligning() {
 		switch (currentState) {
 			case ALIGNING_WITH_CAN:
-				return true;
 			case ALIGNING_WITH_TOTE:
 				return true;
 			default:
@@ -182,7 +181,6 @@ public class AutoAlign implements Updatable {
 	public boolean isCurrentlyReleasing() {
 		switch (currentState) {
 			case RELEASING_CAN:
-				return true;
 			case RELEASING_TOTE:
 				return true;
 			default:
@@ -194,10 +192,10 @@ public class AutoAlign implements Updatable {
 		switch (currentState) {
 			case ALIGNING_WITH_CAN:
 			case ALIGNING_WITH_TOTE:
-			case RELEASING_CAN:
-			case RELEASING_TOTE:
 			case EMPTY:
 				return Grabber.GrabberState.OPEN;
+			case RELEASING_CAN:
+			case RELEASING_TOTE:
 			case HOLDING_TOTE:
 			case HOLDING_CAN:
 				return Grabber.GrabberState.CLOSED;
