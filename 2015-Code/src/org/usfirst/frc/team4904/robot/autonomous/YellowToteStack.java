@@ -5,21 +5,22 @@ package org.usfirst.frc.team4904.robot.autonomous;
 
 
 import org.usfirst.frc.team4904.robot.AutoAlign;
+import org.usfirst.frc.team4904.robot.Autonomous;
 import org.usfirst.frc.team4904.robot.input.Camera;
 import org.usfirst.frc.team4904.robot.output.WinchAction;
 import edu.wpi.first.wpilibj.Timer;
 
-public class YellowToteStack extends SimpleAutonomous {
+public class YellowToteStack extends Autonomous {
 	private final int step;
 	private final Camera camera;
 	private final AutoAlign align;
-
+	
 	public YellowToteStack(Camera camera, AutoAlign align) {
 		step = 0;
 		this.align = align;
 		this.camera = camera;
 	}
-
+	
 	public void run() {
 		while (running) {
 			desiredYMovement = 1;
