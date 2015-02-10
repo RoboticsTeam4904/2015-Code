@@ -18,17 +18,17 @@ void requestEvent() {
   
   switch (byteNum) {
     case 1:
-    TinyWireS.send(highByte);
-    byteNum++;
-    break;
-    
-    case 2:
     TinyWireS.send(mid1Byte);
     byteNum++;
     break;
     
-    case 3:
+    case 2:
     TinyWireS.send(mid2Byte);
+    byteNum++;
+    break;
+    
+    case 3:
+    TinyWireS.send(highByte);
     byteNum++;
     break;
     
