@@ -217,7 +217,7 @@ public class AutoAlign implements Updatable {
 		return currentState == State.EMPTY;
 	}
 
-	public boolean isDriverLockedOut() {
-		return isCurrentlyAligning() || isCurrentlyReleasing();
+	public boolean isInControl() {
+		return !(isCurrentlyAligning() || isCurrentlyReleasing());
 	}
 }
