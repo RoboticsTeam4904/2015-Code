@@ -1,8 +1,9 @@
 package org.usfirst.frc.team4904.robot;
 
 
-import org.usfirst.frc.team4904.robot.autonomous.AutonomousType1;
+import org.usfirst.frc.team4904.robot.autonomous.YellowToteStack;
 import org.usfirst.frc.team4904.robot.driver.AutoDriver;
+import org.usfirst.frc.team4904.robot.input.Camera;
 import org.usfirst.frc.team4904.robot.operator.AutoOperator;
 import org.usfirst.frc.team4904.robot.output.Mecanum;
 import org.usfirst.frc.team4904.robot.output.Winch;
@@ -14,13 +15,15 @@ public class AutonomousManager {
 	private final Mecanum mecanumDrive;
 	private final Winch winch;
 	private final AutoAlign align;
+	private final Camera camera;
 	private final LogKitten logger;
 	
-	public AutonomousManager(Mecanum mecanumDrive, Winch winch, AutoAlign align) {
-		autonomouses[AUTONOMOUS_TYPE_1] = new AutonomousType1();
+	public AutonomousManager(Mecanum mecanumDrive, Winch winch, AutoAlign align, Camera camera) {
+		autonomouses[AUTONOMOUS_TYPE_1] = new YellowToteStack(camera);
 		this.mecanumDrive = mecanumDrive;
 		this.winch = winch;
 		this.align = align;
+		this.camera = camera;
 		for (Autonomous auto : autonomouses) {
 			registerAutonomous(auto);
 		}
