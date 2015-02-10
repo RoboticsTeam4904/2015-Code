@@ -13,7 +13,7 @@ public abstract class Autonomous implements Updatable, Disablable {
 	protected volatile double desiredTurnSpeed = 0;
 	protected volatile int desiredWinchHeight = 0;
 	protected final Step[] steps;
-	int step = 0;
+	int currentStep = 0;
 	
 	public Autonomous(Step[] steps) {
 		this.steps = steps;
@@ -42,13 +42,15 @@ public abstract class Autonomous implements Updatable, Disablable {
 	}
 
 	public void update() {
-		boolean increase = steps[step].run();
-		this.desiredTurnSpeed = steps[step].desiredTurnSpeed;
-		this.desiredWinchHeight = steps[step].desiredWinchHeight;
-		this.desiredXMovement = steps[step].desiredXMovement;
-		this.desiredYMovement = steps[step].desiredYMovement;
+		Step step = steps[currentStep];
+		boolean increase = step.run();
+		double[] movement = step.getDesiredMovement();
+		this.desiredTurnSpeed = movement[2];
+		this.desiredWinchHeight = step.getDesiredWinchHeight();
+		this.desiredXMovement = movement[0];
+		this.desiredYMovement = movement[1];
 		if (increase) {
-			step++;
+			currentStep++;
 		}
 	}
 
