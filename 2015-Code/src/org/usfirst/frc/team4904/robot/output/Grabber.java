@@ -13,8 +13,13 @@ public class Grabber extends Talon implements Disablable, Updatable {
 	public static final int LEFT_OUTER_SWITCH = 3;
 	private final DigitalInput[] limitSwitches;
 	
-	public enum GrabberState {
-		OPEN, CLOSED, OPENING, CLOSING, DISABLED
+	public enum GrabberState { // an enum containing grabber states and their values
+		OPEN(0), CLOSED(-0.25), OPENING(0.5), CLOSING(-0.5), DISABLED(0); // grabber state and values
+		public final double motorSpeed; // the architecture allowing the enum states to have values
+
+		private GrabberState(double speed) {
+			motorSpeed = speed;
+		}
 	}
 	private volatile GrabberState grabberState;
 	
@@ -44,44 +49,26 @@ public class Grabber extends Talon implements Disablable, Updatable {
 				grabberState = GrabberState.CLOSING;
 				System.out.println("Setting state to closing");
 				break;
+			default:
+				throw new Error("Invalid or unsupported state passed to setDesiredGrabberState");
 		}
-	}
-	
-	public void move(double speed) {
-		super.set(speed);
 	}
 	
 	public void update() {
 		checkLimitSwitches();
-		switch (grabberState) {
-			case OPEN:
-				move(0);// Dont go too far
-				return;
-			case OPENING:
-				move(0.5);
-				return;
-			case CLOSED:
-				move(-0.25);// Dont grab too hard
-				return;
-			case CLOSING:
-				move(-0.5);
-				return;
-			default:
-				move(0);
-				return;
-		}
+		set(grabberState.motorSpeed);
 	}
 
 	private void checkLimitSwitches() {
 		switch (grabberState) {
 			case OPENING:
-				if (!limitSwitches[RIGHT_OUTER_SWITCH].get()) {
+				if (!limitSwitches[RIGHT_OUTER_SWITCH].get()) { // If limit switch has been hit (get() returns opposite - true if not pressed)
 					System.out.println("Right outer switch");
-					grabberState = GrabberState.OPEN;// Don't go too far
+					grabberState = GrabberState.OPEN; // Don't go too far
 				}
 				if (!limitSwitches[LEFT_OUTER_SWITCH].get()) {
 					System.out.println("Left outer switch");
-					grabberState = GrabberState.OPEN;// Don't go too far
+					grabberState = GrabberState.OPEN; // Don't go too far
 				}
 				return;
 			case CLOSING:
@@ -95,11 +82,12 @@ public class Grabber extends Talon implements Disablable, Updatable {
 				}
 				return;
 			default:
+				return;
 		}
 	}
 
 	public void disable() {
 		grabberState = GrabberState.DISABLED;
-		move(0);
+		set(0);
 	}
 }

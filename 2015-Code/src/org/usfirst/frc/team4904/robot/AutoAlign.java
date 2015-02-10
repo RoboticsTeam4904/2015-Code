@@ -100,7 +100,7 @@ public class AutoAlign implements Updatable {
 		int[] toteFront = lidar.getLine();
 		double angle = Math.atan2(toteFront[3] - toteFront[1], toteFront[2] - toteFront[0]); // Angle of the tote relative to the X axis (us)
 		if (angle < Math.PI / 60) {
-			winch.move(0);
+			winch.set(0);
 			mecanum.setDesiredTurnSpeed(0);
 			if (lidar.getDists()[90] > 100) {
 				mecanum.setDesiredXYSpeed(0, 1);// TODO that is really f***ing fast
@@ -114,7 +114,7 @@ public class AutoAlign implements Updatable {
 				}
 			}
 		} else {
-			winch.move(0);
+			winch.set(0);
 			double x = Math.cos(angle);
 			double y = Math.sin(angle);
 			mecanum.setDesiredXYSpeed(x, y);
@@ -127,7 +127,7 @@ public class AutoAlign implements Updatable {
 	}
 
 	private void doAligningTick(boolean grab) {
-		switch (currentState) {// ****************************************************************************************************************
+		switch (currentState) {
 			case ALIGNING_WITH_CAN:
 				// alignWithCanTick(grab);
 				currentState = State.HOLDING_CAN;
@@ -141,7 +141,7 @@ public class AutoAlign implements Updatable {
 				currentState = State.EMPTY;
 				return;
 			default: // Should never reach here
-				winch.move(0);
+				winch.set(0);
 				mecanum.setDesiredXYSpeed(0, 0);
 				mecanum.setDesiredTurnSpeed(0);// Stop the robot, otherwise it would just keep going in the same speed and direction it was when grab was called
 				return;
@@ -179,29 +179,24 @@ public class AutoAlign implements Updatable {
 		}
 	}
 
-	private GrabberState getDesiredGrabberState() {// What state should the grabber be in
+	private GrabberState getDesiredGrabberState() { // What state should the grabber be in
 		switch (currentState) {
 			case ALIGNING_WITH_CAN:
-				return Grabber.GrabberState.OPEN;
 			case ALIGNING_WITH_TOTE:
-				return Grabber.GrabberState.OPEN;
-			case HOLDING_CAN:
-				return Grabber.GrabberState.CLOSED;
 			case RELEASING_CAN:
-				return Grabber.GrabberState.OPEN;
-			case HOLDING_TOTE:
-				return Grabber.GrabberState.CLOSED;
 			case RELEASING_TOTE:
-				return Grabber.GrabberState.OPEN;
 			case EMPTY:
 				return Grabber.GrabberState.OPEN;
+			case HOLDING_TOTE:
+			case HOLDING_CAN:
+				return Grabber.GrabberState.CLOSED;
 			default:
-				throw new Error("Current state of AutoAlign does not exist/is null");
+				throw new Error("Current state of AutoAlign does not exist or is null");
 		}
 	}
 
 	public void release() {
-		if (isCurrentlyAligning()) {// Canceling alignment, e.g. in case it isn't working
+		if (isCurrentlyAligning()) { // Canceling alignment, e.g. in case it isn't working
 			currentState = State.EMPTY;
 			return;
 		}
