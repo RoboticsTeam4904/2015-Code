@@ -12,11 +12,23 @@ byte byteNum = 0;
 
 void requestEvent() {
   byte lowByte = (byte) (count & 0xff);
-  byte highByte = (byte) ((count >> 8) & 0xff);
+  byte mid1Byte = (byte) ((count >> 8) & 0xff);
+  byte mid2Byte = (byte) ((count >> 16) & 0xff);
+  byte highByte = (byte) ((count >> 24) & 0xff);
   
   switch (byteNum) {
     case 1:
     TinyWireS.send(highByte);
+    byteNum++;
+    break;
+    
+    case 2:
+    TinyWireS.send(mid1Byte);
+    byteNum++;
+    break;
+    
+    case 3:
+    TinyWireS.send(mid2Byte);
     byteNum++;
     break;
     
@@ -40,6 +52,7 @@ void requestEvent() {
  * so be quick, set flags for long running tasks to be called from the mainloop instead of running them directly,
  */
 void receiveEvent(uint8_t howMany) {
+  byteNum = TinyWireS.receive();
 }
 
 
