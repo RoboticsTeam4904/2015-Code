@@ -15,7 +15,7 @@ public class OperatorManager {
 	public final int OPERATOR_NACHI = 1;
 	
 	public OperatorManager(LogitechJoystick stick, Winch winch, AutoAlign align) {
-		operatorTable = NetworkTable.getTable("driverTable");
+		operatorTable = NetworkTable.getTable("DB");
 		this.operators = new Operator[2];
 		operators[OPERATOR_GRIFFIN] = new OperatorGriffin(stick, winch, align);
 		operators[OPERATOR_NACHI] = new OperatorNachi(stick, winch, align);
@@ -23,7 +23,7 @@ public class OperatorManager {
 	
 	public Operator getOperator() {
 		NumberArray values = new NumberArray();
-		operatorTable.retrieveValue("DRIVER", values);
+		operatorTable.retrieveValue("Button 2", values);
 		return operators[(int) values.get(0)];
 	}
 }

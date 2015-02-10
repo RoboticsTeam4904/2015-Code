@@ -18,7 +18,7 @@ public class AutonomousManager {
 	private final AutoAlign align;
 	
 	public AutonomousManager(Mecanum mecanumDrive, Winch winch, AutoAlign align) {
-		autonomousTable = NetworkTable.getTable("driverTable");
+		autonomousTable = NetworkTable.getTable("DB");
 		this.autonomouses = new Autonomous[1];
 		autonomouses[AUTONOMOUS_TYPE_1] = new AutonomousType1();
 		this.mecanumDrive = mecanumDrive;
@@ -31,10 +31,10 @@ public class AutonomousManager {
 	
 	public Autonomous getAutonomous() {
 		NumberArray values = new NumberArray();
-		autonomousTable.retrieveValue("DRIVER", values);
+		autonomousTable.retrieveValue("Slider 3", values);
 		return autonomouses[(int) values.get(0)];
 	}
-
+	
 	private void registerAutonomous(Autonomous auto) {
 		auto.setAutoDriver(new AutoDriver(mecanumDrive, align, auto));
 		auto.setAutoOperator(new AutoOperator(winch, align, auto));

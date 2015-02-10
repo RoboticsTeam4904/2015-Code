@@ -13,14 +13,14 @@ public class DriverManager {
 	public final int DRIVER_NATHAN = 0;
 	
 	public DriverManager(Mecanum mecanum, XboxController xbox, AutoAlign align) {
-		driverTable = NetworkTable.getTable("driverTable");
+		driverTable = NetworkTable.getTable("DB");
 		this.drivers = new Driver[1];
 		drivers[DRIVER_NATHAN] = new DriverNathan(mecanum, xbox, align);
 	}
 	
 	public Driver getDriver() {
 		NumberArray values = new NumberArray();
-		driverTable.retrieveValue("DRIVER", values);
+		driverTable.retrieveValue("Button 1", values);
 		return drivers[(int) values.get(0)];
 	}
 }
