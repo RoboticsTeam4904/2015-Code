@@ -18,6 +18,7 @@ public class AutoAlign implements Updatable {
 	private final Winch winch;
 	private final int THIN_TOTE_WIDTH = 100;
 	private final int WIDE_TOTE_WIDTH = 200;
+	private final int LIDAR_MOUNT_OFFSET = -100; // mm to right. Cartesian. Because.
 	
 	private enum State {
 		EMPTY, ALIGNING_WITH_TOTE, ALIGNING_WITH_CAN, HOLDING_CAN, HOLDING_TOTE, RELEASING_CAN, RELEASING_TOTE
@@ -100,12 +101,21 @@ public class AutoAlign implements Updatable {
 		int[] toteFront = lidar.getLine();
 		double angle = Math.atan2(toteFront[3] - toteFront[1], toteFront[2] - toteFront[0]); // Angle of the tote relative to the X axis (us)
 		if (angle < Math.PI / 60) {
+			double x = 0;
+			double y = 0;
 			winch.set(0);
 			mecanum.setDesiredTurnSpeed(0);
-			if (lidar.getDists()[90] > 100) {
-				mecanum.setDesiredXYSpeed(0, 1);// TODO that is really f***ing fast
+			if (((toteFront[2] + toteFront[0]) / 2) < LIDAR_MOUNT_OFFSET) {
+				x = -0.2;
+			} else if (((toteFront[2] + toteFront[0]) / 2) > LIDAR_MOUNT_OFFSET) {
+				x = 0.2;
 			} else {
-				mecanum.setDesiredXYSpeed(0, 0);
+				x = 0.0;
+			}
+			if (lidar.getDists()[90] > 100) {
+				y = 1; // TODO Really fast (see comment on speeds at top of YellowToteStack)
+			} else {
+				y = 0;
 				double width = toteFront[2] - toteFront[0];
 				if (grab) {
 					currentState = State.HOLDING_TOTE;
@@ -113,6 +123,7 @@ public class AutoAlign implements Updatable {
 					currentState = State.EMPTY;
 				}
 			}
+			mecanum.setDesiredXYSpeed(x, y);
 		} else {
 			winch.set(0);
 			double x = Math.cos(angle);
