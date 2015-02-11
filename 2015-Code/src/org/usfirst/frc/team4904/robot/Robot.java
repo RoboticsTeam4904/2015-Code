@@ -5,16 +5,16 @@ import org.usfirst.frc.team4904.robot.input.Camera;
 import org.usfirst.frc.team4904.robot.input.IMU;
 import org.usfirst.frc.team4904.robot.input.LIDAR;
 import org.usfirst.frc.team4904.robot.input.LogitechJoystick;
-import org.usfirst.frc.team4904.robot.input.SuperEncoder;
 import org.usfirst.frc.team4904.robot.input.UDAR;
 import org.usfirst.frc.team4904.robot.input.XboxController;
-import org.usfirst.frc.team4904.robot.output.EncodedMotor;
 import org.usfirst.frc.team4904.robot.output.Grabber;
 import org.usfirst.frc.team4904.robot.output.Mecanum;
 import org.usfirst.frc.team4904.robot.output.Winch;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.SampleRobot;
+import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.VictorSP;
 
 public class Robot extends SampleRobot {
 	// Default ports for joystick/controller
@@ -44,19 +44,15 @@ public class Robot extends SampleRobot {
 	private final IMU imu;
 	private final LIDAR lidar;
 	private final DigitalInput limitSwitches[] = new DigitalInput[4];
-	private final SuperEncoder frontLeftEncoder;
-	private final SuperEncoder frontRightEncoder;
-	private final SuperEncoder backLeftEncoder;
-	private final SuperEncoder backRightEncoder;
 	private final Camera camera;
 	// movement controllers
 	private final Winch winch; // the Winch class takes care of moving to specific heights
 	private final Grabber grabber; // the grabber class takes care of opening and closing the grabber
 	private final Mecanum mecanumDrive; // the Mecanum class that takes care of the math required to use mecanum drive
-	private final EncodedMotor frontLeftWheel;
-	private final EncodedMotor frontRightWheel;
-	private final EncodedMotor backLeftWheel;
-	private final EncodedMotor backRightWheel;
+	private final SpeedController frontLeftWheel;
+	private final SpeedController frontRightWheel;
+	private final SpeedController backLeftWheel;
+	private final SpeedController backRightWheel;
 	// Managers
 	private final DriverManager driverManager;
 	private final OperatorManager operatorManager;
@@ -91,19 +87,14 @@ public class Robot extends SampleRobot {
 		limitSwitches[Grabber.RIGHT_OUTER_SWITCH] = new DigitalInput(RIGHT_OUTER_SWITCH_PORT);
 		limitSwitches[Grabber.LEFT_OUTER_SWITCH] = new DigitalInput(LEFT_OUTER_SWITCH_PORT);
 		camera = new Camera();
-		// Initialize Encoders
-		frontLeftEncoder = new SuperEncoder(FRONT_LEFT_I2C_PORT);
-		frontRightEncoder = new SuperEncoder(FRONT_RIGHT_I2C_PORT);
-		backLeftEncoder = new SuperEncoder(BACK_LEFT_I2C_PORT);
-		backRightEncoder = new SuperEncoder(BACK_RIGHT_I2C_PORT);
 		// Initialize movement controllers
 		winch = new Winch(WINCH_PORT); // Initialize Winch control
 		grabber = new Grabber(GRABBER_PORT, limitSwitches); // Initialize Grabber control -- only autoalign has access to this, by design
 		// Initialize motor controllers with default ports
-		frontLeftWheel = new EncodedMotor(FRONT_LEFT_WHEEL_PORT, frontLeftEncoder);
-		frontRightWheel = new EncodedMotor(FRONT_RIGHT_WHEEL_PORT, frontRightEncoder);
-		backLeftWheel = new EncodedMotor(BACK_LEFT_WHEEL_PORT, backLeftEncoder);
-		backRightWheel = new EncodedMotor(BACK_RIGHT_WHEEL_PORT, backRightEncoder);
+		frontLeftWheel = new VictorSP(FRONT_LEFT_WHEEL_PORT);
+		frontRightWheel = new VictorSP(FRONT_RIGHT_WHEEL_PORT);
+		backLeftWheel = new VictorSP(BACK_LEFT_WHEEL_PORT);
+		backRightWheel = new VictorSP(BACK_RIGHT_WHEEL_PORT);
 		mecanumDrive = new Mecanum(frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel, imu); // Initialize Mecanum control
 		// Initialize joysticks (numbers correspond to value set by driver station)
 		stick = new LogitechJoystick(JOYSTICK_PORT);
