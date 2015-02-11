@@ -6,7 +6,6 @@ import org.usfirst.frc.team4904.robot.output.Winch;
 public abstract class Operator implements Disablable, Updatable {
 	private final Winch winch;
 	private final AutoAlign align;
-	private volatile int winchTimer;
 	public static final int MODE_THIN_TOTE = 0;
 	public static final int MODE_WIDE_TOTE = 1;
 	public static final int MODE_CAN = 2;
@@ -15,13 +14,11 @@ public abstract class Operator implements Disablable, Updatable {
 	public Operator(Winch winch, AutoAlign align) {
 		this.winch = winch;
 		this.align = align;
-		winchTimer = 0;
 	}
 	
 	protected void changeHeight(int levels) {
 		if (align.isInControl()) {
-			winch.setHeight(levels + winch.getHeight());// TODO Made moving the winch a little more accurate than moving at a certain speed for 5 ticks
-			winchTimer = 5;
+			winch.setHeight(levels + winch.getHeight());
 		}
 	}
 	
@@ -43,13 +40,6 @@ public abstract class Operator implements Disablable, Updatable {
 		if (align.isInControl()) {
 			winch.set(value); // Sets winch motor speed
 		}
-	}
-	
-	protected void updateWinch() {
-		if (!align.isInControl()) {
-			return;
-		}
-		// TODO use PID loop to move winch
 	}
 	
 	public void setWinch(int height) {
