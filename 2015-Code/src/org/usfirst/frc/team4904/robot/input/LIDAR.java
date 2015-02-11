@@ -57,6 +57,7 @@ public class LIDAR implements Disablable, Updatable {
 				b_data[i][1] &= 0x3F;
 				dist[i] = new BigInteger(new byte[] {0, b_data[i][1], b_data[i][0]}).intValue();
 			}
+			logger.v("scanline", Integer.toString(dist[0]) + " " + Integer.toString(dist[1]) + " " + Integer.toString(dist[2]) + " " + Integer.toString(3));
 			return dist;
 		}
 		return null;
