@@ -24,6 +24,7 @@ public class LIDAR implements Disablable, Updatable {
 		motor = new Talon(motorport);
 		port = new SerialPort(115200, SerialPort.Port.kMXP);
 		logger = new LogKitten("LIDAR", LogKitten.LEVEL_DEBUG);
+		logger.v("LIDAR", "Started Logging");
 	}
 	
 	private byte[] read(int bytes) throws Exception {
@@ -64,7 +65,7 @@ public class LIDAR implements Disablable, Updatable {
 	public int[] getDists() {
 		return dists;
 	}
-
+	
 	public int[] getLine() {
 		HoughTransform H = new HoughTransform(width, height);
 		for (int i = 0; i < 360; i++) {
@@ -93,7 +94,7 @@ public class LIDAR implements Disablable, Updatable {
 		// TODO check the length of the lines to see which is the most reasonable
 		return inFront.get(new Random().nextInt(inFront.size()));
 	}
-
+	
 	/*
 	 * public int[] getLine() { double[] xs = new double[180]; double[] ys = new double[180]; for (int i = 0; i < 180; i++) { xs[i] = dists[i] * Math.cos(i); ys[i] = dists[i] * Math.sin(i); } double angle = Math.atan2(ys[90], xs[90]); int startIter = 90; int endIter = 90; for (int i = 0; i < 180; i++) { double thisAngle = Math.atan2(ys[i], xs[i]); if (Math.abs(thisAngle - angle) < 5) { if (i < startIter) { startIter = i; } else if (i > endIter) { endIter = i; } } } int[] line = new int[4]; line[0] = (int) xs[startIter]; line[1] = (int) ys[startIter]; line[2] = (int) xs[endIter]; line[3] = (int) ys[endIter]; return line; }
 	 */
@@ -103,7 +104,7 @@ public class LIDAR implements Disablable, Updatable {
 	
 	public void update() {
 		motor.set(0.5);
-		if (bytesCurrentlyAvailable() < 10000) {
+		if (bytesCurrentlyAvailable() < 100) {
 			return;
 		}
 		System.out.println("Reading from LIDAR");
@@ -175,7 +176,7 @@ public class LIDAR implements Disablable, Updatable {
 			this.theta = theta;
 			this.r = r;
 		}
-
+		
 		public int[] getCoordinates() {
 			int[] X = new int[360];// X and Y coordinates of the 360 points
 			int[] Y = new int[360];
@@ -225,7 +226,7 @@ public class LIDAR implements Disablable, Updatable {
 			int[] B = a.get(a.size() - 1);
 			return new int[] {A[1], A[2], B[1], B[2]};
 		}
-
+		
 		public boolean process(int x, int y, int[] X, int[] Y, ArrayList<ArrayList<int[]>> me, boolean inLine) {
 			int max = greenSensitivityPixels * greenSensitivityPixels;// We only want points closer than the sensitivity
 			int maxInd = -1;// Index of the closest point
