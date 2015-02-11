@@ -30,7 +30,9 @@ public class SuperEncoder {
 	
 	public int getTicks() {
 		byte[] toRecieve = new byte[4];
-		i2c.transaction(null, 0, toRecieve, 4);
+		byte[] toSend = new byte[1];
+		toSend = new byte[] {0};
+		i2c.transaction(toSend, 1, toRecieve, 4);
 		int value = new BigInteger(toRecieve).intValue();
 		logger.d("getTicks", "Got ticks: " + Integer.toString(value));
 		return value;
