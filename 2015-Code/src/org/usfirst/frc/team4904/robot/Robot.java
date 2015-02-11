@@ -5,7 +5,6 @@ import org.usfirst.frc.team4904.robot.input.Camera;
 import org.usfirst.frc.team4904.robot.input.IMU;
 import org.usfirst.frc.team4904.robot.input.LIDAR;
 import org.usfirst.frc.team4904.robot.input.LogitechJoystick;
-import org.usfirst.frc.team4904.robot.input.SuperEncoder;
 import org.usfirst.frc.team4904.robot.input.UDAR;
 import org.usfirst.frc.team4904.robot.input.XboxController;
 import org.usfirst.frc.team4904.robot.output.Grabber;
@@ -45,10 +44,6 @@ public class Robot extends SampleRobot {
 	private final IMU imu;
 	private final LIDAR lidar;
 	private final DigitalInput limitSwitches[] = new DigitalInput[4];
-	private final SuperEncoder frontLeftEncoder;
-	private final SuperEncoder frontRightEncoder;
-	private final SuperEncoder backLeftEncoder;
-	private final SuperEncoder backRightEncoder;
 	private final Camera camera;
 	// movement controllers
 	private final Winch winch; // the Winch class takes care of moving to specific heights
@@ -73,11 +68,11 @@ public class Robot extends SampleRobot {
 	// Logging system
 	private final LogKitten logger;
 	private final Disablable[] toDisable;
-
+	
 	private enum RobotState {
 		DISABLED, OPERATOR, AUTONOMOUS
 	}
-
+	
 	public Robot() {
 		System.out.println("*** CONSTRUCTING ROBOT ***");
 		// Initializing logging
@@ -92,19 +87,14 @@ public class Robot extends SampleRobot {
 		limitSwitches[Grabber.RIGHT_OUTER_SWITCH] = new DigitalInput(RIGHT_OUTER_SWITCH_PORT);
 		limitSwitches[Grabber.LEFT_OUTER_SWITCH] = new DigitalInput(LEFT_OUTER_SWITCH_PORT);
 		camera = new Camera();
-		// Initialize Encoders
-		frontLeftEncoder = new SuperEncoder(FRONT_LEFT_I2C_PORT);
-		frontRightEncoder = new SuperEncoder(FRONT_RIGHT_I2C_PORT);
-		backLeftEncoder = new SuperEncoder(BACK_LEFT_I2C_PORT);
-		backRightEncoder = new SuperEncoder(BACK_RIGHT_I2C_PORT);
 		// Initialize movement controllers
 		winch = new Winch(WINCH_PORT); // Initialize Winch control
 		grabber = new Grabber(GRABBER_PORT, limitSwitches); // Initialize Grabber control -- only autoalign has access to this, by design
 		// Initialize motor controllers with default ports
-		frontLeftWheel = new VictorSP(FRONT_LEFT_WHEEL_PORT/* , frontLeftEncoder */);
-		frontRightWheel = new VictorSP(FRONT_RIGHT_WHEEL_PORT/* , FRONT_RIGHT_I2C_PORT */);
-		backLeftWheel = new VictorSP(BACK_LEFT_WHEEL_PORT/* , BACK_LEFT_I2C_PORT */);
-		backRightWheel = new VictorSP(BACK_RIGHT_WHEEL_PORT/* , BACK_RIGHT_I2C_PORT */);
+		frontLeftWheel = new VictorSP(FRONT_LEFT_WHEEL_PORT);
+		frontRightWheel = new VictorSP(FRONT_RIGHT_WHEEL_PORT);
+		backLeftWheel = new VictorSP(BACK_LEFT_WHEEL_PORT);
+		backRightWheel = new VictorSP(BACK_RIGHT_WHEEL_PORT);
 		mecanumDrive = new Mecanum(frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel, imu); // Initialize Mecanum control
 		// Initialize joysticks (numbers correspond to value set by driver station)
 		stick = new LogitechJoystick(JOYSTICK_PORT);
@@ -119,12 +109,12 @@ public class Robot extends SampleRobot {
 		autonomous = autonomousManager.getAutonomous();
 		toDisable = new Disablable[] {winch, grabber, lidar, driver, operator, autonomous};
 	}
-
+	
 	public void robotInit() {
 		System.out.println("*** INITIALIZING ***");
 		logger.v("Initializing", "Initializing");
 	}
-
+	
 	public void disabled() {
 		System.out.println("*** DISABLED ***");
 		logger.v("Disabled", "Disabled");
@@ -143,7 +133,7 @@ public class Robot extends SampleRobot {
 			Timer.delay(0.01);
 		}
 	}
-
+	
 	public void autonomous() {
 		System.out.println("*** AUTONOMOUS ***");
 		logger.v("Autonomous", "Autonomous");
@@ -158,7 +148,7 @@ public class Robot extends SampleRobot {
 			Timer.delay(0.01);
 		}
 	}
-
+	
 	public void operatorControl() {
 		System.out.println("*** TELEOPERATED ***");
 		logger.v("Teleoperated", "Teleoperated");
@@ -172,7 +162,7 @@ public class Robot extends SampleRobot {
 			Timer.delay(0.01);
 		}
 	}
-
+	
 	private RobotState getRobotState() {
 		if (isDisabled()) {
 			return RobotState.DISABLED;
@@ -185,22 +175,22 @@ public class Robot extends SampleRobot {
 		}
 		return RobotState.DISABLED;
 	}
-
+	
 	public static double time() {
 		return (double) System.currentTimeMillis() / 1000;
 	}
-
+	
 	private class Updater extends Thread { // Function to update automatically in a new thread
 		private final RobotState robotState;
 		private final Updatable[] toUpdate;
 		private final double updateSpeed;
-
+		
 		public Updater(RobotState state, Updatable[] toUpdate, double updateSpeed) {
 			robotState = state;
 			this.toUpdate = toUpdate;
 			this.updateSpeed = updateSpeed;
 		}
-
+		
 		public void run() {
 			if (toUpdate.length > 1) {
 				for (Updatable u : toUpdate) {
