@@ -31,8 +31,9 @@ public class SuperEncoder {
 	public int getTicks() {
 		byte[] toRecieve = new byte[4];
 		i2c.transaction(null, 0, toRecieve, 4);
-		logger.d("getTicks", toRecieve.toString());
-		return new BigInteger(toRecieve).intValue();
+		int value = new BigInteger(toRecieve).intValue();
+		logger.d("getTicks", "Got ticks: " + Integer.toString(value));
+		return value;
 	}
 	
 	public static double time() {
