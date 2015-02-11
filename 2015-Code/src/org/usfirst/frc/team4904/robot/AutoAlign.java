@@ -225,7 +225,7 @@ public class AutoAlign implements Updatable {
 	public boolean isGrabberEmpty() {
 		return currentState == State.EMPTY;
 	}
-
+	
 	public boolean isInControl() {
 		return !(isCurrentlyAligning() || isCurrentlyReleasing());
 	}
