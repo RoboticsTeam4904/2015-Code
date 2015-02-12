@@ -116,7 +116,7 @@ public class Robot extends SampleRobot {
 		autonomousManager = new AutonomousManager(mecanumDrive, winch, align, camera, lidar);
 		// Drivers, operators, autonomous
 		autonomous = autonomousManager.getAutonomous();
-		toDisable = new Disablable[] {winch, grabber, lidar, driver, operator, autonomous};
+		toDisable = new Disablable[] {winch, grabber, lidar, driver, operator, autonomous, frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel};
 	}
 	
 	public void robotInit() {
@@ -152,7 +152,7 @@ public class Robot extends SampleRobot {
 		operator = autonomous.getAutoOperator();
 		new Updater(state, new Updatable[] {align, autonomous}, slowUpdatePeriod).start(); // Controller and align are potentially slower
 		new Updater(state, new Updatable[] {imu, driver, operator, mecanumDrive, lidar, grabber}, fastUpdatePeriod).start(); // These should have fast updates
-		new Updater(state, new Updatable[] {}, fastUpdatePeriod).start();
+		new Updater(state, new Updatable[] {frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel}, fastUpdatePeriod).start();
 		while (getRobotState() == state) {
 			Timer.delay(0.01);
 		}
@@ -166,7 +166,7 @@ public class Robot extends SampleRobot {
 		driver = driverManager.getDriver();
 		new Updater(state, new Updatable[] {align}, slowUpdatePeriod).start(); // Controller and align are potentially slower
 		new Updater(state, new Updatable[] {imu, driver, operator, mecanumDrive, lidar, grabber}, fastUpdatePeriod).start(); // These should have fast updates
-		new Updater(state, new Updatable[] {}, fastUpdatePeriod).start();
+		new Updater(state, new Updatable[] {frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel}, fastUpdatePeriod).start();
 		while (getRobotState() == state) {
 			Timer.delay(0.01);
 		}

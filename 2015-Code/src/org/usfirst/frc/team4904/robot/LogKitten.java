@@ -44,7 +44,7 @@ public class LogKitten {
 	}
 	
 	public void f(String tag, String message) { // Log error message
-		if (level >= LEVEL_FATAL) {
+		if (level < LEVEL_FATAL) {
 			return;
 		}
 		try {
@@ -62,7 +62,7 @@ public class LogKitten {
 	}
 	
 	public void e(String tag, String message) { // Log error message
-		if (level >= LEVEL_ERROR) {
+		if (level < LEVEL_ERROR) {
 			return;
 		}
 		try {
@@ -80,7 +80,7 @@ public class LogKitten {
 	}
 	
 	public void w(String tag, String message) { // Log error message
-		if (level >= LEVEL_WARN) {
+		if (level < LEVEL_WARN) {
 			return;
 		}
 		try {
@@ -98,7 +98,7 @@ public class LogKitten {
 	}
 	
 	public void v(String tag, String message) { // Log verbose message
-		if (level >= LEVEL_VERBOSE) {
+		if (level < LEVEL_VERBOSE) {
 			return;
 		}
 		try {
@@ -116,7 +116,7 @@ public class LogKitten {
 	}
 	
 	public void d(String tag, String message) { // Log debug message
-		if (level >= LEVEL_DEBUG) {
+		if (level < LEVEL_DEBUG) {
 			return;
 		}
 		try {
@@ -129,7 +129,7 @@ public class LogKitten {
 			ioe.printStackTrace();
 		}
 		if (printLevel >= LEVEL_DEBUG) {
-			System.out.println(identifier + " " + "DEBUG: " + tag + ": " + message + "\n");
+			System.out.println(identifier + " " + "DEBUG: " + tag + ": " + message + " " + Integer.toString(printLevel) + "\n");
 		}
 	}
 	
