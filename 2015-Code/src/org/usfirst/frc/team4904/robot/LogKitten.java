@@ -44,7 +44,7 @@ public class LogKitten {
 	}
 	
 	public void f(String tag, String message) { // Log error message
-		if (level < LEVEL_FATAL) {
+		if (level >= LEVEL_FATAL) {
 			return;
 		}
 		try {
@@ -56,13 +56,13 @@ public class LogKitten {
 			System.out.println("Error logging error.");
 			ioe.printStackTrace();
 		}
-		if (printLevel < LEVEL_FATAL) {
+		if (printLevel >= LEVEL_FATAL) {
 			System.out.println(identifier + " " + "FATAL: " + tag + ": " + message + "\n");
 		}
 	}
 	
 	public void e(String tag, String message) { // Log error message
-		if (level < LEVEL_ERROR) {
+		if (level >= LEVEL_ERROR) {
 			return;
 		}
 		try {
@@ -74,13 +74,13 @@ public class LogKitten {
 			System.out.println("Error logging error.");
 			ioe.printStackTrace();
 		}
-		if (printLevel < LEVEL_ERROR) {
+		if (printLevel >= LEVEL_ERROR) {
 			System.out.println(identifier + " " + "ERROR: " + tag + ": " + message + "\n");
 		}
 	}
 	
 	public void w(String tag, String message) { // Log error message
-		if (level < LEVEL_WARN) {
+		if (level >= LEVEL_WARN) {
 			return;
 		}
 		try {
@@ -92,13 +92,13 @@ public class LogKitten {
 			System.out.println("Error logging error.");
 			ioe.printStackTrace();
 		}
-		if (printLevel < LEVEL_WARN) {
+		if (printLevel >= LEVEL_WARN) {
 			System.out.println(identifier + " " + "WARN: " + tag + ": " + message + "\n");
 		}
 	}
 	
 	public void v(String tag, String message) { // Log verbose message
-		if (level < LEVEL_VERBOSE) {
+		if (level >= LEVEL_VERBOSE) {
 			return;
 		}
 		try {
@@ -110,13 +110,13 @@ public class LogKitten {
 			System.out.println("Error logging verbose message.");
 			ioe.printStackTrace();
 		}
-		if (printLevel < LEVEL_VERBOSE) {
+		if (printLevel >= LEVEL_VERBOSE) {
 			System.out.println(identifier + " " + "VERBOSE: " + tag + ": " + message + "\n");
 		}
 	}
 	
 	public void d(String tag, String message) { // Log debug message
-		if (level < LEVEL_DEBUG) {
+		if (level >= LEVEL_DEBUG) {
 			return;
 		}
 		try {
@@ -128,7 +128,7 @@ public class LogKitten {
 			System.out.println("Error logging debug message");
 			ioe.printStackTrace();
 		}
-		if (printLevel < LEVEL_DEBUG) {
+		if (printLevel >= LEVEL_DEBUG) {
 			System.out.println(identifier + " " + "DEBUG: " + tag + ": " + message + "\n");
 		}
 	}
