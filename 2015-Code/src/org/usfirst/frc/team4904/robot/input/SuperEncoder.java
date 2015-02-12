@@ -29,7 +29,7 @@ public class SuperEncoder {
 		return speed / 4500;
 	}
 	
-	private int getTicks() {
+	public int getTicks() {
 		byte[] toRecieve = new byte[4];
 		byte[] toSend = new byte[1];
 		toSend = new byte[] {0};
