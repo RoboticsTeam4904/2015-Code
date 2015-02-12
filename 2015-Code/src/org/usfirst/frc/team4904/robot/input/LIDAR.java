@@ -3,7 +3,6 @@ package org.usfirst.frc.team4904.robot.input;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
-import java.util.Random;
 import org.usfirst.frc.team4904.robot.Disablable;
 import org.usfirst.frc.team4904.robot.LogKitten;
 import org.usfirst.frc.team4904.robot.Updatable;
@@ -93,7 +92,8 @@ public class LIDAR implements Disablable, Updatable {
 			}
 		}
 		// TODO check the length of the lines to see which is the most reasonable
-		return inFront.get(new Random().nextInt(inFront.size()));
+		logger.v("getLines", "Line: " + Integer.toString(inFront.get(0)[0]) + " " + Integer.toString(inFront.get(0)[1]) + " " + Integer.toString(inFront.get(0)[2]) + " " + Integer.toString(inFront.get(0)[3]));
+		return inFront.get(0);
 	}
 	
 	/*
