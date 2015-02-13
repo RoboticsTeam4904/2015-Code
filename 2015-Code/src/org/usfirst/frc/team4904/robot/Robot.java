@@ -10,6 +10,7 @@ import org.usfirst.frc.team4904.robot.input.UDAR;
 import org.usfirst.frc.team4904.robot.input.XboxController;
 import org.usfirst.frc.team4904.robot.output.Grabber;
 import org.usfirst.frc.team4904.robot.output.Mecanum;
+import org.usfirst.frc.team4904.robot.output.PID;
 import org.usfirst.frc.team4904.robot.output.SpeedEncodedMotor;
 import org.usfirst.frc.team4904.robot.output.Winch;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -103,10 +104,10 @@ public class Robot extends SampleRobot {
 		winch = new Winch(WINCH_PORT, winchEncoder); // Initialize Winch control
 		grabber = new Grabber(GRABBER_PORT, limitSwitches); // Initialize Grabber control -- only autoalign has access to this, by design
 		// Initialize motor controllers with default ports
-		frontLeftWheel = new SpeedEncodedMotor(FRONT_LEFT_WHEEL_PORT, frontLeftEncoder);
-		frontRightWheel = new SpeedEncodedMotor(FRONT_RIGHT_WHEEL_PORT, frontRightEncoder);
-		backLeftWheel = new SpeedEncodedMotor(BACK_LEFT_WHEEL_PORT, backLeftEncoder);
-		backRightWheel = new SpeedEncodedMotor(BACK_RIGHT_WHEEL_PORT, backRightEncoder);
+		frontLeftWheel = new SpeedEncodedMotor(FRONT_LEFT_WHEEL_PORT, frontLeftEncoder, new PID(1.0, 0.3, 0.3));
+		frontRightWheel = new SpeedEncodedMotor(FRONT_RIGHT_WHEEL_PORT, frontRightEncoder, new PID(1.0, 0.3, 0.3));
+		backLeftWheel = new SpeedEncodedMotor(BACK_LEFT_WHEEL_PORT, backLeftEncoder, new PID(1.0, 0.3, 0.3));
+		backRightWheel = new SpeedEncodedMotor(BACK_RIGHT_WHEEL_PORT, backRightEncoder, new PID(1.0, 0.3, 0.3));
 		mecanumDrive = new Mecanum(frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel, imu); // Initialize Mecanum control
 		// Initialize joysticks (numbers correspond to value set by driver station)
 		stick = new LogitechJoystick(JOYSTICK_PORT);

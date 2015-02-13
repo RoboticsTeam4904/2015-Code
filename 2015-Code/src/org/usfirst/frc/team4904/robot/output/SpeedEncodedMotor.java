@@ -4,8 +4,8 @@ package org.usfirst.frc.team4904.robot.output;
 import org.usfirst.frc.team4904.robot.input.SuperEncoder;
 
 public class SpeedEncodedMotor extends EncodedMotor {
-	public SpeedEncodedMotor(int channel, SuperEncoder encoder) {
-		super(channel, encoder);
+	public SpeedEncodedMotor(int channel, SuperEncoder encoder, PID pid) {
+		super(channel, encoder, pid);
 	}
 	
 	public void set(double value) {

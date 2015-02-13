@@ -4,8 +4,8 @@ package org.usfirst.frc.team4904.robot.output;
 import org.usfirst.frc.team4904.robot.input.SuperEncoder;
 
 public class PositionEncodedMotor extends EncodedMotor {
-	public PositionEncodedMotor(int channel, SuperEncoder encoder) {
-		super(channel, encoder);
+	public PositionEncodedMotor(int channel, SuperEncoder encoder, PID pid) {
+		super(channel, encoder, pid);
 	}
 	
 	public void set(double value) {
