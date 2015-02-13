@@ -120,7 +120,7 @@ public class Robot extends SampleRobot {
 		autonomousManager = new AutonomousManager(mecanumDrive, winch, align, camera, lidar);
 		// Drivers, operators, autonomous
 		autonomous = autonomousManager.getAutonomous();
-		toDisable = new Disablable[] {winch, grabber, lidar, driver, operator, autonomous, frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel};
+		toDisable = new Disablable[] {winch, grabber, lidar, driver, operator, autonomous, frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel, camera};
 	}
 	
 	public void robotInit() {
@@ -154,7 +154,7 @@ public class Robot extends SampleRobot {
 		autonomous = autonomousManager.getAutonomous();
 		driver = autonomous.getAutoDriver();
 		operator = autonomous.getAutoOperator();
-		new Updater(state, new Updatable[] {align, autonomous}, slowUpdatePeriod).start(); // Controller and align are potentially slower
+		new Updater(state, new Updatable[] {align, autonomous, camera}, slowUpdatePeriod).start(); // Controller and align are potentially slower
 		new Updater(state, new Updatable[] {imu, driver, operator, mecanumDrive, lidar, grabber}, fastUpdatePeriod).start(); // These should have fast updates
 		new Updater(state, new Updatable[] {frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel, winch}, fastUpdatePeriod).start();
 		while (getRobotState() == state) {
@@ -168,7 +168,7 @@ public class Robot extends SampleRobot {
 		RobotState state = RobotState.OPERATOR;
 		operator = operatorManager.getOperator();
 		driver = driverManager.getDriver();
-		new Updater(state, new Updatable[] {align}, slowUpdatePeriod).start(); // Controller and align are potentially slower
+		new Updater(state, new Updatable[] {align, camera}, slowUpdatePeriod).start(); // Controller and align are potentially slower
 		new Updater(state, new Updatable[] {imu, driver, operator, mecanumDrive, lidar, grabber}, fastUpdatePeriod).start(); // These should have fast updates
 		new Updater(state, new Updatable[] {frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel, winch}, fastUpdatePeriod).start();
 		while (getRobotState() == state) {
