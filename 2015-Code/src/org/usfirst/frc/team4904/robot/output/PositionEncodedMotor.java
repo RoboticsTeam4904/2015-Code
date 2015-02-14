@@ -9,11 +9,7 @@ public class PositionEncodedMotor extends EncodedMotor {
 	}
 	
 	public void set(double value) {
-		// This function takes a motor speed where -1 is -5000 ticks per seond and 1 is 5000 ticks per second
-		// ////////////////////////////
-		// You do not need to reset the sum when you set the motor speed
-		// It is a cumulative variable that is designed to accumulate for continuous pressures on the motor
-		// integralSum = 0;
+		// This function takes a motor height
 		target = value;
 	}
 	
