@@ -2,6 +2,7 @@ package org.usfirst.frc.team4904.robot.output;
 
 
 import org.usfirst.frc.team4904.robot.Disablable;
+import org.usfirst.frc.team4904.robot.LogKitten;
 import org.usfirst.frc.team4904.robot.Updatable;
 import org.usfirst.frc.team4904.robot.input.SuperEncoder;
 import edu.wpi.first.wpilibj.VictorSP;
@@ -15,6 +16,7 @@ public abstract class EncodedMotor extends VictorSP implements Disablable, Updat
 	protected double D = 0.3; // ticks per second per second
 	protected boolean override;
 	protected final SuperEncoder encoder;
+	private LogKitten logger;
 	
 	public EncodedMotor(int channel, SuperEncoder encoder, PID pid) {
 		super(channel);
@@ -22,13 +24,26 @@ public abstract class EncodedMotor extends VictorSP implements Disablable, Updat
 		this.pid = pid;
 		motorOutput = 0;
 		override = false;
+		logger = new LogKitten("EncodedMotor" + channel, LogKitten.LEVEL_VERBOSE);
 	}
 	
-	public abstract void setValue(double value);
+	public abstract void set(double value);
 	
 	protected abstract double currentState();
 	
-	public abstract void update();
+	public void setSpeed(double value) { // Ignore the warning on this line. It is all good anyway.
+		motorOutput = value;
+		override = true;
+		logger.v("setSpeed", "Set value to " + value);
+	}
+	
+	public void update() {
+		if (!override) {
+			motorOutput = pid.calculate(target, currentState());
+		}
+		logger.d("update", "override is: " + Boolean.toString(override) + " motorOutput is: " + Double.toString(motorOutput));
+		super.set(motorOutput);
+	}
 	
 	public void override(double value) {
 		super.set(value);

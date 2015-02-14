@@ -1,11 +1,15 @@
 package org.usfirst.frc.team4904.robot.output;
 
 
+import org.usfirst.frc.team4904.robot.LogKitten;
 import org.usfirst.frc.team4904.robot.input.SuperEncoder;
 
 public class SpeedEncodedMotor extends EncodedMotor {
+	private LogKitten logger;
+	
 	public SpeedEncodedMotor(int channel, SuperEncoder encoder, PID pid) {
 		super(channel, encoder, pid);
+		logger = new LogKitten("SpeedEncodedMotor" + channel, LogKitten.LEVEL_VERBOSE);
 	}
 	
 	public void set(double value) {
@@ -22,21 +26,10 @@ public class SpeedEncodedMotor extends EncodedMotor {
 		if (target < -1) {
 			target = -1;
 		}
+		logger.v("set", "Set value to " + value);
 	}
 	
 	protected double currentState() {
 		return encoder.currentEncoderSpeed();
-	}
-	
-	public void setValue(double value) {
-		override = true;
-		motorOutput = value;
-	}
-	
-	public void update() {
-		if (!override) {
-			motorOutput = pid.calculate(target, currentState());
-		}
-		super.set(motorOutput);
 	}
 }

@@ -59,7 +59,7 @@ public class Mecanum implements Updatable {
 		double currentAngle = Math.atan2(currentYSpeed, currentXSpeed);
 		move(currentSpeed, currentAngle, currentTurnSpeed, absolute); // This system allows for different updating times and rates
 	}
-
+	
 	public void setDesiredXYSpeed(double desiredXSpeed, double desiredYSpeed) {
 		currentXSpeed = desiredXSpeed;
 		currentYSpeed = desiredYSpeed;

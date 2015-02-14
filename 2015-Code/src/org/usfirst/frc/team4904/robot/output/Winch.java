@@ -21,7 +21,7 @@ public class Winch extends PositionEncodedMotor implements Disablable {
 		} else if (height < 0) {
 			height = 0;
 		}
-		super.setValue(height * TICK_HEIGHT_RATIO);
+		super.set(height * TICK_HEIGHT_RATIO);
 		currentHeight = (int) (super.currentState() / TICK_HEIGHT_RATIO);
 	}
 	
@@ -34,7 +34,7 @@ public class Winch extends PositionEncodedMotor implements Disablable {
 	}
 	
 	public void disable() {
-		set(0);
+		setSpeed(0);
 		target = currentHeight * TICK_HEIGHT_RATIO;
 	}
 }
