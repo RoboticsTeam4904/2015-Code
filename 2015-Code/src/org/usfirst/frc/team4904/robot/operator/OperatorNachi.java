@@ -21,7 +21,7 @@ public class OperatorNachi extends Operator {
 			System.out.print("TOTE");
 			if (align.isGrabberEmpty()) {
 				System.out.println("Grab");
-				grab(MODE_WIDE_TOTE);
+				grab(MODE_TOTE);
 			} else {
 				System.out.println("Release");
 				release();

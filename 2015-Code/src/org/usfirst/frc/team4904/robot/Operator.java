@@ -6,10 +6,9 @@ import org.usfirst.frc.team4904.robot.output.Winch;
 public abstract class Operator implements Disablable, Updatable {
 	private final Winch winch;
 	private final AutoAlign align;
-	public static final int MODE_THIN_TOTE = 0;
-	public static final int MODE_WIDE_TOTE = 1;
-	public static final int MODE_CAN = 2;
-	public static final int MODE_EMPTY = 3;
+	public static final int MODE_TOTE = 0;
+	public static final int MODE_CAN = 1;
+	public static final int MODE_EMPTY = 2;
 	
 	public Operator(Winch winch, AutoAlign align) {
 		this.winch = winch;
@@ -23,9 +22,7 @@ public abstract class Operator implements Disablable, Updatable {
 	}
 	
 	protected void grab(int mode) {
-		if (mode == MODE_THIN_TOTE) {
-			align.grabTote();
-		} else if (mode == MODE_WIDE_TOTE) {
+		if (mode == MODE_TOTE) {
 			align.grabTote();
 		} else if (mode == MODE_CAN) {
 			align.grabCan();
