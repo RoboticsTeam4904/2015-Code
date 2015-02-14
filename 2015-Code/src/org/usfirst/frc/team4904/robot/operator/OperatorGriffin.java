@@ -9,10 +9,12 @@ import org.usfirst.frc.team4904.robot.output.Winch;
 
 public class OperatorGriffin extends Operator {
 	private final LogitechJoystick stick;
+	private final Grabber grabber;
 	
 	public OperatorGriffin(LogitechJoystick stick, Winch winch, AutoAlign align, Grabber grabber) {
 		super(winch, align, grabber);
 		this.stick = stick;
+		this.grabber = grabber;
 	}
 	
 	public synchronized void update() {
@@ -50,6 +52,10 @@ public class OperatorGriffin extends Operator {
 		}
 		if (stick.buttons[6].get()) {
 			release(); // When button 7 is pressed, release a can
+		}
+		// Grabber override
+		if (stick.buttons[11].getRaw()) {
+			grabber.override(stick.getY());
 		}
 	}
 	
