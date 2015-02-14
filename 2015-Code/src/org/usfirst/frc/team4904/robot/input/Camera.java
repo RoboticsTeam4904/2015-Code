@@ -19,11 +19,11 @@ public class Camera implements Updatable, Disablable {
 	private final NIVision.Range TOTE_HUE_RANGE = new NIVision.Range(101, 64); // Default hue range for yellow tote
 	private final NIVision.Range TOTE_SAT_RANGE = new NIVision.Range(88, 255); // Default saturation range for yellow tote
 	private final NIVision.Range TOTE_VAL_RANGE = new NIVision.Range(134, 255); // Default value range for yellow tote
-	private final double AREA_MINIMUM = 0.5;
-	private double LONG_RATIO = 2.22; // Tote long side = 26.9 / Tote height = 12.1 = 2.22
-	private double SHORT_RATIO = 1.4; // Tote short side = 16.9 / Tote height = 12.1 = 1.4
-	private double SCORE_MIN = 75.0; // Minimum score to be considered a tote
-	private final String CAMERA_NAME = "cam1";
+	private static final double AREA_MINIMUM = 0.5;
+	private static double LONG_RATIO = 2.22; // Tote long side = 26.9 / Tote height = 12.1 = 2.22
+	private static double SHORT_RATIO = 1.4; // Tote short side = 16.9 / Tote height = 12.1 = 1.4
+	private static double SCORE_MIN = 75.0; // Minimum score to be considered a tote
+	private static final String CAMERA_NAME = "cam1";
 	private NIVision.ParticleFilterCriteria2 criteria[] = new NIVision.ParticleFilterCriteria2[1];
 	private NIVision.ParticleFilterOptions2 filterOptions = new NIVision.ParticleFilterOptions2(0, 0, 1, 1);
 	
@@ -39,10 +39,12 @@ public class Camera implements Updatable, Disablable {
 	}
 	
 	private void enable() {
+		enabled = true;
 		NIVision.IMAQdxStartAcquisition(cameraSession);
 	}
 	
 	public void disable() {
+		enabled = false;
 		NIVision.IMAQdxStopAcquisition(cameraSession);
 	}
 	
@@ -75,7 +77,7 @@ public class Camera implements Updatable, Disablable {
 			par.BoundingRectRight = NIVision.imaqMeasureParticle(binaryFrame, pI, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_RIGHT);
 			particles.add(par);
 		}
-		particles.sort(null);
+		particles.sort(null);// I find it hard to believe that this will work in any way
 		ParticleReport tote = particles.get(0);
 		// TODO actually get center
 	}
