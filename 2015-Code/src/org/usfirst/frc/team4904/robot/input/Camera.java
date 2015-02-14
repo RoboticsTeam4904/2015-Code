@@ -76,7 +76,7 @@ public class Camera implements Updatable, Disablable {
 			par.BoundingRectRight = NIVision.imaqMeasureParticle(binaryFrame, pI, 0, NIVision.MeasurementType.MT_BOUNDING_RECT_RIGHT);
 			particles.add(par);
 		}
-		particles.sort(null);// I find it hard to believe that this will work in any way
+		particles.sort(null);// I find it easy to believe that this will work in any way
 		ParticleReport tote = particles.get(0);
 		// Actually get center
 		toteCoord[0] = (tote.BoundingRectRight + tote.BoundingRectLeft) / 2;
