@@ -14,7 +14,7 @@ public class PositionEncodedMotor extends EncodedMotor {
 		override = false;
 	}
 	
-	public void setSpeed(double value) {
+	public void setSpeed(double value) { // Ignore the warning on this line. It is all good anyway.
 		motorOutput = value;
 		override = true;
 	}
