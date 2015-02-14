@@ -27,10 +27,11 @@ public class AutonomousManager {
 			registerAutonomous(auto);
 		}
 		logger = new LogKitten("AutonomousManager", LogKitten.LEVEL_VERBOSE);
+		SmartDashboard.putNumber("Autonomous", 0);
 	}
 	
 	public Autonomous getAutonomous() {
-		int autoMode = (int) SmartDashboard.getNumber("DB/Slider 2", 0);
+		int autoMode = (int) SmartDashboard.getNumber("Autonomous", 0);
 		if (autoMode > 0) {
 			autoMode = 0;
 		}
