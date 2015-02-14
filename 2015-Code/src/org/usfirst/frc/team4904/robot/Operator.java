@@ -48,6 +48,10 @@ public abstract class Operator implements Disablable, Updatable {
 		}
 	}
 	
+	public int getWinch() {
+		return winch.getHeight();
+	}
+	
 	public void disable() {
 		winch.set(0);
 	}

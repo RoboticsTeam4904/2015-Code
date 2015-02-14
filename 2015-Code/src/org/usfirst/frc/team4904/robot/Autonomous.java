@@ -12,6 +12,7 @@ public abstract class Autonomous implements Updatable, Disablable {
 	protected volatile double desiredYMovement = 0;
 	protected volatile double desiredTurnSpeed = 0;
 	protected volatile int desiredWinchHeight = 0;
+	protected volatile int currentWinchHeight = 0;
 	protected final Step[] steps;
 	int currentStep = 0;
 	LogKitten logger;
@@ -45,6 +46,7 @@ public abstract class Autonomous implements Updatable, Disablable {
 	
 	public void update() {
 		Step step = steps[currentStep];
+		step.setCurrentWinchHeight(currentWinchHeight);
 		boolean increase = step.run();
 		double[] movement = step.getDesiredMovement();
 		this.desiredTurnSpeed = movement[2];
@@ -62,6 +64,10 @@ public abstract class Autonomous implements Updatable, Disablable {
 	
 	public int getDesiredWinchHeight() {
 		return desiredWinchHeight;
+	}
+	
+	public void setCurrentWinchHeight(int currentWinchHeight) {
+		this.currentWinchHeight = currentWinchHeight;
 	}
 	
 	public void disable() {
