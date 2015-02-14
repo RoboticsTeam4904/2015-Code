@@ -78,11 +78,13 @@ public class Camera implements Updatable, Disablable {
 		}
 		particles.sort(null);// I find it hard to believe that this will work in any way
 		ParticleReport tote = particles.get(0);
-		// TODO actually get center
+		// Actually get center
+		toteCoord[0] = (tote.BoundingRectRight + tote.BoundingRectLeft) / 2;
+		toteCoord[1] = (tote.BoundingRectTop + tote.BoundingRectBottom) / 2;
 	}
 	
 	public double[] getYellowTote() { // This function will return the x, y coordinates of the center of the yellow tote.
-		return new double[] {0, 0}; // It uses magic.
+		return toteCoord; // It uses logic.
 	}
 	
 	// Comparator function for sorting particles. Returns true if particle 1 is larger
