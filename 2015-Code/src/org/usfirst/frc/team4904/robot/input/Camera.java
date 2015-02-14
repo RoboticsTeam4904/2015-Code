@@ -23,16 +23,17 @@ public class Camera implements Updatable, Disablable {
 	private double LONG_RATIO = 2.22; // Tote long side = 26.9 / Tote height = 12.1 = 2.22
 	private double SHORT_RATIO = 1.4; // Tote short side = 16.9 / Tote height = 12.1 = 1.4
 	private double SCORE_MIN = 75.0; // Minimum score to be considered a tote
+	private final String CAMERA_NAME = "cam1";
 	private NIVision.ParticleFilterCriteria2 criteria[] = new NIVision.ParticleFilterCriteria2[1];
 	private NIVision.ParticleFilterOptions2 filterOptions = new NIVision.ParticleFilterOptions2(0, 0, 1, 1);
 	
 	public Camera() {
 		frame = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_RGB, 0);
-		cameraSession = NIVision.IMAQdxOpenCamera("cam0", NIVision.IMAQdxCameraControlMode.CameraControlModeController);
+		cameraSession = NIVision.IMAQdxOpenCamera(CAMERA_NAME, NIVision.IMAQdxCameraControlMode.CameraControlModeController);
 		NIVision.IMAQdxConfigureGrab(cameraSession);
 		server = CameraServer.getInstance();
 		server.setQuality(50);
-		server.startAutomaticCapture("cam0");
+		server.startAutomaticCapture(CAMERA_NAME);
 		enabled = false;
 		criteria[0] = new NIVision.ParticleFilterCriteria2(NIVision.MeasurementType.MT_AREA_BY_IMAGE_AREA, AREA_MINIMUM, 100.0, 0, 0);
 	}
@@ -108,7 +109,7 @@ public class Camera implements Updatable, Disablable {
 		double BoundingRectBottom;
 		
 		public int compareTo(ParticleReport r) {
-			return (int) (r.Area - this.Area);
+			return (int) (r.Area - Area);
 		}
 		
 		public int compare(ParticleReport r1, ParticleReport r2) {
