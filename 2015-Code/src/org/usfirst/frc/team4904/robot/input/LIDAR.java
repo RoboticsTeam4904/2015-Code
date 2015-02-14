@@ -101,7 +101,7 @@ public class LIDAR implements Disablable, Updatable {
 	}
 	
 	public void update() {
-		motor.set(0.5);
+		motor.set(0.9);
 		if (bytesCurrentlyAvailable() < 100) {
 			return;
 		}
