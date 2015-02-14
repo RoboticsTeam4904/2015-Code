@@ -13,10 +13,6 @@ public class Mecanum implements Updatable {
 	private volatile double currentXSpeed;
 	private volatile double currentYSpeed;
 	private volatile double currentTurnSpeed;
-	private volatile double previousXSpeed;
-	private volatile double previousYSpeed;
-	private volatile double previousTurnSpeed;
-	private volatile double previousTime;
 	private volatile boolean absolute;
 	private final IMU imu;
 	
@@ -59,28 +55,11 @@ public class Mecanum implements Updatable {
 	}
 	
 	public synchronized void update() {
-		double currentTime = time();
-		double timeDifference = currentTime - previousTime;
-		double newXSpeed = adjust(previousXSpeed, currentXSpeed, 16 * timeDifference);
-		double newYSpeed = adjust(previousYSpeed, currentYSpeed, 16 * timeDifference);
-		double newTurnSpeed = adjust(previousTurnSpeed, currentTurnSpeed, timeDifference);
-		previousXSpeed = newXSpeed;
-		previousYSpeed = newYSpeed;
-		previousTurnSpeed = newTurnSpeed;
-		previousTime = currentTime;
-		double currentSpeed = Math.sqrt(newXSpeed * newXSpeed + newYSpeed * newYSpeed);
-		double currentAngle = Math.atan2(newYSpeed, newXSpeed);
-		move(currentSpeed, currentAngle, newTurnSpeed, absolute); // This system allows for different updating times and rates
+		double currentSpeed = Math.sqrt(currentXSpeed * currentXSpeed + currentYSpeed * currentYSpeed);
+		double currentAngle = Math.atan2(currentYSpeed, currentXSpeed);
+		move(currentSpeed, currentAngle, currentTurnSpeed, absolute); // This system allows for different updating times and rates
 	}
-	
-	public static double adjust(double prevValue, double currentValue, double maxChange) {// Dampen or don't dampen
-		if (currentValue < prevValue) { // Deaccelerating
-			return Math.max(currentValue, prevValue - maxChange);
-		} else { // Accelerating
-			return Math.min(currentValue, prevValue + maxChange);
-		}
-	}
-	
+
 	public void setDesiredXYSpeed(double desiredXSpeed, double desiredYSpeed) {
 		currentXSpeed = desiredXSpeed;
 		currentYSpeed = desiredYSpeed;
