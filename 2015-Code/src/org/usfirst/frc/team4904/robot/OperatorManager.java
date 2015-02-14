@@ -9,8 +9,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class OperatorManager {
 	private Operator[] operators;
-	public final int OPERATOR_GRIFFIN = 0;
-	public final int OPERATOR_NACHI = 1;
+	public final int OPERATOR_GRIFFIN = 1;
+	public final int OPERATOR_NACHI = 0;
 	private final LogKitten logger;
 	
 	public OperatorManager(LogitechJoystick stick, Winch winch, AutoAlign align) {
@@ -27,7 +27,6 @@ public class OperatorManager {
 			operatorMode = 1;
 		}
 		logger.v("getOperator", "Operator mode" + Integer.toString(operatorMode));
-		// return operators[operatorMode];
-		return operators[OPERATOR_NACHI];
+		return operators[operatorMode];
 	}
 }

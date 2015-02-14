@@ -49,11 +49,11 @@ public class OperatorNachi extends Operator {
 		if (stick.buttons[3].get()) {
 			setWinch(-12); // When button 4 is pressed, lower the winch all the way
 		}
-		// if (stick.buttons[10].getRaw()) {
-		adjust(stick.getY()); // When button 11 is pressed, adjust the winch
-		// } else {
-		// adjust(0);
-		// }
+		if (stick.buttons[10].getRaw()) {
+			adjust(stick.getY()); // When button 11 is pressed, adjust the winch
+		} else {
+			adjust(0);
+		}
 	}
 	
 	public void disable() {
