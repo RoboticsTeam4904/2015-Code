@@ -26,6 +26,7 @@ public class OperatorManager {
 			operatorMode = 1;
 		}
 		logger.v("getOperator", "Operator mode" + Integer.toString(operatorMode));
-		return operators[operatorMode];
+		// return operators[operatorMode];
+		return operators[OPERATOR_NACHI];
 	}
 }
