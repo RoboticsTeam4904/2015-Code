@@ -4,6 +4,7 @@ package org.usfirst.frc.team4904.robot;
 import org.usfirst.frc.team4904.robot.input.LogitechJoystick;
 import org.usfirst.frc.team4904.robot.operator.OperatorGriffin;
 import org.usfirst.frc.team4904.robot.operator.OperatorNachi;
+import org.usfirst.frc.team4904.robot.output.Grabber;
 import org.usfirst.frc.team4904.robot.output.Winch;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -13,10 +14,10 @@ public class OperatorManager {
 	public final int OPERATOR_NACHI = 0;
 	private final LogKitten logger;
 	
-	public OperatorManager(LogitechJoystick stick, Winch winch, AutoAlign align) {
+	public OperatorManager(LogitechJoystick stick, Winch winch, AutoAlign align, Grabber grabber) {
 		operators = new Operator[2];
-		operators[OPERATOR_GRIFFIN] = new OperatorGriffin(stick, winch, align);
-		operators[OPERATOR_NACHI] = new OperatorNachi(stick, winch, align);
+		operators[OPERATOR_GRIFFIN] = new OperatorGriffin(stick, winch, align, grabber);
+		operators[OPERATOR_NACHI] = new OperatorNachi(stick, winch, align, grabber);
 		logger = new LogKitten("OperatorManager", LogKitten.LEVEL_VERBOSE);
 		SmartDashboard.putNumber("Operator", 0);
 	}

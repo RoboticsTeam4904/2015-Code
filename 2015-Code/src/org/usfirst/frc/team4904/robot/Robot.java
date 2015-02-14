@@ -119,8 +119,8 @@ public class Robot extends SampleRobot {
 		align = new AutoAlign(mecanumDrive, udar, lidar, imu, grabber, winch); // Initialize AutoAlign system
 		// Initialize managers
 		driverManager = new DriverManager(mecanumDrive, xboxController, align);
-		operatorManager = new OperatorManager(stick, winch, align);
-		autonomousManager = new AutonomousManager(mecanumDrive, winch, align, camera, lidar);
+		operatorManager = new OperatorManager(stick, winch, align, grabber);
+		autonomousManager = new AutonomousManager(mecanumDrive, winch, grabber, align, camera, lidar);
 		// Drivers, operators, autonomous
 		autonomous = autonomousManager.getAutonomous();
 		toDisable = new Disablable[] {winch, grabber, lidar, driver, operator, autonomous, frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel, camera};

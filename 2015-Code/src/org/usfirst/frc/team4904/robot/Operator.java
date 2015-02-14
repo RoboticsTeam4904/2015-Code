@@ -1,18 +1,21 @@
 package org.usfirst.frc.team4904.robot;
 
 
+import org.usfirst.frc.team4904.robot.output.Grabber;
 import org.usfirst.frc.team4904.robot.output.Winch;
 
 public abstract class Operator implements Disablable, Updatable {
 	private final Winch winch;
 	private final AutoAlign align;
+	private final Grabber grabber;
 	public static final int MODE_TOTE = 0;
 	public static final int MODE_CAN = 1;
 	public static final int MODE_EMPTY = 2;
 	
-	public Operator(Winch winch, AutoAlign align) {
+	public Operator(Winch winch, AutoAlign align, Grabber grabber) {
 		this.winch = winch;
 		this.align = align;
+		this.grabber = grabber;
 	}
 	
 	protected void changeHeight(int levels) {
@@ -39,14 +42,18 @@ public abstract class Operator implements Disablable, Updatable {
 		}
 	}
 	
-	public void setWinch(int height) {
+	protected void setWinch(int height) {
 		if (align.isInControl()) {
 			winch.setHeight(height);
 		}
 	}
 	
-	public int getWinch() {
+	protected int getWinch() {
 		return winch.getHeight();
+	}
+	
+	protected void overrideWinch(double speed) {
+		grabber.override(speed);
 	}
 	
 	public void disable() {

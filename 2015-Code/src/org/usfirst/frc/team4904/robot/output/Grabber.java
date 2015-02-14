@@ -93,4 +93,8 @@ public class Grabber extends Talon implements Disablable, Updatable {
 		grabberState = GrabberState.DISABLED;
 		set(0);
 	}
+	
+	public void override(double speed) {
+		super.set(speed);
+	}
 }
