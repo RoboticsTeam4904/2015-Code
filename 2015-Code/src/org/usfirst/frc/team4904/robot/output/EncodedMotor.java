@@ -24,11 +24,15 @@ public abstract class EncodedMotor extends VictorSP implements Disablable, Updat
 	
 	public abstract void set(double value);
 	
+	protected void setSuperSpeed(double value) {
+		super.set(value);
+	}
+	
 	protected abstract double currentState();
 	
 	public void update() {
-		// motorOutput += pid.calculate(target, currentState());
-		super.set(target);
+		motorOutput += pid.calculate(target, currentState());
+		super.set(motorOutput);
 	}
 	
 	public void disable() {

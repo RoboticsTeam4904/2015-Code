@@ -17,6 +17,10 @@ public class PositionEncodedMotor extends EncodedMotor {
 		target = value;
 	}
 	
+	public void setSpeed(double value) {
+		super.setSuperSpeed(value);
+	}
+	
 	protected double currentState() {
 		return encoder.getTicks();
 	}

@@ -38,7 +38,7 @@ public abstract class Operator implements Disablable, Updatable {
 	
 	protected void adjust(double value) {
 		if (align.isInControl()) {
-			winch.set(value); // Sets winch motor speed
+			winch.setSpeed(value); // Sets winch motor speed
 		}
 	}
 	
