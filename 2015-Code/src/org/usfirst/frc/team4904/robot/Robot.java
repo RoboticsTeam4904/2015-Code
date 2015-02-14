@@ -39,6 +39,9 @@ public class Robot extends SampleRobot {
 	private static final int BACK_LEFT_I2C_PORT = 12;
 	private static final int BACK_RIGHT_I2C_PORT = 13;
 	private static final int WINCH_I2C_PORT = 14; // TODO Erik change this
+	private static final double MOTOR_P_COEFFICIENT = 1;
+	private static final double MOTOR_I_COEFFICIENT = 0.3;
+	private static final double MOTOR_D_COEFFICIENT = 0.3;
 	private final LogitechJoystick stick; // the X3D Extreme3DPro Logitech joystick (right hand) - operator
 	private final XboxController xboxController; // the Xbox 360 controller - driver
 	// Input devices
@@ -75,11 +78,11 @@ public class Robot extends SampleRobot {
 	// Logging system
 	private final LogKitten logger;
 	private final Disablable[] toDisable;
-	
+
 	private enum RobotState {
 		DISABLED, OPERATOR, AUTONOMOUS
 	}
-	
+
 	public Robot() {
 		System.out.println("*** CONSTRUCTING ROBOT ***");
 		// Initializing logging
@@ -104,10 +107,10 @@ public class Robot extends SampleRobot {
 		winch = new Winch(WINCH_PORT, winchEncoder); // Initialize Winch control
 		grabber = new Grabber(GRABBER_PORT, limitSwitches); // Initialize Grabber control -- only autoalign has access to this, by design
 		// Initialize motor controllers with default ports
-		frontLeftWheel = new SpeedEncodedMotor(FRONT_LEFT_WHEEL_PORT, frontLeftEncoder, new PID(1.0, 0.3, 0.3));
-		frontRightWheel = new SpeedEncodedMotor(FRONT_RIGHT_WHEEL_PORT, frontRightEncoder, new PID(1.0, 0.3, 0.3));
-		backLeftWheel = new SpeedEncodedMotor(BACK_LEFT_WHEEL_PORT, backLeftEncoder, new PID(1.0, 0.3, 0.3));
-		backRightWheel = new SpeedEncodedMotor(BACK_RIGHT_WHEEL_PORT, backRightEncoder, new PID(1.0, 0.3, 0.3));
+		frontLeftWheel = new SpeedEncodedMotor(FRONT_LEFT_WHEEL_PORT, frontLeftEncoder, new PID(MOTOR_P_COEFFICIENT, MOTOR_I_COEFFICIENT, MOTOR_D_COEFFICIENT));
+		frontRightWheel = new SpeedEncodedMotor(FRONT_RIGHT_WHEEL_PORT, frontRightEncoder, new PID(MOTOR_P_COEFFICIENT, MOTOR_I_COEFFICIENT, MOTOR_D_COEFFICIENT));
+		backLeftWheel = new SpeedEncodedMotor(BACK_LEFT_WHEEL_PORT, backLeftEncoder, new PID(MOTOR_P_COEFFICIENT, MOTOR_I_COEFFICIENT, MOTOR_D_COEFFICIENT));
+		backRightWheel = new SpeedEncodedMotor(BACK_RIGHT_WHEEL_PORT, backRightEncoder, new PID(MOTOR_P_COEFFICIENT, MOTOR_I_COEFFICIENT, MOTOR_D_COEFFICIENT));
 		mecanumDrive = new Mecanum(frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel, imu); // Initialize Mecanum control
 		// Initialize joysticks (numbers correspond to value set by driver station)
 		stick = new LogitechJoystick(JOYSTICK_PORT);
@@ -122,12 +125,12 @@ public class Robot extends SampleRobot {
 		autonomous = autonomousManager.getAutonomous();
 		toDisable = new Disablable[] {winch, grabber, lidar, driver, operator, autonomous, frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel, camera};
 	}
-	
+
 	public void robotInit() {
 		System.out.println("*** INITIALIZING ***");
 		logger.v("Initializing", "Initializing");
 	}
-	
+
 	public void disabled() {
 		System.out.println("*** DISABLED ***");
 		logger.v("Disabled", "Disabled");
@@ -146,7 +149,7 @@ public class Robot extends SampleRobot {
 			Timer.delay(0.01);
 		}
 	}
-	
+
 	public void autonomous() {
 		System.out.println("*** AUTONOMOUS ***");
 		logger.v("Autonomous", "Autonomous");
@@ -161,7 +164,7 @@ public class Robot extends SampleRobot {
 			Timer.delay(0.01);
 		}
 	}
-	
+
 	public void operatorControl() {
 		System.out.println("*** TELEOPERATED ***");
 		logger.v("Teleoperated", "Teleoperated");
@@ -175,7 +178,7 @@ public class Robot extends SampleRobot {
 			Timer.delay(0.01);
 		}
 	}
-	
+
 	private RobotState getRobotState() {
 		if (isDisabled()) {
 			return RobotState.DISABLED;
@@ -188,22 +191,22 @@ public class Robot extends SampleRobot {
 		}
 		return RobotState.DISABLED;
 	}
-	
+
 	public static double time() {
 		return (double) System.currentTimeMillis() / 1000;
 	}
-	
+
 	private class Updater extends Thread { // Function to update automatically in a new thread
 		private final RobotState robotState;
 		private final Updatable[] toUpdate;
 		private final double updateSpeed;
-		
+
 		public Updater(RobotState state, Updatable[] toUpdate, double updateSpeed) {
 			robotState = state;
 			this.toUpdate = toUpdate;
 			this.updateSpeed = updateSpeed;
 		}
-		
+
 		public void run() {
 			if (toUpdate.length > 1) {
 				for (Updatable u : toUpdate) {
