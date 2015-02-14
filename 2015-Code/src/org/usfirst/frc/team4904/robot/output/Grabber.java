@@ -29,7 +29,7 @@ public class Grabber extends Talon implements Disablable, Updatable {
 		super(channel);
 		this.limitSwitches = limitSwitches;
 		grabberState = GrabberState.OPEN;
-		logger = new LogKitten("Grabber", LogKitten.LEVEL_VERBOSE);
+		logger = new LogKitten("Grabber", LogKitten.LEVEL_VERBOSE, LogKitten.LEVEL_VERBOSE);
 	}
 	
 	public void setDesiredGrabberState(GrabberState state) {
@@ -60,6 +60,7 @@ public class Grabber extends Talon implements Disablable, Updatable {
 	public void update() {
 		checkLimitSwitches();
 		set(grabberState.motorSpeed);
+		logger.v("update", "motorSpeed: " + grabberState.motorSpeed);
 	}
 	
 	private void checkLimitSwitches() {
