@@ -50,6 +50,7 @@ public class OperatorGriffin extends Operator {
 		if (stick.buttons[6].get()) {
 			release(); // When button 7 is pressed, release a can
 		}
+		System.out.println("Adjusting Griffin");
 	}
 	
 	public void disable() {

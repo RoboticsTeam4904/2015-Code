@@ -15,6 +15,7 @@ public class PositionEncodedMotor extends EncodedMotor {
 	}
 	
 	public void setSpeed(double value) { // Ignore the warning on this line. It is all good anyway.
+		System.out.println("Speed set: " + value);
 		motorOutput = value;
 		override = true;
 	}
@@ -23,6 +24,7 @@ public class PositionEncodedMotor extends EncodedMotor {
 		if (!override) {
 			motorOutput = pid.calculate(target, currentState());
 		}
+		System.out.println("update: " + motorOutput);
 		super.set(motorOutput);
 	}
 	
