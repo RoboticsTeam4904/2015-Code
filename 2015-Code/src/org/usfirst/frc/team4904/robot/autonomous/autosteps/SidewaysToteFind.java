@@ -14,6 +14,9 @@ public class SidewaysToteFind extends Step {
 	}
 	
 	public boolean run() {
+		desiredXMovement = 1;
+		desiredYMovement = 0;
+		desiredTurnSpeed = 0;
 		if (!clear) {
 			clear = lidar.getDists()[90] > 100;
 			return false;

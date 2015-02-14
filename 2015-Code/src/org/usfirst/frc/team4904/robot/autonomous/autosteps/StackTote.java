@@ -14,10 +14,8 @@ public class StackTote extends Step {
 	public boolean run() {
 		desiredXMovement = 1;
 		if (align.isGrabberEmpty()) {
-			desiredWinchHeight = 0;
 			return true;
 		} else {
-			desiredWinchHeight = 1;
 			align.release();
 			return false;
 		}
