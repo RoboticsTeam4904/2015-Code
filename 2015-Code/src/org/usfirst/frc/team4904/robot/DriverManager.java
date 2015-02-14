@@ -15,10 +15,11 @@ public class DriverManager {
 		drivers = new Driver[1];
 		drivers[DRIVER_NATHAN] = new DriverNathan(mecanum, xbox, align);
 		logger = new LogKitten("DriverManager", LogKitten.LEVEL_VERBOSE);
+		SmartDashboard.putNumber("Driver", 0);
 	}
 	
 	public Driver getDriver() {
-		int driverMode = (int) SmartDashboard.getNumber("DB/Slider 0", 0);
+		int driverMode = (int) SmartDashboard.getNumber("Driver", 0);
 		if (driverMode > 0) {
 			driverMode = 0;
 		}

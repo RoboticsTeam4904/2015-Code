@@ -51,7 +51,6 @@ public class OperatorNachi extends Operator {
 		}
 		// if (stick.buttons[10].getRaw()) {
 		adjust(stick.getY()); // When button 11 is pressed, adjust the winch
-		System.out.println("Adjusting Nachi: " + stick.getY());
 		// } else {
 		// adjust(0);
 		// }

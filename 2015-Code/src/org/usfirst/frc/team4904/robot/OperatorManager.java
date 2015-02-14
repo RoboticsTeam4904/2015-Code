@@ -18,10 +18,11 @@ public class OperatorManager {
 		operators[OPERATOR_GRIFFIN] = new OperatorGriffin(stick, winch, align);
 		operators[OPERATOR_NACHI] = new OperatorNachi(stick, winch, align);
 		logger = new LogKitten("OperatorManager", LogKitten.LEVEL_VERBOSE);
+		SmartDashboard.putNumber("Operator", 0);
 	}
 	
 	public Operator getOperator() {
-		int operatorMode = (int) SmartDashboard.getNumber("DB/Slider 1", 0);
+		int operatorMode = (int) SmartDashboard.getNumber("Operator", 0);
 		if (operatorMode > 1) {
 			operatorMode = 1;
 		}
