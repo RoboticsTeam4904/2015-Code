@@ -13,6 +13,7 @@ public abstract class EncodedMotor extends VictorSP implements Disablable, Updat
 	protected double P = 1.0; // ticks per second Assuming this is updated at 200Hz, this should result in 0.5 seconds to full speed
 	protected double I = 0.3; // ticks
 	protected double D = 0.3; // ticks per second per second
+	protected boolean override;
 	protected final SuperEncoder encoder;
 	
 	public EncodedMotor(int channel, SuperEncoder encoder, PID pid) {
@@ -20,6 +21,7 @@ public abstract class EncodedMotor extends VictorSP implements Disablable, Updat
 		this.encoder = encoder;
 		this.pid = pid;
 		motorOutput = 0;
+		override = false;
 	}
 	
 	public abstract void setValue(double value);

@@ -14,6 +14,7 @@ public class SpeedEncodedMotor extends EncodedMotor {
 		// You do not need to reset the sum when you set the motor speed
 		// It is a cumulative variable that is designed to accumulate for continuous pressures on the motor
 		// integralSum = 0;
+		override = false;
 		target = value;
 		if (target > 1) {
 			target = 1;
@@ -25,5 +26,17 @@ public class SpeedEncodedMotor extends EncodedMotor {
 	
 	protected double currentState() {
 		return encoder.currentEncoderSpeed();
+	}
+	
+	public void setValue(double value) {
+		override = true;
+		motorOutput = value;
+	}
+	
+	public void update() {
+		if (!override) {
+			motorOutput = pid.calculate(target, currentState());
+		}
+		super.set(motorOutput);
 	}
 }

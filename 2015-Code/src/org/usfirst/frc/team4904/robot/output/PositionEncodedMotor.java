@@ -4,26 +4,23 @@ package org.usfirst.frc.team4904.robot.output;
 import org.usfirst.frc.team4904.robot.input.SuperEncoder;
 
 public class PositionEncodedMotor extends EncodedMotor {
-	private boolean directSet;
-	
 	public PositionEncodedMotor(int channel, SuperEncoder encoder, PID pid) {
 		super(channel, encoder, pid);
-		directSet = false;
 	}
 	
 	public void setValue(double value) {
 		// This function takes a motor height
 		target = value;
-		directSet = false;
+		override = false;
 	}
 	
 	public void setSpeed(double value) {
 		motorOutput = value;
-		directSet = true;
+		override = true;
 	}
 	
 	public void update() {
-		if (!directSet) {
+		if (!override) {
 			motorOutput = pid.calculate(target, currentState());
 		}
 		super.set(motorOutput);
