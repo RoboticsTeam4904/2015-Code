@@ -16,7 +16,7 @@ public class Grabber extends Talon implements Disablable, Updatable {
 	private LogKitten logger;
 	
 	public enum GrabberState { // an enum containing grabber states and their values
-		OPEN(0), CLOSED(-0.05), OPENING(0.1), CLOSING(-0.2), DISABLED(0); // grabber state and values
+		OPEN(0), CLOSED(-0.05), OPENING(0.1), CLOSING(-0.1), DISABLED(0); // grabber state and values
 		public final double motorSpeed; // the architecture allowing the enum states to have values
 		
 		private GrabberState(double speed) {
