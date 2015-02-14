@@ -18,6 +18,7 @@ public abstract class EncodedMotor extends VictorSP implements Disablable, Updat
 	public EncodedMotor(int channel, SuperEncoder encoder, PID pid) {
 		super(channel);
 		this.encoder = encoder;
+		this.pid = pid;
 		motorOutput = 0;
 	}
 	
