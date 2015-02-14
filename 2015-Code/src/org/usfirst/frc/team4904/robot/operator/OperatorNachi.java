@@ -4,14 +4,15 @@ package org.usfirst.frc.team4904.robot.operator;
 import org.usfirst.frc.team4904.robot.AutoAlign;
 import org.usfirst.frc.team4904.robot.Operator;
 import org.usfirst.frc.team4904.robot.input.LogitechJoystick;
+import org.usfirst.frc.team4904.robot.output.Grabber;
 import org.usfirst.frc.team4904.robot.output.Winch;
 
 public class OperatorNachi extends Operator {
 	private final LogitechJoystick stick;
 	private final AutoAlign align;
 	
-	public OperatorNachi(LogitechJoystick stick, Winch winch, AutoAlign align) {
-		super(winch, align);
+	public OperatorNachi(LogitechJoystick stick, Winch winch, AutoAlign align, Grabber grabber) {
+		super(winch, align, grabber);
 		this.stick = stick;
 		this.align = align;
 	}

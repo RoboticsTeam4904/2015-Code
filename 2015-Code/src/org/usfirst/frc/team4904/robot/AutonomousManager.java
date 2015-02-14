@@ -7,6 +7,7 @@ import org.usfirst.frc.team4904.robot.driver.AutoDriver;
 import org.usfirst.frc.team4904.robot.input.Camera;
 import org.usfirst.frc.team4904.robot.input.LIDAR;
 import org.usfirst.frc.team4904.robot.operator.AutoOperator;
+import org.usfirst.frc.team4904.robot.output.Grabber;
 import org.usfirst.frc.team4904.robot.output.Mecanum;
 import org.usfirst.frc.team4904.robot.output.Winch;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -17,15 +18,17 @@ public class AutonomousManager {
 	private final int LANDFILL_STACK = 1;
 	private final Mecanum mecanumDrive;
 	private final Winch winch;
+	private final Grabber grabber;
 	private final AutoAlign align;
 	private final LogKitten logger;
 	
-	public AutonomousManager(Mecanum mecanumDrive, Winch winch, AutoAlign align, Camera camera, LIDAR lidar) {
+	public AutonomousManager(Mecanum mecanumDrive, Winch winch, Grabber grabber, AutoAlign align, Camera camera, LIDAR lidar) {
 		autonomouses[YELLOW_TOTE_STACK] = new YellowToteStack(camera, align, lidar);
 		autonomouses[LANDFILL_STACK] = new LandfillStack(lidar, align);
 		this.mecanumDrive = mecanumDrive;
 		this.winch = winch;
 		this.align = align;
+		this.grabber = grabber;
 		for (Autonomous auto : autonomouses) {
 			registerAutonomous(auto);
 		}
@@ -44,6 +47,6 @@ public class AutonomousManager {
 	
 	private void registerAutonomous(Autonomous auto) {
 		auto.setAutoDriver(new AutoDriver(mecanumDrive, align, auto));
-		auto.setAutoOperator(new AutoOperator(winch, align, auto));
+		auto.setAutoOperator(new AutoOperator(winch, align, grabber, auto));
 	}
 }
