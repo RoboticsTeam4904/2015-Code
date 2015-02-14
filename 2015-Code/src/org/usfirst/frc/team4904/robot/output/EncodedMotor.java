@@ -8,8 +8,8 @@ import edu.wpi.first.wpilibj.VictorSP;
 
 public abstract class EncodedMotor extends VictorSP implements Disablable, Updatable {
 	protected volatile double target;
-	private PID pid;
-	private double motorOutput;
+	protected PID pid;
+	protected double motorOutput;
 	protected double P = 1.0; // ticks per second Assuming this is updated at 200Hz, this should result in 0.5 seconds to full speed
 	protected double I = 0.3; // ticks
 	protected double D = 0.3; // ticks per second per second
@@ -22,17 +22,14 @@ public abstract class EncodedMotor extends VictorSP implements Disablable, Updat
 		motorOutput = 0;
 	}
 	
-	public abstract void set(double value);
-	
-	protected void setSuperSpeed(double value) {
-		super.set(value);
-	}
+	public abstract void setValue(double value);
 	
 	protected abstract double currentState();
 	
-	public void update() {
-		// motorOutput += pid.calculate(target, currentState());
-		super.set(target);
+	public abstract void update();
+	
+	public void override(double value) {
+		super.set(value);
 	}
 	
 	public void disable() {
