@@ -100,7 +100,7 @@ public class AutoAlign implements Updatable {
 	private void alignWithToteTick(boolean grab) {
 		int[] toteFront = lidar.getLine();
 		double angle = Math.atan2(toteFront[3] - toteFront[1], toteFront[2] - toteFront[0]); // Angle of the tote relative to the X axis (us)
-		if (angle < Math.PI / 60) {
+		if (Math.abs(angle) < Math.PI / 60) {
 			double x = 0;
 			double y = 0;
 			winch.set(0);
@@ -126,13 +126,13 @@ public class AutoAlign implements Updatable {
 			mecanum.setDesiredXYSpeed(x, y);
 		} else {
 			winch.set(0);
-			double x = Math.cos(angle);
-			double y = Math.sin(angle);
+			double x = Math.cos(angle) / 3;
+			double y = Math.sin(angle) / 3;
 			mecanum.setDesiredXYSpeed(x, y);
 			if (angle > 0) {
-				mecanum.setDesiredTurnSpeed(0.25);
+				mecanum.setDesiredTurnSpeed(0.15);
 			} else {
-				mecanum.setDesiredTurnSpeed(-0.25);
+				mecanum.setDesiredTurnSpeed(-0.15);
 			}
 		}
 	}
@@ -145,7 +145,7 @@ public class AutoAlign implements Updatable {
 				return;
 			case ALIGNING_WITH_TOTE:
 				currentState = State.HOLDING_TOTE;
-				// alignWithToteTick(grab); // LIDAR Auto align does not differentiate wide from thin totes
+				alignWithToteTick(grab);
 				return;
 			case RELEASING_CAN:
 			case RELEASING_TOTE:
