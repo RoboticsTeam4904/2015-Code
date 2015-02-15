@@ -17,7 +17,6 @@ import org.usfirst.frc.team4904.robot.output.Winch;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.SampleRobot;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends SampleRobot {
 	// Default ports for joystick/controller
@@ -73,6 +72,7 @@ public class Robot extends SampleRobot {
 	private final DriverManager driverManager;
 	private final OperatorManager operatorManager;
 	private final AutonomousManager autonomousManager;
+	private final ModeManager modeManager;
 	// Drivers and operators
 	private Driver driver;
 	private Operator operator;
@@ -137,6 +137,7 @@ public class Robot extends SampleRobot {
 		driverManager = new DriverManager(mecanumDrive, xboxController, align);
 		operatorManager = new OperatorManager(stick, winch, align, grabber);
 		autonomousManager = new AutonomousManager(mecanumDrive, winch, grabber, align, camera, lidar);
+		modeManager = new ModeManager();
 		// Drivers, operators, autonomous
 		autonomous = autonomousManager.getAutonomous();
 		// This list should include everything with a motor
@@ -148,8 +149,6 @@ public class Robot extends SampleRobot {
 	public void robotInit() {
 		System.out.println("*** INITIALIZING ***");
 		logger.v("Initializing", "Initializing");
-		SmartDashboard.putBoolean("TrainPID", false);
-		SmartDashboard.putBoolean("DumpLIDAR", false);
 	}
 	
 	public void disabled() {
@@ -197,12 +196,15 @@ public class Robot extends SampleRobot {
 		System.out.println("*** TELEOPERATED ***");
 		logger.v("Teleoperated", "Teleoperated");
 		RobotState state = RobotState.OPERATOR;
-		if (SmartDashboard.getBoolean("TrainPID")) {
-			trainPID(state);
-			return;
-		} else if (SmartDashboard.getBoolean("DumpLIDAR")) {
-			dumpLIDAR(state);
-			return;
+		switch (modeManager.useMode()) {
+			case ModeManager.TRAIN_PID_MODE:
+				trainPID(state);
+				return;
+			case ModeManager.DUMP_LIDAR_MODE:
+				dumpLIDAR(state);
+				return;
+			case ModeManager.NO_MODE:
+			default:
 		}
 		operator = operatorManager.getOperator();
 		driver = driverManager.getDriver();
