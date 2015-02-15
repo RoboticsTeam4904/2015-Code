@@ -38,6 +38,9 @@ public class PID {
 		double iComponent = integralSum * I;
 		// Update total error
 		absoluteError += Math.abs(error);
+		if (current != 0.0) {
+			logger.v("Current", Double.toString(current));
+		}
 		return pComponent + iComponent + dComponent;
 	}
 	
@@ -46,11 +49,10 @@ public class PID {
 		logger.v("EndtrainI", Double.toString(I));
 		logger.v("EndtrainD", Double.toString(D));
 		logger.v("EndtrainError", Double.toString(absoluteError));
-		reset();
 		double[] newPID = new double[3];
 		double errorDiff = lastAbsoluteError - absoluteError;
 		// Only train P coefficient
-		newPID[0] = errorDiff * P * 0.1;
+		newPID[0] = (errorDiff * P * 0.1) + P;
 		newPID[1] = I; // errorDiff * I * 0.1;
 		newPID[2] = D; // errorDiff * D * 0.1;
 		lastPID = new double[] {P, I, D};
@@ -58,5 +60,6 @@ public class PID {
 		P = newPID[0];
 		I = newPID[1];
 		D = newPID[2];
+		reset();
 	}
 }

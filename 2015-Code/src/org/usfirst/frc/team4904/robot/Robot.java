@@ -130,7 +130,7 @@ public class Robot extends SampleRobot {
 	public void robotInit() {
 		System.out.println("*** INITIALIZING ***");
 		logger.v("Initializing", "Initializing");
-		SmartDashboard.putBoolean("TrainPID", false);
+		SmartDashboard.putBoolean("TrainPID", true);
 	}
 	
 	public void disabled() {
@@ -188,12 +188,12 @@ public class Robot extends SampleRobot {
 	public void trainPID(RobotState state) {
 		System.out.println("*** TEST ***");
 		logger.v("Test", "Test");
-		frontLeftWheel.setValue(0.1);
 		new Updater(state, new Updatable[] {frontLeftWheel, mecanumDrive}, fastUpdatePeriod).start();
 		while (getRobotState() == state) {
+			frontLeftWheel.setValue(0.1);
 			logger.v("trainPID", "training cycle");
 			frontLeftWheel.trainPID();
-			Timer.delay(5);
+			Timer.delay(3);
 		}
 	}
 	
@@ -243,7 +243,7 @@ public class Robot extends SampleRobot {
 					Timer.delay(delay); // Wait until the time that this tick should end
 				} else {
 					if (delay < -0.1) {
-						logger.v("Run", "Delay is " + delay + " seconds for " + updateSpeed);
+						logger.d("Run", "Delay is " + delay + " seconds for " + updateSpeed);
 					}
 				}
 				desiredTime += updateSpeed; // Next tick should end updatePeriod seconds in the future
