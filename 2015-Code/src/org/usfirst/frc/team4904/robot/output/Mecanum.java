@@ -5,17 +5,17 @@ import org.usfirst.frc.team4904.robot.Updatable;
 import org.usfirst.frc.team4904.robot.input.IMU;
 
 public class Mecanum implements Updatable {
-	private final EncodedMotor frontLeftWheel;
-	private final EncodedMotor frontRightWheel;
-	private final EncodedMotor backLeftWheel;
-	private final EncodedMotor backRightWheel;
+	private final DampenedMotor frontLeftWheel;
+	private final DampenedMotor frontRightWheel;
+	private final DampenedMotor backLeftWheel;
+	private final DampenedMotor backRightWheel;
 	private volatile double currentXSpeed;
 	private volatile double currentYSpeed;
 	private volatile double currentTurnSpeed;
 	private volatile boolean absolute;
 	private final IMU imu;
 	
-	public Mecanum(EncodedMotor frontLeftWheel, EncodedMotor frontRightWheel, EncodedMotor backLeftWheel, EncodedMotor backRightWheel, IMU imu) {
+	public Mecanum(DampenedMotor frontLeftWheel, DampenedMotor frontRightWheel, DampenedMotor backLeftWheel, DampenedMotor backRightWheel, IMU imu) {
 		// Initialize motor controllers with default ports
 		this.frontLeftWheel = frontLeftWheel;
 		this.frontRightWheel = frontRightWheel;
