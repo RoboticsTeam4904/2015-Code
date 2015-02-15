@@ -9,6 +9,7 @@ import org.usfirst.frc.team4904.robot.input.PDP;
 import org.usfirst.frc.team4904.robot.input.SuperEncoder;
 import org.usfirst.frc.team4904.robot.input.UDAR;
 import org.usfirst.frc.team4904.robot.input.XboxController;
+import org.usfirst.frc.team4904.robot.lights.LightSet;
 import org.usfirst.frc.team4904.robot.output.DampenedMotor;
 import org.usfirst.frc.team4904.robot.output.Grabber;
 import org.usfirst.frc.team4904.robot.output.Mecanum;
@@ -51,6 +52,7 @@ public class Robot extends SampleRobot {
 	private final LIDAR lidar;
 	private final DigitalInput limitSwitches[] = new DigitalInput[4];
 	private final Camera camera;
+	private final LightSet lights;
 	private final SuperEncoder frontLeftEncoder;
 	private final SuperEncoder frontRightEncoder;
 	private final SuperEncoder backLeftEncoder;
@@ -102,7 +104,11 @@ public class Robot extends SampleRobot {
 		limitSwitches[Grabber.RIGHT_OUTER_SWITCH] = new DigitalInput(RIGHT_OUTER_SWITCH_PORT);
 		limitSwitches[Grabber.LEFT_OUTER_SWITCH] = new DigitalInput(LEFT_OUTER_SWITCH_PORT);
 		pdp = new PDP();
+		/* Lights! */
+		lights = new LightSet();
+		/* Camera! */
 		camera = new Camera();
+		/* Action! */
 		// Initialize Encoders
 		frontLeftEncoder = new SuperEncoder(FRONT_LEFT_I2C_PORT);
 		frontRightEncoder = new SuperEncoder(FRONT_RIGHT_I2C_PORT);
@@ -192,6 +198,8 @@ public class Robot extends SampleRobot {
 		new Updater(state, alwaysUpdate, fastUpdatePeriod).start();
 		// These should have fast updates
 		new Updater(state, new Updatable[] {driver, operator, mecanumDrive, lidar, frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel, grabber, winch}, fastUpdatePeriod).start();
+		// Lights - slow update
+		new Updater(state, new Updatable[] {lights}, slowUpdatePeriod).start();
 		while (getRobotState() == state) {
 			Timer.delay(0.01);
 		}
