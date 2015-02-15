@@ -149,6 +149,7 @@ public class Robot extends SampleRobot {
 		System.out.println("*** INITIALIZING ***");
 		logger.v("Initializing", "Initializing");
 		SmartDashboard.putBoolean("TrainPID", false);
+		SmartDashboard.putBoolean("DumpLIDAR", false);
 	}
 	
 	public void disabled() {
@@ -199,6 +200,9 @@ public class Robot extends SampleRobot {
 		if (SmartDashboard.getBoolean("TrainPID")) {
 			trainPID(state);
 			return;
+		} else if (SmartDashboard.getBoolean("DumpLIDAR")) {
+			dumpLIDAR(state);
+			return;
 		}
 		operator = operatorManager.getOperator();
 		driver = driverManager.getDriver();
@@ -215,8 +219,8 @@ public class Robot extends SampleRobot {
 	}
 	
 	public void trainPID(RobotState state) {
-		System.out.println("*** TEST ***");
-		logger.v("Test", "Test");
+		System.out.println("*** TRAIN PID ***");
+		logger.v("trainPID", "trainPID");
 		// IMU, PDP, and Camera should always update
 		new Updater(state, alwaysUpdate, fastUpdatePeriod).start();
 		// always slow updates
@@ -225,6 +229,20 @@ public class Robot extends SampleRobot {
 		while (getRobotState() == state) {
 			frontLeftWheel.setValue(0.1);
 			logger.v("trainPID", "training cycle");
+		}
+	}
+	
+	public void dumpLIDAR(RobotState state) {
+		System.out.println("*** DUMP LIDAR ***");
+		logger.v("dumpLIDAR", "dumpLIDAR");
+		// IMU, PDP, and Camera should always update
+		new Updater(state, alwaysUpdate, fastUpdatePeriod).start();
+		new Updater(state, alwaysUpdateSlow, slowUpdatePeriod).start();
+		new Updater(state, new Updatable[] {lidar}, fastUpdatePeriod).start();
+		while (getRobotState() == state) {
+			for (int i = 0; i < 360; i++) {
+				logger.w("LIDAR", "+" + lidar.getXY(i) + "+");
+			}
 		}
 	}
 	
