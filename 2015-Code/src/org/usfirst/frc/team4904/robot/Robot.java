@@ -241,7 +241,7 @@ public class Robot extends SampleRobot {
 		new Updater(state, new Updatable[] {lidar}, fastUpdatePeriod).start();
 		while (getRobotState() == state) {
 			for (int i = 0; i < 360; i++) {
-				logger.w("LIDAR", "+" + lidar.getXY(i) + "+");
+				logger.w("LIDAR", "(" + Integer.toString(lidar.getXY(i)[0]) + ", " + Integer.toString(lidar.getXY(i)[1]) + ")");
 			}
 		}
 	}
