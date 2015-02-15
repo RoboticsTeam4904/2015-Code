@@ -7,11 +7,9 @@ import org.usfirst.frc4904.robot.Disablable;
 import org.usfirst.frc4904.robot.LogKitten;
 import org.usfirst.frc4904.robot.Updatable;
 import edu.wpi.first.wpilibj.SerialPort;
-import edu.wpi.first.wpilibj.Talon;
 
 public class LIDAR implements Disablable, Updatable {
 	int[] dists = new int[360];
-	private final Talon motor;
 	private SerialPort port;
 	private final LogKitten logger;
 	static final int width = 1280;// This is the resolution of my screen, because that seemed to work
@@ -19,8 +17,7 @@ public class LIDAR implements Disablable, Updatable {
 	static final double d = 5;// Settings from my screen
 	static final int houghSensitivity = 30;
 	
-	public LIDAR(int motorport) {
-		motor = new Talon(motorport);
+	public LIDAR() {
 		port = new SerialPort(115200, SerialPort.Port.kMXP);
 		logger = new LogKitten("LIDAR", LogKitten.LEVEL_DEBUG, LogKitten.LEVEL_VERBOSE);
 		logger.v("LIDAR", "Started Logging");
