@@ -83,6 +83,7 @@ public class Robot extends SampleRobot {
 	// Disables
 	private final Disablable[] toDisable;
 	private final Updatable[] alwaysUpdate;
+	private final Updatable[] alwaysUpdateSlow;
 	// Power distribution board
 	private final PDP pdp;
 	
@@ -138,6 +139,7 @@ public class Robot extends SampleRobot {
 		// This list should include everything with a motor
 		toDisable = new Disablable[] {winch, grabber, lidar, driver, operator, autonomous, frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel};
 		alwaysUpdate = new Updatable[] {imu, pdp, camera};
+		alwaysUpdateSlow = new Updatable[] {lights};
 	}
 	
 	public void robotInit() {
@@ -152,6 +154,8 @@ public class Robot extends SampleRobot {
 		RobotState state = RobotState.DISABLED;
 		// IMU, PDP, and Camera should always update
 		new Updater(state, alwaysUpdate, fastUpdatePeriod).start();
+		// always slow updates
+		new Updater(state, alwaysUpdateSlow, slowUpdatePeriod).start();
 		while (isDisabled()) {
 			for (Disablable implementsdisable : toDisable) {
 				if (implementsdisable != null) {
@@ -176,6 +180,8 @@ public class Robot extends SampleRobot {
 		new Updater(state, new Updatable[] {align}, slowUpdatePeriod).start(); // Controller and align are potentially slower
 		// IMU, PDP, and Camera should always update
 		new Updater(state, alwaysUpdate, fastUpdatePeriod).start();
+		// always slow updates
+		new Updater(state, alwaysUpdateSlow, slowUpdatePeriod).start();
 		// These should have fast updates
 		new Updater(state, new Updatable[] {driver, operator, mecanumDrive, lidar, frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel, grabber, winch}, fastUpdatePeriod).start();
 		while (getRobotState() == state) {
@@ -198,8 +204,8 @@ public class Robot extends SampleRobot {
 		new Updater(state, alwaysUpdate, fastUpdatePeriod).start();
 		// These should have fast updates
 		new Updater(state, new Updatable[] {driver, operator, mecanumDrive, lidar, frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel, grabber, winch}, fastUpdatePeriod).start();
-		// Lights - slow update
-		new Updater(state, new Updatable[] {lights}, slowUpdatePeriod).start();
+		// always slow updates
+		new Updater(state, alwaysUpdateSlow, slowUpdatePeriod).start();
 		while (getRobotState() == state) {
 			Timer.delay(0.01);
 		}
@@ -210,6 +216,8 @@ public class Robot extends SampleRobot {
 		logger.v("Test", "Test");
 		// IMU, PDP, and Camera should always update
 		new Updater(state, alwaysUpdate, fastUpdatePeriod).start();
+		// always slow updates
+		new Updater(state, alwaysUpdateSlow, slowUpdatePeriod).start();
 		new Updater(state, new Updatable[] {frontLeftWheel, mecanumDrive}, fastUpdatePeriod).start();
 		while (getRobotState() == state) {
 			frontLeftWheel.setValue(0.1);
