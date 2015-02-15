@@ -14,7 +14,7 @@ public class Grabber extends Talon implements Disablable, Updatable {
 	public static final int RIGHT_OUTER_SWITCH = 2;
 	public static final int LEFT_OUTER_SWITCH = 3;
 	public static final int PDP_PORT = 1;
-	private static final double MAX_AMPS = 1.25; // TODO Yoni fix this
+	private static final double MAX_AMPS = 6; // Tune this value
 	private final DigitalInput[] limitSwitches;
 	private LogKitten logger;
 	private double overrideSpeed;
