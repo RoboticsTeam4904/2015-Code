@@ -16,7 +16,6 @@ import org.usfirst.frc4904.robot.output.Mecanum;
 import org.usfirst.frc4904.robot.output.Winch;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.SampleRobot;
-import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.Timer;
 
 public class Robot extends SampleRobot {
@@ -203,9 +202,6 @@ public class Robot extends SampleRobot {
 			case ModeManager.DUMP_LIDAR_MODE:
 				dumpLIDAR(state);
 				return;
-			case ModeManager.TEST_USB_MODE:
-				testUSB(state);
-				return;
 			case ModeManager.NO_MODE:
 				break;
 			default:
@@ -250,17 +246,6 @@ public class Robot extends SampleRobot {
 			for (int i = 0; i < 360; i++) {
 				logger.w("LIDAR", "(" + Integer.toString(lidar.getXY(i)[0]) + ", " + Integer.toString(lidar.getXY(i)[1]) + ")");
 			}
-		}
-	}
-	
-	public void testUSB(RobotState state) {
-		System.out.println("*** TEST USB ***");
-		logger.v("testUSB", "testUSB");
-		new Updater(state, alwaysUpdate, fastUpdatePeriod).start();
-		new Updater(state, alwaysUpdateSlow, slowUpdatePeriod).start();
-		SerialPort port = new SerialPort(115200, SerialPort.Port.kUSB);
-		while (getRobotState() == state) {
-			logger.w("USB DATA", port.readString());
 		}
 	}
 	
