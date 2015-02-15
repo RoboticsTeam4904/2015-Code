@@ -2,6 +2,7 @@ package org.usfirst.frc.team4904.robot.operator;
 
 
 import org.usfirst.frc.team4904.robot.AutoAlign;
+import org.usfirst.frc.team4904.robot.LogKitten;
 import org.usfirst.frc.team4904.robot.Operator;
 import org.usfirst.frc.team4904.robot.input.LogitechJoystick;
 import org.usfirst.frc.team4904.robot.output.Grabber;
@@ -11,12 +12,14 @@ public class OperatorNachi extends Operator {
 	private final LogitechJoystick stick;
 	private final AutoAlign align;
 	private final Grabber grabber;
+	private final LogKitten logger;
 	
 	public OperatorNachi(LogitechJoystick stick, Winch winch, AutoAlign align, Grabber grabber) {
 		super(winch, align, grabber);
 		this.stick = stick;
 		this.align = align;
 		this.grabber = grabber;
+		logger = new LogKitten("OperatorNachi", LogKitten.LEVEL_VERBOSE, LogKitten.LEVEL_WARN);
 	}
 	
 	public synchronized void update() {
@@ -64,6 +67,7 @@ public class OperatorNachi extends Operator {
 		// Disable
 		if (stick.buttons[8].get()) {
 			disable();
+			logger.w("update", "disabled");
 		}
 	}
 	

@@ -3,16 +3,19 @@ package org.usfirst.frc.team4904.robot.driver;
 
 import org.usfirst.frc.team4904.robot.AutoAlign;
 import org.usfirst.frc.team4904.robot.Driver;
+import org.usfirst.frc.team4904.robot.LogKitten;
 import org.usfirst.frc.team4904.robot.input.XboxController;
 import org.usfirst.frc.team4904.robot.output.Mecanum;
 import edu.wpi.first.wpilibj.Joystick.RumbleType;
 
 public class DriverNathan extends Driver {
 	private final XboxController xboxController;
+	private final LogKitten logger;
 	
 	public DriverNathan(Mecanum mecanumDrive, XboxController xboxController, AutoAlign align) {
 		super(mecanumDrive, align);
 		this.xboxController = xboxController;
+		logger = new LogKitten("DriverNathan", LogKitten.LEVEL_VERBOSE, LogKitten.LEVEL_WARN);
 	}
 	
 	public synchronized void update() {
@@ -31,6 +34,7 @@ public class DriverNathan extends Driver {
 		}
 		if (xboxController.getButton(XboxController.BACK_BUTTON)) {
 			disable();
+			logger.w("update", "disabled");
 		}
 	}
 	

@@ -2,6 +2,7 @@ package org.usfirst.frc.team4904.robot.operator;
 
 
 import org.usfirst.frc.team4904.robot.AutoAlign;
+import org.usfirst.frc.team4904.robot.LogKitten;
 import org.usfirst.frc.team4904.robot.Operator;
 import org.usfirst.frc.team4904.robot.input.LogitechJoystick;
 import org.usfirst.frc.team4904.robot.output.Grabber;
@@ -10,11 +11,13 @@ import org.usfirst.frc.team4904.robot.output.Winch;
 public class OperatorGriffin extends Operator {
 	private final LogitechJoystick stick;
 	private final Grabber grabber;
+	private final LogKitten logger;
 	
 	public OperatorGriffin(LogitechJoystick stick, Winch winch, AutoAlign align, Grabber grabber) {
 		super(winch, align, grabber);
 		this.stick = stick;
 		this.grabber = grabber;
+		logger = new LogKitten("OperatorGriffin", LogKitten.LEVEL_VERBOSE, LogKitten.LEVEL_WARN);
 	}
 	
 	public synchronized void update() {
@@ -57,6 +60,7 @@ public class OperatorGriffin extends Operator {
 		// Disable
 		if (stick.buttons[0].get()) {
 			disable();
+			logger.w("update", "disabled");
 		}
 	}
 	
