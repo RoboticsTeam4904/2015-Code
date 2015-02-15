@@ -100,7 +100,8 @@ public class LIDAR implements Disablable, Updatable {
 	}
 	
 	public void update() {
-		if (bytesCurrentlyAvailable() < 16) {
+		if (bytesCurrentlyAvailable() < 8) {
+			logger.v("Update", "Only " + Integer.toString(bytesCurrentlyAvailable()) + " bytes available");
 			return;
 		}
 		logger.v("update", "Reading from LIDAR");
