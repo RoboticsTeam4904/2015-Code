@@ -47,13 +47,13 @@ public class Autonomous implements Updatable, Disablable {
 	public void update() {
 		Step step = steps[currentStep];
 		step.setCurrentWinchHeight(currentWinchHeight);
-		boolean increase = step.run();
+		boolean stepCompleted = step.run();
 		double[] movement = step.getDesiredMovement();
 		this.desiredTurnSpeed = movement[2];
 		this.desiredWinchHeight = step.getDesiredWinchHeight();
 		this.desiredXMovement = movement[0];
 		this.desiredYMovement = movement[1];
-		if (increase) {
+		if (stepCompleted) {
 			currentStep++;
 			disable(); // A step might leave the desiredMovement variables in a nonzero state
 		}
