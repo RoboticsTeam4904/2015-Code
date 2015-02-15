@@ -5,6 +5,7 @@ import org.usfirst.frc.team4904.robot.input.Camera;
 import org.usfirst.frc.team4904.robot.input.IMU;
 import org.usfirst.frc.team4904.robot.input.LIDAR;
 import org.usfirst.frc.team4904.robot.input.LogitechJoystick;
+import org.usfirst.frc.team4904.robot.input.PDP;
 import org.usfirst.frc.team4904.robot.input.SuperEncoder;
 import org.usfirst.frc.team4904.robot.input.UDAR;
 import org.usfirst.frc.team4904.robot.input.XboxController;
@@ -13,7 +14,6 @@ import org.usfirst.frc.team4904.robot.output.Grabber;
 import org.usfirst.frc.team4904.robot.output.Mecanum;
 import org.usfirst.frc.team4904.robot.output.Winch;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.SampleRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -80,7 +80,7 @@ public class Robot extends SampleRobot {
 	private final LogKitten logger;
 	private final Disablable[] toDisable;
 	// Power distribution board
-	private final PowerDistributionPanel pdp;
+	private final PDP pdp;
 	
 	private enum RobotState {
 		DISABLED, OPERATOR, AUTONOMOUS
@@ -127,7 +127,7 @@ public class Robot extends SampleRobot {
 		// Drivers, operators, autonomous
 		autonomous = autonomousManager.getAutonomous();
 		toDisable = new Disablable[] {winch, grabber, lidar, driver, operator, autonomous, frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel, camera};
-		pdp = new PowerDistributionPanel();
+		pdp = new PDP();
 	}
 	
 	public void robotInit() {
@@ -140,7 +140,7 @@ public class Robot extends SampleRobot {
 		System.out.println("*** DISABLED ***");
 		logger.v("Disabled", "Disabled");
 		RobotState state = RobotState.DISABLED;
-		new Updater(state, new Updatable[] {imu}, fastUpdatePeriod).start(); // These should have fast updates
+		new Updater(state, new Updatable[] {imu, pdp}, fastUpdatePeriod).start(); // These should have fast updates
 		while (isDisabled()) {
 			for (Disablable implementsdisable : toDisable) {
 				if (implementsdisable != null) {
@@ -151,10 +151,6 @@ public class Robot extends SampleRobot {
 			frontRightWheel.set(0);
 			backLeftWheel.set(0);
 			backRightWheel.set(0);
-			SmartDashboard.putNumber("Temperature", pdp.getTemperature());
-			SmartDashboard.putNumber("Voltage", pdp.getVoltage());
-			SmartDashboard.putNumber("Current", pdp.getCurrent(1));
-			// System.out.println("Current " + pdp.getCurrent(1));
 			Timer.delay(0.01);
 		}
 	}
@@ -167,7 +163,7 @@ public class Robot extends SampleRobot {
 		driver = autonomous.getAutoDriver();
 		operator = autonomous.getAutoOperator();
 		new Updater(state, new Updatable[] {align, autonomous, camera}, slowUpdatePeriod).start(); // Controller and align are potentially slower
-		new Updater(state, new Updatable[] {imu, driver, operator, mecanumDrive, lidar}, fastUpdatePeriod).start(); // These should have fast updates
+		new Updater(state, new Updatable[] {imu, pdp, driver, operator, mecanumDrive, lidar}, fastUpdatePeriod).start(); // These should have fast updates
 		new Updater(state, new Updatable[] {frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel, grabber, winch}, fastUpdatePeriod).start();
 		while (getRobotState() == state) {
 			Timer.delay(0.01);
@@ -185,14 +181,10 @@ public class Robot extends SampleRobot {
 		operator = operatorManager.getOperator();
 		driver = driverManager.getDriver();
 		new Updater(state, new Updatable[] {align, camera}, slowUpdatePeriod).start(); // Controller and align are potentially slower
-		new Updater(state, new Updatable[] {imu, driver, operator, mecanumDrive, lidar}, fastUpdatePeriod).start(); // These should have fast updates
+		new Updater(state, new Updatable[] {imu, pdp, driver, operator, mecanumDrive, lidar}, fastUpdatePeriod).start(); // These should have fast updates
 		new Updater(state, new Updatable[] {frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel, grabber, winch}, fastUpdatePeriod).start();
 		while (getRobotState() == state) {
 			Timer.delay(0.01);
-			SmartDashboard.putNumber("Temperature", pdp.getTemperature());
-			SmartDashboard.putNumber("Voltage", pdp.getVoltage());
-			SmartDashboard.putNumber("Current", pdp.getCurrent(1));
-			System.out.println("Current " + pdp.getCurrent(1));
 		}
 	}
 	

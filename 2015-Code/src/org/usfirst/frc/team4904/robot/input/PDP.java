@@ -5,9 +5,8 @@ import org.usfirst.frc.team4904.robot.Updatable;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class PDP implements Updatable {
+public class PDP extends PowerDistributionPanel implements Updatable {
 	private static final int NUM_PDP_PORTS = 16;
-	private final PowerDistributionPanel pdp;
 	
 	public PDP() {
 		SmartDashboard.putNumber("PDP Temperature: ", 0);
@@ -15,15 +14,14 @@ public class PDP implements Updatable {
 		for (int i = 0; i < NUM_PDP_PORTS; i++) {
 			SmartDashboard.putNumber("PDP Port " + i + " Current", 0);
 		}
-		pdp = new PowerDistributionPanel();
 	}
 	
 	public void update() {
-		SmartDashboard.putNumber("PDP Temperature: ", pdp.getTemperature());
-		SmartDashboard.putNumber("PDP Voltage", pdp.getVoltage());
-		SmartDashboard.putNumber("PDP Current", pdp.getTotalCurrent());
+		SmartDashboard.putNumber("PDP Temperature: ", getTemperature());
+		SmartDashboard.putNumber("PDP Voltage", getVoltage());
+		SmartDashboard.putNumber("PDP Current", getTotalCurrent());
 		for (int i = 0; i < NUM_PDP_PORTS; i++) {
-			SmartDashboard.putNumber("PDP Port " + i + " Current", pdp.getCurrent(i));
+			SmartDashboard.putNumber("PDP Port " + i + " Current", getCurrent(i));
 		}
 	}
 }
