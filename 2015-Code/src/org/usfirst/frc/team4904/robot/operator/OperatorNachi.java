@@ -11,14 +11,12 @@ import org.usfirst.frc.team4904.robot.output.Winch;
 public class OperatorNachi extends Operator {
 	private final LogitechJoystick stick;
 	private final AutoAlign align;
-	private final Grabber grabber;
 	private final LogKitten logger;
 	
 	public OperatorNachi(LogitechJoystick stick, Winch winch, AutoAlign align, Grabber grabber) {
 		super(winch, align, grabber);
 		this.stick = stick;
 		this.align = align;
-		this.grabber = grabber;
 		logger = new LogKitten("OperatorNachi", LogKitten.LEVEL_VERBOSE, LogKitten.LEVEL_WARN);
 	}
 	
@@ -62,10 +60,10 @@ public class OperatorNachi extends Operator {
 		}
 		// Grabber override
 		if (stick.buttons[11].getRaw()) {
-			grabber.override(stick.getY());
+			overrideGrabber(stick.getY());
 		}
 		// Disable
-		if (stick.buttons[8].get()) {
+		if (stick.buttons[7].get()) {
 			disable();
 			logger.w("update", "disabled");
 		}
