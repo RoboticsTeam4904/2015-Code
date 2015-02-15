@@ -189,6 +189,9 @@ public class AutoAlign implements Updatable {
 	}
 	
 	private GrabberState getDesiredGrabberState() { // What state should the grabber be in
+		if (grabber.getState() == Grabber.GrabberState.DISABLED) {
+			return Grabber.GrabberState.DISABLED;
+		}
 		switch (currentState) {
 			case ALIGNING_WITH_CAN:
 			case ALIGNING_WITH_TOTE:

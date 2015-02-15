@@ -2,6 +2,7 @@ package org.usfirst.frc.team4904.robot;
 
 
 import org.usfirst.frc.team4904.robot.output.Grabber;
+import org.usfirst.frc.team4904.robot.output.Grabber.GrabberState;
 import org.usfirst.frc.team4904.robot.output.Winch;
 
 public abstract class Operator implements Disablable, Updatable {
@@ -25,6 +26,7 @@ public abstract class Operator implements Disablable, Updatable {
 	}
 	
 	protected void grab(int mode) {
+		grabber.setDesiredGrabberState(GrabberState.OPEN);
 		if (mode == MODE_TOTE) {
 			align.grabTote();
 		} else if (mode == MODE_CAN) {
@@ -53,7 +55,7 @@ public abstract class Operator implements Disablable, Updatable {
 	}
 	
 	protected void overrideWinch(double speed) {
-		grabber.override(speed);
+		grabber.override(speed / 5);
 	}
 	
 	public void disable() {

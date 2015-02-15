@@ -14,6 +14,8 @@ public class Grabber extends Talon implements Disablable, Updatable {
 	public static final int LEFT_OUTER_SWITCH = 3;
 	private final DigitalInput[] limitSwitches;
 	private LogKitten logger;
+	private double overrideSpeed;
+	private boolean override;
 	
 	public enum GrabberState { // an enum containing grabber states and their values
 		OPEN(0), CLOSED(-0.05), OPENING(0.1), CLOSING(-0.1), DISABLED(0); // grabber state and values
@@ -30,6 +32,8 @@ public class Grabber extends Talon implements Disablable, Updatable {
 		this.limitSwitches = limitSwitches;
 		grabberState = GrabberState.OPEN;
 		logger = new LogKitten("Grabber", LogKitten.LEVEL_VERBOSE, LogKitten.LEVEL_VERBOSE);
+		overrideSpeed = 0;
+		override = false;
 	}
 	
 	public void setDesiredGrabberState(GrabberState state) {
@@ -59,7 +63,11 @@ public class Grabber extends Talon implements Disablable, Updatable {
 	
 	public void update() {
 		checkLimitSwitches();
-		set(grabberState.motorSpeed);
+		if (!override) {
+			set(grabberState.motorSpeed);
+		} else {
+			set(overrideSpeed);
+		}
 		logger.v("update", "motorSpeed: " + grabberState.motorSpeed);
 	}
 	
@@ -95,7 +103,12 @@ public class Grabber extends Talon implements Disablable, Updatable {
 		set(0);
 	}
 	
+	public GrabberState getState() {
+		return grabberState;
+	}
+	
 	public void override(double speed) {
-		super.set(speed);
+		override = true;
+		overrideSpeed = speed;
 	}
 }
