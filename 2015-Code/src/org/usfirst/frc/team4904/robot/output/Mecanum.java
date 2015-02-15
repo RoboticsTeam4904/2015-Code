@@ -9,9 +9,12 @@ public class Mecanum implements Updatable {
 	private final DampenedMotor frontRightWheel;
 	private final DampenedMotor backLeftWheel;
 	private final DampenedMotor backRightWheel;
-	private volatile double currentXSpeed;
-	private volatile double currentYSpeed;
-	private volatile double currentTurnSpeed;
+	private volatile double desiredXSpeed;
+	private volatile double desiredYSpeed;
+	private volatile double desiredTurnSpeed;
+	private final PID speedPID;
+	private final PID anglePID;
+	private final PID turnSpeedPID;
 	private volatile boolean absolute;
 	private final IMU imu;
 	
@@ -22,6 +25,9 @@ public class Mecanum implements Updatable {
 		this.backLeftWheel = backLeftWheel;
 		this.backRightWheel = backRightWheel;
 		this.imu = imu;
+		this.speedPID = new PID(0.1, 0.1, 0.1);
+		this.anglePID = new PID(0.1, 0.1, 0.1);
+		this.turnSpeedPID = new PID(0.1, 0.1, 0.1);
 	}
 	
 	private void move(double desiredSpeed, double desiredAngle, double turnSpeed, boolean absolute) {
@@ -54,18 +60,23 @@ public class Mecanum implements Updatable {
 	}
 	
 	public synchronized void update() {
-		double currentSpeed = Math.sqrt(currentXSpeed * currentXSpeed + currentYSpeed * currentYSpeed);
-		double currentAngle = Math.atan2(currentYSpeed, currentXSpeed);
-		move(currentSpeed, currentAngle, currentTurnSpeed, absolute); // This system allows for different updating times and rates
+		double[] movement = imu.getMovement();
+		double setSpeed = Math.sqrt(desiredXSpeed * desiredXSpeed + desiredYSpeed * desiredYSpeed);
+		double setAngle = Math.atan2(desiredYSpeed, desiredXSpeed);
+		double setTurnSpeed = desiredTurnSpeed;
+		setSpeed = speedPID.calculate(setSpeed, movement[0]);
+		setAngle = anglePID.calculate(setAngle, movement[1]);
+		setTurnSpeed = turnSpeedPID.calculate(setTurnSpeed, movement[2]);
+		move(setSpeed, setAngle, setTurnSpeed, absolute); // This system allows for different updating times and rates
 	}
 	
 	public void setDesiredXYSpeed(double desiredXSpeed, double desiredYSpeed) {
-		currentXSpeed = desiredXSpeed;
-		currentYSpeed = desiredYSpeed;
+		this.desiredXSpeed = desiredXSpeed;
+		this.desiredYSpeed = desiredYSpeed;
 	}
 	
 	public void setDesiredTurnSpeed(double desiredTurnSpeed) {
-		currentTurnSpeed = desiredTurnSpeed;
+		this.desiredTurnSpeed = desiredTurnSpeed;
 	}
 	
 	public void setAbsolute(boolean absolute) {

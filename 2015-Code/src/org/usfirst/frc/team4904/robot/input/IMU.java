@@ -12,12 +12,18 @@ public class IMU implements Updatable {
 	private double startTime;
 	private long updates = 0;
 	private final LogKitten logger;
+	private double currentSpeed;
+	private double currentAngle;
+	private double currentTurnSpeed;
 	
 	public IMU() {
 		mpu9150 = new MPU9150();
 		mpu9150.init();
 		zero();
 		logger = new LogKitten("IMU", LogKitten.LEVEL_DEBUG);
+		currentSpeed = 0;
+		currentAngle = 0;
+		currentTurnSpeed = 0;
 	}
 	
 	public int test() {
@@ -41,6 +47,10 @@ public class IMU implements Updatable {
 		mpu9150.update();
 		readData();
 		updateKalman();
+	}
+	
+	public double[] getMovement() {
+		return new double[] {currentSpeed, currentAngle, currentTurnSpeed};
 	}
 	
 	private void readData() {
