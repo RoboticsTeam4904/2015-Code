@@ -14,7 +14,7 @@ public class Grabber extends Talon implements Disablable, Updatable {
 	public static final int RIGHT_OUTER_SWITCH = 2;
 	public static final int LEFT_OUTER_SWITCH = 3;
 	public static final int PDP_PORT = 1;
-	private static final double MAX_AMPS = 6; // Tune this value
+	private static final double MAX_AMPS = 4; // Tune this value
 	private final DigitalInput[] limitSwitches;
 	private LogKitten logger;
 	private double overrideSpeed;
@@ -22,7 +22,7 @@ public class Grabber extends Talon implements Disablable, Updatable {
 	private PDP pdp;
 	
 	public enum GrabberState { // an enum containing grabber states and their values
-		OPEN(0), CLOSED(-0.05), OPENING(0.1), CLOSING(-0.1), DISABLED(0); // grabber state and values
+		OPEN(0), CLOSED(-0.1), OPENING(0.1), CLOSING(-0.25), DISABLED(0); // grabber state and values
 		public final double motorSpeed; // the architecture allowing the enum states to have values
 		
 		private GrabberState(double speed) {
