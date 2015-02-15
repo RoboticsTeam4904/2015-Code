@@ -133,7 +133,7 @@ public class Robot extends SampleRobot {
 	public void robotInit() {
 		System.out.println("*** INITIALIZING ***");
 		logger.v("Initializing", "Initializing");
-		SmartDashboard.putBoolean("TrainPID", true);
+		SmartDashboard.putBoolean("TrainPID", false);
 	}
 	
 	public void disabled() {
