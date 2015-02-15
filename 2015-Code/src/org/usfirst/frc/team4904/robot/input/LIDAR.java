@@ -85,10 +85,10 @@ public class LIDAR implements Disablable, Updatable {
 			logger.v("HoughLine", "Checking a line");
 			int[] tmpcoords = new int[4];
 			tmpcoords = line.getCoordinates();
-			if (tmpcoords[1] > 0 && tmpcoords[3] > 0) {
-				// If the two X coordinates are on opposites sides of the Y axis (the line crosses the Y axis)
-				// and both Y coordinates are positive,
-				// assume that this is a line that we like, because it's directly in front of the sensor
+			if (tmpcoords[0] > 0 && tmpcoords[2] > 0) {
+				// If the two Y coordinates are on opposites sides of the X axis (the line crosses the X axis)
+				// and both X coordinates are positive,
+				// assume that this is a line that we like, because it's directly in front of the sensor 0 degrees
 				logger.v("HoughLine", "Added line");
 				inFront.add(tmpcoords);
 			}
