@@ -32,7 +32,7 @@ public class Camera implements Updatable, Disablable {
 		cameraSession = NIVision.IMAQdxOpenCamera(CAMERA_NAME, NIVision.IMAQdxCameraControlMode.CameraControlModeController);
 		NIVision.IMAQdxConfigureGrab(cameraSession);
 		server = CameraServer.getInstance();
-		server.setQuality(40);
+		server.setQuality(20);
 		enabled = false;
 		criteria[0] = new NIVision.ParticleFilterCriteria2(NIVision.MeasurementType.MT_AREA_BY_IMAGE_AREA, AREA_MINIMUM, 100.0, 0, 0);
 	}

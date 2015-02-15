@@ -36,7 +36,7 @@ public class Grabber extends Talon implements Disablable, Updatable {
 		this.limitSwitches = limitSwitches;
 		this.pdp = pdp;
 		grabberState = GrabberState.OPEN;
-		logger = new LogKitten("Grabber", LogKitten.LEVEL_VERBOSE, LogKitten.LEVEL_VERBOSE);
+		logger = new LogKitten("Grabber", LogKitten.LEVEL_VERBOSE, LogKitten.LEVEL_FATAL);
 		overrideSpeed = 0;
 		override = false;
 	}

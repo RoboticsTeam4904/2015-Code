@@ -19,6 +19,7 @@ public class AutoAlign implements Updatable {
 	private final int THIN_TOTE_WIDTH = 100;
 	private final int WIDE_TOTE_WIDTH = 200;
 	private final int LIDAR_MOUNT_OFFSET = -100; // mm to right. Cartesian. Because.
+	private final LogKitten logger;
 	
 	private enum State {
 		EMPTY, ALIGNING_WITH_TOTE, ALIGNING_WITH_CAN, HOLDING_CAN, HOLDING_TOTE, RELEASING_CAN, RELEASING_TOTE
@@ -33,6 +34,7 @@ public class AutoAlign implements Updatable {
 		this.lidar = lidar;
 		this.winch = winch;
 		currentState = State.EMPTY;
+		logger = new LogKitten("AutoAlign", LogKitten.LEVEL_VERBOSE, LogKitten.LEVEL_VERBOSE);
 	}
 	
 	public void grabTote() {
@@ -40,6 +42,7 @@ public class AutoAlign implements Updatable {
 			return;
 		}
 		currentState = State.ALIGNING_WITH_TOTE;
+		logger.v("grabTote", "Grabbing tote" + " tote distance " + lidar.getDists()[90]);
 	}
 	
 	public void grabCan() {
@@ -100,6 +103,7 @@ public class AutoAlign implements Updatable {
 	private void alignWithToteTick(boolean grab) {
 		int[] toteFront = lidar.getLine();
 		double angle = Math.atan2(toteFront[3] - toteFront[1], toteFront[2] - toteFront[0]); // Angle of the tote relative to the X axis (us)
+		logger.v("alignWithToteTick", "Current angle: " + Double.toString(angle));
 		if (Math.abs(angle) < Math.PI / 60) {
 			double x = 0;
 			double y = 0;
@@ -113,7 +117,7 @@ public class AutoAlign implements Updatable {
 				x = 0.0;
 			}
 			if (lidar.getDists()[90] > 100) {
-				y = 1; // TODO Really fast (see comment on speeds at top of YellowToteStack)
+				y = 0.5; // TODO Really fast (see comment on speeds at top of YellowToteStack)
 			} else {
 				y = 0;
 				double width = toteFront[2] - toteFront[0];
@@ -144,7 +148,7 @@ public class AutoAlign implements Updatable {
 				currentState = State.HOLDING_CAN;
 				return;
 			case ALIGNING_WITH_TOTE:
-				currentState = State.HOLDING_TOTE;
+				// currentState = State.HOLDING_TOTE;
 				alignWithToteTick(grab);
 				return;
 			case RELEASING_CAN:

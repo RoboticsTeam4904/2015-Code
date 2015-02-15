@@ -16,7 +16,7 @@ public class PDP extends PowerDistributionPanel implements Updatable {
 		for (int i = 0; i < NUM_PDP_PORTS; i++) {
 			SmartDashboard.putNumber("PDP Port " + i + " Current", 0);
 		}
-		logger = new LogKitten("PDP", LogKitten.LEVEL_VERBOSE, LogKitten.LEVEL_VERBOSE);
+		logger = new LogKitten("PDP", LogKitten.LEVEL_VERBOSE, LogKitten.LEVEL_FATAL);
 	}
 	
 	public void update() {

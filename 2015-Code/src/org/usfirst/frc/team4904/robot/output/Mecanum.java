@@ -64,9 +64,9 @@ public class Mecanum implements Updatable {
 		double setSpeed = Math.sqrt(desiredXSpeed * desiredXSpeed + desiredYSpeed * desiredYSpeed);
 		double setAngle = Math.atan2(desiredYSpeed, desiredXSpeed);
 		double setTurnSpeed = desiredTurnSpeed;
-		setSpeed = speedPID.calculate(setSpeed, movement[0]);
-		setAngle = anglePID.calculate(setAngle, movement[1]);
-		setTurnSpeed = turnSpeedPID.calculate(setTurnSpeed, movement[2]);
+		// setSpeed = speedPID.calculate(setSpeed, movement[0]);
+		// setAngle = anglePID.calculate(setAngle, movement[1]);
+		// setTurnSpeed = turnSpeedPID.calculate(setTurnSpeed, movement[2]);
 		move(setSpeed, setAngle, setTurnSpeed, absolute); // This system allows for different updating times and rates
 	}
 	

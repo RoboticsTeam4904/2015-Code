@@ -22,7 +22,7 @@ public class LIDAR implements Disablable, Updatable {
 	public LIDAR(int motorport) {
 		motor = new Talon(motorport);
 		port = new SerialPort(115200, SerialPort.Port.kMXP);
-		logger = new LogKitten("LIDAR", LogKitten.LEVEL_DEBUG);
+		logger = new LogKitten("LIDAR", LogKitten.LEVEL_DEBUG, LogKitten.LEVEL_VERBOSE);
 		logger.v("LIDAR", "Started Logging");
 	}
 	
@@ -56,7 +56,7 @@ public class LIDAR implements Disablable, Updatable {
 				b_data[i][1] &= 0x3F;
 				dist[i] = new BigInteger(new byte[] {0, b_data[i][1], b_data[i][0]}).intValue();
 			}
-			logger.v("scanline", Integer.toString(dist[0]) + " " + Integer.toString(dist[1]) + " " + Integer.toString(dist[2]) + " " + Integer.toString(3));
+			logger.d("scanline", Integer.toString(dist[0]) + " " + Integer.toString(dist[1]) + " " + Integer.toString(dist[2]) + " " + Integer.toString(3));
 			return dist;
 		}
 		return null;
@@ -82,12 +82,14 @@ public class LIDAR implements Disablable, Updatable {
 		}
 		ArrayList<int[]> inFront = new ArrayList<int[]>();
 		for (HoughLine line : H.getLines(houghSensitivity)) {
+			logger.v("HoughLine", "Checking a line");
 			int[] tmpcoords = new int[4];
 			tmpcoords = line.getCoordinates();
-			if ((tmpcoords[0] < 0 && tmpcoords[2] > 0 || tmpcoords[0] > 0 && tmpcoords[2] < 0) && tmpcoords[1] > 0 && tmpcoords[3] > 0) {
+			if (tmpcoords[1] > 0 && tmpcoords[3] > 0) {
 				// If the two X coordinates are on opposites sides of the Y axis (the line crosses the Y axis)
 				// and both Y coordinates are positive,
 				// assume that this is a line that we like, because it's directly in front of the sensor
+				logger.v("HoughLine", "Added line");
 				inFront.add(tmpcoords);
 			}
 		}
@@ -101,11 +103,10 @@ public class LIDAR implements Disablable, Updatable {
 	}
 	
 	public void update() {
-		motor.set(0.9);
-		if (bytesCurrentlyAvailable() < 100) {
+		if (bytesCurrentlyAvailable() < 32) {
 			return;
 		}
-		System.out.println("Reading from LIDAR");
+		logger.v("update", "Reading from LIDAR");
 		byte scanhdr = (byte) 0xA0;
 		try {
 			for (int i = 0; i < 90; i++) { // Reading in chunks of 4, so only 90 steps
@@ -148,9 +149,7 @@ public class LIDAR implements Disablable, Updatable {
 		}
 	}
 	
-	public void disable() {
-		motor.set(0);
-	}
+	public void disable() {}
 	
 	public int clean() {
 		port.free();
