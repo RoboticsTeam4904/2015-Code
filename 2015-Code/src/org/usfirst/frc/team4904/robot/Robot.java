@@ -41,9 +41,12 @@ public class Robot extends SampleRobot {
 	private static final int BACK_LEFT_I2C_PORT = 12;
 	private static final int BACK_RIGHT_I2C_PORT = 13;
 	private static final int WINCH_I2C_PORT = 14;
-	private static final double MOTOR_P_COEFFICIENT = 0.1;
-	private static final double MOTOR_I_COEFFICIENT = 0.1;
-	private static final double MOTOR_D_COEFFICIENT = 0.1;
+	private static final double WINCH_P_COEFFICIENT = 0.1;
+	private static final double WINCH_I_COEFFICIENT = 0.1;
+	private static final double WINCH_D_COEFFICIENT = 0.1;
+	private static final double MECANUM_P_COEFFICIENT = 0.1;
+	private static final double MECANUM_I_COEFFICIENT = 0.1;
+	private static final double MECANUM_D_COEFFICIENT = 0.1;
 	private final LogitechJoystick stick; // the X3D Extreme3DPro Logitech joystick (right hand) - operator
 	private final XboxController xboxController; // the Xbox 360 controller - driver
 	// Input devices
@@ -104,7 +107,7 @@ public class Robot extends SampleRobot {
 		limitSwitches[Grabber.LEFT_INNER_SWITCH] = new DigitalInput(LEFT_INNER_SWITCH_PORT);
 		limitSwitches[Grabber.RIGHT_OUTER_SWITCH] = new DigitalInput(RIGHT_OUTER_SWITCH_PORT);
 		limitSwitches[Grabber.LEFT_OUTER_SWITCH] = new DigitalInput(LEFT_OUTER_SWITCH_PORT);
-		pdp = new PDP();
+		pdp = new PDP(); // Power Distribution Panel interface and logging.
 		/* Lights! */
 		lights = new LightSet();
 		/* Camera! */
@@ -146,6 +149,7 @@ public class Robot extends SampleRobot {
 		System.out.println("*** INITIALIZING ***");
 		logger.v("Initializing", "Initializing");
 		SmartDashboard.putBoolean("TrainPID", false);
+		SmartDashboard.putBoolean("DumpLIDAR", false);
 	}
 	
 	public void disabled() {
@@ -196,10 +200,13 @@ public class Robot extends SampleRobot {
 		if (SmartDashboard.getBoolean("TrainPID")) {
 			trainPID(state);
 			return;
+		} else if (SmartDashboard.getBoolean("DumpLIDAR")) {
+			dumpLIDAR(state);
+			return;
 		}
 		operator = operatorManager.getOperator();
 		driver = driverManager.getDriver();
-		new Updater(state, new Updatable[] {align}, slowUpdatePeriod).start(); // Controller and align are potentially slower
+		new Updater(state, new Updatable[] {align}, slowUpdatePeriod).start(); // align is potentially slower
 		// IMU, PDP, and Camera should always update
 		new Updater(state, alwaysUpdate, fastUpdatePeriod).start();
 		// These should have fast updates
@@ -212,8 +219,8 @@ public class Robot extends SampleRobot {
 	}
 	
 	public void trainPID(RobotState state) {
-		System.out.println("*** TEST ***");
-		logger.v("Test", "Test");
+		System.out.println("*** TRAIN PID ***");
+		logger.v("trainPID", "trainPID");
 		// IMU, PDP, and Camera should always update
 		new Updater(state, alwaysUpdate, fastUpdatePeriod).start();
 		// always slow updates
@@ -222,6 +229,20 @@ public class Robot extends SampleRobot {
 		while (getRobotState() == state) {
 			frontLeftWheel.setValue(0.1);
 			logger.v("trainPID", "training cycle");
+		}
+	}
+	
+	public void dumpLIDAR(RobotState state) {
+		System.out.println("*** DUMP LIDAR ***");
+		logger.v("dumpLIDAR", "dumpLIDAR");
+		// IMU, PDP, and Camera should always update
+		new Updater(state, alwaysUpdate, fastUpdatePeriod).start();
+		new Updater(state, alwaysUpdateSlow, slowUpdatePeriod).start();
+		new Updater(state, new Updatable[] {lidar}, fastUpdatePeriod).start();
+		while (getRobotState() == state) {
+			for (int i = 0; i < 360; i++) {
+				logger.w("LIDAR", "+" + lidar.getXY(i) + "+");
+			}
 		}
 	}
 	
