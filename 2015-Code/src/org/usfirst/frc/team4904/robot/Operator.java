@@ -40,7 +40,7 @@ public abstract class Operator implements Disablable, Updatable {
 	
 	protected void adjust(double value) {
 		if (align.isInControl()) {
-			winch.setSpeed(value); // Sets winch motor speed
+			winch.setSpeed(-1 * value); // Sets winch motor speed
 		}
 	}
 	
@@ -54,7 +54,7 @@ public abstract class Operator implements Disablable, Updatable {
 		return winch.getHeight();
 	}
 	
-	protected void overrideWinch(double speed) {
+	protected void overrideGrabber(double speed) {
 		grabber.override(speed / 5);
 	}
 	
