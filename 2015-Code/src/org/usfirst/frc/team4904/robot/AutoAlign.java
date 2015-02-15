@@ -144,8 +144,8 @@ public class AutoAlign implements Updatable {
 				currentState = State.HOLDING_CAN;
 				return;
 			case ALIGNING_WITH_TOTE:
-				currentState = State.HOLDING_TOTE;
-				// alignWithToteTick(grab);
+				// currentState = State.HOLDING_TOTE;
+				alignWithToteTick(grab);
 				return;
 			case RELEASING_CAN:
 			case RELEASING_TOTE:

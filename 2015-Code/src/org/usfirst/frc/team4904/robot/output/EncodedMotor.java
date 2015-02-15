@@ -17,6 +17,7 @@ public abstract class EncodedMotor extends VictorSP implements Disablable, Updat
 	protected boolean override;
 	protected final SuperEncoder encoder;
 	private LogKitten logger;
+	private boolean cap;
 	
 	public EncodedMotor(int channel, SuperEncoder encoder, PID pid) {
 		super(channel);
@@ -24,21 +25,23 @@ public abstract class EncodedMotor extends VictorSP implements Disablable, Updat
 		this.pid = pid;
 		motorOutput = 0;
 		override = false;
-		logger = new LogKitten("EncodedMotor" + channel, LogKitten.LEVEL_VERBOSE);
+		logger = new LogKitten("EncodedMotor" + channel, LogKitten.LEVEL_VERBOSE, LogKitten.LEVEL_VERBOSE);
+		cap = false;
 	}
 	
 	public void trainPID() {
-		this.pid.train();
+		cap = true;
+		pid.train();
 	}
 	
-	public abstract void set(double value);
+	public abstract void setValue(double value);
 	
 	protected abstract double currentState();
 	
 	public void setSpeed(double value) { // Ignore the warning on this line. It is all good anyway.
 		motorOutput = value;
 		override = true;
-		logger.v("setSpeed", "Set value to " + value);
+		logger.d("setSpeed", "Set value to " + value);
 	}
 	
 	public void update() {
@@ -46,6 +49,12 @@ public abstract class EncodedMotor extends VictorSP implements Disablable, Updat
 			motorOutput = pid.calculate(target, currentState());
 		}
 		logger.d("update", "override is: " + Boolean.toString(override) + " motorOutput is: " + Double.toString(motorOutput));
+		if (cap && motorOutput > 0.33) {
+			motorOutput = 0.33;
+		}
+		if (cap && motorOutput < -0.33) {
+			motorOutput = -0.33;
+		}
 		super.set(motorOutput);
 	}
 	

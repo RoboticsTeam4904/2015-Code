@@ -16,6 +16,7 @@ import org.usfirst.frc.team4904.robot.output.Winch;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.SampleRobot;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends SampleRobot {
 	// Default ports for joystick/controller
@@ -39,9 +40,9 @@ public class Robot extends SampleRobot {
 	private static final int BACK_LEFT_I2C_PORT = 12;
 	private static final int BACK_RIGHT_I2C_PORT = 13;
 	private static final int WINCH_I2C_PORT = 14;
-	private static final double MOTOR_P_COEFFICIENT = 1;
-	private static final double MOTOR_I_COEFFICIENT = 0.3;
-	private static final double MOTOR_D_COEFFICIENT = 0.3;
+	private static final double MOTOR_P_COEFFICIENT = 0.1;
+	private static final double MOTOR_I_COEFFICIENT = 0.1;
+	private static final double MOTOR_D_COEFFICIENT = 0.1;
 	private final LogitechJoystick stick; // the X3D Extreme3DPro Logitech joystick (right hand) - operator
 	private final XboxController xboxController; // the Xbox 360 controller - driver
 	// Input devices
@@ -86,7 +87,7 @@ public class Robot extends SampleRobot {
 	public Robot() {
 		System.out.println("*** CONSTRUCTING ROBOT ***");
 		// Initializing logging
-		logger = new LogKitten("Robot", LogKitten.LEVEL_WARN);// TODO Since this level is less than level_fatal, fatal errors will not be logged
+		logger = new LogKitten("Robot", LogKitten.LEVEL_VERBOSE, LogKitten.LEVEL_VERBOSE);// TODO Since this level is less than level_fatal, fatal errors will not be logged
 		logger.v("Constructing", "Constructing");
 		// Initialize sensors
 		imu = new IMU(); // Initialize IMU
@@ -129,6 +130,7 @@ public class Robot extends SampleRobot {
 	public void robotInit() {
 		System.out.println("*** INITIALIZING ***");
 		logger.v("Initializing", "Initializing");
+		SmartDashboard.putBoolean("TrainPID", false);
 	}
 	
 	public void disabled() {
@@ -169,6 +171,10 @@ public class Robot extends SampleRobot {
 		System.out.println("*** TELEOPERATED ***");
 		logger.v("Teleoperated", "Teleoperated");
 		RobotState state = RobotState.OPERATOR;
+		if (SmartDashboard.getBoolean("TrainPID")) {
+			trainPID(state);
+			return;
+		}
 		operator = operatorManager.getOperator();
 		driver = driverManager.getDriver();
 		new Updater(state, new Updatable[] {align, camera}, slowUpdatePeriod).start(); // Controller and align are potentially slower
@@ -176,6 +182,18 @@ public class Robot extends SampleRobot {
 		new Updater(state, new Updatable[] {frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel, grabber, winch}, fastUpdatePeriod).start();
 		while (getRobotState() == state) {
 			Timer.delay(0.01);
+		}
+	}
+	
+	public void trainPID(RobotState state) {
+		System.out.println("*** TEST ***");
+		logger.v("Test", "Test");
+		frontLeftWheel.setValue(0.1);
+		new Updater(state, new Updatable[] {frontLeftWheel, mecanumDrive}, fastUpdatePeriod).start();
+		while (getRobotState() == state) {
+			logger.v("trainPID", "training cycle");
+			frontLeftWheel.trainPID();
+			Timer.delay(5);
 		}
 	}
 	

@@ -12,7 +12,7 @@ public class PositionEncodedMotor extends EncodedMotor {
 		logger = new LogKitten("PositionEncodedMotor" + channel, LogKitten.LEVEL_VERBOSE);
 	}
 	
-	public void set(double value) {
+	public void setValue(double value) {
 		// This function takes a motor height
 		target = value;
 		override = false;

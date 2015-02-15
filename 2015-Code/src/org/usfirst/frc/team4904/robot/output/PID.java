@@ -19,15 +19,14 @@ public class PID {
 		this.P = P;
 		this.I = I;
 		this.D = D;
-		this.absoluteError = 0;
-		logger = new LogKitten("PID", LogKitten.LEVEL_DEBUG, LogKitten.LEVEL_FATAL);
+		logger = new LogKitten("PID", LogKitten.LEVEL_DEBUG, LogKitten.LEVEL_VERBOSE);
 		reset();
 	}
 	
 	public void reset() {
-		previousError = 0;
+		previousError = 1;
 		integralSum = 0;
-		absoluteError = 0;
+		absoluteError = 1;
 	}
 	
 	public double calculate(double target, double current) {
@@ -38,7 +37,7 @@ public class PID {
 		integralSum += error;
 		double iComponent = integralSum * I;
 		// Update total error
-		this.absoluteError += Math.abs(error);
+		absoluteError += Math.abs(error);
 		return pComponent + iComponent + dComponent;
 	}
 	
@@ -50,9 +49,10 @@ public class PID {
 		reset();
 		double[] newPID = new double[3];
 		double errorDiff = lastAbsoluteError - absoluteError;
+		// Only train P coefficient
 		newPID[0] = errorDiff * P * 0.1;
-		newPID[1] = errorDiff * I * 0.1;
-		newPID[2] = errorDiff * D * 0.1;
+		newPID[1] = I; // errorDiff * I * 0.1;
+		newPID[2] = D; // errorDiff * D * 0.1;
 		lastPID = new double[] {P, I, D};
 		lastAbsoluteError = absoluteError;
 		P = newPID[0];

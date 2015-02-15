@@ -3,20 +3,19 @@ package org.usfirst.frc.team4904.robot.output;
 
 import org.usfirst.frc.team4904.robot.Updatable;
 import org.usfirst.frc.team4904.robot.input.IMU;
-import edu.wpi.first.wpilibj.SpeedController;
 
 public class Mecanum implements Updatable {
-	private final SpeedController frontLeftWheel;
-	private final SpeedController frontRightWheel;
-	private final SpeedController backLeftWheel;
-	private final SpeedController backRightWheel;
+	private final EncodedMotor frontLeftWheel;
+	private final EncodedMotor frontRightWheel;
+	private final EncodedMotor backLeftWheel;
+	private final EncodedMotor backRightWheel;
 	private volatile double currentXSpeed;
 	private volatile double currentYSpeed;
 	private volatile double currentTurnSpeed;
 	private volatile boolean absolute;
 	private final IMU imu;
 	
-	public Mecanum(SpeedController frontLeftWheel, SpeedController frontRightWheel, SpeedController backLeftWheel, SpeedController backRightWheel, IMU imu) {
+	public Mecanum(EncodedMotor frontLeftWheel, EncodedMotor frontRightWheel, EncodedMotor backLeftWheel, EncodedMotor backRightWheel, IMU imu) {
 		// Initialize motor controllers with default ports
 		this.frontLeftWheel = frontLeftWheel;
 		this.frontRightWheel = frontRightWheel;
@@ -44,10 +43,10 @@ public class Mecanum implements Updatable {
 		if (scaleFactor < 1) {
 			scaleFactor = 1;
 		}
-		frontLeftWheel.set(frontLeft / scaleFactor); // Negated because of motors being of the inside of chassis
-		frontRightWheel.set(-frontRight / scaleFactor);
-		backLeftWheel.set(backLeft / scaleFactor); // Negated because of motors being of the inside of chassis
-		backRightWheel.set(-backRight / scaleFactor);
+		frontLeftWheel.setValue(frontLeft / scaleFactor); // Negated because of motors being of the inside of chassis
+		frontRightWheel.setValue(-frontRight / scaleFactor);
+		backLeftWheel.setValue(backLeft / scaleFactor); // Negated because of motors being of the inside of chassis
+		backRightWheel.setValue(-backRight / scaleFactor);
 	}
 	
 	public static double time() {
