@@ -1,7 +1,6 @@
 package org.usfirst.frc.team4904.robot.input;
 
 
-import java.util.Date;
 import org.usfirst.frc.team4904.robot.LogKitten;
 import org.usfirst.frc.team4904.robot.Robot;
 import org.usfirst.frc.team4904.robot.Updatable;
@@ -38,7 +37,6 @@ public class IMU implements Updatable {
 	public void zero() {
 		// TODO set current orientation as "forward"
 		update();
-		Date date = new java.util.Date();
 		startTime = Robot.time();
 		updates = 0;
 	}
