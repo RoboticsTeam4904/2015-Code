@@ -29,7 +29,6 @@ public class Robot extends SampleRobot {
 	private static final int BACK_RIGHT_WHEEL_PORT = 3;
 	private static final int WINCH_PORT = 4;
 	private static final int GRABBER_PORT = 5;
-	private static final int LIDAR_MOTOR_PORT = 6;
 	// Default ports for limit switches
 	private static final int RIGHT_INNER_SWITCH_PORT = 0;
 	private static final int LEFT_INNER_SWITCH_PORT = 1;
@@ -102,7 +101,7 @@ public class Robot extends SampleRobot {
 		// Initialize sensors
 		imu = new IMU(); // Initialize IMU
 		udar = new UDAR(); // Initialize UDAR
-		lidar = new LIDAR(LIDAR_MOTOR_PORT); // Initialize LIDAR
+		lidar = new LIDAR(); // Initialize LIDAR
 		limitSwitches[Grabber.RIGHT_INNER_SWITCH] = new DigitalInput(RIGHT_INNER_SWITCH_PORT);
 		limitSwitches[Grabber.LEFT_INNER_SWITCH] = new DigitalInput(LEFT_INNER_SWITCH_PORT);
 		limitSwitches[Grabber.RIGHT_OUTER_SWITCH] = new DigitalInput(RIGHT_OUTER_SWITCH_PORT);
