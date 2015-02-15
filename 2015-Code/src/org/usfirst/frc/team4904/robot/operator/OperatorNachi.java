@@ -61,6 +61,10 @@ public class OperatorNachi extends Operator {
 		if (stick.buttons[11].getRaw()) {
 			grabber.override(stick.getY());
 		}
+		// Disable
+		if (stick.buttons[8].get()) {
+			disable();
+		}
 	}
 	
 	public void disable() {

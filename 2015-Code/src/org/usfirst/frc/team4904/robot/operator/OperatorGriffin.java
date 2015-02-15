@@ -35,9 +35,6 @@ public class OperatorGriffin extends Operator {
 		if (stick.buttons[4].get()) {
 			changeHeight(-12); // When button 5 is pressed, lower the winch all the way
 		}
-		if (stick.buttons[11].get()) {
-			grab(MODE_TOTE); // When button 12 is pressed, grab a thin tote
-		}
 		if (stick.buttons[9].get()) {
 			grab(MODE_TOTE); // When button 10 is pressed, grab a wide tote
 		}
@@ -56,6 +53,10 @@ public class OperatorGriffin extends Operator {
 		// Grabber override
 		if (stick.buttons[11].getRaw()) {
 			grabber.override(stick.getY());
+		}
+		// Disable
+		if (stick.buttons[0].get()) {
+			disable();
 		}
 	}
 	
