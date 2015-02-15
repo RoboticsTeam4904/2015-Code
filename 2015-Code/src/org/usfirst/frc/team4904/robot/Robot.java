@@ -78,7 +78,9 @@ public class Robot extends SampleRobot {
 	public static final double slowUpdatePeriod = 0.2; // update every 0.2 seconds/200 milliseconds (5Hz)
 	// Logging system
 	private final LogKitten logger;
+	// Disables
 	private final Disablable[] toDisable;
+	private final Updatable[] alwaysUpdate;
 	// Power distribution board
 	private final PDP pdp;
 	
@@ -99,6 +101,7 @@ public class Robot extends SampleRobot {
 		limitSwitches[Grabber.LEFT_INNER_SWITCH] = new DigitalInput(LEFT_INNER_SWITCH_PORT);
 		limitSwitches[Grabber.RIGHT_OUTER_SWITCH] = new DigitalInput(RIGHT_OUTER_SWITCH_PORT);
 		limitSwitches[Grabber.LEFT_OUTER_SWITCH] = new DigitalInput(LEFT_OUTER_SWITCH_PORT);
+		pdp = new PDP();
 		camera = new Camera();
 		// Initialize Encoders
 		frontLeftEncoder = new SuperEncoder(FRONT_LEFT_I2C_PORT);
@@ -108,7 +111,7 @@ public class Robot extends SampleRobot {
 		winchEncoder = new SuperEncoder(WINCH_I2C_PORT);
 		// Initialize movement controllers
 		winch = new Winch(WINCH_PORT, winchEncoder); // Initialize Winch control
-		grabber = new Grabber(GRABBER_PORT, limitSwitches); // Initialize Grabber control -- only autoalign has access to this, by design
+		grabber = new Grabber(GRABBER_PORT, limitSwitches, pdp); // Initialize Grabber control -- only autoalign has access to this, by design
 		// Initialize motor controllers with default ports
 		frontLeftWheel = new DampenedMotor(FRONT_LEFT_WHEEL_PORT);
 		frontRightWheel = new DampenedMotor(FRONT_RIGHT_WHEEL_PORT);
@@ -126,8 +129,9 @@ public class Robot extends SampleRobot {
 		autonomousManager = new AutonomousManager(mecanumDrive, winch, grabber, align, camera, lidar);
 		// Drivers, operators, autonomous
 		autonomous = autonomousManager.getAutonomous();
-		toDisable = new Disablable[] {winch, grabber, lidar, driver, operator, autonomous, frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel, camera};
-		pdp = new PDP();
+		// This list should include everything with a motor
+		toDisable = new Disablable[] {winch, grabber, lidar, driver, operator, autonomous, frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel};
+		alwaysUpdate = new Updatable[] {imu, pdp, camera};
 	}
 	
 	public void robotInit() {
@@ -140,7 +144,8 @@ public class Robot extends SampleRobot {
 		System.out.println("*** DISABLED ***");
 		logger.v("Disabled", "Disabled");
 		RobotState state = RobotState.DISABLED;
-		new Updater(state, new Updatable[] {imu, pdp}, fastUpdatePeriod).start(); // These should have fast updates
+		// IMU, PDP, and Camera should always update
+		new Updater(state, alwaysUpdate, fastUpdatePeriod).start();
 		while (isDisabled()) {
 			for (Disablable implementsdisable : toDisable) {
 				if (implementsdisable != null) {
@@ -162,9 +167,11 @@ public class Robot extends SampleRobot {
 		autonomous = autonomousManager.getAutonomous();
 		driver = autonomous.getAutoDriver();
 		operator = autonomous.getAutoOperator();
-		new Updater(state, new Updatable[] {align, autonomous, camera}, slowUpdatePeriod).start(); // Controller and align are potentially slower
-		new Updater(state, new Updatable[] {imu, pdp, driver, operator, mecanumDrive, lidar}, fastUpdatePeriod).start(); // These should have fast updates
-		new Updater(state, new Updatable[] {frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel, grabber, winch}, fastUpdatePeriod).start();
+		new Updater(state, new Updatable[] {align}, slowUpdatePeriod).start(); // Controller and align are potentially slower
+		// IMU, PDP, and Camera should always update
+		new Updater(state, alwaysUpdate, fastUpdatePeriod).start();
+		// These should have fast updates
+		new Updater(state, new Updatable[] {driver, operator, mecanumDrive, lidar, frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel, grabber, winch}, fastUpdatePeriod).start();
 		while (getRobotState() == state) {
 			Timer.delay(0.01);
 		}
@@ -180,9 +187,11 @@ public class Robot extends SampleRobot {
 		}
 		operator = operatorManager.getOperator();
 		driver = driverManager.getDriver();
-		new Updater(state, new Updatable[] {align, camera}, slowUpdatePeriod).start(); // Controller and align are potentially slower
-		new Updater(state, new Updatable[] {imu, pdp, driver, operator, mecanumDrive, lidar}, fastUpdatePeriod).start(); // These should have fast updates
-		new Updater(state, new Updatable[] {frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel, grabber, winch}, fastUpdatePeriod).start();
+		new Updater(state, new Updatable[] {align}, slowUpdatePeriod).start(); // Controller and align are potentially slower
+		// IMU, PDP, and Camera should always update
+		new Updater(state, alwaysUpdate, fastUpdatePeriod).start();
+		// These should have fast updates
+		new Updater(state, new Updatable[] {driver, operator, mecanumDrive, lidar, frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel, grabber, winch}, fastUpdatePeriod).start();
 		while (getRobotState() == state) {
 			Timer.delay(0.01);
 		}
@@ -191,6 +200,8 @@ public class Robot extends SampleRobot {
 	public void trainPID(RobotState state) {
 		System.out.println("*** TEST ***");
 		logger.v("Test", "Test");
+		// IMU, PDP, and Camera should always update
+		new Updater(state, alwaysUpdate, fastUpdatePeriod).start();
 		new Updater(state, new Updatable[] {frontLeftWheel, mecanumDrive}, fastUpdatePeriod).start();
 		while (getRobotState() == state) {
 			frontLeftWheel.setValue(0.1);
