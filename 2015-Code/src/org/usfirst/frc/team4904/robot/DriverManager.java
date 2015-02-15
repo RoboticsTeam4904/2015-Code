@@ -8,18 +8,19 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class DriverManager {
 	private Driver[] drivers;
-	public final int DRIVER_NATHAN = 0;
+	public static final int DRIVER_NATHAN = 0;
+	private static final int DRIVER_DEFAULT = DRIVER_NATHAN;
 	private final LogKitten logger;
 	
 	public DriverManager(Mecanum mecanum, XboxController xbox, AutoAlign align) {
 		drivers = new Driver[1];
 		drivers[DRIVER_NATHAN] = new DriverNathan(mecanum, xbox, align);
 		logger = new LogKitten("DriverManager", LogKitten.LEVEL_VERBOSE);
-		SmartDashboard.putNumber("Driver", 0);
+		SmartDashboard.putNumber("Driver", DRIVER_DEFAULT);
 	}
 	
 	public Driver getDriver() {
-		int driverMode = (int) SmartDashboard.getNumber("Driver", 0);
+		int driverMode = (int) SmartDashboard.getNumber("Driver", DRIVER_DEFAULT);
 		if (driverMode > 0) {
 			driverMode = 0;
 		}

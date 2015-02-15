@@ -14,8 +14,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class AutonomousManager {
 	private final Autonomous[] autonomouses = new Autonomous[2];
-	private final int YELLOW_TOTE_STACK = 0;
-	private final int LANDFILL_STACK = 1;
+	private static final int YELLOW_TOTE_STACK = 0;
+	private static final int LANDFILL_STACK = 1;
+	private static final int AUTO_DEFAULT = YELLOW_TOTE_STACK;
 	private final Mecanum mecanumDrive;
 	private final Winch winch;
 	private final Grabber grabber;
@@ -33,11 +34,11 @@ public class AutonomousManager {
 			registerAutonomous(auto);
 		}
 		logger = new LogKitten("AutonomousManager", LogKitten.LEVEL_VERBOSE);
-		SmartDashboard.putNumber("Autonomous", 0);
+		SmartDashboard.putNumber("Autonomous", AUTO_DEFAULT);
 	}
 	
 	public Autonomous getAutonomous() {
-		int autoMode = (int) SmartDashboard.getNumber("Autonomous", 0);
+		int autoMode = (int) SmartDashboard.getNumber("Autonomous", AUTO_DEFAULT);
 		if (autoMode > 0) {
 			autoMode = 0;
 		}
