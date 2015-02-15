@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj.VictorSP;
 public class DampenedMotor extends VictorSP implements Disablable, Updatable {
 	private double currentSpeed;
 	private double targetSpeed;
-	private final double maxRate = 0.1; // Per tick. If tick length is changed significantly, adjust this number
+	private final double maxRate = 0.05; // Per tick. If tick length is changed significantly, adjust this number
 	
 	public DampenedMotor(int channel) {
 		super(channel);
