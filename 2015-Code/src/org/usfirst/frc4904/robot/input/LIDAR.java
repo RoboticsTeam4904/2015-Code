@@ -3,29 +3,27 @@ package org.usfirst.frc4904.robot.input;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
-import org.usfirst.frc4904.robot.Disablable;
 import org.usfirst.frc4904.robot.LogKitten;
 import org.usfirst.frc4904.robot.Updatable;
-import edu.wpi.first.wpilibj.SerialPort;
 
-public class LIDAR implements Disablable, Updatable {
+public class LIDAR implements Updatable {
 	int[] dists = new int[360];
-	private SerialPort port;
+	private SuperSerial port;
 	private final LogKitten logger;
 	static final int width = 1280;// This is the resolution of my screen, because that seemed to work
 	static final int height = 720;
 	static final double d = 5;// Settings from my screen
 	static final int houghSensitivity = 30;
 	
-	public LIDAR() {
-		port = new SerialPort(115200, SerialPort.Port.kMXP);
+	public LIDAR(SuperSerial port) {
 		logger = new LogKitten("LIDAR", LogKitten.LEVEL_DEBUG, LogKitten.LEVEL_VERBOSE);
 		logger.v("LIDAR", "Started Logging");
+		this.port = port;
 	}
 	
 	private byte[] read(int bytes) throws Exception {
 		byte[] b = new byte[bytes];
-		b = port.read(bytes);
+		b = port.readLIDAR(bytes);
 		for (int i = 0; i < bytes; i++) {
 			logger.d("read", Integer.toString(i) + " " + Byte.toString(b[i]));
 		}
@@ -95,16 +93,11 @@ public class LIDAR implements Disablable, Updatable {
 		return inFront.get(0);
 	}
 	
-	private int bytesCurrentlyAvailable() {
-		return port.getBytesReceived();
-	}
-	
 	public void update() {
-		if (bytesCurrentlyAvailable() < 22) {
-			logger.v("Update", "Only " + Integer.toString(bytesCurrentlyAvailable()) + " bytes available");
+		if (port.availableLIDARBytes() < 1980) { // LIDAR returns 1980 bytes per cycle
 			return;
 		}
-		logger.v("update", "Reading from LIDAR");
+		logger.v("update", "Updating LIDAR");
 		byte scanhdr = (byte) 0xA0;
 		try {
 			for (int i = 0; i < 90; i++) { // Reading in chunks of 4, so only 90 steps
@@ -145,13 +138,6 @@ public class LIDAR implements Disablable, Updatable {
 		catch (Exception e) {
 			System.out.println("Exception: " + e);
 		}
-	}
-	
-	public void disable() {}
-	
-	public int clean() {
-		port.free();
-		return 0;
 	}
 	
 	public int[] getXY(int i) {
