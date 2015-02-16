@@ -13,8 +13,8 @@ public class SuperEncoder {
 	
 	public SuperEncoder(int channel, SuperSerial port) {
 		this.port = port;
-		previousNumTicks = getTicks();
 		this.channel = channel;
+		previousNumTicks = getTicks();
 		logger = new LogKitten("SuperEncoder" + Integer.toString(channel), LogKitten.LEVEL_DEBUG, LogKitten.LEVEL_VERBOSE);
 	}
 	

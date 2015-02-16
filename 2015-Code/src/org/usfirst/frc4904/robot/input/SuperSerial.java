@@ -11,12 +11,13 @@ public class SuperSerial implements Updatable {
 	ArrayList<Byte> lidarData = new ArrayList<Byte>();
 	ArrayList<Byte> udarData = new ArrayList<Byte>();
 	ArrayList<Byte> imuData = new ArrayList<Byte>();
-	ArrayList<Byte>[] encoderData;
+	ArrayList<ArrayList<Byte>> encoderData = new ArrayList<ArrayList<Byte>>();
 	
 	public SuperSerial() {
-		port = new SerialPort(115200, SerialPort.Port.kMXP);
+		port = new SerialPort(230400, SerialPort.Port.kMXP);
 		for (int i = 0; i < 5; i++) {
-			encoderData[i] = new ArrayList<Byte>();
+			encoderData.add(new ArrayList<Byte>());
+			encoderData.get(i).add(new Byte((byte) 0));
 		}
 	}
 	
@@ -46,27 +47,27 @@ public class SuperSerial implements Updatable {
 			} else if (line.startsWith("E0")) {
 				line = line.substring(2);
 				for (Byte aByte : line.getBytes()) {
-					encoderData[0].add(aByte);
+					encoderData.get(0).add(aByte);
 				}
 			} else if (line.startsWith("E1")) {
 				line = line.substring(2);
 				for (Byte aByte : line.getBytes()) {
-					encoderData[1].add(aByte);
+					encoderData.get(1).add(aByte);
 				}
 			} else if (line.startsWith("E2")) {
 				line = line.substring(2);
 				for (Byte aByte : line.getBytes()) {
-					encoderData[2].add(aByte);
+					encoderData.get(2).add(aByte);
 				}
 			} else if (line.startsWith("E3")) {
 				line = line.substring(2);
 				for (Byte aByte : line.getBytes()) {
-					encoderData[3].add(aByte);
+					encoderData.get(3).add(aByte);
 				}
 			} else if (line.startsWith("E4")) {
 				line = line.substring(2);
 				for (Byte aByte : line.getBytes()) {
-					encoderData[4].add(aByte);
+					encoderData.get(4).add(aByte);
 				}
 			}
 		}
@@ -101,14 +102,14 @@ public class SuperSerial implements Updatable {
 	public byte[] readEncoder(int encoder, int bytes) {
 		byte[] wantedData = new byte[bytes];
 		for (int i = 0; i < bytes; i++) {
-			wantedData[i] = encoderData[encoder].get(0);
-			encoderData[encoder].remove(0);
+			wantedData[i] = encoderData.get(encoder).get(0);
+			encoderData.get(encoder).remove(0);
 		}
 		return wantedData;
 	}
 	
 	public int availableEncoderBytes(int channel) {
-		return encoderData[channel].size();
+		return encoderData.get(channel).size();
 	}
 	
 	public byte[] readIMU(int bytes) {
