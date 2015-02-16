@@ -1,0 +1,51 @@
+<xml version="1.0">
+<dashboard>
+	<widget field="PDP Temperature: " type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="21"/>
+	</widget>
+	<widget field="Mode" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="136" y="64"/>
+	</widget>
+	<widget field="UseMode" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="118" y="43"/>
+	</widget>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.WebcamViewerExtension">
+		<location x="794" y="4"/>
+		<width>549</width>
+		<height>413</height>
+	</static-widget>
+	<widget field="Autonomous" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="1" y="86"/>
+	</widget>
+	<widget field="Operator" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="1" y="65"/>
+	</widget>
+	<widget field="Driver" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="1" y="43"/>
+	</widget>
+	<widget field="PDP Voltage" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="0"/>
+	</widget>
+</dashboard>
+<live-window>
+</live-window>
+	<hidden field="PDP Port 4 Current"/>
+	<hidden field="PDP Port 13 Current"/>
+	<hidden field="PDP Voltage: "/>
+	<hidden field="PDP Port 5 Current"/>
+	<hidden field="PDP Port 15 Current"/>
+	<hidden field="TrainPID"/>
+	<hidden field="PDP Port 7 Current"/>
+	<hidden field="PDP Port 1 Current"/>
+	<hidden field="PDP Port 0 Current"/>
+	<hidden field="PDP Port 6 Current"/>
+	<hidden field="PDP Port 14 Current"/>
+	<hidden field="PDP Port 8 Current"/>
+	<hidden field="PDP Current"/>
+	<hidden field="PDP Port 10 Current"/>
+	<hidden field="PDP Port 2 Current"/>
+	<hidden field="PDP Port 12 Current"/>
+	<hidden field="PDP Port 3 Current"/>
+	<hidden field="PDP Port 11 Current"/>
+	<hidden field="PDP Port 9 Current"/>
+</xml>
