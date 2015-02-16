@@ -9,7 +9,7 @@ public class IMU extends MPU9150 implements Updatable {
 	private final LogKitten logger;
 	private double[] angles; // Angle 0 is perpendicular (yaw), Angle 1 is lateral (pitch), Angle 2 is longitudinal (roll)
 	private double[] lastAngles;
-	private double[] speed; // Same as above
+	private double[] rate; // Same as above
 	private double zeroAngle;
 	private double lastTime;
 	
@@ -29,8 +29,8 @@ public class IMU extends MPU9150 implements Updatable {
 		return angles[0];
 	}
 	
-	public double[] readSpeed() {
-		return speed;
+	public double[] readRate() {
+		return rate;
 	}
 	
 	private void zero() {
@@ -44,7 +44,7 @@ public class IMU extends MPU9150 implements Updatable {
 		super.update();
 		readData();
 		for (int i = 0; i < 3; i++) {
-			speed[i] = (angles[i] - lastAngles[i]) / (time - lastTime);
+			rate[i] = (angles[i] - lastAngles[i]) / (time - lastTime);
 		}
 		lastTime = time;
 		lastAngles = angles;
