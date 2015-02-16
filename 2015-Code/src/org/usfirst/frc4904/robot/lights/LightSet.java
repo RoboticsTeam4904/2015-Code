@@ -8,9 +8,9 @@ public class LightSet implements Updatable {
 	private long lastUpdate = System.currentTimeMillis();
 	
 	private enum COLOR {
-		GREEN, TURQUOISE
+		BLUE, TURQUOISE
 	}
-	private COLOR lastColor = COLOR.GREEN;
+	private COLOR lastColor = COLOR.BLUE;
 	
 	public LightSet() {
 		this.lights = new LightManager(4);
@@ -25,12 +25,12 @@ public class LightSet implements Updatable {
 	
 	public void update() {
 		if (System.currentTimeMillis() < (lastUpdate + 2 * 1000)) {
-			if (lastColor == COLOR.GREEN) {
+			if (lastColor == COLOR.BLUE) {
 				setAll(29, 190, 222);
 				lastColor = COLOR.TURQUOISE;
 			} else if (lastColor == COLOR.TURQUOISE) {
 				setAll(160, 242, 182);
-				lastColor = COLOR.GREEN;
+				lastColor = COLOR.BLUE;
 			}
 			lastUpdate = System.currentTimeMillis();
 		}
