@@ -7,10 +7,8 @@ import org.usfirst.frc4904.robot.Updatable;
 import com.ni.vision.NIVision;
 import com.ni.vision.NIVision.Image;
 import com.ni.vision.NIVision.ImageType;
-import edu.wpi.first.wpilibj.CameraServer;
 
 public class Camera implements Updatable {
-	private CameraServer server;
 	private int cameraSession;
 	private Image frame;
 	private double[] toteCoord = new double[2];
@@ -32,14 +30,11 @@ public class Camera implements Updatable {
 		frame = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_RGB, 0);
 		cameraSession = NIVision.IMAQdxOpenCamera(CAMERA_NAME, NIVision.IMAQdxCameraControlMode.CameraControlModeController);
 		NIVision.IMAQdxConfigureGrab(cameraSession);
-		server = CameraServer.getInstance();
-		server.setQuality(CAMERA_QUALITY);
 		criteria[0] = new NIVision.ParticleFilterCriteria2(NIVision.MeasurementType.MT_AREA_BY_IMAGE_AREA, AREA_MINIMUM, 100.0, 0, 0);
 	}
 	
 	public void update() {
 		NIVision.IMAQdxGrab(cameraSession, frame, 1);
-		server.setImage(frame);
 		// Create simple image
 		Image binaryFrame = NIVision.imaqCreateImage(ImageType.IMAGE_U8, 0);
 		// Threshold image
