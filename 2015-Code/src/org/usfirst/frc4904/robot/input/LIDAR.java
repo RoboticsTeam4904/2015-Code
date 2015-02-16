@@ -14,9 +14,9 @@ public class LIDAR implements Updatable {
 	private static final int height = 720;
 	private static final double d = 5;// Settings from my screen
 	private static final int houghSensitivity = 30;
-	public final int LIDAR_MOUNT_OFFSET = -100; // mm to right. Cartesian. Because.
-	public final int GRABBER_LENGTH = 700;
-	public final int GRABBER_LENGTH_OFFSET = GRABBER_LENGTH + 100;
+	public static final int LIDAR_MOUNT_OFFSET = -100; // mm to right. Cartesian. Because.
+	public static final int GRABBER_LENGTH = 700; // Distance from LIDAR to grabber
+	public static final int GRABBER_LENGTH_OFFSET = GRABBER_LENGTH + 100; // Go an extra 100 mm (to tell if lines are the grabber or totes)
 	
 	public LIDAR(SuperSerial port) {
 		logger = new LogKitten("LIDAR", LogKitten.LEVEL_DEBUG, LogKitten.LEVEL_VERBOSE);
