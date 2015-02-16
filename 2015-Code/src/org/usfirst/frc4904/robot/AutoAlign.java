@@ -69,16 +69,16 @@ public class AutoAlign implements Updatable {
 	}
 	
 	private boolean shouldAlignToteBeforeReleasing() {
-		return lidar.getDists()[0] < lidar.GRABBER_LENGTH_OFFSET;
+		return lidar.getDists()[0] < LIDAR.GRABBER_LENGTH_OFFSET;
 	}
 	
 	private boolean shouldAlignCanBeforeReleasing() {
-		return udar.read()[2] < lidar.GRABBER_LENGTH_OFFSET;
+		return udar.read()[2] < LIDAR.GRABBER_LENGTH_OFFSET;
 	}
 	
 	private void alignWithCanTick(boolean grab) {
 		double[] UDARdists = udar.read();
-		if (UDARdists[2] > lidar.GRABBER_LENGTH_OFFSET) {
+		if (UDARdists[2] > LIDAR.GRABBER_LENGTH_OFFSET) {
 			return;
 		}
 		if (UDARdists[1] > UDARdists[3]) { // If right sensor detects can, turn right
@@ -87,7 +87,7 @@ public class AutoAlign implements Updatable {
 			mecanum.setDesiredTurnSpeed(-0.5);
 		} else {
 			mecanum.setDesiredTurnSpeed(0);
-			if (UDARdists[2] > lidar.GRABBER_LENGTH_OFFSET) {
+			if (UDARdists[2] > LIDAR.GRABBER_LENGTH_OFFSET) {
 				mecanum.setDesiredXYSpeed(0, 1);
 			} else {
 				mecanum.setDesiredXYSpeed(0, 0);
@@ -109,9 +109,9 @@ public class AutoAlign implements Updatable {
 			double y = 0;
 			winch.set(0);
 			mecanum.setDesiredTurnSpeed(0);
-			if ((toteFront[2] + toteFront[0]) / 2 < lidar.LIDAR_MOUNT_OFFSET) {
+			if ((toteFront[2] + toteFront[0]) / 2 < LIDAR.LIDAR_MOUNT_OFFSET) {
 				x = -0.2;
-			} else if ((toteFront[2] + toteFront[0]) / 2 > lidar.LIDAR_MOUNT_OFFSET) {
+			} else if ((toteFront[2] + toteFront[0]) / 2 > LIDAR.LIDAR_MOUNT_OFFSET) {
 				x = 0.2;
 			} else {
 				x = 0.0;
