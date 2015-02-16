@@ -17,18 +17,7 @@ public class ApproachYellowTote extends Step {
 	public boolean run() {
 		desiredYMovement = 1;
 		desiredTurnSpeed = 0;
-		if (camera.getYellowTote()[0] < 0) {
-			desiredXMovement = 0.5;
-		} else if (camera.getYellowTote()[0] > 0) {
-			desiredXMovement = -0.5;
-		} else {
-			desiredXMovement = 0;
-			desiredYMovement = 0;
-		}
-		if (lidar.getXY(0)[1] < 100 && lidar.getXY(1)[1] < 100 && lidar.getXY(359)[1] < 100) { // There is probably a better way to do this
-			return false;
-		} else {
-			return true;
-		}
+		desiredXMovement = -1 * camera.getYellowTote()[0];
+		return !(lidar.getXY(0)[0] < 100 && lidar.getXY(1)[0] < 100 && lidar.getXY(359)[0] < 100);
 	}
 }

@@ -18,9 +18,11 @@ public class Camera implements Updatable {
 	private final NIVision.Range TOTE_SAT_RANGE = new NIVision.Range(88, 255); // Default saturation range for yellow tote
 	private final NIVision.Range TOTE_VAL_RANGE = new NIVision.Range(134, 255); // Default value range for yellow tote
 	private static final double AREA_MINIMUM = 0.5;
-	private static double LONG_RATIO = 2.22; // Tote long side = 26.9 / Tote height = 12.1 = 2.22
-	private static double SHORT_RATIO = 1.4; // Tote short side = 16.9 / Tote height = 12.1 = 1.4
-	private static double SCORE_MIN = 75.0; // Minimum score to be considered a tote
+	private static final double LONG_RATIO = 2.22; // Tote long side = 26.9 / Tote height = 12.1 = 2.22
+	private static final double SHORT_RATIO = 1.4; // Tote short side = 16.9 / Tote height = 12.1 = 1.4
+	private static final double SCORE_MIN = 75.0; // Minimum score to be considered a tote
+	private double X_RES;
+	private double Y_RES;
 	private static final String CAMERA_NAME = "cam1";
 	private NIVision.ParticleFilterCriteria2 criteria[] = new NIVision.ParticleFilterCriteria2[1];
 	private NIVision.ParticleFilterOptions2 filterOptions = new NIVision.ParticleFilterOptions2(0, 0, 1, 1);
@@ -62,13 +64,19 @@ public class Camera implements Updatable {
 		}
 		particles.sort(null);// I find it easy to believe that this will work in any way
 		ParticleReport tote = particles.get(0);
+		NIVision.GetImageSizeResult size = NIVision.imaqGetImageSize(frame);
+		X_RES = size.width;
+		Y_RES = size.height;
 		// Actually get center
 		toteCoord[0] = (tote.BoundingRectRight + tote.BoundingRectLeft) / 2;
 		toteCoord[1] = (tote.BoundingRectTop + tote.BoundingRectBottom) / 2;
 	}
 	
-	public double[] getYellowTote() { // This function will return the x, y coordinates of the center of the yellow tote.
-		return toteCoord; // It uses logic.
+	public double[] getYellowTote() { // This function will return the scaled x, y coordinates of the center of the yellow tote.
+		double[] scaledCoord = new double[2];
+		scaledCoord[0] = (toteCoord[0] - (X_RES / 2)) / X_RES;
+		scaledCoord[1] = (toteCoord[1] - (Y_RES / 2)) / Y_RES;
+		return scaledCoord; // It uses logic.
 	}
 	
 	// Comparator function for sorting particles. Returns true if particle 1 is larger
