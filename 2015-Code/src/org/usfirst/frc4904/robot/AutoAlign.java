@@ -72,7 +72,7 @@ public class AutoAlign implements Updatable {
 	}
 	
 	private boolean shouldAlignToteBeforeReleasing() {
-		return lidar.getDists()[90] < 200;
+		return lidar.getDists()[0] < 200;
 	}
 	
 	private boolean shouldAlignCanBeforeReleasing() {
@@ -119,7 +119,7 @@ public class AutoAlign implements Updatable {
 			} else {
 				x = 0.0;
 			}
-			if (lidar.getDists()[90] > 100) {
+			if (lidar.getDists()[0] > 100) {
 				y = 0.5; // TODO Really fast (see comment on speeds at top of YellowToteStack)
 			} else {
 				y = 0;
