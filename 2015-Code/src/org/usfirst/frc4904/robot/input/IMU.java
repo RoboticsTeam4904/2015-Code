@@ -1,62 +1,52 @@
 package org.usfirst.frc4904.robot.input;
 
 
+import java.util.Arrays;
 import org.usfirst.frc4904.robot.LogKitten;
 import org.usfirst.frc4904.robot.Updatable;
 
 public class IMU extends MPU9150 implements Updatable {
-	private long updates = 0;
 	private final LogKitten logger;
-	private double currentSpeed;
-	private double currentAngle;
-	private double currentTurnSpeed;
+	private double[] angles; // Angle 0 is perpendicular (yaw), Angle 1 is lateral (pitch), Angle 2 is longitudinal (roll)
+	private double[] speed; // Same as above
 	private double zeroAngle;
+	private double lastTime;
 	
 	public IMU(SuperSerial serial) {
 		super(serial);
 		zero();
-		logger = new LogKitten("IMU", LogKitten.LEVEL_DEBUG);
-		currentSpeed = 0;
-		currentAngle = 0;
-		currentTurnSpeed = 0;
+		logger = new LogKitten("IMU", LogKitten.LEVEL_DEBUG, LogKitten.LEVEL_VERBOSE);
+		angles = new double[3];
+		lastTime = getTime();
 	}
 	
 	public byte test() {
 		return super.test();
 	}
 	
-	public double getAngle() {
-		// TODO return current robot angle relative to beginning of match (0 - 2pi)
-		return 0D;
+	public double turnAngle() {
+		return angles[0];
 	}
 	
-	public void zero() {
+	private void zero() {
 		// TODO set current orientation as "forward"
-		zeroAngle = super.read()[2];
 		update();
-		updates = 0;
+		zeroAngle = angles[0];
 	}
 	
 	public synchronized void update() {
+		double time = getTime();
 		super.update();
 		readData();
-		updateKalman();
-	}
-	
-	public double[] getMovement() {
-		return new double[] {currentSpeed, currentAngle, currentTurnSpeed};
+		lastTime = time;
 	}
 	
 	private void readData() {
-		updates++;
-		// TODO only read data if enough data is available, otherwise return so
-		// that this function is always fast
-		double[] rawData = super.read();
-		if (updates % 30 == 0) {
-			// logger.d("readData", updates / (Robot.time() - startTime) + " hz ");
-			// logger.d("readData", Arrays.toString(rawData));
-		}
+		angles = super.read();
+		logger.d("readData", Arrays.toString(angles));
 	}
 	
-	private void updateKalman() {}
+	private double getTime() {
+		return System.currentTimeMillis();
+	}
 }
