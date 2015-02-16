@@ -1,4 +1,21 @@
 # 2015-Code
-Code for 2015
+Team 4904 - Code for 2015
 
-This is the team 4904 code for 2015. It is an Eclipse project (Eclipse Luna).
+IDE: Eclipse Luna
+Language: Java
+
+2015 Robot Uses:
+* LIDAR (laser vision)
+* Logitech USB Camera
+* UDAR (ultrasonic vision) 
+* Mecanum Wheels
+* and Adafruit NeoPixels
+and other stuff I haven't written
+
+Programming Team:
+Yoni
+Carter
+Leif
+Erik
+AJ
+Ariana
