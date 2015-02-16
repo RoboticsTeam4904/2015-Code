@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.SerialPort;
 public class SuperSerial implements Updatable {
 	private final SerialPort port;
 	ArrayList<Byte> lidarData = new ArrayList<Byte>();
+	ArrayList<Byte> udarData = new ArrayList<Byte>();
 	ArrayList<Byte> imuData = new ArrayList<Byte>();
 	ArrayList<Byte>[] encoderData;
 	
@@ -31,6 +32,11 @@ public class SuperSerial implements Updatable {
 				line = line.substring(5);
 				for (Byte aByte : line.getBytes()) {
 					lidarData.add(aByte);
+				}
+			} else if (line.startsWith("UDAR")) {
+				line = line.substring(4);
+				for (Byte aByte : line.getBytes()) {
+					udarData.add(aByte);
 				}
 			} else if (line.startsWith("IMU")) {
 				line = line.substring(3);
@@ -77,6 +83,19 @@ public class SuperSerial implements Updatable {
 	
 	public int availableLIDARBytes() {
 		return lidarData.size();
+	}
+	
+	public byte[] readUDAR(int bytes) {
+		byte[] wantedData = new byte[bytes];
+		for (int i = 0; i < bytes; i++) {
+			wantedData[i] = udarData.get(0);
+			udarData.remove(0);
+		}
+		return wantedData;
+	}
+	
+	public int availableUDARBytes() {
+		return udarData.size();
 	}
 	
 	public byte[] readEncoder(int encoder, int bytes) {
