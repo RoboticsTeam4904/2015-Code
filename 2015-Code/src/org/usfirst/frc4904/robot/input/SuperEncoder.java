@@ -39,6 +39,9 @@ public class SuperEncoder {
 		byte[] toRecieve = new byte[4];
 		toRecieve = port.readEncoder(this.channel, 4);
 		int value = new BigInteger(toRecieve).intValue();
+		if (value != 0) {
+			logger.v("getTicks", Integer.toString(value));
+		}
 		return value;
 	}
 	
