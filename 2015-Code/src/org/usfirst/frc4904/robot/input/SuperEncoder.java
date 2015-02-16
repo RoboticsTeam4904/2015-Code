@@ -1,7 +1,6 @@
 package org.usfirst.frc4904.robot.input;
 
 
-import java.math.BigInteger;
 import org.usfirst.frc4904.robot.LogKitten;
 
 public class SuperEncoder {
@@ -36,9 +35,9 @@ public class SuperEncoder {
 		if (port.availableEncoderBytes(channel) < 4) {
 			return 0;
 		}
-		byte[] toRecieve = new byte[4];
+		String toRecieve;
 		toRecieve = port.readEncoder(this.channel, 4);
-		int value = new BigInteger(toRecieve).intValue();
+		int value = Integer.parseInt(toRecieve);
 		if (value != 0) {
 			logger.v("getTicks", Integer.toString(value));
 		}
