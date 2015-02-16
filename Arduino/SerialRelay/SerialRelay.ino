@@ -11,60 +11,67 @@
 // set this to the hardware serial port you wish to use
 #define SerOut Serial1
 #define SerLidar Serial2
+#define SerIMU Serial3
+
+//char[100] IMUBuffer;
 
 void setup() {
   Wire.begin();
-  Serial.begin(115200);
-  SerOut.begin(115200);
+  Serial.begin(230400);
+  //SerOut.begin(921600);
+  SerOut.begin(230400);
   SerLidar.begin(115200);
-  //pinMode(14, INPUT_PULLUP);
-  //pinMode(15, INPUT_PULLUP);
+  SerIMU.begin(115200);
+
 }
 
 void loop() {
   int incomingByte;
 
-  while (SerLidar.available() > 0) {
-    char c = SerLidar.read();
-    SerOut.write(c);
-    //Serial.write(c);
+
+  while (SerLidar.available() > 50) {
+    SerOut.print("LIDAR");
+    //Serial.print("LIDAR");
+    for (int i=0; i<50; i++) {
+      char c = SerLidar.read();
+      SerOut.write(c);
+      //Serial.write(c);
+    }
+    SerOut.println();
+    //Serial.println();
   }
   /*
-  Serial.print(readEncoder(10));
-  Serial.print("\t");
-  Serial.print(readEncoder(11));
-  Serial.print("\t");
-  Serial.print(readEncoder(12));
-  Serial.print("\t");
-  Serial.print(readEncoder(13));
-  Serial.print("\t");*/
-  Serial.print(readEncoder(14));
-  Serial.println();
-  
-  
-}
-
-
-
-long readEncoder(int i2cAddr) {
-  
-  Wire.beginTransmission(i2cAddr);
-  Wire.write(0);
-  delay(1); // somehow 
-  Wire.endTransmission();
-  Wire.requestFrom(i2cAddr, 4);    // request 6 bytes from slave device #2
-
-  long dist = 0;
-  byte counter = 0;
-  while(Wire.available()) {   // slave may send less than requested
-   
-    byte c = Wire.read(); // receive a byte as character
-    //Serial.print(c);         // print the character
-    //Serial.print("\t");
-    dist |=  c << (counter*8);
-    counter++;
+  while (SerIMU.available()) {
+   char c = SerIMU.read();
+   SerOut.write(c);
+   Serial.write(c);
+   }
+   */
+  while (SerIMU.available() > 50) {
+    Serial.println(SerIMU.available());
+    SerOut.print("IMU");
+    //Serial.print("IMU");
+    char c = SerIMU.read();
+    while ( c != '\n') {    //int i=0; i<45; i++) {
+      SerOut.write(c);
+      Serial.write(c);
+      c = SerIMU.read();
+    }
+    Serial.println();
+    SerOut.println();
   }
-  //Serial.print(dist);
-  //Serial.println();
-  return dist;
+
+
+  while (Serial.available() > 0) {
+    char c = Serial.read();
+    SerOut.write(c);
+    Serial.write(c);
+  }
+
+
 }
+
+
+
+
+
