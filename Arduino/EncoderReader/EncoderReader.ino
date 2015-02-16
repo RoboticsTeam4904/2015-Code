@@ -15,6 +15,8 @@
 void setup() {
   Wire.begin();        // join i2c bus (address optional for master)
   Serial.begin(115200);  // start serial for output
+  while (!Serial);
+  Serial.print("Running");
 }
 
 void loop() {
@@ -25,10 +27,12 @@ void loop() {
   Serial.print(readEncoder(12));
   Serial.print("\t");
   Serial.print(readEncoder(13));
+  Serial.print("\t");
+  Serial.print(readEncoder(14));
   Serial.println();
   
 
-  delay(1);
+  delay(100);
 }
 
 long readEncoder(int i2cAddr) {
@@ -36,8 +40,8 @@ long readEncoder(int i2cAddr) {
   Wire.beginTransmission(i2cAddr);
   Wire.write(0);
   delay(1); // somehow 
-  Wire.endTransmission();
-  Wire.requestFrom(i2cAddr, 4);    // request 6 bytes from slave device #2
+  Wire.endTransmission(true);
+  Wire.requestFrom(i2cAddr, 4, true);    // request 6 bytes from slave device #2
 
   long dist = 0;
   byte counter = 0;
