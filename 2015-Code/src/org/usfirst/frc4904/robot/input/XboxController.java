@@ -1,9 +1,11 @@
 package org.usfirst.frc4904.robot.input;
 
 
+import org.usfirst.frc4904.robot.LogKitten;
 import edu.wpi.first.wpilibj.Joystick;
 
 public class XboxController extends Joystick {
+	private final LogKitten logger;
 	public final static int A_BUTTON = 1;
 	public final static int B_BUTTON = 2;
 	public final static int X_BUTTON = 3;
@@ -24,6 +26,7 @@ public class XboxController extends Joystick {
 		for (int i = 0; i < 10; i++) {
 			buttons[i] = new SuperButton(this, i + 1);
 		}
+		logger = new LogKitten("XboxController", LogKitten.LEVEL_VERBOSE);
 	}
 	
 	public double getValue(int axis) {
@@ -43,5 +46,15 @@ public class XboxController extends Joystick {
 	
 	public boolean getButton(int button) {
 		return buttons[button].get();
+	}
+	
+	public void rumble(int rumbleIntensityLeft, int rumbleIntensityRight) {
+		this.setRumble(RumbleType.kLeftRumble, rumbleIntensityLeft);
+		this.setRumble(RumbleType.kRightRumble, rumbleIntensityRight);
+		logger.d("Rumble", "Rumbled: Left(" + rumbleIntensityLeft + ") Right(" + rumbleIntensityRight + ")");
+	}
+	
+	public void rumble(int rumbleIntensity) {
+		this.rumble(rumbleIntensity, rumbleIntensity);
 	}
 }

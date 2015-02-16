@@ -6,7 +6,6 @@ import org.usfirst.frc4904.robot.Driver;
 import org.usfirst.frc4904.robot.LogKitten;
 import org.usfirst.frc4904.robot.input.XboxController;
 import org.usfirst.frc4904.robot.output.Mecanum;
-import edu.wpi.first.wpilibj.Joystick.RumbleType;
 
 public class DriverNathan extends Driver {
 	private final XboxController xboxController;
@@ -26,11 +25,9 @@ public class DriverNathan extends Driver {
 		double turnSpeed = xboxController.getValue(XboxController.TWIST_STICK) / 2; // Turns way too fast otherwise
 		setTurn(turnSpeed); // Actually do the turning
 		if (xboxController.getButton(xboxController.A_BUTTON)) {
-			rumble(RumbleType.kLeftRumble, 1);
-			rumble(RumbleType.kRightRumble, 1);
+			xboxController.rumble(1);
 		} else {
-			rumble(RumbleType.kLeftRumble, 0);
-			rumble(RumbleType.kRightRumble, 0);
+			xboxController.rumble(0);
 		}
 		if (xboxController.getButton(XboxController.BACK_BUTTON)) {
 			disable();
@@ -38,12 +35,7 @@ public class DriverNathan extends Driver {
 		}
 	}
 	
-	public void rumble(RumbleType type, int value) {
-		xboxController.setRumble(type, value);
-	}
-	
 	public void disable() {
-		xboxController.setRumble(RumbleType.kLeftRumble, 0);
-		xboxController.setRumble(RumbleType.kRightRumble, 0);
+		xboxController.rumble(0); // kill the rumble
 	}
 }
