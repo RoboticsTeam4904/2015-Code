@@ -2,22 +2,18 @@ package org.usfirst.frc4904.robot.input;
 
 
 import org.usfirst.frc4904.robot.LogKitten;
-import org.usfirst.frc4904.robot.Robot;
 import org.usfirst.frc4904.robot.Updatable;
 
-public class IMU implements Updatable {
-	private final MPU9150 mpu9150;
-	public double[] rawData = new double[10];
-	private double startTime;
+public class IMU extends MPU9150 implements Updatable {
 	private long updates = 0;
 	private final LogKitten logger;
 	private double currentSpeed;
 	private double currentAngle;
 	private double currentTurnSpeed;
+	private double zeroAngle;
 	
-	public IMU() {
-		mpu9150 = new MPU9150();
-		mpu9150.init();
+	public IMU(SuperSerial serial) {
+		super(serial);
 		zero();
 		logger = new LogKitten("IMU", LogKitten.LEVEL_DEBUG);
 		currentSpeed = 0;
@@ -25,8 +21,8 @@ public class IMU implements Updatable {
 		currentTurnSpeed = 0;
 	}
 	
-	public int test() {
-		return mpu9150.test();
+	public byte test() {
+		return super.test();
 	}
 	
 	public double getAngle() {
@@ -36,13 +32,13 @@ public class IMU implements Updatable {
 	
 	public void zero() {
 		// TODO set current orientation as "forward"
+		zeroAngle = super.read()[2];
 		update();
-		startTime = Robot.time();
 		updates = 0;
 	}
 	
 	public synchronized void update() {
-		mpu9150.update();
+		super.update();
 		readData();
 		updateKalman();
 	}
@@ -55,7 +51,7 @@ public class IMU implements Updatable {
 		updates++;
 		// TODO only read data if enough data is available, otherwise return so
 		// that this function is always fast
-		rawData = mpu9150.read();
+		double[] rawData = super.read();
 		if (updates % 30 == 0) {
 			// logger.d("readData", updates / (Robot.time() - startTime) + " hz ");
 			// logger.d("readData", Arrays.toString(rawData));

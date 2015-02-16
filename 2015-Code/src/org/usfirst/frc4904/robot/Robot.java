@@ -113,7 +113,7 @@ public class Robot extends SampleRobot {
 		backLeftEncoder = new SuperEncoder(BACK_LEFT_ENCODER_NUMBER, serial);
 		backRightEncoder = new SuperEncoder(BACK_RIGHT_ENCODER_NUMBER, serial);
 		winchEncoder = new SuperEncoder(WINCH_ENCODER_NUMBER, serial);
-		imu = new IMU(); // Initialize IMU
+		imu = new IMU(serial); // Initialize IMU
 		udar = new UDAR(); // Initialize UDAR
 		lidar = new LIDAR(serial); // Initialize LIDAR
 		pdp = new PDP(); // Power Distribution Panel interface and logging.

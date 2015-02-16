@@ -1,42 +1,29 @@
 package org.usfirst.frc4904.robot.input;
 
+import org.usfirst.frc4904.robot.Updatable;
 
-import org.usfirst.frc4904.robot.SuperPort;
 
-public class MPU9150 extends SuperPort {
-	public final int MPU9150_PWR_MGMT_1 = 0x6B; // R/W
-	public final int MPU9150_PWR_MGMT_2 = 0x6C; // R/W
-	// taken from http://playground.arduino.cc/Main/MPU-9150
-	// modified to be Java syntax
-	private final int[] cmps = new int[3];
-	private final int[] accl = new int[3];
-	private final int[] gyro = new int[3];
-	private int temp; // Temperature, not temporary. Don't kill Erik.
+public class MPU9150 implements Updatable {
+	private double movementMagnitude;
+	private double movementAngle;
+	private double absoluteAngle;
+	private final SuperSerial serial;
 	
-	// I2C objects
-	// private final MPUAccelGryo accelGryo;
-	// private final MPUComp compass;
-	public MPU9150() {
-		// Initialize I2C
-		/*
-		 * accelGryo = new MPUAccelGryo(0x68); compass = new MPUComp(0x0C); accelGryo.write(MPU9150_PWR_MGMT_1, 0); // Data variable
-		 */
-		data = new double[10];
+	public MPU9150(SuperSerial serial) {
+		this.serial = serial;
 	}
 	
-	public void init() {
-		// Extremely modified from http://playground.arduino.cc/Main/MPU-9150
-		/*
-		 * accelGryo.init(); compass.init();
-		 */
-	}
+	public void init() {}
 	
 	public byte test() {
-		// return accelGryo.test();
 		return 0x00;
 	}
 	
-	public void readAcc() {}
+	public double[] read() {
+		return new double[] {movementMagnitude, movementAngle, absoluteAngle};
+	}
 	
-	public void update() {}
+	public void update() {
+		byte[] data = serial.readIMU(0);
+	}
 }
