@@ -21,6 +21,7 @@ public class Camera implements Updatable {
 	private static final double LONG_RATIO = 2.22; // Tote long side = 26.9 / Tote height = 12.1 = 2.22
 	private static final double SHORT_RATIO = 1.4; // Tote short side = 16.9 / Tote height = 12.1 = 1.4
 	private static final double SCORE_MIN = 75.0; // Minimum score to be considered a tote
+	private static int CAMERA_QUALITY = 10;
 	private double X_RES;
 	private double Y_RES;
 	private static final String CAMERA_NAME = "cam1";
@@ -32,7 +33,7 @@ public class Camera implements Updatable {
 		cameraSession = NIVision.IMAQdxOpenCamera(CAMERA_NAME, NIVision.IMAQdxCameraControlMode.CameraControlModeController);
 		NIVision.IMAQdxConfigureGrab(cameraSession);
 		server = CameraServer.getInstance();
-		server.setQuality(20);
+		server.setQuality(CAMERA_QUALITY);
 		criteria[0] = new NIVision.ParticleFilterCriteria2(NIVision.MeasurementType.MT_AREA_BY_IMAGE_AREA, AREA_MINIMUM, 100.0, 0, 0);
 	}
 	
