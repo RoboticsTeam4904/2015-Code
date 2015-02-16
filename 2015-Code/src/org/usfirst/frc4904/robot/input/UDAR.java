@@ -2,13 +2,13 @@ package org.usfirst.frc4904.robot.input;
 
 
 import java.math.BigInteger;
-import org.usfirst.frc4904.robot.SuperPort;
 import org.usfirst.frc4904.robot.Updatable;
 import edu.wpi.first.wpilibj.I2C;
 
-public class UDAR extends SuperPort implements Updatable {
+public class UDAR implements Updatable {
 	private I2C i2c;
 	private final int numSensors = 3;
+	double[] data;
 	
 	public UDAR() {
 		try {
@@ -22,6 +22,10 @@ public class UDAR extends SuperPort implements Updatable {
 	
 	private int bytesCurrentlyAvailable() {
 		return 0;
+	}
+	
+	public double[] read() {
+		return data;
 	}
 	
 	public void update() {
