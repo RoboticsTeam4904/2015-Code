@@ -1,8 +1,8 @@
-package org.usfirst.frc4904.robot;
+package org.usfirst.frc4904.robot.autonomous;
 
 
-import org.usfirst.frc4904.robot.autonomous.LandfillStack;
-import org.usfirst.frc4904.robot.autonomous.YellowToteStack;
+import org.usfirst.frc4904.robot.AutoAlign;
+import org.usfirst.frc4904.robot.LogKitten;
 import org.usfirst.frc4904.robot.driver.AutoDriver;
 import org.usfirst.frc4904.robot.input.Camera;
 import org.usfirst.frc4904.robot.input.LIDAR;

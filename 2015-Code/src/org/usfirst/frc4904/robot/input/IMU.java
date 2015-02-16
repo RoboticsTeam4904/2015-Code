@@ -58,4 +58,10 @@ public class IMU extends MPU9150 implements Updatable {
 	private double getTime() {
 		return System.currentTimeMillis();
 	}
+	
+	public boolean isGoingOverScoringPlatform() {
+		double[] eulers = read();
+		double angle = eulers[1];
+		return angle > 5 * Math.PI / 180; // TODO 5 degrees is ballpark - measure
+	}
 }
