@@ -18,6 +18,6 @@ public class ApproachYellowTote extends Step {
 		desiredYMovement = 1;
 		desiredTurnSpeed = 0;
 		desiredXMovement = -1 * camera.getYellowTote()[0];
-		return !(lidar.getXY(0)[0] < 100 && lidar.getXY(1)[0] < 100 && lidar.getXY(359)[0] < 100);
+		return !(lidar.getXY(0)[0] < lidar.GRABBER_LENGTH_OFFSET && lidar.getXY(1)[0] < lidar.GRABBER_LENGTH_OFFSET && lidar.getXY(359)[0] < lidar.GRABBER_LENGTH_OFFSET);
 	}
 }
