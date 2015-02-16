@@ -1,9 +1,9 @@
-package org.usfirst.frc4904.robot;
+package org.usfirst.frc4904.robot.operator;
 
 
+import org.usfirst.frc4904.robot.AutoAlign;
+import org.usfirst.frc4904.robot.LogKitten;
 import org.usfirst.frc4904.robot.input.LogitechJoystick;
-import org.usfirst.frc4904.robot.operator.OperatorGriffin;
-import org.usfirst.frc4904.robot.operator.OperatorNachi;
 import org.usfirst.frc4904.robot.output.Grabber;
 import org.usfirst.frc4904.robot.output.Winch;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;

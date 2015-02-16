@@ -2,7 +2,6 @@ package org.usfirst.frc4904.robot.autonomous;
 
 
 import org.usfirst.frc4904.robot.AutoAlign;
-import org.usfirst.frc4904.robot.Autonomous;
 import org.usfirst.frc4904.robot.autonomous.autosteps.ForwardCharge;
 import org.usfirst.frc4904.robot.autonomous.autosteps.GrabTote;
 import org.usfirst.frc4904.robot.autonomous.autosteps.LiftTote;

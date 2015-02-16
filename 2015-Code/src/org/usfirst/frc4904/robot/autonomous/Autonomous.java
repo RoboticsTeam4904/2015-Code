@@ -1,7 +1,9 @@
-package org.usfirst.frc4904.robot;
+package org.usfirst.frc4904.robot.autonomous;
 
 
-import org.usfirst.frc4904.robot.autonomous.Step;
+import org.usfirst.frc4904.robot.Disablable;
+import org.usfirst.frc4904.robot.LogKitten;
+import org.usfirst.frc4904.robot.Updatable;
 import org.usfirst.frc4904.robot.driver.AutoDriver;
 import org.usfirst.frc4904.robot.operator.AutoOperator;
 

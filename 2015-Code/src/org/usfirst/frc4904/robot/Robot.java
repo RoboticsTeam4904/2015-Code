@@ -1,6 +1,10 @@
 package org.usfirst.frc4904.robot;
 
 
+import org.usfirst.frc4904.robot.autonomous.Autonomous;
+import org.usfirst.frc4904.robot.autonomous.AutonomousManager;
+import org.usfirst.frc4904.robot.driver.Driver;
+import org.usfirst.frc4904.robot.driver.DriverManager;
 import org.usfirst.frc4904.robot.input.Camera;
 import org.usfirst.frc4904.robot.input.IMU;
 import org.usfirst.frc4904.robot.input.LIDAR;
@@ -11,6 +15,8 @@ import org.usfirst.frc4904.robot.input.SuperSerial;
 import org.usfirst.frc4904.robot.input.UDAR;
 import org.usfirst.frc4904.robot.input.XboxController;
 import org.usfirst.frc4904.robot.lights.LightSet;
+import org.usfirst.frc4904.robot.operator.Operator;
+import org.usfirst.frc4904.robot.operator.OperatorManager;
 import org.usfirst.frc4904.robot.output.DampenedMotor;
 import org.usfirst.frc4904.robot.output.Grabber;
 import org.usfirst.frc4904.robot.output.Mecanum;
