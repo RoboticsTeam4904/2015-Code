@@ -4,7 +4,7 @@ package org.usfirst.frc4904.robot.lights;
 import edu.wpi.first.wpilibj.I2C;
 
 public class LightManager {
-	public int leds = 300;
+	public int leds = 209;
 	private final I2C i2c;
 	
 	public LightManager(int i2cAddr) {
