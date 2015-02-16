@@ -33,6 +33,9 @@ public class SuperEncoder {
 	}
 	
 	public int getTicks() {
+		if (port.availableEncoderBytes(channel) < 4) {
+			return 0;
+		}
 		byte[] toRecieve = new byte[4];
 		toRecieve = port.readEncoder(this.channel, 4);
 		int value = new BigInteger(toRecieve).intValue();
