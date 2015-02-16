@@ -7,6 +7,7 @@ import org.usfirst.frc4904.robot.input.LIDAR;
 import org.usfirst.frc4904.robot.input.LogitechJoystick;
 import org.usfirst.frc4904.robot.input.PDP;
 import org.usfirst.frc4904.robot.input.SuperEncoder;
+import org.usfirst.frc4904.robot.input.SuperSerial;
 import org.usfirst.frc4904.robot.input.UDAR;
 import org.usfirst.frc4904.robot.input.XboxController;
 import org.usfirst.frc4904.robot.lights.LightSet;
@@ -48,6 +49,7 @@ public class Robot extends SampleRobot {
 	private final LogitechJoystick stick; // the X3D Extreme3DPro Logitech joystick (right hand) - operator
 	private final XboxController xboxController; // the Xbox 360 controller - driver
 	// Input devices
+	private final SuperSerial serial;
 	private final UDAR udar; // the UDAR (ultrasonic detection and ranging)
 	private final IMU imu;
 	private final LIDAR lidar;
@@ -98,26 +100,28 @@ public class Robot extends SampleRobot {
 		// Initializing logging
 		logger = new LogKitten("Robot", LogKitten.LEVEL_VERBOSE, LogKitten.LEVEL_VERBOSE);
 		logger.v("Constructing", "Constructing");
+		// Initialize serial interface
+		serial = new SuperSerial();
 		// Initialize sensors
-		imu = new IMU(); // Initialize IMU
-		udar = new UDAR(); // Initialize UDAR
-		lidar = new LIDAR(); // Initialize LIDAR
 		limitSwitches[Grabber.RIGHT_INNER_SWITCH] = new DigitalInput(RIGHT_INNER_SWITCH_PORT);
 		limitSwitches[Grabber.LEFT_INNER_SWITCH] = new DigitalInput(LEFT_INNER_SWITCH_PORT);
 		limitSwitches[Grabber.RIGHT_OUTER_SWITCH] = new DigitalInput(RIGHT_OUTER_SWITCH_PORT);
 		limitSwitches[Grabber.LEFT_OUTER_SWITCH] = new DigitalInput(LEFT_OUTER_SWITCH_PORT);
-		pdp = new PDP(); // Power Distribution Panel interface and logging.
-		/* Lights! */
-		lights = new LightSet();
-		/* Camera! */
-		camera = new Camera();
-		/* Action! */
 		// Initialize Encoders
 		frontLeftEncoder = new SuperEncoder(FRONT_LEFT_I2C_PORT);
 		frontRightEncoder = new SuperEncoder(FRONT_RIGHT_I2C_PORT);
 		backLeftEncoder = new SuperEncoder(BACK_LEFT_I2C_PORT);
 		backRightEncoder = new SuperEncoder(BACK_RIGHT_I2C_PORT);
 		winchEncoder = new SuperEncoder(WINCH_I2C_PORT);
+		imu = new IMU(); // Initialize IMU
+		udar = new UDAR(); // Initialize UDAR
+		lidar = new LIDAR(serial); // Initialize LIDAR
+		pdp = new PDP(); // Power Distribution Panel interface and logging.
+		/* Lights! */
+		lights = new LightSet();
+		/* Camera! */
+		camera = new Camera();
+		/* Action! */
 		// Initialize movement controllers
 		winch = new Winch(WINCH_PORT, winchEncoder); // Initialize Winch control
 		grabber = new Grabber(GRABBER_PORT, limitSwitches, pdp); // Initialize Grabber control -- only autoalign has access to this, by design
@@ -140,7 +144,7 @@ public class Robot extends SampleRobot {
 		// Drivers, operators, autonomous
 		autonomous = autonomousManager.getAutonomous();
 		// This list should include everything with a motor
-		toDisable = new Disablable[] {winch, grabber, lidar, driver, operator, autonomous, frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel};
+		toDisable = new Disablable[] {winch, grabber, driver, operator, autonomous, frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel};
 		alwaysUpdate = new Updatable[] {imu, pdp, camera};
 		alwaysUpdateSlow = new Updatable[] {lights};
 	}
