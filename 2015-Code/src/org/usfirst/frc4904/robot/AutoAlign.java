@@ -5,9 +5,9 @@ import org.usfirst.frc4904.robot.input.IMU;
 import org.usfirst.frc4904.robot.input.LIDAR;
 import org.usfirst.frc4904.robot.input.UDAR;
 import org.usfirst.frc4904.robot.output.Grabber;
+import org.usfirst.frc4904.robot.output.Grabber.GrabberState;
 import org.usfirst.frc4904.robot.output.Mecanum;
 import org.usfirst.frc4904.robot.output.Winch;
-import org.usfirst.frc4904.robot.output.Grabber.GrabberState;
 
 public class AutoAlign implements Updatable {
 	private final Mecanum mecanum;
@@ -42,7 +42,7 @@ public class AutoAlign implements Updatable {
 			return;
 		}
 		currentState = State.ALIGNING_WITH_TOTE;
-		logger.v("grabTote", "Grabbing tote" + " tote distance " + lidar.getDists()[90]);
+		logger.v("grabTote", "Grabbing tote" + " tote distance " + lidar.getDists()[0]);
 	}
 	
 	public void grabCan() {
@@ -50,6 +50,7 @@ public class AutoAlign implements Updatable {
 			return;
 		}
 		currentState = State.ALIGNING_WITH_CAN; // NOTE: Setting the grabber is NOT done in these functions and is instead done the next time update is called
+		logger.v("grabCan", "Grabbing can" + " can distance " + lidar.getDists()[0]);
 	}
 	
 	private void releaseTote(boolean wide) {
@@ -58,6 +59,7 @@ public class AutoAlign implements Updatable {
 			return;
 		}
 		currentState = State.EMPTY;
+		logger.v("AlignToteBeforeReleasing", "Aligning tote before releasing" + " tote distance " + lidar.getDists()[0]);
 	}
 	
 	private void releaseCan() {
@@ -66,6 +68,7 @@ public class AutoAlign implements Updatable {
 			return;
 		}
 		currentState = State.EMPTY;
+		logger.v("AlignCanBeforeReleasing", "Aligning can before releasing" + " can distance " + lidar.getDists()[0]);
 	}
 	
 	private boolean shouldAlignToteBeforeReleasing() {
