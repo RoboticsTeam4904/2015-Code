@@ -3,18 +3,16 @@ package org.usfirst.frc4904.robot.input;
 
 import java.util.Comparator;
 import java.util.Vector;
-import org.usfirst.frc4904.robot.Disablable;
 import org.usfirst.frc4904.robot.Updatable;
 import com.ni.vision.NIVision;
 import com.ni.vision.NIVision.Image;
 import com.ni.vision.NIVision.ImageType;
 import edu.wpi.first.wpilibj.CameraServer;
 
-public class Camera implements Updatable, Disablable {
+public class Camera implements Updatable {
 	private CameraServer server;
 	private int cameraSession;
 	private Image frame;
-	private boolean enabled;
 	private double[] toteCoord = new double[2];
 	private final NIVision.Range TOTE_HUE_RANGE = new NIVision.Range(101, 64); // Default hue range for yellow tote
 	private final NIVision.Range TOTE_SAT_RANGE = new NIVision.Range(88, 255); // Default saturation range for yellow tote
@@ -33,24 +31,10 @@ public class Camera implements Updatable, Disablable {
 		NIVision.IMAQdxConfigureGrab(cameraSession);
 		server = CameraServer.getInstance();
 		server.setQuality(20);
-		enabled = false;
 		criteria[0] = new NIVision.ParticleFilterCriteria2(NIVision.MeasurementType.MT_AREA_BY_IMAGE_AREA, AREA_MINIMUM, 100.0, 0, 0);
 	}
 	
-	private void enable() {
-		enabled = true;
-		NIVision.IMAQdxStartAcquisition(cameraSession);
-	}
-	
-	public void disable() {
-		enabled = false;
-		NIVision.IMAQdxStopAcquisition(cameraSession);
-	}
-	
 	public void update() {
-		if (!enabled) {
-			enable();
-		}
 		NIVision.IMAQdxGrab(cameraSession, frame, 1);
 		server.setImage(frame);
 		// Create simple image
