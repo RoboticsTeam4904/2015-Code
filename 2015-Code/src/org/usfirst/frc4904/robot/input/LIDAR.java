@@ -60,7 +60,7 @@ public class LIDAR implements Updatable {
 	}
 	
 	public void update() {
-		if (serial.availableLIDARBytes() < 1980) { // LIDAR returns 1980 bytes per cycle
+		if (serial.availableLIDARData() < 1980) { // LIDAR returns 1980 bytes per cycle
 			return;
 		}
 		logger.v("update", "Updating LIDAR");

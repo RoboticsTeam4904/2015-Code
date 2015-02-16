@@ -32,7 +32,7 @@ public class SuperEncoder {
 	}
 	
 	public int getTicks() {
-		if (port.availableEncoderBytes(channel) < 4) {
+		if (port.availableEncoderData(channel) < 4) {
 			return 0;
 		}
 		String toRecieve;

@@ -17,7 +17,7 @@ public class UDAR implements Updatable {
 	}
 	
 	private int bytesCurrentlyAvailable() {
-		return serial.availableUDARBytes();
+		return serial.availableUDARData();
 	}
 	
 	public double[] read() {

@@ -21,6 +21,8 @@ public class SuperSerial implements Updatable {
 		for (int i = 1; i < 1 + NUM_LEDS * 3; i++) {
 			ledData[i] = 0x00;
 		}
+		for (int i = 0; i < 5; i++)
+			encoderData[i] = "";
 	}
 	
 	public void update() {
@@ -67,7 +69,7 @@ public class SuperSerial implements Updatable {
 		return data;
 	}
 	
-	public int availableLIDARBytes() {
+	public int availableLIDARData() {
 		return lidarData.length();
 	}
 	
@@ -78,7 +80,7 @@ public class SuperSerial implements Updatable {
 		return data;
 	}
 	
-	public int availableUDARBytes() {
+	public int availableUDARData() {
 		return udarData.length();
 	}
 	
@@ -89,7 +91,7 @@ public class SuperSerial implements Updatable {
 		return data;
 	}
 	
-	public int availableEncoderBytes(int channel) {
+	public int availableEncoderData(int channel) {
 		return encoderData[channel].length();
 	}
 	
