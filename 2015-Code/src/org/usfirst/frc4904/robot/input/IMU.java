@@ -29,6 +29,10 @@ public class IMU extends MPU9150 implements Updatable {
 		return angles[0];
 	}
 	
+	public double[] readSpeed() {
+		return speed;
+	}
+	
 	private void zero() {
 		// TODO set current orientation as "forward"
 		update();
