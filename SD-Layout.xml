@@ -1,31 +1,57 @@
 <xml version="1.0">
 <dashboard>
+	<!-- PDP Monitoring -->
 	<widget field="PDP Temperature: " type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="0" y="21"/>
+		<location x="0" y="20"/>
 	</widget>
 	<widget field="Mode" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="136" y="64"/>
+		<location x="135" y="65"/>
 	</widget>
-	<widget field="UseMode" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="118" y="43"/>
-	</widget>
-	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.WebcamViewerExtension">
-		<location x="794" y="4"/>
-		<width>549</width>
-		<height>413</height>
-	</static-widget>
-	<widget field="Autonomous" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="1" y="86"/>
-	</widget>
-	<widget field="Operator" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="1" y="65"/>
-	</widget>
-	<widget field="Driver" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="1" y="43"/>
-	</widget>
+	<!-- Special Modes -->
 	<widget field="PDP Voltage" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
 		<location x="0" y="0"/>
 	</widget>
+	<widget field="UseMode" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="120" y="40"/>
+	</widget>
+	<!-- Driver, Operator, Autonomous settings -->
+	<widget field="Driver" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="4"/>
+	</widget>
+	<widget field="Operator" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="65"/>
+	</widget>
+	<widget field="Autonomous" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="85"/>
+	</widget>
+	<!-- Camera -->
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.WebcamViewerExtension">
+		<location x="795" y="5"/>
+		<width>550</width>
+		<height>410</height>
+	</static-widget>
+	<!-- 4904 -->
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.ConnectionIndicator">
+		<location x="0" y="500">
+		<width>500</width>
+		<height>200</height>
+	</static-widget>
+	<!-- 4 -->
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.ConnectionIndicator">
+		<location x="10" y="510">
+		<width>10</width>
+		<height>40</height>
+	</static-widget>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.ConnectionIndicator">
+		<location x="10" y="550">
+		<width>40</width>
+		<height>10</height>
+	</static-widget>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.ConnectionIndicator">
+		<location x="50" y="510">
+		<width>10</width>
+		<height>90</height>
+	</static-widget>
 </dashboard>
 <live-window>
 </live-window>
