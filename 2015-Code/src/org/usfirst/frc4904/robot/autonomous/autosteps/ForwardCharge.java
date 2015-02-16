@@ -12,7 +12,7 @@ public class ForwardCharge extends Step {
 	}
 	
 	public boolean run() {
-		if (lidar.getDists()[90] < 100) {
+		if (lidar.getDists()[0] < 100) {
 			return true;
 		}
 		desiredXMovement = 0;

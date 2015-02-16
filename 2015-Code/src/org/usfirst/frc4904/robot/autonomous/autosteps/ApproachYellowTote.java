@@ -25,7 +25,7 @@ public class ApproachYellowTote extends Step {
 			desiredXMovement = 0;
 			desiredYMovement = 0;
 		}
-		if (lidar.getXY(90)[1] < 100 && lidar.getXY(89)[1] < 100 && lidar.getXY(91)[1] < 100) { // There is probably a better way to do this
+		if (lidar.getXY(0)[1] < 100 && lidar.getXY(1)[1] < 100 && lidar.getXY(359)[1] < 100) { // There is probably a better way to do this
 			return false;
 		} else {
 			return true;
