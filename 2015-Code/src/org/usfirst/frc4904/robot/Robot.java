@@ -35,11 +35,11 @@ public class Robot extends SampleRobot {
 	private static final int LEFT_INNER_SWITCH_PORT = 1;
 	private static final int RIGHT_OUTER_SWITCH_PORT = 2;
 	private static final int LEFT_OUTER_SWITCH_PORT = 3;
-	private static final int FRONT_LEFT_I2C_PORT = 10;
-	private static final int FRONT_RIGHT_I2C_PORT = 11;
-	private static final int BACK_LEFT_I2C_PORT = 12;
-	private static final int BACK_RIGHT_I2C_PORT = 13;
-	private static final int WINCH_I2C_PORT = 14;
+	private static final int FRONT_LEFT_ENCODER_NUMBER = 0;
+	private static final int FRONT_RIGHT_ENCODER_NUMBER = 1;
+	private static final int BACK_LEFT_ENCODER_NUMBER = 2;
+	private static final int BACK_RIGHT_ENCODER_NUMBER = 3;
+	private static final int WINCH_ENCODER_NUMBER = 4;
 	private static final double WINCH_P_COEFFICIENT = 0.1;
 	private static final double WINCH_I_COEFFICIENT = 0.1;
 	private static final double WINCH_D_COEFFICIENT = 0.1;
@@ -108,11 +108,11 @@ public class Robot extends SampleRobot {
 		limitSwitches[Grabber.RIGHT_OUTER_SWITCH] = new DigitalInput(RIGHT_OUTER_SWITCH_PORT);
 		limitSwitches[Grabber.LEFT_OUTER_SWITCH] = new DigitalInput(LEFT_OUTER_SWITCH_PORT);
 		// Initialize Encoders
-		frontLeftEncoder = new SuperEncoder(FRONT_LEFT_I2C_PORT);
-		frontRightEncoder = new SuperEncoder(FRONT_RIGHT_I2C_PORT);
-		backLeftEncoder = new SuperEncoder(BACK_LEFT_I2C_PORT);
-		backRightEncoder = new SuperEncoder(BACK_RIGHT_I2C_PORT);
-		winchEncoder = new SuperEncoder(WINCH_I2C_PORT);
+		frontLeftEncoder = new SuperEncoder(FRONT_LEFT_ENCODER_NUMBER, serial);
+		frontRightEncoder = new SuperEncoder(FRONT_RIGHT_ENCODER_NUMBER, serial);
+		backLeftEncoder = new SuperEncoder(BACK_LEFT_ENCODER_NUMBER, serial);
+		backRightEncoder = new SuperEncoder(BACK_RIGHT_ENCODER_NUMBER, serial);
+		winchEncoder = new SuperEncoder(WINCH_ENCODER_NUMBER, serial);
 		imu = new IMU(); // Initialize IMU
 		udar = new UDAR(); // Initialize UDAR
 		lidar = new LIDAR(serial); // Initialize LIDAR
