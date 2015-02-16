@@ -16,9 +16,9 @@ public class AutoAlign implements Updatable {
 	private final LIDAR lidar;
 	private final Grabber grabber;
 	private final Winch winch;
-	private final int THIN_TOTE_WIDTH = 100;
-	private final int WIDE_TOTE_WIDTH = 200;
 	private final int LIDAR_MOUNT_OFFSET = -100; // mm to right. Cartesian. Because.
+	private final int GRABBER_LENGTH = 700;
+	private final int GRABBER_LENGTH_OFFSET = GRABBER_LENGTH + 100;
 	private final LogKitten logger;
 	
 	private enum State {
@@ -72,16 +72,16 @@ public class AutoAlign implements Updatable {
 	}
 	
 	private boolean shouldAlignToteBeforeReleasing() {
-		return lidar.getDists()[0] < 200;
+		return lidar.getDists()[0] < GRABBER_LENGTH_OFFSET;
 	}
 	
 	private boolean shouldAlignCanBeforeReleasing() {
-		return udar.read()[2] < 200;
+		return udar.read()[2] < GRABBER_LENGTH_OFFSET;
 	}
 	
 	private void alignWithCanTick(boolean grab) {
 		double[] UDARdists = udar.read();
-		if (UDARdists[2] > 1000) {
+		if (UDARdists[2] > GRABBER_LENGTH_OFFSET) {
 			return;
 		}
 		if (UDARdists[1] > UDARdists[3]) { // If right sensor detects can, turn right
@@ -90,7 +90,7 @@ public class AutoAlign implements Updatable {
 			mecanum.setDesiredTurnSpeed(-0.5);
 		} else {
 			mecanum.setDesiredTurnSpeed(0);
-			if (UDARdists[2] > 100) {
+			if (UDARdists[2] > GRABBER_LENGTH_OFFSET) {
 				mecanum.setDesiredXYSpeed(0, 1);
 			} else {
 				mecanum.setDesiredXYSpeed(0, 0);
@@ -123,7 +123,6 @@ public class AutoAlign implements Updatable {
 				y = 0.5; // TODO Really fast (see comment on speeds at top of YellowToteStack)
 			} else {
 				y = 0;
-				double width = toteFront[2] - toteFront[0];
 				if (grab) {
 					currentState = State.HOLDING_TOTE;
 				} else {
