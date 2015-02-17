@@ -10,6 +10,6 @@ import org.usfirst.frc4904.robot.input.LIDAR;
 
 public class LandfillStack extends Autonomous {
 	public LandfillStack(LIDAR lidar, AutoAlign align) {
-		super(new Step[] {new ForwardCharge(lidar), new GrabTote(align), new LiftTote(), new Stop()});
+		super(new Step[] {new ForwardCharge(lidar), new GrabTote(align), new LiftTote(3), new Stop()});
 	}
 }
