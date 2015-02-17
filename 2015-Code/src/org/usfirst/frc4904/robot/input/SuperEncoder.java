@@ -42,7 +42,9 @@ public class SuperEncoder {
 			try {
 				logger.v("getTicks", Integer.toString(value));
 			}
-			catch (Exception e) {}
+			catch (Exception e) {
+				value = 0;
+			}
 		}
 		return value;
 	}

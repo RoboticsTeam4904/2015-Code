@@ -8,10 +8,10 @@ import org.usfirst.frc4904.robot.Updatable;
 public class MPU9150 implements Updatable {
 	private double[] angles;
 	double q[];
-	private final SuperSerial serial;
+	private final MPUSerial serial;
 	LogKitten logger;
 	
-	public MPU9150(SuperSerial serial) {
+	public MPU9150(MPUSerial serial) {
 		this.serial = serial;
 		logger = new LogKitten("MPU9150", LogKitten.LEVEL_VERBOSE, LogKitten.LEVEL_VERBOSE);
 		angles = new double[3];

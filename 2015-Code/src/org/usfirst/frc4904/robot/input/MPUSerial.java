@@ -6,13 +6,13 @@ import org.usfirst.frc4904.robot.LogKitten;
 import org.usfirst.frc4904.robot.Updatable;
 import edu.wpi.first.wpilibj.SerialPort;
 
-public class SuperSerial implements Updatable {
+public class MPUSerial implements Updatable {
 	private final SerialPort port;
 	private volatile String imuData;
 	private static final int NUM_LEDS = 209;
 	private final LogKitten logger;
 	
-	public SuperSerial() {
+	public MPUSerial() {
 		port = new SerialPort(115200, SerialPort.Port.kMXP);
 		imuData = "";
 		logger = new LogKitten("SuperSerial", LogKitten.LEVEL_DEBUG, LogKitten.LEVEL_VERBOSE);

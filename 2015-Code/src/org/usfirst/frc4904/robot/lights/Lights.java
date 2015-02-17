@@ -3,7 +3,7 @@ package org.usfirst.frc4904.robot.lights;
 
 import java.util.Arrays;
 import org.usfirst.frc4904.robot.Updatable;
-import org.usfirst.frc4904.robot.input.SuperSerial;
+import org.usfirst.frc4904.robot.input.MPUSerial;
 
 public class Lights implements Updatable {
 	protected LightStep[] steps;
@@ -13,9 +13,9 @@ public class Lights implements Updatable {
 	public int ledCount = 209;
 	public byte[] previousLedData = new byte[ledCount * 3];
 	public byte[] ledData = new byte[ledCount * 3]; // length of 209 with R,G,B for each
-	private SuperSerial serial;
+	private MPUSerial serial;
 	
-	private void init(LightStep[] steps, SuperSerial serial) {
+	private void init(LightStep[] steps, MPUSerial serial) {
 		this.steps = steps;
 		this.serial = serial;
 		for (int i = ledData.length; i >= 0; i--) {
@@ -24,7 +24,7 @@ public class Lights implements Updatable {
 		}
 	}
 	
-	public Lights(LightStep[] steps, boolean infinite, SuperSerial serial) {
+	public Lights(LightStep[] steps, boolean infinite, MPUSerial serial) {
 		init(steps, serial);
 		if (infinite) {
 			this.iter = -1;
@@ -33,7 +33,7 @@ public class Lights implements Updatable {
 		}
 	}
 	
-	public Lights(LightStep[] steps, int iterations, SuperSerial serial) {
+	public Lights(LightStep[] steps, int iterations, MPUSerial serial) {
 		init(steps, serial);
 		this.iter = Math.abs(iterations); // prevent infinite loops from this constructor (on principle)
 	}

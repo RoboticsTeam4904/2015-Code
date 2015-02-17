@@ -11,7 +11,7 @@ import org.usfirst.frc4904.robot.input.LIDAR;
 import org.usfirst.frc4904.robot.input.LogitechJoystick;
 import org.usfirst.frc4904.robot.input.PDP;
 import org.usfirst.frc4904.robot.input.SuperEncoder;
-import org.usfirst.frc4904.robot.input.SuperSerial;
+import org.usfirst.frc4904.robot.input.MPUSerial;
 import org.usfirst.frc4904.robot.input.UDAR;
 import org.usfirst.frc4904.robot.input.XboxController;
 import org.usfirst.frc4904.robot.operator.Operator;
@@ -56,7 +56,7 @@ public class Robot extends SampleRobot {
 	private final LogitechJoystick stick; // the X3D Extreme3DPro Logitech joystick (right hand) - operator
 	private final XboxController xboxController; // the Xbox 360 controller - driver
 	// Input devices
-	private final SuperSerial serial;
+	private final MPUSerial serial;
 	private final UDAR udar; // the UDAR (ultrasonic detection and ranging)
 	private final IMU imu;
 	private final LIDAR lidar;
@@ -108,7 +108,7 @@ public class Robot extends SampleRobot {
 		logger = new LogKitten("Robot", LogKitten.LEVEL_VERBOSE, LogKitten.LEVEL_FATAL);
 		logger.v("Constructing", "Constructing");
 		// Initialize serial interface
-		serial = new SuperSerial();
+		serial = new MPUSerial();
 		// Initialize sensors
 		limitSwitches[Grabber.RIGHT_INNER_SWITCH] = new DigitalInput(RIGHT_INNER_SWITCH_PORT);
 		limitSwitches[Grabber.LEFT_INNER_SWITCH] = new DigitalInput(LEFT_INNER_SWITCH_PORT);
