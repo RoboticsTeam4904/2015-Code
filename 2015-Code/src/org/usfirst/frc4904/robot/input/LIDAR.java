@@ -1,13 +1,14 @@
 package org.usfirst.frc4904.robot.input;
 
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import org.usfirst.frc4904.robot.LogKitten;
 import org.usfirst.frc4904.robot.Updatable;
+import edu.wpi.first.wpilibj.SerialPort;
 
 public class LIDAR implements Updatable {
 	int[] dists = new int[180];
-	private SuperSerial serial;
 	private final LogKitten logger;
 	private static final int width = 1280;// This is the resolution of my screen, because that seemed to work
 	private static final int height = 720;
@@ -16,11 +17,48 @@ public class LIDAR implements Updatable {
 	public static final int LIDAR_MOUNT_OFFSET = -100; // mm to right. Cartesian. Because.
 	public static final int GRABBER_LENGTH = 700; // Distance from LIDAR to grabber
 	public static final int GRABBER_LENGTH_OFFSET = GRABBER_LENGTH + 100; // Go an extra 100 mm (to tell if lines are the grabber or totes)
+	private final SerialPort port;
 	
-	public LIDAR(SuperSerial serial) {
+	public LIDAR() {
 		logger = new LogKitten("LIDAR", LogKitten.LEVEL_DEBUG, LogKitten.LEVEL_FATAL);
 		logger.v("LIDAR", "Started Logging");
-		this.serial = serial;
+		port = new SerialPort(115200, SerialPort.Port.kOnboard);
+	}
+	
+	private byte[] read(int bytes) throws Exception {
+		byte[] b = new byte[bytes];
+		b = port.read(bytes);
+		for (int i = 0; i < bytes; i++) {
+			logger.d("read", Integer.toString(i) + " " + Byte.toString(b[i]));
+		}
+		return b;
+	}
+	
+	private int[] scanline_b(byte angle) throws Exception {
+		boolean insync = false;
+		while (!insync) { // Wait until beginning of distance data
+			byte header = read(1)[0]; // Header is one byte
+			if (header == (byte) 0xFA) {
+				byte scan = read(1)[0];
+				if (scan == angle) {
+					insync = true;
+				}
+			}
+		}
+		if (insync) {
+			byte[][] b_data = new byte[4][]; // Read four values at a time
+			for (int i = 0; i < 4; i++) {
+				b_data[i] = read(4);
+			}
+			int[] dist = new int[4];
+			for (int i = 0; i < 4; i++) {
+				b_data[i][1] &= 0x3F;
+				dist[i] = new BigInteger(new byte[] {0, b_data[i][1], b_data[i][0]}).intValue();
+			}
+			logger.d("scanline", Integer.toString(dist[0]) + " " + Integer.toString(dist[1]) + " " + Integer.toString(dist[2]) + " " + Integer.toString(3));
+			return dist;
+		}
+		return null;
 	}
 	
 	public int[] getDists() {
@@ -60,17 +98,50 @@ public class LIDAR implements Updatable {
 	}
 	
 	public void update() {
-		if (serial.availableLIDARData() < 1980) { // LIDAR returns 1980 bytes per cycle
+		if (port.getBytesReceived() < 100) { // LIDAR returns 1980 bytes per cycle
+			logger.v("getBytesReceived", "only " + port.getBytesReceived() + " bytes received");
 			return;
 		}
 		logger.v("update", "Updating LIDAR");
-		String data = serial.readLIDAR();
-		String[] distStrings = data.split(" ");
-		if (distStrings.length < 179) {
-			logger.w("update", "Not enough data points");
+		byte scanhdr = (byte) 0xA0;
+		try {
+			for (int i = 0; i < 90; i++) { // Reading in chunks of 4, so only 90 steps
+				int[] scanrange = scanline_b(scanhdr);
+				int degree = 4 * (scanhdr - (byte) 0xA0);
+				if (scanrange != null) {
+					for (int j = 0; j < 4; j++) {
+						if (scanrange[j] != 53) {
+							dists[degree + j] = scanrange[j]; // No one knows why we are comparing scanrange[j] to 53, so I am too scared to change it
+						} else {
+							dists[degree + j] = 0;
+						}
+					}
+				}
+				if (scanhdr == (byte) 0xF9) {
+					scanhdr = (byte) 0xA0;
+				} else {
+					scanhdr += 1;
+				}
+			}
+			for (int i = 0; i < 90; i++) { // Do it again for redundancy
+				int[] scanrange = scanline_b(scanhdr);
+				int degree = 4 * (scanhdr - (byte) 0xA0);
+				if (scanrange != null) {
+					for (int j = 0; j < 4; j++) {
+						if (scanrange[j] != 53) {
+							dists[degree + j] = scanrange[j];
+						}
+					}
+				}
+				if (scanhdr == (byte) 0xF9) {
+					scanhdr = (byte) 0xA0;
+				} else {
+					scanhdr += 1;
+				}
+			}
 		}
-		for (int i = 0; i < 180; i++) {
-			dists[i] = Integer.parseInt(distStrings[i]);
+		catch (Exception e) {
+			System.out.println("Exception: " + e);
 		}
 	}
 	
