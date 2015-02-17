@@ -9,9 +9,9 @@ import org.usfirst.frc4904.robot.input.Camera;
 import org.usfirst.frc4904.robot.input.IMU;
 import org.usfirst.frc4904.robot.input.LIDAR;
 import org.usfirst.frc4904.robot.input.LogitechJoystick;
+import org.usfirst.frc4904.robot.input.MPUSerial;
 import org.usfirst.frc4904.robot.input.PDP;
 import org.usfirst.frc4904.robot.input.SuperEncoder;
-import org.usfirst.frc4904.robot.input.MPUSerial;
 import org.usfirst.frc4904.robot.input.UDAR;
 import org.usfirst.frc4904.robot.input.XboxController;
 import org.usfirst.frc4904.robot.operator.Operator;
@@ -208,7 +208,7 @@ public class Robot extends SampleRobot {
 		RobotState state = RobotState.OPERATOR;
 		switch (modeManager.useMode()) {
 			case ModeManager.TRAIN_PID_MODE:
-				trainPID(state);
+				trainMecanumPID(state);
 				return;
 			case ModeManager.DUMP_LIDAR_MODE:
 				dumpLIDAR(state);
@@ -232,7 +232,7 @@ public class Robot extends SampleRobot {
 		}
 	}
 	
-	public void trainPID(RobotState state) {
+	public void trainMecanumPID(RobotState state) {
 		System.out.println("*** TRAIN PID ***");
 		logger.v("trainPID", "trainPID");
 		// IMU, PDP, and Camera should always update
@@ -243,6 +243,23 @@ public class Robot extends SampleRobot {
 		while (getRobotState() == state) {
 			frontLeftWheel.setValue(0.1);
 			logger.v("trainPID", "training cycle");
+		}
+	}
+	
+	public void trainWinchPID(RobotState state) {
+		System.out.println("*** TRAIN PID ***");
+		logger.v("trainPID", "trainPID");
+		new Updater(state, alwaysUpdate, fastUpdatePeriod).start();
+		new Updater(state, alwaysUpdateSlow, slowUpdatePeriod).start();
+		new Updater(state, new Updatable[] {winch}, fastUpdatePeriod).start();
+		while (getRobotState() == state) {
+			if (winch.getHeight() < 10) {
+				winch.setHeight(1);
+			} else {
+				winch.setHeight(-1);
+			}
+			winch.trainPID();
+			Timer.delay(5);
 		}
 	}
 	
