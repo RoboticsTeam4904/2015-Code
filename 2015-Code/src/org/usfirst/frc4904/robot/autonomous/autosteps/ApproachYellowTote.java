@@ -14,6 +14,8 @@ public class ApproachYellowTote extends Step {
 		this.lidar = lidar;
 	}
 	
+	public void init() {}
+	
 	public boolean run() {
 		desiredYMovement = 1;
 		desiredTurnSpeed = 0;

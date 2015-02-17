@@ -13,6 +13,8 @@ public class SidewaysToteFind extends Step {
 		clear = false;
 	}
 	
+	public void init() {}
+	
 	public boolean run() {
 		desiredXMovement = 1;
 		desiredYMovement = 0;

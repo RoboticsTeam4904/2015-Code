@@ -8,6 +8,8 @@ public class LowerGrabber extends Step {
 		desiredWinchHeight = stackHeight;
 	}
 	
+	public void init() {}
+	
 	public boolean run() {
 		return desiredWinchHeight == currentWinchHeight;
 	}

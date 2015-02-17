@@ -13,6 +13,8 @@ public class BackwardsCharge extends Step {
 		desiredTurnSpeed = 0;
 	}
 	
+	public void init() {}
+	
 	public boolean run() {
 		return imu.isGoingOverScoringPlatform();
 	}

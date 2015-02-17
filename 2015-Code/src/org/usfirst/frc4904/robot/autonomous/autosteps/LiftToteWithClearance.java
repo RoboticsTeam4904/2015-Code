@@ -9,6 +9,8 @@ public class LiftToteWithClearance extends Step {
 		desiredXMovement = 0.1;
 	}
 	
+	public void init() {}
+	
 	public boolean run() {
 		return currentWinchHeight == desiredWinchHeight;
 	}
