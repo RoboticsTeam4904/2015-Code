@@ -39,7 +39,10 @@ public class SuperEncoder {
 		i2c.transaction(toSend, 1, toRecieve, 4);
 		int value = new BigInteger(toRecieve).intValue();
 		if (value != 0) {
-			logger.v("getTicks", Integer.toString(value));
+			try {
+				logger.v("getTicks", Integer.toString(value));
+			}
+			catch (Exception e) {}
 		}
 		return value;
 	}
