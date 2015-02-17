@@ -21,6 +21,19 @@ boolean dataReady = false;
 #define LED_PIN    6
 Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMPIXELS, LED_PIN, NEO_GRB + NEO_KHZ800);
 
+int echoPin1 = 5;
+int echoPin2 = 6;
+int echoPin3 = 7;
+
+unsigned long echoPin1riseTime;
+unsigned long echoPin1fallTime;
+
+unsigned long echoPin2riseTime;
+unsigned long echoPin2fallTime;
+
+unsigned long echoPin3riseTime;
+unsigned long echoPin3fallTime;
+
 
 // set this to the hardware serial port you wish to use
 #define SerOut Serial1
@@ -37,9 +50,22 @@ void setup() {
   SerLidar.begin(115200);
   SerIMU.begin(115200);
   pixels.begin();
+  /*
+  attatchInterrupt(echoPin1, echoPin1high, RISING);
+   attatchInterrupt(echoPin1, echoPin1low, FALLING);
+   
+   attatchInterrupt(echoPin2, echoPin2high, RISING);
+   attatchInterrupt(echoPin2, echoPin2low, FALLING);
+   
+   attatchInterrupt(echoPin3, echoPin3high, RISING);
+   attatchInterrupt(echoPin3, echoPin3low, FALLING);
+   */
+  for(int i=0; i<pixels.numPixels(); i++) {
+    pixels.setPixelColor(i, pixels.Color(64, 0, 64));
+  }
   pixels.show();
-
 }
+
 
 void loop() {
   int incomingByte;
@@ -47,30 +73,31 @@ void loop() {
 
   while (SerLidar.available() > 0) {
     char c = SerLidar.read();
-    
-    decodeData(c);/*
+
+    decodeData(c);
     //Serial.println(Data_loop_index);
+    dataReady = true;
     if (dataReady) {
       dataReady = false;
-      for (int i=0; i<10; i++) {
+      SerLidar.print("LIDAR");
+      Serial.print(SerLidar.available());
+      for (int i=90; i<270; i++) {
+        //Serial.write(lowByte(distance_array[i]));
+        //Serial.write(highByte(distance_array[i]));
+
         Serial.print(distance_array[i]);
-        Serial.print(" ");
+        Serial.print(",");
+
+        SerOut.print(distance_array[i]);
+        SerOut.print(",");
+
+        //SerLidar.write((unsigned char)(distance_array[i] & 0xFF));
+        //SerLidar.write((unsigned char)((distance_array[i] >> 8) & 0xFF));
       }
+      SerLidar.println();
       Serial.println();
-    }*/
+    }
   }
-
-  /*
-    SerOut.print("LIDAR");
-   //Serial.print("LIDAR");
-   for (int i=0; i<50; i++) {
-   char c = SerLidar.read();
-   SerOut.write(c);
-   //Serial.write(c);
-   }
-   SerOut.println();
-   //Serial.println();*/
-
 
 
   while (SerIMU.available() > 50) {
@@ -78,7 +105,7 @@ void loop() {
     SerOut.print("IMU");
     //Serial.print("IMU");
     char c = SerIMU.read();
-    while ( c != '\n') {    //int i=0; i<45; i++) {
+    while ( c != '\n') {
       SerOut.write(c);
       //Serial.write(c);
       c = SerIMU.read();
@@ -92,17 +119,32 @@ void loop() {
     char c = Serial.read(); // receive byte as a character
 
     if (c == 'w' && Serial.available() > 4) {
-      byte o = Serial.read();
+      byte n = Serial.read();
       byte r = Serial.read();
       byte g = Serial.read();
       byte b = Serial.read();
-      pixels.setPixelColor(o, pixels.Color(r,g,b));
-    } else if (c == 'u') {
+      pixels.setPixelColor(n, pixels.Color(r,g,b));
+    } 
+    else if (c == 'a') {
+      for (int i=0; i<209; i++) {
+        unsigned long itters = 0;
+        while (Serial.available() < 3) if (itters++ > 1000000) break;
+        byte r = Serial.read();
+        byte g = Serial.read();
+        byte b = Serial.read();
+        pixels.setPixelColor(i, pixels.Color(r,g,b));
+
+      }
+    }
+    else if (c == 'u') {
       pixels.show();
     }
   }
 
 }
+
+
+
 
 
 

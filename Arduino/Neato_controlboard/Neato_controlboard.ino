@@ -6,6 +6,7 @@ unsigned char Data_loop_index = 0;
 
 void setup() {
   SerLidar.begin(115200);  // XV-11 LDS data
+  Serial.begin(115200);
 
 }
 
@@ -13,6 +14,7 @@ void loop() {
   // if we get a valid byte from LDS, read it and send it to USB-serial
   if (SerLidar.available() > 0) {
     decodeData(SerLidar.read());
+    Serial.println(distance_array[0]);
   }
 }
 

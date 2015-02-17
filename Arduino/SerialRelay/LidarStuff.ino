@@ -2,7 +2,6 @@
 unsigned char Data_status = 0;
 
 
-
 const byte EEPROM_ID = 0x04;  // used to validate EEPROM initialized
 
 double pwm_val;
@@ -81,8 +80,8 @@ void readData(unsigned char inByte) {
       digitalWrite(ledPin, ledState);
       if (true) {
         curMillis = millis();
-        Serial.print(F("Time Interval: "));
-        Serial.println(curMillis - lastMillis);
+        //Serial.print(F("Time Interval: "));
+        //Serial.println(curMillis - lastMillis);
         lastMillis = curMillis;
       }
     }
@@ -99,10 +98,10 @@ void readData(unsigned char inByte) {
     motor_rph = (motor_rph_high_byte << 8) | motor_rph_low_byte;
     motor_rpm = float( (motor_rph_high_byte << 8) | motor_rph_low_byte ) / 64.0;
     if (true) {
-      Serial.print(F("RPM: "));
-      Serial.print(motor_rpm);
-      Serial.print(F("  PWM: "));   
-      Serial.println(pwm_val);
+      //Serial.print(F("RPM: "));
+      //Serial.print(motor_rpm);
+      //Serial.print(F("  PWM: "));   
+      //Serial.println(pwm_val);
     }
     break;
 
@@ -127,12 +126,14 @@ void readData(unsigned char inByte) {
     quality = (inByte << 8) | data2; 
     if (true) {
       if (true) {
-        Serial.print(angle);
-        Serial.print(F(": "));
-        Serial.print(int(dist));
-        Serial.print(F(" ("));
-        Serial.print(quality);
-        Serial.println(F(")"));
+        if (angle == 360) dataReady = true;
+        distance_array[angle] = dist;
+        //Serial.print(angle);
+        //Serial.print(F(": "));
+        //Serial.print(int(dist));
+        //Serial.print(F(" ("));
+        //Serial.print(quality);
+        //Serial.println(F(")"));
       }
     }
     angle++;    
@@ -159,12 +160,14 @@ void readData(unsigned char inByte) {
     quality = (inByte << 8) | data2; 
     if (true) {
       if (true) {
-        Serial.print(angle);
-        Serial.print(F(": "));
-        Serial.print(int(dist));
-        Serial.print(F(" ("));
-        Serial.print(quality);
-        Serial.println(F(")"));
+        if (angle == 360) dataReady = true;
+        distance_array[angle] = dist;
+        //Serial.print(angle);
+        //Serial.print(F(": "));
+        //Serial.print(int(dist));
+        //Serial.print(F(" ("));
+        //Serial.print(quality);
+        //Serial.println(F(")"));
       }
     }
     angle++;    
@@ -191,12 +194,14 @@ void readData(unsigned char inByte) {
     quality = (inByte << 8) | data2; 
     if (true) {
       if (true) {
-        Serial.print(angle);
-        Serial.print(F(": "));
-        Serial.print(int(dist));
-        Serial.print(F(" ("));
-        Serial.print(quality);
-        Serial.println(F(")"));
+        if (angle == 360) dataReady = true;
+        distance_array[angle] = dist;
+        //Serial.print(angle);
+        //Serial.print(F(": "));
+        //Serial.print(int(dist));
+        //Serial.print(F(" ("));
+        //Serial.print(quality);
+        //Serial.println(F(")"));
       }
     }
     angle++;    
@@ -223,12 +228,14 @@ void readData(unsigned char inByte) {
     quality = (inByte << 8) | data2; 
     if (true) {
       if (true) {
-        Serial.print(angle);
-        Serial.print(F(": "));
-        Serial.print(int(dist));
-        Serial.print(F(" ("));
-        Serial.print(quality);
-        Serial.println(F(")"));
+        if (angle == 360) dataReady = true;
+        distance_array[angle] = dist;
+        //Serial.print(angle);
+        //Serial.print(F(": "));
+        //Serial.print(int(dist));
+        //Serial.print(F(" ("));
+        //Serial.print(quality);
+        //Serial.println(F(")"));
       }
     }
     angle++;    
