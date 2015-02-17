@@ -32,9 +32,9 @@ public class MPU9150 implements Updatable {
 		try {
 			byte[] inData = new byte[4];
 			data = data.substring(2, 10); // discard the leading "f:"
-			inData[1] = (byte) Byte.parseByte(data.substring(2, 4));
-			inData[2] = (byte) Byte.parseByte(data.substring(4, 6));
-			inData[3] = (byte) Byte.parseByte(data.substring(6, 8));
+			inData[1] = (byte) Integer.parseInt(data.substring(2, 4), 16);
+			inData[2] = (byte) Integer.parseInt(data.substring(4, 6), 16);
+			inData[3] = (byte) Integer.parseInt(data.substring(6, 8), 16);
 			int intbits = (inData[3] << 24) | ((inData[2] & 0xff) << 16) | ((inData[1] & 0xff) << 8) | (inData[0] & 0xff);
 			return Float.intBitsToFloat(intbits);
 		}
@@ -51,12 +51,8 @@ public class MPU9150 implements Updatable {
 		}
 		String data = serial.readIMU();
 		logger.v("MPUInput", data);
+		data = data.substring(3);
 		String[] floatString = data.split(",");
-		String a = "";
-		for (int i = 0; i < floatString.length; i++) {
-			a += floatString[i] + " ";
-		}
-		logger.v("MPU", a);
 		double q[] = new double[4];
 		q[0] = (double) parseFloat(floatString[0]);
 		q[1] = (double) parseFloat(floatString[1]);
