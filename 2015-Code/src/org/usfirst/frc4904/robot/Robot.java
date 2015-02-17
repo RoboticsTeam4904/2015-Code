@@ -208,10 +208,13 @@ public class Robot extends SampleRobot {
 		RobotState state = RobotState.OPERATOR;
 		switch (modeManager.useMode()) {
 			case ModeManager.TRAIN_PID_MODE:
-				trainPID(state);
+				trainMecanumPID(state);
 				return;
 			case ModeManager.DUMP_LIDAR_MODE:
 				dumpLIDAR(state);
+				return;
+			case ModeManager.TRAIN_WINCH_MODE:
+				trainWinchPID(state);
 				return;
 			case ModeManager.NO_MODE:
 				break;
@@ -232,7 +235,7 @@ public class Robot extends SampleRobot {
 		}
 	}
 	
-	public void trainPID(RobotState state) {
+	public void trainMecanumPID(RobotState state) {
 		System.out.println("*** TRAIN PID ***");
 		logger.v("trainPID", "trainPID");
 		// IMU, PDP, and Camera should always update
@@ -243,6 +246,22 @@ public class Robot extends SampleRobot {
 		while (getRobotState() == state) {
 			frontLeftWheel.setValue(0.1);
 			logger.v("trainPID", "training cycle");
+		}
+	}
+	
+	public void trainWinchPID(RobotState state) {
+		System.out.println("*** TRAIN PID ***");
+		logger.v("trainPID", "trainPID");
+		new Updater(state, alwaysUpdate, fastUpdatePeriod).start();
+		new Updater(state, alwaysUpdateSlow, slowUpdatePeriod).start();
+		new Updater(state, new Updatable[] {winch}, fastUpdatePeriod).start();
+		while (getRobotState() == state) {
+			winch.setHeight(8);
+			winch.trainPID();
+			Timer.delay(5);
+			winch.setHeight(4);
+			winch.trainPID();
+			Timer.delay(5);
 		}
 	}
 	
