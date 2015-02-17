@@ -19,18 +19,15 @@ public class SuperSerial implements Updatable {
 	}
 	
 	public void update() {
-		int available = port.getBytesReceived();
-		logger.v("update", available + " bytes received");
-		while (port.getBytesReceived() > 50) {
-			String data = "";
-			String current = "a";
-			while (!current.matches("\n")) {
-				current = port.readString(1);
-				data += current;
-			}
-			logger.v("update", "Got data " + data);
-			imuData = data;
+		String data = "";
+		String current = "a";
+		while (!current.matches("\n")) {
+			current = port.readString(1);
+			data += current;
+			logger.d("adding data", data);
 		}
+		logger.v("update", "Got data " + data);
+		imuData = data;
 	}
 	
 	public String readIMU() { // Reads the first available full IMU pulse
