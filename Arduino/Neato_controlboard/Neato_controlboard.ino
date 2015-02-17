@@ -2,17 +2,18 @@
 unsigned int distance_array[180]; // Only look forward
 unsigned char Data_loop_index = 0;
 
+#define SerLidar Serial2
+
 void setup() {
-  Serial2.begin(115200);  // XV-11 LDS data
+  SerLidar.begin(115200);  // XV-11 LDS data
 
 }
 
 void loop() {
   // if we get a valid byte from LDS, read it and send it to USB-serial
-  if (Serial2.available() > 0) {
-    decodeData(Serial2.read());
+  if (SerLidar.available() > 0) {
+    decodeData(SerLidar.read());
   }
-
 }
 
 void decodeData(unsigned char inByte) {
