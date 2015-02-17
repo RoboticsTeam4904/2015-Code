@@ -5,6 +5,7 @@ import org.usfirst.frc4904.robot.AutoAlign;
 import org.usfirst.frc4904.robot.LogKitten;
 import org.usfirst.frc4904.robot.driver.AutoDriver;
 import org.usfirst.frc4904.robot.input.Camera;
+import org.usfirst.frc4904.robot.input.IMU;
 import org.usfirst.frc4904.robot.input.LIDAR;
 import org.usfirst.frc4904.robot.operator.AutoOperator;
 import org.usfirst.frc4904.robot.output.Grabber;
@@ -23,8 +24,8 @@ public class AutonomousManager {
 	private final AutoAlign align;
 	private final LogKitten logger;
 	
-	public AutonomousManager(Mecanum mecanumDrive, Winch winch, Grabber grabber, AutoAlign align, Camera camera, LIDAR lidar) {
-		autonomouses[YELLOW_TOTE_STACK] = new YellowToteStack(camera, align, lidar);
+	public AutonomousManager(Mecanum mecanumDrive, Winch winch, Grabber grabber, AutoAlign align, Camera camera, LIDAR lidar, IMU imu) {
+		autonomouses[YELLOW_TOTE_STACK] = new YellowToteStack(camera, align, lidar, imu);
 		autonomouses[LANDFILL_STACK] = new LandfillStack(lidar, align);
 		this.mecanumDrive = mecanumDrive;
 		this.winch = winch;
