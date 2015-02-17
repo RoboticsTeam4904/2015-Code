@@ -98,7 +98,8 @@ public class LIDAR implements Updatable {
 	}
 	
 	public void update() {
-		if (port.getBytesReceived() < 1980) { // LIDAR returns 1980 bytes per cycle
+		if (port.getBytesReceived() < 100) { // LIDAR returns 1980 bytes per cycle
+			logger.v("getBytesReceived", "only " + port.getBytesReceived() + " bytes received");
 			return;
 		}
 		logger.v("update", "Updating LIDAR");
