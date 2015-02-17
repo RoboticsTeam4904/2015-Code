@@ -102,7 +102,7 @@ public class SuperSerial implements Updatable {
 		return data;
 	}
 	
-	public int availableIMUBytes() {
+	public int availableIMUData() {
 		return imuData.length();
 	}
 	

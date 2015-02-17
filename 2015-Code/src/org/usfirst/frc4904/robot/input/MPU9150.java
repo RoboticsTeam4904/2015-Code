@@ -45,6 +45,9 @@ public class MPU9150 implements Updatable {
 	}
 	
 	public void update() {
+		if (serial.availableIMUData() < 30) {
+			return;
+		}
 		String[] floatString = serial.readIMU(0).split(",");
 		double q[] = new double[3];
 		q[0] = (double) parseFloat(floatString[0]);
