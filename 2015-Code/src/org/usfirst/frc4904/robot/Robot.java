@@ -295,7 +295,7 @@ public class Robot extends SampleRobot {
 				return;
 			}
 			double desiredTime = time() + updateSpeed; // Sync with clock to ensure that update interval is consistent regardless of how long each update takes
-			System.out.println("Starting");
+			logger.d("Run", "Starting");
 			while (getRobotState() == robotState) {
 				for (Updatable update : toUpdate) {
 					update.update();
@@ -310,8 +310,7 @@ public class Robot extends SampleRobot {
 				}
 				desiredTime += updateSpeed; // Next tick should end updatePeriod seconds in the future
 			}
-			System.out.println("Terminating");
-			logger.v("Run", "Terminating");
+			logger.d("Run", "Terminating");
 		}
 	}
 }
