@@ -15,7 +15,7 @@ public class SuperEncoder {
 	public SuperEncoder(int i2cPort) {
 		i2c = new I2C(Port.kOnboard, i2cPort);
 		previousNumTicks = getTicks();
-		logger = new LogKitten("SuperEncoder" + Integer.toString(i2cPort), LogKitten.LEVEL_DEBUG, LogKitten.LEVEL_FATAL);
+		logger = new LogKitten("SuperEncoder" + Integer.toString(i2cPort), LogKitten.LEVEL_DEBUG, LogKitten.LEVEL_VERBOSE);
 	}
 	
 	public double currentEncoderSpeed() { // Should return ticks per second
@@ -33,10 +33,13 @@ public class SuperEncoder {
 	}
 	
 	public int getTicks() {
+		logger.v("getTicks", "Tick request");
 		byte[] toRecieve = new byte[4];
 		byte[] toSend = new byte[1];
 		toSend = new byte[] {0};
+		logger.v("getTicks", "Begin i2c transaction");
 		i2c.transaction(toSend, 1, toRecieve, 4);
+		logger.v("getTicks", "End i2c transaction");
 		int value = new BigInteger(toRecieve).intValue();
 		if (value != 0) {
 			try {
