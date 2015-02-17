@@ -9,9 +9,9 @@ import org.usfirst.frc4904.robot.input.Camera;
 import org.usfirst.frc4904.robot.input.IMU;
 import org.usfirst.frc4904.robot.input.LIDAR;
 import org.usfirst.frc4904.robot.input.LogitechJoystick;
+import org.usfirst.frc4904.robot.input.MPUSerial;
 import org.usfirst.frc4904.robot.input.PDP;
 import org.usfirst.frc4904.robot.input.SuperEncoder;
-import org.usfirst.frc4904.robot.input.MPUSerial;
 import org.usfirst.frc4904.robot.input.UDAR;
 import org.usfirst.frc4904.robot.input.XboxController;
 import org.usfirst.frc4904.robot.operator.Operator;
@@ -152,7 +152,7 @@ public class Robot extends SampleRobot {
 		autonomous = autonomousManager.getAutonomous();
 		// This list should include everything with a motor
 		toDisable = new Disablable[] {winch, grabber, driver, operator, autonomous, frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel};
-		alwaysUpdate = new Updatable[] {serial, imu, pdp, camera};
+		alwaysUpdate = new Updatable[] {imu, serial, pdp, camera};
 		alwaysUpdateSlow = new Updatable[] {};
 	}
 	

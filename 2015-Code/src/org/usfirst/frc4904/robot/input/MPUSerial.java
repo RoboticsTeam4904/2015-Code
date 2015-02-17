@@ -13,12 +13,14 @@ public class MPUSerial implements Updatable {
 	private final LogKitten logger;
 	
 	public MPUSerial() {
+		System.out.println("MPU INITIALIZED *********");
 		port = new SerialPort(115200, SerialPort.Port.kMXP);
 		imuData = "";
-		logger = new LogKitten("SuperSerial", LogKitten.LEVEL_DEBUG, LogKitten.LEVEL_VERBOSE);
+		logger = new LogKitten("SuperSerial", LogKitten.LEVEL_DEBUG, LogKitten.LEVEL_DEBUG);
 	}
 	
 	public void update() {
+		System.out.println("MPU UPDATED **************");
 		String data = "";
 		String current = "a";
 		while (!current.matches("\n")) {
