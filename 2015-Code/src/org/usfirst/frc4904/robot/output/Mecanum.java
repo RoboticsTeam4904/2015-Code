@@ -12,6 +12,7 @@ public class Mecanum implements Updatable {
 	private volatile double desiredXSpeed;
 	private volatile double desiredYSpeed;
 	private volatile double desiredTurnSpeed;
+	private volatile double tsAdjust; // Turn speed adjust
 	private final PID turnSpeedPID;
 	private volatile boolean absolute;
 	private final IMU imu;
@@ -24,6 +25,7 @@ public class Mecanum implements Updatable {
 		this.backRightWheel = backRightWheel;
 		this.imu = imu;
 		this.turnSpeedPID = new PID(0.1, 0.1, 0.1);
+		tsAdjust = 0;
 	}
 	
 	private void move(double desiredSpeed, double desiredAngle, double turnSpeed, boolean absolute) {
@@ -59,6 +61,12 @@ public class Mecanum implements Updatable {
 		double turnSpeed = imu.readRate()[0];
 		double setSpeed = Math.sqrt(desiredXSpeed * desiredXSpeed + desiredYSpeed * desiredYSpeed);
 		double setAngle = Math.atan2(desiredXSpeed, desiredYSpeed);
+		if (turnSpeed > desiredTurnSpeed) {
+			tsAdjust += 0.05;
+		} else if (turnSpeed < desiredTurnSpeed) {
+			tsAdjust -= 0.05;
+		}
+		desiredTurnSpeed += tsAdjust;
 		double setTurnSpeed = desiredTurnSpeed;
 		// setTurnSpeed = turnSpeedPID.calculate(setTurnSpeed, turnSpeed);
 		move(setSpeed, setAngle, setTurnSpeed, absolute); // This system allows for different updating times and rates
