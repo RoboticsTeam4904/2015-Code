@@ -28,14 +28,26 @@ public class SuperSerial implements Updatable {
 	
 	public void update() {
 		int available = port.getBytesReceived();
-		if (available < 5) {
-			logger.v("update", "data too small");
+		logger.v("update", available + " bytes received");
+		if (available < 100) {
 			return;
 		}
-		String data = port.readString();
-		String[] lines = data.split("\n");
+		try {
+			Thread.sleep(20);
+		}
+		catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		String data = "";
+		String current = "a";
+		while (!current.matches("\n")) {
+			current = port.readString(1);
+			data += current;
+		}
 		logger.v("update", "Got data " + data);
+		String[] lines = data.split("\n");
 		for (String line : lines) {
+			line = line.substring(0, line.length() - 1);
 			if (line.startsWith("LIDAR")) {
 				line = line.substring(5);
 				lidarData += "#" + line + "$";
@@ -44,7 +56,7 @@ public class SuperSerial implements Updatable {
 				udarData += "#" + line + "$";
 			} else if (line.startsWith("IMU")) {
 				line = line.substring(3);
-				imuData += line;
+				imuData += "#" + line + "$";
 				logger.v("Update", "Added " + line + " to IMU");
 			} else if (line.startsWith("E0")) {
 				line = line.substring(2);
@@ -65,10 +77,16 @@ public class SuperSerial implements Updatable {
 		}
 	}
 	
-	public String readLIDAR(int length) {
-		String data = new String();
-		data = lidarData.substring(0, length);
-		lidarData = lidarData.substring(length);
+	public String readLIDAR() { // Reads the first available full LIDAR pulse
+		String data = "";
+		int iter = 0;
+		while (lidarData.charAt(iter) != '#') {
+			iter++;
+		}
+		while (lidarData.charAt(iter) != '$') {
+			data += lidarData.charAt(iter);
+		}
+		lidarData = lidarData.substring(iter, lidarData.length());
 		return data;
 	}
 	
@@ -76,10 +94,16 @@ public class SuperSerial implements Updatable {
 		return lidarData.length();
 	}
 	
-	public String readUDAR(int length) {
-		String data = new String();
-		data = udarData.substring(0, length);
-		lidarData = udarData.substring(length);
+	public String readUDAR() { // Reads the first available full UDAR pulse
+		String data = "";
+		int iter = 0;
+		while (udarData.charAt(iter) != '#') {
+			iter++;
+		}
+		while (udarData.charAt(iter) != '$') {
+			data += udarData.charAt(iter);
+		}
+		udarData = udarData.substring(iter, udarData.length());
 		return data;
 	}
 	
@@ -87,10 +111,16 @@ public class SuperSerial implements Updatable {
 		return udarData.length();
 	}
 	
-	public String readEncoder(int encoder, int length) {
-		String data = new String();
-		data = encoderData[encoder].substring(0, length);
-		lidarData = encoderData[encoder].substring(length);
+	public String readEncoder(int encoder) { // Reads the first available full encoder pulse
+		String data = "";
+		int iter = 0;
+		while (encoderData[encoder].charAt(iter) != '#') {
+			iter++;
+		}
+		while (encoderData[encoder].charAt(iter) != '$') {
+			data += encoderData[encoder].charAt(iter);
+		}
+		encoderData[encoder] = encoderData[encoder].substring(iter, imuData.length());
 		return data;
 	}
 	
@@ -98,10 +128,16 @@ public class SuperSerial implements Updatable {
 		return encoderData[channel].length();
 	}
 	
-	public String readIMU(int length) {
-		String data = new String();
-		data = imuData.substring(0, length);
-		lidarData = imuData.substring(length);
+	public String readIMU() { // Reads the first available full IMU pulse
+		String data = "";
+		int iter = 0;
+		while (imuData.charAt(iter) != '#') {
+			iter++;
+		}
+		while (imuData.charAt(iter) != '$') {
+			data += imuData.charAt(iter);
+		}
+		imuData = imuData.substring(iter, imuData.length());
 		return data;
 	}
 	

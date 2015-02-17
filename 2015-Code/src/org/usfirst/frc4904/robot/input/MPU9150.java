@@ -45,11 +45,18 @@ public class MPU9150 implements Updatable {
 	}
 	
 	public void update() {
-		if (serial.availableIMUData() < 10) {
+		if (serial.availableIMUData() <= 10) {
 			logger.v("MPU", "data too small");
 			return;
 		}
-		String[] floatString = serial.readIMU(0).split(",");
+		String data = serial.readIMU();
+		logger.v("MPUInput", data);
+		String[] floatString = data.split(",");
+		String a = "";
+		for (int i = 0; i < floatString.length; i++) {
+			a += floatString[i] + " ";
+		}
+		logger.v("MPU", a);
 		double q[] = new double[4];
 		q[0] = (double) parseFloat(floatString[0]);
 		q[1] = (double) parseFloat(floatString[1]);
