@@ -1,6 +1,7 @@
 /* UART Example, any character received on either the real
  serial port, or USB serial (or emulated serial to the
- Arduino Serial Monitor when using non-serial USB types)
+ Arduino 
+ Monitor when using non-serial USB types)
  is printed as a message to both ports.
  
  This example code is in the public domain.
@@ -45,8 +46,8 @@ unsigned long echoPin3fallTime;
 void setup() {
   Wire.begin();
   Serial.begin(230400);
-  //SerOut.begin(921600);
-  SerOut.begin(230400);
+  SerOut.begin(115200);
+  //SerOut.begin(230400);
   SerLidar.begin(115200);
   SerIMU.begin(115200);
   pixels.begin();
@@ -61,7 +62,7 @@ void setup() {
    attatchInterrupt(echoPin3, echoPin3low, FALLING);
    */
   for(int i=0; i<pixels.numPixels(); i++) {
-    pixels.setPixelColor(i, pixels.Color(64, 0, 64));
+    pixels.setPixelColor(i, pixels.Color(8, 0, 8));
   }
   pixels.show();
 }
@@ -73,30 +74,30 @@ void loop() {
 
   while (SerLidar.available() > 0) {
     char c = SerLidar.read();
-
+    /*
     decodeData(c);
-    //Serial.println(Data_loop_index);
-    dataReady = true;
-    if (dataReady) {
-      dataReady = false;
-      SerLidar.print("LIDAR");
-      Serial.print(SerLidar.available());
-      for (int i=90; i<270; i++) {
-        //Serial.write(lowByte(distance_array[i]));
-        //Serial.write(highByte(distance_array[i]));
-
-        Serial.print(distance_array[i]);
-        Serial.print(",");
-
-        SerOut.print(distance_array[i]);
-        SerOut.print(",");
-
-        //SerLidar.write((unsigned char)(distance_array[i] & 0xFF));
-        //SerLidar.write((unsigned char)((distance_array[i] >> 8) & 0xFF));
-      }
-      SerLidar.println();
-      Serial.println();
-    }
+     //Serial.println(Data_loop_index);
+     dataReady = true;
+     if (dataReady) {
+     dataReady = false;
+     SerLidar.print("LIDAR");
+     Serial.print(SerLidar.available());
+     for (int i=90; i<270; i++) {
+     //Serial.write(lowByte(distance_array[i]));
+     //Serial.write(highByte(distance_array[i]));
+     
+     Serial.print(distance_array[i]);
+     Serial.print(",");
+     
+     SerOut.print(distance_array[i]);
+     SerOut.print(",");
+     
+     //SerLidar.write((unsigned char)(distance_array[i] & 0xFF));
+     //SerLidar.write((unsigned char)((distance_array[i] >> 8) & 0xFF));
+     }
+     SerLidar.println();
+     Serial.println();
+     }*/
   }
 
 
@@ -107,10 +108,11 @@ void loop() {
     char c = SerIMU.read();
     while ( c != '\n') {
       SerOut.write(c);
-      //Serial.write(c);
+      //
+      Serial.write(c);
       c = SerIMU.read();
     }
-    //Serial.println();
+    Serial.println();
     SerOut.println();
   }
 
@@ -133,8 +135,36 @@ void loop() {
         byte g = Serial.read();
         byte b = Serial.read();
         pixels.setPixelColor(i, pixels.Color(r,g,b));
-
       }
+      pixels.show();
+    }
+    else if (c == 'u') {
+      pixels.show();
+    }
+  }
+
+
+
+  while (SerOut.available() > 0) {
+    char c = SerOut.read(); // receive byte as a character
+
+    if (c == 'w' && SerOut.available() > 4) {
+      byte n = SerOut.read();
+      byte r = SerOut.read();
+      byte g = SerOut.read();
+      byte b = SerOut.read();
+      pixels.setPixelColor(n, pixels.Color(r,g,b));
+    } 
+    else if (c == 'a') {
+      for (int i=0; i<209; i++) {
+        unsigned long itters = 0;
+        while (SerOut.available() < 3) if (itters++ > 1000000) break;
+        byte r = SerOut.read();
+        byte g = SerOut.read();
+        byte b = SerOut.read();
+        pixels.setPixelColor(i, pixels.Color(r,g,b));
+      }
+      pixels.show();
     }
     else if (c == 'u') {
       pixels.show();
@@ -142,6 +172,11 @@ void loop() {
   }
 
 }
+
+
+
+
+
 
 
 
