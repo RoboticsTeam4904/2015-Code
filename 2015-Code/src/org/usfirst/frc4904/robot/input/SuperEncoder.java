@@ -14,7 +14,7 @@ public class SuperEncoder {
 		this.port = port;
 		this.channel = channel;
 		previousNumTicks = getTicks();
-		logger = new LogKitten("SuperEncoder" + Integer.toString(channel), LogKitten.LEVEL_DEBUG, LogKitten.LEVEL_VERBOSE);
+		logger = new LogKitten("SuperEncoder" + Integer.toString(channel), LogKitten.LEVEL_DEBUG, LogKitten.LEVEL_FATAL);
 	}
 	
 	public double currentEncoderSpeed() { // Should return ticks per second

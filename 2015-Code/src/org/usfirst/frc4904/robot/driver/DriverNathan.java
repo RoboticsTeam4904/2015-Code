@@ -13,7 +13,7 @@ public class DriverNathan extends Driver {
 	public DriverNathan(Mecanum mecanumDrive, XboxController xboxController, AutoAlign align) {
 		super(mecanumDrive, align);
 		this.xboxController = xboxController;
-		logger = new LogKitten("DriverNathan", LogKitten.LEVEL_VERBOSE, LogKitten.LEVEL_WARN);
+		logger = new LogKitten("DriverNathan", LogKitten.LEVEL_VERBOSE, LogKitten.LEVEL_FATAL);
 	}
 	
 	public synchronized void update() {

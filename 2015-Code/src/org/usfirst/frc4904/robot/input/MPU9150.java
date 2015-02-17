@@ -11,7 +11,7 @@ public class MPU9150 implements Updatable {
 	
 	public MPU9150(SuperSerial serial) {
 		this.serial = serial;
-		logger = new LogKitten("MPU9150", LogKitten.LEVEL_VERBOSE, LogKitten.LEVEL_VERBOSE);
+		logger = new LogKitten("MPU9150", LogKitten.LEVEL_VERBOSE, LogKitten.LEVEL_FATAL);
 		angles = new double[3];
 		for (int i = 0; i < 3; i++) {
 			angles[i] = 0;

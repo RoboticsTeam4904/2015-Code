@@ -25,7 +25,7 @@ public abstract class EncodedMotor extends VictorSP implements Disablable, Updat
 		this.pid = pid;
 		motorOutput = 0;
 		override = false;
-		logger = new LogKitten("EncodedMotor" + channel, LogKitten.LEVEL_VERBOSE, LogKitten.LEVEL_VERBOSE);
+		logger = new LogKitten("EncodedMotor" + channel, LogKitten.LEVEL_VERBOSE, LogKitten.LEVEL_FATAL);
 		cap = false;
 	}
 	

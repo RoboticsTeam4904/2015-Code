@@ -31,7 +31,7 @@ public class AutoAlign implements Updatable {
 		this.lidar = lidar;
 		this.winch = winch;
 		currentState = State.EMPTY;
-		logger = new LogKitten("AutoAlign", LogKitten.LEVEL_VERBOSE, LogKitten.LEVEL_VERBOSE);
+		logger = new LogKitten("AutoAlign", LogKitten.LEVEL_VERBOSE, LogKitten.LEVEL_FATAL);
 	}
 	
 	public void grabTote() {

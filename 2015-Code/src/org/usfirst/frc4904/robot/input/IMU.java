@@ -15,7 +15,7 @@ public class IMU extends MPU9150 implements Updatable {
 	
 	public IMU(SuperSerial serial) {
 		super(serial);
-		logger = new LogKitten("IMU", LogKitten.LEVEL_DEBUG, LogKitten.LEVEL_VERBOSE);
+		logger = new LogKitten("IMU", LogKitten.LEVEL_DEBUG, LogKitten.LEVEL_FATAL);
 		angles = new double[3];
 		lastAngles = new double[3];
 		for (int i = 0; i < 3; i++) {

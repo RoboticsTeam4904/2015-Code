@@ -16,7 +16,7 @@ public class OperatorNachi extends Operator {
 		super(winch, align, grabber);
 		this.stick = stick;
 		this.align = align;
-		logger = new LogKitten("OperatorNachi", LogKitten.LEVEL_VERBOSE, LogKitten.LEVEL_WARN);
+		logger = new LogKitten("OperatorNachi", LogKitten.LEVEL_VERBOSE, LogKitten.LEVEL_FATAL);
 	}
 	
 	public synchronized void update() {

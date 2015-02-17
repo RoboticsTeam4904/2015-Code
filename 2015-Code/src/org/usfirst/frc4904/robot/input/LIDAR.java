@@ -18,7 +18,7 @@ public class LIDAR implements Updatable {
 	public static final int GRABBER_LENGTH_OFFSET = GRABBER_LENGTH + 100; // Go an extra 100 mm (to tell if lines are the grabber or totes)
 	
 	public LIDAR(SuperSerial serial) {
-		logger = new LogKitten("LIDAR", LogKitten.LEVEL_DEBUG, LogKitten.LEVEL_VERBOSE);
+		logger = new LogKitten("LIDAR", LogKitten.LEVEL_DEBUG, LogKitten.LEVEL_FATAL);
 		logger.v("LIDAR", "Started Logging");
 		this.serial = serial;
 	}
