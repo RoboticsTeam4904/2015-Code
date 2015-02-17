@@ -52,6 +52,7 @@ public class SuperSerial implements Updatable {
 		}
 		while (lidarData.charAt(iter) != '$') {
 			data += lidarData.charAt(iter);
+			iter++;
 		}
 		lidarData = lidarData.substring(iter, lidarData.length());
 		return data;
@@ -69,6 +70,7 @@ public class SuperSerial implements Updatable {
 		}
 		while (udarData.charAt(iter) != '$') {
 			data += udarData.charAt(iter);
+			iter++;
 		}
 		udarData = udarData.substring(iter, udarData.length());
 		return data;
@@ -86,6 +88,7 @@ public class SuperSerial implements Updatable {
 		}
 		while (encoderData[encoder].charAt(iter) != '$') {
 			data += encoderData[encoder].charAt(iter);
+			iter++;
 		}
 		encoderData[encoder] = encoderData[encoder].substring(iter, imuData.length());
 		return data;
@@ -103,6 +106,7 @@ public class SuperSerial implements Updatable {
 		}
 		while (imuData.charAt(iter) != '$') {
 			data += imuData.charAt(iter);
+			iter++;
 		}
 		imuData = imuData.substring(iter, imuData.length());
 		return data;
