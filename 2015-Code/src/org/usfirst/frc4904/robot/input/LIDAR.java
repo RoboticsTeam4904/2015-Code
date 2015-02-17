@@ -8,7 +8,7 @@ import org.usfirst.frc4904.robot.Updatable;
 import edu.wpi.first.wpilibj.SerialPort;
 
 public class LIDAR implements Updatable {
-	int[] dists = new int[180];
+	int[] dists = new int[360];
 	private final LogKitten logger;
 	private static final int width = 1280;// This is the resolution of my screen, because that seemed to work
 	private static final int height = 720;
