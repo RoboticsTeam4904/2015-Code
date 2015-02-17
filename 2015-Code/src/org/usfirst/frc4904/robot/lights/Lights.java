@@ -1,6 +1,7 @@
 package org.usfirst.frc4904.robot.lights;
 
 
+import java.util.Arrays;
 import org.usfirst.frc4904.robot.Updatable;
 import org.usfirst.frc4904.robot.input.SuperSerial;
 
@@ -10,6 +11,7 @@ public class Lights implements Updatable {
 	public boolean disabled = false;
 	protected int iter;
 	public int ledCount = 209;
+	public byte[] previousLedData = new byte[ledCount * 3];
 	public byte[] ledData = new byte[ledCount * 3]; // length of 209 with R,G,B for each
 	private SuperSerial serial;
 	
@@ -18,6 +20,7 @@ public class Lights implements Updatable {
 		this.serial = serial;
 		for (int i = ledData.length; i >= 0; i--) {
 			ledData[i] = (byte) 0; // zero out the LEDs
+			previousLedData[i] = (byte) 0;
 		}
 	}
 	
@@ -42,8 +45,11 @@ public class Lights implements Updatable {
 		if (currentStepIndex < steps.length) {
 			LightStep currentStep = steps[currentStepIndex];
 			boolean stepCompleted = currentStep.run();
-			byte[] desiredLedData = currentStep.getLedData();
-			serial.setLeds(desiredLedData);
+			previousLedData = ledData;
+			ledData = currentStep.getLedData();
+			if (!Arrays.equals(previousLedData, ledData)) {
+				serial.setLeds(ledData);
+			}
 			if (stepCompleted) {
 				++currentStepIndex;
 			}
