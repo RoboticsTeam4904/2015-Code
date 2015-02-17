@@ -1,11 +1,13 @@
 package org.usfirst.frc4904.robot.input;
 
 
+import java.util.Arrays;
 import org.usfirst.frc4904.robot.LogKitten;
 import org.usfirst.frc4904.robot.Updatable;
 
 public class MPU9150 implements Updatable {
 	private double[] angles;
+	double q[];
 	private final SuperSerial serial;
 	LogKitten logger;
 	
@@ -13,9 +15,8 @@ public class MPU9150 implements Updatable {
 		this.serial = serial;
 		logger = new LogKitten("MPU9150", LogKitten.LEVEL_VERBOSE, LogKitten.LEVEL_VERBOSE);
 		angles = new double[3];
-		for (int i = 0; i < 3; i++) {
-			angles[i] = 0;
-		}
+		Arrays.fill(angles, (double) 0);
+		q = new double[4];
 	}
 	
 	public void init() {}
@@ -56,8 +57,7 @@ public class MPU9150 implements Updatable {
 		for (int i = 0; i < floatString.length; i++) {
 			a += floatString[i] + " ";
 		}
-		logger.v("MPU", a);
-		double q[] = new double[4];
+		logger.v("FloatData", a);
 		q[0] = (double) parseFloat(floatString[0]);
 		q[1] = (double) parseFloat(floatString[1]);
 		q[2] = (double) parseFloat(floatString[2]);
