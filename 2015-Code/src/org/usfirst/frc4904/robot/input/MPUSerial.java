@@ -15,7 +15,7 @@ public class MPUSerial implements Updatable {
 	public MPUSerial() {
 		port = new SerialPort(115200, SerialPort.Port.kMXP);
 		imuData = "";
-		logger = new LogKitten("SuperSerial", LogKitten.LEVEL_DEBUG, LogKitten.LEVEL_VERBOSE);
+		logger = new LogKitten("MPUSerial", LogKitten.LEVEL_DEBUG, LogKitten.LEVEL_VERBOSE);
 	}
 	
 	public void update() {

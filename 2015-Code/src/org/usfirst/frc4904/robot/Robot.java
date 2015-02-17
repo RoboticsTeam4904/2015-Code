@@ -213,6 +213,9 @@ public class Robot extends SampleRobot {
 			case ModeManager.DUMP_LIDAR_MODE:
 				dumpLIDAR(state);
 				return;
+			case ModeManager.TRAIN_WINCH_MODE:
+				trainWinchPID(state);
+				return;
 			case ModeManager.NO_MODE:
 				break;
 			default:
