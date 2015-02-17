@@ -1,17 +1,17 @@
 package org.usfirst.frc4904.robot.lights;
 
 
-public class LightStep {
+public class EasyLightStep {
 	protected volatile int redValue;
 	protected volatile int blueValue;
 	protected volatile int greenValue;
 	protected volatile long duration;
 	private volatile long completeTime;
 	private volatile boolean lightsAreSet;
-	private LightManager lights;
-	protected int ledIndexRange;
+	private int ledCount = 209;
+	private byte[] ledData = new byte[ledCount * 3]; // length of 209
 	
-	protected class RGBRange {
+	public class RGBRange {
 		public int r;
 		public int g;
 		public int b;
@@ -24,48 +24,52 @@ public class LightStep {
 			this.g = g;
 			this.b = b;
 			if (start < 1 && start > 0) { // handle percentages if given
-				this.startIndex = (int) Math.floor(start * ledIndexRange);
+				this.startIndex = (int) Math.floor(start * ledCount);
 			} else {
 				this.startIndex = (int) start;
 			}
 			if (end < 1 && end > 0) {
-				this.startIndex = (int) Math.floor(start * ledIndexRange);
+				this.startIndex = (int) Math.floor(start * ledCount);
 			} else {
 				this.startIndex = (int) start;
 			}
 		}
 	}
 	protected RGBRange[] ranges;
-	protected final RGBRange resetRange = new RGBRange(0, 0, 0, 0, ledIndexRange);
+	protected final RGBRange resetRange = new RGBRange(0, 0, 0, 0, ledCount);
 	
-	public LightStep(RGBRange[] ranges, int durationMillis) {
+	private void init(long durationMillis) {
 		completeTime = System.currentTimeMillis() + durationMillis;
-		lights = new LightManager(4);
-		ledIndexRange = lights.leds - 1;
+		for (int i = ledData.length; i >= 0; i--) {
+			ledData[i] = (byte) 0;
+		}
+	}
+	
+	public EasyLightStep(RGBRange[] ranges, long durationMillis) {
+		init(durationMillis);
 		this.ranges = ranges;
 	}
 	
-	public LightStep(int r, int g, int b, int durationMillis) {
-		completeTime = System.currentTimeMillis() + durationMillis;
-		lights = new LightManager(4);
-		ledIndexRange = lights.leds - 1;
-		this.ranges[0] = new RGBRange(r, g, b, 0, lights.leds);
+	public EasyLightStep(int r, int g, int b, long durationMillis) {
+		init(durationMillis);
+		this.ranges[0] = new RGBRange(r, g, b, 0, ledCount);
 	}
 	
 	public void applyRanges(RGBRange[] ranges) {
 		for (RGBRange range : ranges) {
 			applyRange(range);
 		}
-		lights.update();
 		lightsAreSet = true;
 	}
 	
 	public void applyRange(RGBRange range) {
-		if (range.startIndex < 0 || range.endIndex > ledIndexRange) {
+		if (range.startIndex < 0 || range.endIndex > ledCount) {
 			return; // if range is impossible, skip setting the LEDs
 		}
-		for (int i = range.startIndex; i <= range.endIndex; i++) {
-			lights.setLED(i, range.r, range.g, range.b);
+		for (int led = range.startIndex; led < range.endIndex; led++) {
+			ledData[3 * led + 0] = (byte) range.r;
+			ledData[3 * led + 1] = (byte) range.g;
+			ledData[3 * led + 2] = (byte) range.b;
 		}
 	}
 	
@@ -82,6 +86,9 @@ public class LightStep {
 	
 	public void resetLights() {
 		applyRange(this.resetRange);
-		lights.update();
+	}
+	
+	public byte[] getLedData() {
+		return ledData;
 	}
 }

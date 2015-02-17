@@ -1,10 +1,10 @@
 package org.usfirst.frc4904.robot.lights.lightsteps;
 
 
-import org.usfirst.frc4904.robot.lights.LightStep;
+import org.usfirst.frc4904.robot.lights.EasyLightStep;
 
-public class BlueLights extends LightStep {
-	public BlueLights() {
-		super(160, 242, 182, 2 * 1000);
+public class BlueLights extends EasyLightStep {
+	public BlueLights(long durationMillis) {
+		super(160, 242, 182, durationMillis);
 	}
 }

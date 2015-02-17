@@ -1,10 +1,10 @@
 package org.usfirst.frc4904.robot.lights.lightsteps;
 
 
-import org.usfirst.frc4904.robot.lights.LightStep;
+import org.usfirst.frc4904.robot.lights.EasyLightStep;
 
-public class TurquoiseLights extends LightStep {
-	public TurquoiseLights() {
-		super(0, 0, 255, 2 * 1000);
+public class TurquoiseLights extends EasyLightStep {
+	public TurquoiseLights(long durationMillis) {
+		super(0, 0, 255, durationMillis);
 	}
 }

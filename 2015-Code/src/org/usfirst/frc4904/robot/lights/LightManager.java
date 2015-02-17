@@ -1,33 +1,28 @@
 package org.usfirst.frc4904.robot.lights;
 
 
-import edu.wpi.first.wpilibj.I2C;
+import org.usfirst.frc4904.robot.input.SuperSerial;
 
 public class LightManager {
-	public int leds = 209;
-	private final I2C i2c;
+	public int ledCount = 209;
+	public byte[] ledData = new byte[ledCount * 3]; // length of 209
+	private final SuperSerial serial;
 	
 	public LightManager(int i2cAddr) {
-		i2c = new I2C(I2C.Port.kOnboard, i2cAddr);
+		serial = new SuperSerial();
+		for (int i = ledData.length; i >= 0; i--) {
+			ledData[i] = (byte) 0;
+		}
 	}
 	
-	public void setLED(byte num, byte r, byte g, byte b) {
-		byte[] data = new byte[4];
-		data[0] = num;
-		data[1] = r;
-		data[2] = g;
-		data[3] = b;
-		i2c.transaction(data, 4, null, 0);
+	public void setLED(int num, int r, int g, int b) {
+		ledData[3 * num + 0] = (byte) r;
+		ledData[3 * num + 1] = (byte) g;
+		ledData[3 * num + 2] = (byte) b;
 	}
 	
 	public void update() { // Sends command to update string of LEDs
 		// This function will take a few ms, so don't call it unnecessarily
-		byte[] data = new byte[1];
-		data[0] = 'u';
-		i2c.transaction(data, 1, null, 0);
-	}
-	
-	public void setLED(int num, int r, int g, int b) {
-		this.setLED((byte) num, (byte) r, (byte) g, (byte) b);
+		serial.setLeds(ledData);
 	}
 }
