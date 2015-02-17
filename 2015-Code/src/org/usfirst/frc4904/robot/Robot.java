@@ -9,7 +9,6 @@ import org.usfirst.frc4904.robot.input.Camera;
 import org.usfirst.frc4904.robot.input.IMU;
 import org.usfirst.frc4904.robot.input.LIDAR;
 import org.usfirst.frc4904.robot.input.LogitechJoystick;
-import org.usfirst.frc4904.robot.input.MPUSerial;
 import org.usfirst.frc4904.robot.input.PDP;
 import org.usfirst.frc4904.robot.input.SuperEncoder;
 import org.usfirst.frc4904.robot.input.UDAR;
@@ -54,7 +53,7 @@ public class Robot extends SampleRobot {
 	private final LogitechJoystick stick; // the X3D Extreme3DPro Logitech joystick (right hand) - operator
 	private final XboxController xboxController; // the Xbox 360 controller - driver
 	// Input devices
-	private final MPUSerial serial;
+	// private final MPUSerial serial;
 	private final UDAR udar; // the UDAR (ultrasonic detection and ranging)
 	private final IMU imu;
 	private final LIDAR lidar;
@@ -106,7 +105,7 @@ public class Robot extends SampleRobot {
 		logger = new LogKitten("Robot", LogKitten.LEVEL_VERBOSE, LogKitten.LEVEL_FATAL);
 		logger.v("Constructing", "Constructing");
 		// Initialize serial interface
-		serial = new MPUSerial();
+		// serial = new MPUSerial();
 		// Initialize sensors
 		limitSwitches[Grabber.RIGHT_OUTER_SWITCH] = new DigitalInput(RIGHT_OUTER_SWITCH_PORT);
 		limitSwitches[Grabber.LEFT_OUTER_SWITCH] = new DigitalInput(LEFT_OUTER_SWITCH_PORT);
@@ -116,7 +115,7 @@ public class Robot extends SampleRobot {
 		backLeftEncoder = new SuperEncoder(BACK_LEFT_ENCODER_I2C_PORT);
 		backRightEncoder = new SuperEncoder(BACK_RIGHT_ENCODER_I2C_PORT);
 		winchEncoder = new SuperEncoder(WINCH_ENCODER_I2C_PORT);
-		imu = new IMU(serial); // Initialize IMU
+		imu = new IMU(); // Initialize IMU
 		udar = new UDAR(UDAR_I2C_PORT); // Initialize UDAR
 		lidar = new LIDAR(); // Initialize LIDAR
 		pdp = new PDP(); // Power Distribution Panel interface and logging.
@@ -148,7 +147,7 @@ public class Robot extends SampleRobot {
 		autonomous = autonomousManager.getAutonomous();
 		// This list should include everything with a motor
 		toDisable = new Disablable[] {winch, grabber, driver, operator, autonomous, frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel};
-		alwaysUpdate = new Updatable[] {imu, serial, pdp, camera};
+		alwaysUpdate = new Updatable[] {imu, pdp, camera};
 		alwaysUpdateSlow = new Updatable[] {};
 	}
 	

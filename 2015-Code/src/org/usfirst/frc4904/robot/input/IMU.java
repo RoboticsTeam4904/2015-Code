@@ -12,8 +12,8 @@ public class IMU extends MPU9150 {
 	private double zeroAngle;
 	private double lastTime;
 	
-	public IMU(MPUSerial serial) {
-		super(serial);
+	public IMU() {
+		// super(serial);
 		logger = new LogKitten("IMU", LogKitten.LEVEL_DEBUG, LogKitten.LEVEL_VERBOSE);
 		angles = new double[3];
 		lastAngles = new double[3];

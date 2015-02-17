@@ -4,16 +4,20 @@ package org.usfirst.frc4904.robot.input;
 import java.util.Arrays;
 import org.usfirst.frc4904.robot.LogKitten;
 import org.usfirst.frc4904.robot.Updatable;
+import edu.wpi.first.wpilibj.SerialPort;
 
 public class MPU9150 implements Updatable {
+	private final SerialPort port;
+	private volatile String imuData;
+	private static final int NUM_LEDS = 209;
 	private double[] angles;
 	double q[];
-	private final MPUSerial serial;
 	LogKitten logger;
 	
-	public MPU9150(MPUSerial serial) {
-		this.serial = serial;
+	public MPU9150() {
+		port = new SerialPort(115200, SerialPort.Port.kMXP);
 		logger = new LogKitten("MPU9150", LogKitten.LEVEL_VERBOSE, LogKitten.LEVEL_VERBOSE);
+		imuData = "";
 		angles = new double[3];
 		Arrays.fill(angles, (double) 0);
 		q = new double[4];
@@ -46,14 +50,24 @@ public class MPU9150 implements Updatable {
 	}
 	
 	public void update() {
-		if (serial.availableIMUData() <= 10) {
-			logger.v("MPU", "data too small : " + serial.readIMU());
-			return;
+		String dataString = "";
+		String current = "a";
+		try {
+			while (!current.matches("\n") && port.getBytesReceived() > 0) {
+				current = port.readString(1);
+				dataString += current;
+				// logger.v("adding data", data);
+			}
 		}
-		String data = serial.readIMU();
-		logger.v("MPUInput", data);
-		data = data.substring(3);
-		String[] floatString = data.split(",");
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		logger.v("update", "Got data " + dataString);
+		imuData = dataString;
+		// ///////////////////////////////////////////////////////
+		logger.v("MPUInput", dataString);
+		dataString = dataString.substring(3);
+		String[] floatString = dataString.split(",");
 		double q[] = new double[4];
 		q[0] = (double) parseFloat(floatString[0]);
 		q[1] = (double) parseFloat(floatString[1]);
