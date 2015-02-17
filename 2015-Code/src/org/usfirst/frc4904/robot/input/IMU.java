@@ -18,12 +18,13 @@ public class IMU extends MPU9150 implements Updatable {
 		logger = new LogKitten("IMU", LogKitten.LEVEL_DEBUG, LogKitten.LEVEL_VERBOSE);
 		angles = new double[3];
 		lastAngles = new double[3];
+		rate = new double[3];
 		for (int i = 0; i < 3; i++) {
 			angles[i] = 0;
 			lastAngles[i] = 0;
 		}
-		zero();
 		lastTime = getTime();
+		zero();
 	}
 	
 	public byte test() {
