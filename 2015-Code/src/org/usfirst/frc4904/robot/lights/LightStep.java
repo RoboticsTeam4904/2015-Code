@@ -2,7 +2,7 @@ package org.usfirst.frc4904.robot.lights;
 
 
 public class LightStep {
-	protected int ledCount = 209;
+	protected static int ledCount = 209;
 	protected byte[] ledData = new byte[ledCount * 3]; // length of 209
 	
 	protected void resetLights() {

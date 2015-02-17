@@ -9,7 +9,7 @@ public class EasyLightStep extends LightStep {
 	private volatile long completeTime;
 	private volatile boolean lightsAreSet;
 	
-	public class RGBRange {
+	public static class RGBRange {
 		public int r;
 		public int g;
 		public int b;
