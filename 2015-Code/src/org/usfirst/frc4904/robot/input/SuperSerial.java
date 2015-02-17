@@ -33,9 +33,9 @@ public class SuperSerial implements Updatable {
 			while (!current.matches("\n")) {
 				current = port.readString(1);
 				data += current;
-				imuData = data;
-				logger.v("data", data);
 			}
+			imuData = data;
+			logger.v("data", data);
 		}
 	}
 	
