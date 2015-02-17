@@ -14,7 +14,7 @@ import org.usfirst.frc4904.robot.input.SuperEncoder;
 import org.usfirst.frc4904.robot.input.SuperSerial;
 import org.usfirst.frc4904.robot.input.UDAR;
 import org.usfirst.frc4904.robot.input.XboxController;
-import org.usfirst.frc4904.robot.lights.LightSet;
+import org.usfirst.frc4904.robot.lights.DemoLightSequence;
 import org.usfirst.frc4904.robot.operator.Operator;
 import org.usfirst.frc4904.robot.operator.OperatorManager;
 import org.usfirst.frc4904.robot.output.DampenedMotor;
@@ -61,7 +61,7 @@ public class Robot extends SampleRobot {
 	private final LIDAR lidar;
 	private final DigitalInput limitSwitches[] = new DigitalInput[4];
 	private final Camera camera;
-	private final LightSet lights;
+	private final DemoLightSequence lightSequence;
 	private final SuperEncoder frontLeftEncoder;
 	private final SuperEncoder frontRightEncoder;
 	private final SuperEncoder backLeftEncoder;
@@ -124,7 +124,7 @@ public class Robot extends SampleRobot {
 		lidar = new LIDAR(serial); // Initialize LIDAR
 		pdp = new PDP(); // Power Distribution Panel interface and logging.
 		/* Lights! */
-		lights = new LightSet();
+		lightSequence = new DemoLightSequence(serial);
 		/* Camera! */
 		camera = new Camera();
 		/* Action! */
@@ -152,7 +152,7 @@ public class Robot extends SampleRobot {
 		// This list should include everything with a motor
 		toDisable = new Disablable[] {winch, grabber, driver, operator, autonomous, frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel};
 		alwaysUpdate = new Updatable[] {imu, pdp, camera};
-		alwaysUpdateSlow = new Updatable[] {lights};
+		alwaysUpdateSlow = new Updatable[] {lightSequence};
 	}
 	
 	public void robotInit() {
@@ -195,7 +195,7 @@ public class Robot extends SampleRobot {
 		// always slow updates
 		new Updater(state, alwaysUpdateSlow, slowUpdatePeriod).start();
 		// These should have fast updates
-		new Updater(state, new Updatable[] {driver, operator, mecanumDrive, lidar, frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel, grabber, winch}, fastUpdatePeriod).start();
+		new Updater(state, new Updatable[] {autonomous, driver, operator, mecanumDrive, lidar, frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel, grabber, winch}, fastUpdatePeriod).start();
 		while (getRobotState() == state) {
 			Timer.delay(0.01);
 		}
@@ -295,7 +295,7 @@ public class Robot extends SampleRobot {
 				return;
 			}
 			double desiredTime = time() + updateSpeed; // Sync with clock to ensure that update interval is consistent regardless of how long each update takes
-			System.out.println("Starting");
+			logger.d("Run", "Starting");
 			while (getRobotState() == robotState) {
 				for (Updatable update : toUpdate) {
 					update.update();
@@ -310,8 +310,7 @@ public class Robot extends SampleRobot {
 				}
 				desiredTime += updateSpeed; // Next tick should end updatePeriod seconds in the future
 			}
-			System.out.println("Terminating");
-			logger.v("Run", "Terminating");
+			logger.d("Run", "Terminating");
 		}
 	}
 }

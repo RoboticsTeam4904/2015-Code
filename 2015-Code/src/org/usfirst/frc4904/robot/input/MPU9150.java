@@ -49,10 +49,11 @@ public class MPU9150 implements Updatable {
 			return;
 		}
 		String[] floatString = serial.readIMU(0).split(",");
-		double q[] = new double[3];
+		double q[] = new double[4];
 		q[0] = (double) parseFloat(floatString[0]);
 		q[1] = (double) parseFloat(floatString[1]);
 		q[2] = (double) parseFloat(floatString[2]);
+		q[3] = (double) parseFloat(floatString[3]);
 		angles[0] = Math.atan2(2 * q[1] * q[2] - 2 * q[0] * q[3], 2 * q[0] * q[0] + 2 * q[1] * q[1] - 1);
 		angles[1] = -1 * Math.asin(2 * q[1] * q[3] + 2 * q[0] * q[2]);
 		angles[2] = Math.atan2(2 * q[2] * q[3] - 2 * q[0] * q[1], 2 * q[0] * q[0] + 2 * q[3] * q[3] - 1);

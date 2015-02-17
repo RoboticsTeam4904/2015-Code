@@ -2,7 +2,6 @@ package org.usfirst.frc4904.robot.input;
 
 
 // We are combining multiple serial streams, this processes those.
-import java.nio.ByteBuffer;
 import org.usfirst.frc4904.robot.Updatable;
 import edu.wpi.first.wpilibj.SerialPort;
 
@@ -13,20 +12,9 @@ public class SuperSerial implements Updatable {
 	private volatile String imuData;
 	private volatile String[] encoderData = new String[5];
 	private static final int NUM_LEDS = 209;
-	private volatile byte[] ledData = new byte[1 + NUM_LEDS * 3];
 	
 	public SuperSerial() {
 		port = new SerialPort(230400, SerialPort.Port.kMXP);
-		ledData[0] = 'u';
-		for (int i = 1; i < 1 + NUM_LEDS * 3; i++) {
-			ledData[i] = 0x00;
-		}
-		for (int i = 0; i < 5; i++) {
-			encoderData[i] = "";
-		}
-		lidarData = "";
-		udarData = "";
-		imuData = "";
 	}
 	
 	public void update() {
@@ -63,7 +51,6 @@ public class SuperSerial implements Updatable {
 				encoderData[4] += "#" + line + "$";
 			}
 		}
-		port.write(ledData, 1 + NUM_LEDS * 3);
 	}
 	
 	public String readLIDAR(int length) {
@@ -110,17 +97,13 @@ public class SuperSerial implements Updatable {
 		return imuData.length();
 	}
 	
-	public void setLed(int ledNum, int R, int G, int B) {
-		ledData[1 + ledNum * 3] = ByteBuffer.allocate(4).putInt(R).array()[0];
-		ledData[1 + ledNum * 3 + 1] = ByteBuffer.allocate(4).putInt(G).array()[0];
-		ledData[1 + ledNum * 3 + 2] = ByteBuffer.allocate(4).putInt(B).array()[0];
-	}
-	
-	public void setLeds(int[] R, int[] G, int[] B) {
-		for (int i = 0; i < NUM_LEDS; i++) {
-			ledData[1 + i] = ByteBuffer.allocate(4).putInt(R[i]).array()[0];
-			ledData[1 + i + 1] = ByteBuffer.allocate(4).putInt(G[i]).array()[0];
-			ledData[1 + i + 2] = ByteBuffer.allocate(4).putInt(B[i]).array()[0];
+	public void setLeds(byte[] leds) {
+		port.writeString("a");
+		try {
+			port.write(leds, 627);
+		}
+		catch (Exception e) {
+			// DIE, you person who put an invalid length of leds
 		}
 	}
 }

@@ -11,6 +11,8 @@ public class GrabTote extends Step {
 		this.align = align;
 	}
 	
+	public void init() {}
+	
 	public boolean run() {
 		if (align.isCurrentlyAligning()) {
 			return false;

@@ -11,6 +11,8 @@ public class ForwardCharge extends Step {
 		this.lidar = lidar;
 	}
 	
+	public void init() {}
+	
 	public boolean run() {
 		if (lidar.getDists()[0] < 100) {
 			return true;
