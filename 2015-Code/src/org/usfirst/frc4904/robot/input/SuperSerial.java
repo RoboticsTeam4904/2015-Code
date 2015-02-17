@@ -2,6 +2,7 @@ package org.usfirst.frc4904.robot.input;
 
 
 // We are combining multiple serial streams, this processes those.
+import org.usfirst.frc4904.robot.LogKitten;
 import org.usfirst.frc4904.robot.Updatable;
 import edu.wpi.first.wpilibj.SerialPort;
 
@@ -12,18 +13,28 @@ public class SuperSerial implements Updatable {
 	private volatile String imuData;
 	private volatile String[] encoderData = new String[5];
 	private static final int NUM_LEDS = 209;
+	private final LogKitten logger;
 	
 	public SuperSerial() {
-		port = new SerialPort(230400, SerialPort.Port.kMXP);
+		port = new SerialPort(115200, SerialPort.Port.kMXP);
+		lidarData = "";
+		udarData = "";
+		imuData = "";
+		for (int i = 0; i < 5; i++) {
+			encoderData[i] = "";
+		}
+		logger = new LogKitten("SuperSerial", LogKitten.LEVEL_DEBUG, LogKitten.LEVEL_VERBOSE);
 	}
 	
 	public void update() {
 		int available = port.getBytesReceived();
-		if (available < 20) {
+		if (available < 5) {
+			logger.v("update", "data too small");
 			return;
 		}
 		String data = port.readString();
 		String[] lines = data.split("\n");
+		logger.v("update", "Got data " + data);
 		for (String line : lines) {
 			if (line.startsWith("LIDAR")) {
 				line = line.substring(5);
@@ -33,7 +44,8 @@ public class SuperSerial implements Updatable {
 				udarData += "#" + line + "$";
 			} else if (line.startsWith("IMU")) {
 				line = line.substring(3);
-				imuData += "#" + line + "$";
+				imuData += line;
+				logger.v("Update", "Added " + line + " to IMU");
 			} else if (line.startsWith("E0")) {
 				line = line.substring(2);
 				encoderData[0] += "#" + line + "$";

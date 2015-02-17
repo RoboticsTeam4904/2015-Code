@@ -11,7 +11,7 @@ public class MPU9150 implements Updatable {
 	
 	public MPU9150(SuperSerial serial) {
 		this.serial = serial;
-		logger = new LogKitten("MPU9150", LogKitten.LEVEL_VERBOSE, LogKitten.LEVEL_FATAL);
+		logger = new LogKitten("MPU9150", LogKitten.LEVEL_VERBOSE, LogKitten.LEVEL_VERBOSE);
 		angles = new double[3];
 		for (int i = 0; i < 3; i++) {
 			angles[i] = 0;
@@ -45,7 +45,8 @@ public class MPU9150 implements Updatable {
 	}
 	
 	public void update() {
-		if (serial.availableIMUData() < 30) {
+		if (serial.availableIMUData() < 10) {
+			logger.v("MPU", "data too small");
 			return;
 		}
 		String[] floatString = serial.readIMU(0).split(",");

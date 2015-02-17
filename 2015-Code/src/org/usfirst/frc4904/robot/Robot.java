@@ -14,7 +14,6 @@ import org.usfirst.frc4904.robot.input.SuperEncoder;
 import org.usfirst.frc4904.robot.input.SuperSerial;
 import org.usfirst.frc4904.robot.input.UDAR;
 import org.usfirst.frc4904.robot.input.XboxController;
-import org.usfirst.frc4904.robot.lights.DemoLightSequence;
 import org.usfirst.frc4904.robot.operator.Operator;
 import org.usfirst.frc4904.robot.operator.OperatorManager;
 import org.usfirst.frc4904.robot.output.DampenedMotor;
@@ -61,7 +60,7 @@ public class Robot extends SampleRobot {
 	private final LIDAR lidar;
 	private final DigitalInput limitSwitches[] = new DigitalInput[4];
 	private final Camera camera;
-	private final DemoLightSequence lightSequence;
+	// private final DemoLightSequence lightSequence;
 	private final SuperEncoder frontLeftEncoder;
 	private final SuperEncoder frontRightEncoder;
 	private final SuperEncoder backLeftEncoder;
@@ -124,7 +123,7 @@ public class Robot extends SampleRobot {
 		lidar = new LIDAR(serial); // Initialize LIDAR
 		pdp = new PDP(); // Power Distribution Panel interface and logging.
 		/* Lights! */
-		lightSequence = new DemoLightSequence(serial);
+		// lightSequence = new DemoLightSequence(serial);
 		/* Camera! */
 		camera = new Camera();
 		/* Action! */
@@ -151,8 +150,8 @@ public class Robot extends SampleRobot {
 		autonomous = autonomousManager.getAutonomous();
 		// This list should include everything with a motor
 		toDisable = new Disablable[] {winch, grabber, driver, operator, autonomous, frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel};
-		alwaysUpdate = new Updatable[] {imu, pdp, camera};
-		alwaysUpdateSlow = new Updatable[] {lightSequence};
+		alwaysUpdate = new Updatable[] {serial, imu, pdp, camera};
+		alwaysUpdateSlow = new Updatable[] {};
 	}
 	
 	public void robotInit() {
