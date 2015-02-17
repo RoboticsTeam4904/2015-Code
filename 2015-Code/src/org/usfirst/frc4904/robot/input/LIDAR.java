@@ -64,13 +64,7 @@ public class LIDAR implements Updatable {
 			return;
 		}
 		logger.v("update", "Updating LIDAR");
-		while (serial.readLIDAR(1) != "#") {
-			// Wait to get one line
-		}
-		String data = "";
-		while (serial.readLIDAR(1) != "$") { // Read until end of line
-			data += serial.readLIDAR(1);
-		}
+		String data = serial.readLIDAR();
 		String[] distStrings = data.split(" ");
 		if (distStrings.length < 179) {
 			logger.w("update", "Not enough data points");

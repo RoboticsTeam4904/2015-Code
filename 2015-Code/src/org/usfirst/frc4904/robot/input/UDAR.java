@@ -26,13 +26,13 @@ public class UDAR implements Updatable {
 	
 	public void update() {
 		if (bytesCurrentlyAvailable() < NUM_SENSORS * 2) {
-			String[] tmpData;
-			tmpData = serial.readUDAR(NUM_SENSORS * 2).split(" ");
-			if (tmpData.length < 3) {
+			String dataString = serial.readUDAR();
+			String[] dataArray = dataString.split(" ");
+			if (dataArray.length < 3) {
 				logger.w("update", "Not enough data points");
 			}
 			for (int i = 0; i < NUM_SENSORS; i++) {
-				data[i] = Integer.parseInt(tmpData[i]);
+				data[i] = Integer.parseInt(dataArray[i]);
 			}
 		}
 	}

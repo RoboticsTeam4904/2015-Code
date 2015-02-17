@@ -5,7 +5,7 @@ import org.usfirst.frc4904.robot.Updatable;
 import org.usfirst.frc4904.robot.input.SuperSerial;
 
 public class Lights implements Updatable {
-	protected EasyLightStep[] steps;
+	protected LightStep[] steps;
 	int currentStepIndex = 0;
 	public boolean disabled = false;
 	protected int iter;
@@ -13,7 +13,7 @@ public class Lights implements Updatable {
 	public byte[] ledData = new byte[ledCount * 3]; // length of 209 with R,G,B for each
 	private SuperSerial serial;
 	
-	private void init(EasyLightStep[] steps, SuperSerial serial) {
+	private void init(LightStep[] steps, SuperSerial serial) {
 		this.steps = steps;
 		this.serial = serial;
 		for (int i = ledData.length; i >= 0; i--) {
@@ -21,7 +21,7 @@ public class Lights implements Updatable {
 		}
 	}
 	
-	public Lights(EasyLightStep[] steps, boolean infinite, SuperSerial serial) {
+	public Lights(LightStep[] steps, boolean infinite, SuperSerial serial) {
 		init(steps, serial);
 		if (infinite) {
 			this.iter = -1;
@@ -30,7 +30,7 @@ public class Lights implements Updatable {
 		}
 	}
 	
-	public Lights(EasyLightStep[] steps, int iterations, SuperSerial serial) {
+	public Lights(LightStep[] steps, int iterations, SuperSerial serial) {
 		init(steps, serial);
 		this.iter = Math.abs(iterations); // prevent infinite loops from this constructor (on principle)
 	}
@@ -40,7 +40,7 @@ public class Lights implements Updatable {
 			return;
 		}
 		if (currentStepIndex < steps.length) {
-			EasyLightStep currentStep = steps[currentStepIndex];
+			LightStep currentStep = steps[currentStepIndex];
 			boolean stepCompleted = currentStep.run();
 			byte[] desiredLedData = currentStep.getLedData();
 			serial.setLeds(desiredLedData);

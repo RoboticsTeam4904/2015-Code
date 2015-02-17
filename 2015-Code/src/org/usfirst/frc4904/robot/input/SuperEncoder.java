@@ -35,9 +35,8 @@ public class SuperEncoder {
 		if (port.availableEncoderData(channel) < 4) {
 			return 0;
 		}
-		String toRecieve;
-		toRecieve = port.readEncoder(this.channel, 4);
-		int value = Integer.parseInt(toRecieve);
+		String data = port.readEncoder(this.channel);
+		int value = Integer.parseInt(data);
 		if (value != 0) {
 			logger.v("getTicks", Integer.toString(value));
 		}
