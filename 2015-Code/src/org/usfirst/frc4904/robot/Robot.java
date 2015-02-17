@@ -36,10 +36,8 @@ public class Robot extends SampleRobot {
 	private static final int WINCH_PORT = 4;
 	private static final int GRABBER_PORT = 5;
 	// Default ports for limit switches
-	private static final int RIGHT_INNER_SWITCH_PORT = 0;
-	private static final int LEFT_INNER_SWITCH_PORT = 1;
-	private static final int RIGHT_OUTER_SWITCH_PORT = 2;
-	private static final int LEFT_OUTER_SWITCH_PORT = 3;
+	private static final int RIGHT_OUTER_SWITCH_PORT = 0;
+	private static final int LEFT_OUTER_SWITCH_PORT = 1;
 	// Various I2C ports
 	private static final int FRONT_LEFT_ENCODER_I2C_PORT = 10;
 	private static final int FRONT_RIGHT_ENCODER_I2C_PORT = 11;
@@ -60,7 +58,7 @@ public class Robot extends SampleRobot {
 	private final UDAR udar; // the UDAR (ultrasonic detection and ranging)
 	private final IMU imu;
 	private final LIDAR lidar;
-	private final DigitalInput limitSwitches[] = new DigitalInput[4];
+	private final DigitalInput limitSwitches[] = new DigitalInput[2];
 	private final Camera camera;
 	// private final DemoLightSequence lightSequence;
 	private final SuperEncoder frontLeftEncoder;
@@ -110,8 +108,6 @@ public class Robot extends SampleRobot {
 		// Initialize serial interface
 		serial = new MPUSerial();
 		// Initialize sensors
-		limitSwitches[Grabber.RIGHT_INNER_SWITCH] = new DigitalInput(RIGHT_INNER_SWITCH_PORT);
-		limitSwitches[Grabber.LEFT_INNER_SWITCH] = new DigitalInput(LEFT_INNER_SWITCH_PORT);
 		limitSwitches[Grabber.RIGHT_OUTER_SWITCH] = new DigitalInput(RIGHT_OUTER_SWITCH_PORT);
 		limitSwitches[Grabber.LEFT_OUTER_SWITCH] = new DigitalInput(LEFT_OUTER_SWITCH_PORT);
 		// Initialize Encoders

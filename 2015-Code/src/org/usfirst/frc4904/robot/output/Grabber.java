@@ -9,10 +9,8 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Talon;
 
 public class Grabber extends Talon implements Disablable, Updatable {
-	public static final int RIGHT_INNER_SWITCH = 0;
-	public static final int LEFT_INNER_SWITCH = 1;
-	public static final int RIGHT_OUTER_SWITCH = 2;
-	public static final int LEFT_OUTER_SWITCH = 3;
+	public static final int RIGHT_OUTER_SWITCH = 0;
+	public static final int LEFT_OUTER_SWITCH = 1;
 	public static final int PDP_PORT = 1;
 	private static final double MAX_AMPS = 4; // Tune this value
 	private final DigitalInput[] limitSwitches;
@@ -87,16 +85,6 @@ public class Grabber extends Talon implements Disablable, Updatable {
 				if (!limitSwitches[LEFT_OUTER_SWITCH].get()) {
 					logger.v("checkLimitSwitches", "Left outer switch");
 					grabberState = GrabberState.OPEN; // Don't go too far
-				}
-				return;
-			case CLOSING:
-				if (!limitSwitches[RIGHT_INNER_SWITCH].get()) {
-					logger.v("checkLimitSwitches", "Right inner switch");
-					grabberState = GrabberState.CLOSED;
-				}
-				if (!limitSwitches[LEFT_INNER_SWITCH].get()) {
-					logger.v("checkLimitSwitches", "Left inner switch");
-					grabberState = GrabberState.CLOSED;
 				}
 				return;
 			default:
