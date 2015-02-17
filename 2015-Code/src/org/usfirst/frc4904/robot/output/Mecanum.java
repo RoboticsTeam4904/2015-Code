@@ -58,7 +58,7 @@ public class Mecanum implements Updatable {
 	public synchronized void update() {
 		double turnSpeed = imu.readRate()[0];
 		double setSpeed = Math.sqrt(desiredXSpeed * desiredXSpeed + desiredYSpeed * desiredYSpeed);
-		double setAngle = Math.atan2(desiredYSpeed, desiredXSpeed);
+		double setAngle = Math.atan2(desiredXSpeed, desiredYSpeed);
 		double setTurnSpeed = desiredTurnSpeed;
 		// setTurnSpeed = turnSpeedPID.calculate(setTurnSpeed, turnSpeed);
 		move(setSpeed, setAngle, setTurnSpeed, absolute); // This system allows for different updating times and rates

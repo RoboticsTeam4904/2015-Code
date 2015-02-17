@@ -39,6 +39,7 @@ public class AutonomousManager {
 	}
 	
 	public Autonomous getAutonomous() {
+		System.out.println("Getting auton");
 		int autoMode = (int) SmartDashboard.getNumber("Autonomous", AUTO_DEFAULT);
 		if (autoMode > 0) {
 			autoMode = 0;

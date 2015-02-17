@@ -195,7 +195,7 @@ public class Robot extends SampleRobot {
 		// always slow updates
 		new Updater(state, alwaysUpdateSlow, slowUpdatePeriod).start();
 		// These should have fast updates
-		new Updater(state, new Updatable[] {driver, operator, mecanumDrive, lidar, frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel, grabber, winch}, fastUpdatePeriod).start();
+		new Updater(state, new Updatable[] {autonomous, driver, operator, mecanumDrive, lidar, frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel, grabber, winch}, fastUpdatePeriod).start();
 		while (getRobotState() == state) {
 			Timer.delay(0.01);
 		}
