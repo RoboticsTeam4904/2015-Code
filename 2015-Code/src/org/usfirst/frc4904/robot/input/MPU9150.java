@@ -1,6 +1,7 @@
 package org.usfirst.frc4904.robot.input;
 
 
+import java.util.Arrays;
 import org.usfirst.frc4904.robot.LogKitten;
 import org.usfirst.frc4904.robot.Updatable;
 
@@ -14,10 +15,8 @@ public class MPU9150 implements Updatable {
 		this.serial = serial;
 		logger = new LogKitten("MPU9150", LogKitten.LEVEL_VERBOSE, LogKitten.LEVEL_VERBOSE);
 		angles = new double[3];
+		Arrays.fill(angles, (double) 0);
 		q = new double[4];
-		for (int i = 0; i < 3; i++) {
-			angles[i] = 0;
-		}
 	}
 	
 	public void init() {}
