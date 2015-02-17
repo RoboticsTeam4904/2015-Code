@@ -256,11 +256,10 @@ public class Robot extends SampleRobot {
 		new Updater(state, alwaysUpdateSlow, slowUpdatePeriod).start();
 		new Updater(state, new Updatable[] {winch}, fastUpdatePeriod).start();
 		while (getRobotState() == state) {
-			if (winch.getHeight() < 10) {
-				winch.setHeight(1);
-			} else {
-				winch.setHeight(-1);
-			}
+			winch.setHeight(8);
+			winch.trainPID();
+			Timer.delay(5);
+			winch.setHeight(4);
 			winch.trainPID();
 			Timer.delay(5);
 		}
