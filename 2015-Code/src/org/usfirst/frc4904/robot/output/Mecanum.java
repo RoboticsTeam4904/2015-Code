@@ -12,8 +12,6 @@ public class Mecanum implements Updatable {
 	private volatile double desiredXSpeed;
 	private volatile double desiredYSpeed;
 	private volatile double desiredTurnSpeed;
-	private final PID speedPID;
-	private final PID anglePID;
 	private final PID turnSpeedPID;
 	private volatile boolean absolute;
 	private final IMU imu;
@@ -25,8 +23,6 @@ public class Mecanum implements Updatable {
 		this.backLeftWheel = backLeftWheel;
 		this.backRightWheel = backRightWheel;
 		this.imu = imu;
-		this.speedPID = new PID(0.1, 0.1, 0.1);
-		this.anglePID = new PID(0.1, 0.1, 0.1);
 		this.turnSpeedPID = new PID(0.1, 0.1, 0.1);
 	}
 	
@@ -37,7 +33,7 @@ public class Mecanum implements Updatable {
 		// @param absolute boolean specifying whether to move relative to the robot or absolutely (relative to the compass)
 		double workingAngle;
 		if (absolute) {
-			workingAngle = (desiredAngle - imu.getAngle()) % (Math.PI * 2);
+			workingAngle = (desiredAngle - imu.turnAngle()) % (Math.PI * 2);
 		} else {
 			workingAngle = desiredAngle;
 		}
@@ -60,13 +56,11 @@ public class Mecanum implements Updatable {
 	}
 	
 	public synchronized void update() {
-		double[] movement = imu.getMovement();
+		double turnSpeed = imu.readRate()[0];
 		double setSpeed = Math.sqrt(desiredXSpeed * desiredXSpeed + desiredYSpeed * desiredYSpeed);
 		double setAngle = Math.atan2(desiredYSpeed, desiredXSpeed);
 		double setTurnSpeed = desiredTurnSpeed;
-		// setSpeed = speedPID.calculate(setSpeed, movement[0]);
-		// setAngle = anglePID.calculate(setAngle, movement[1]);
-		// setTurnSpeed = turnSpeedPID.calculate(setTurnSpeed, movement[2]);
+		// setTurnSpeed = turnSpeedPID.calculate(setTurnSpeed, turnSpeed);
 		move(setSpeed, setAngle, setTurnSpeed, absolute); // This system allows for different updating times and rates
 	}
 	

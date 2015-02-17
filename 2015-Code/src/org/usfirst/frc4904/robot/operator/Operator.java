@@ -1,6 +1,9 @@
-package org.usfirst.frc4904.robot;
+package org.usfirst.frc4904.robot.operator;
 
 
+import org.usfirst.frc4904.robot.AutoAlign;
+import org.usfirst.frc4904.robot.Disablable;
+import org.usfirst.frc4904.robot.Updatable;
 import org.usfirst.frc4904.robot.output.Grabber;
 import org.usfirst.frc4904.robot.output.Winch;
 import org.usfirst.frc4904.robot.output.Grabber.GrabberState;

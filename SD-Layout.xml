@@ -1,66 +1,68 @@
 <xml version="1.0">
 <dashboard>
-	<!-- PDP Monitoring -->
-	<widget field="PDP Temperature: " type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="0" y="20"/>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.ConnectionIndicator">
+		<location x="1309" y="0"/>
+		<width>14</width>
+		<height>414</height>
+		<property name="Graphics" value="Simple"/>
+	</static-widget>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.ConnectionIndicator">
+		<location x="790" y="0"/>
+		<width>520</width>
+		<height>13</height>
+		<property name="Graphics" value="Simple"/>
+	</static-widget>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.ConnectionIndicator">
+		<location x="779" y="0"/>
+		<width>12</width>
+		<height>414</height>
+		<property name="Graphics" value="Simple"/>
+	</static-widget>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.ConnectionIndicator">
+		<location x="791" y="402"/>
+		<width>522</width>
+		<height>12</height>
+		<property name="Graphics" value="Simple"/>
+	</static-widget>
+	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.VideoStreamViewerExtension">
+		<location x="791" y="14"/>
+		<width>519</width>
+		<height>390</height>
+		<property name="Camera IP Address" value="169.254.0.103"/>
+	</static-widget>
+	<widget field="PDP Temperature: " type="Number" class="edu.wpi.first.smartdashboard.gui.elements.LinePlot">
+		<location x="360" y="130"/>
+		<width>360</width>
+		<height>275</height>
+	</widget>
+	<widget field="PDP Voltage" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.LinePlot">
+		<location x="0" y="130"/>
+		<width>360</width>
+		<height>275</height>
 	</widget>
 	<widget field="Mode" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="135" y="65"/>
-	</widget>
-	<!-- Special Modes -->
-	<widget field="PDP Voltage" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="0" y="0"/>
+		<location x="260" y="-1"/>
 	</widget>
 	<widget field="UseMode" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="120" y="40"/>
+		<location x="120" y="0"/>
 	</widget>
-	<!-- Driver, Operator, Autonomous settings -->
 	<widget field="Driver" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="0" y="4"/>
+		<location x="0" y="0"/>
 	</widget>
 	<widget field="Operator" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="0" y="65"/>
+		<location x="0" y="20"/>
 	</widget>
 	<widget field="Autonomous" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="0" y="85"/>
+		<location x="0" y="40"/>
 	</widget>
-	<!-- Camera -->
-	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.WebcamViewerExtension">
-		<location x="795" y="5"/>
-		<width>550</width>
-		<height>410</height>
-	</static-widget>
-	<!-- 4904 -->
-	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.ConnectionIndicator">
-		<location x="0" y="500">
-		<width>500</width>
-		<height>200</height>
-	</static-widget>
-	<!-- 4 -->
-	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.ConnectionIndicator">
-		<location x="10" y="510">
-		<width>10</width>
-		<height>40</height>
-	</static-widget>
-	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.ConnectionIndicator">
-		<location x="10" y="550">
-		<width>40</width>
-		<height>10</height>
-	</static-widget>
-	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.ConnectionIndicator">
-		<location x="50" y="510">
-		<width>10</width>
-		<height>90</height>
-	</static-widget>
 </dashboard>
 <live-window>
 </live-window>
 	<hidden field="PDP Port 4 Current"/>
 	<hidden field="PDP Port 13 Current"/>
 	<hidden field="PDP Voltage: "/>
-	<hidden field="PDP Port 5 Current"/>
 	<hidden field="PDP Port 15 Current"/>
-	<hidden field="TrainPID"/>
+	<hidden field="PDP Port 5 Current"/>
 	<hidden field="PDP Port 7 Current"/>
 	<hidden field="PDP Port 1 Current"/>
 	<hidden field="PDP Port 0 Current"/>

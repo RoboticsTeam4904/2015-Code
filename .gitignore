@@ -2,7 +2,9 @@
 2015-Code/dist/*
 2015-Code/bin/usfirst/frc/team4904/*
 2015-Code/build/usfirst/frc/team4904/*
+2015-Code/build/jars/*.jar
 2015-Code/.settings/*
+2015-Code/sysProps.xml
 src/*
 bin/*
 .metadata/*

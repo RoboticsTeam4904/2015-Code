@@ -1,7 +1,6 @@
 package org.usfirst.frc4904.robot.input;
 
 
-import java.math.BigInteger;
 import org.usfirst.frc4904.robot.LogKitten;
 
 public class SuperEncoder {
@@ -15,7 +14,7 @@ public class SuperEncoder {
 		this.port = port;
 		this.channel = channel;
 		previousNumTicks = getTicks();
-		logger = new LogKitten("SuperEncoder" + Integer.toString(channel), LogKitten.LEVEL_DEBUG, LogKitten.LEVEL_VERBOSE);
+		logger = new LogKitten("SuperEncoder" + Integer.toString(channel), LogKitten.LEVEL_DEBUG, LogKitten.LEVEL_FATAL);
 	}
 	
 	public double currentEncoderSpeed() { // Should return ticks per second
@@ -33,12 +32,15 @@ public class SuperEncoder {
 	}
 	
 	public int getTicks() {
-		if (port.availableEncoderBytes(channel) < 4) {
+		if (port.availableEncoderData(channel) < 4) {
 			return 0;
 		}
-		byte[] toRecieve = new byte[4];
+		String toRecieve;
 		toRecieve = port.readEncoder(this.channel, 4);
-		int value = new BigInteger(toRecieve).intValue();
+		int value = Integer.parseInt(toRecieve);
+		if (value != 0) {
+			logger.v("getTicks", Integer.toString(value));
+		}
 		return value;
 	}
 	

@@ -2,23 +2,31 @@ package org.usfirst.frc4904.robot.input;
 
 
 // We are combining multiple serial streams, this processes those.
-import java.util.ArrayList;
+import java.nio.ByteBuffer;
 import org.usfirst.frc4904.robot.Updatable;
 import edu.wpi.first.wpilibj.SerialPort;
 
 public class SuperSerial implements Updatable {
 	private final SerialPort port;
-	ArrayList<Byte> lidarData = new ArrayList<Byte>();
-	ArrayList<Byte> udarData = new ArrayList<Byte>();
-	ArrayList<Byte> imuData = new ArrayList<Byte>();
-	ArrayList<Byte> encoderData0 = new ArrayList<Byte>();
-	ArrayList<Byte> encoderData1 = new ArrayList<Byte>();
-	ArrayList<Byte> encoderData2 = new ArrayList<Byte>();
-	ArrayList<Byte> encoderData3 = new ArrayList<Byte>();
-	ArrayList<Byte> encoderData4 = new ArrayList<Byte>();
+	private volatile String lidarData;
+	private volatile String udarData;
+	private volatile String imuData;
+	private volatile String[] encoderData = new String[5];
+	private static final int NUM_LEDS = 209;
+	private volatile byte[] ledData = new byte[1 + NUM_LEDS * 3];
 	
 	public SuperSerial() {
 		port = new SerialPort(230400, SerialPort.Port.kMXP);
+		ledData[0] = 'u';
+		for (int i = 1; i < 1 + NUM_LEDS * 3; i++) {
+			ledData[i] = 0x00;
+		}
+		for (int i = 0; i < 5; i++) {
+			encoderData[i] = "";
+		}
+		lidarData = "";
+		udarData = "";
+		imuData = "";
 	}
 	
 	public void update() {
@@ -31,127 +39,88 @@ public class SuperSerial implements Updatable {
 		for (String line : lines) {
 			if (line.startsWith("LIDAR")) {
 				line = line.substring(5);
-				for (Byte aByte : line.getBytes()) {
-					lidarData.add(aByte);
-				}
+				lidarData += "#" + line + "$";
 			} else if (line.startsWith("UDAR")) {
 				line = line.substring(4);
-				for (Byte aByte : line.getBytes()) {
-					udarData.add(aByte);
-				}
+				udarData += "#" + line + "$";
 			} else if (line.startsWith("IMU")) {
 				line = line.substring(3);
-				for (Byte aByte : line.getBytes()) {
-					imuData.add(aByte);
-				}
+				imuData += "#" + line + "$";
 			} else if (line.startsWith("E0")) {
 				line = line.substring(2);
-				for (Byte aByte : line.getBytes()) {
-					encoderData0.add(aByte);
-				}
+				encoderData[0] += "#" + line + "$";
 			} else if (line.startsWith("E1")) {
 				line = line.substring(2);
-				for (Byte aByte : line.getBytes()) {
-					encoderData1.add(aByte);
-				}
+				encoderData[1] += "#" + line + "$";
 			} else if (line.startsWith("E2")) {
 				line = line.substring(2);
-				for (Byte aByte : line.getBytes()) {
-					encoderData2.add(aByte);
-				}
+				encoderData[2] += "#" + line + "$";
 			} else if (line.startsWith("E3")) {
 				line = line.substring(2);
-				for (Byte aByte : line.getBytes()) {
-					encoderData3.add(aByte);
-				}
+				encoderData[3] += "#" + line + "$";
 			} else if (line.startsWith("E4")) {
 				line = line.substring(2);
-				for (Byte aByte : line.getBytes()) {
-					encoderData4.add(aByte);
-				}
+				encoderData[4] += "#" + line + "$";
 			}
 		}
+		port.write(ledData, 1 + NUM_LEDS * 3);
 	}
 	
-	public byte[] readLIDAR(int bytes) {
-		byte[] wantedData = new byte[bytes];
-		for (int i = 0; i < bytes; i++) {
-			wantedData[i] = lidarData.get(0);
-			lidarData.remove(0);
+	public String readLIDAR(int length) {
+		String data = new String();
+		data = lidarData.substring(0, length);
+		lidarData = lidarData.substring(length);
+		return data;
+	}
+	
+	public int availableLIDARData() {
+		return lidarData.length();
+	}
+	
+	public String readUDAR(int length) {
+		String data = new String();
+		data = udarData.substring(0, length);
+		lidarData = udarData.substring(length);
+		return data;
+	}
+	
+	public int availableUDARData() {
+		return udarData.length();
+	}
+	
+	public String readEncoder(int encoder, int length) {
+		String data = new String();
+		data = encoderData[encoder].substring(0, length);
+		lidarData = encoderData[encoder].substring(length);
+		return data;
+	}
+	
+	public int availableEncoderData(int channel) {
+		return encoderData[channel].length();
+	}
+	
+	public String readIMU(int length) {
+		String data = new String();
+		data = imuData.substring(0, length);
+		lidarData = imuData.substring(length);
+		return data;
+	}
+	
+	public int availableIMUData() {
+		return imuData.length();
+	}
+	
+	public void setLed(int ledNum, int R, int G, int B) {
+		ledData[1 + ledNum * 3] = ByteBuffer.allocate(4).putInt(R).array()[0];
+		ledData[1 + ledNum * 3 + 1] = ByteBuffer.allocate(4).putInt(G).array()[0];
+		ledData[1 + ledNum * 3 + 2] = ByteBuffer.allocate(4).putInt(B).array()[0];
+	}
+	
+	public void setLeds(int[] R, int[] G, int[] B) {
+		for (int i = 0; i < NUM_LEDS; i++) {
+			ledData[1 + i] = ByteBuffer.allocate(4).putInt(R[i]).array()[0];
+			ledData[1 + i + 1] = ByteBuffer.allocate(4).putInt(G[i]).array()[0];
+			ledData[1 + i + 2] = ByteBuffer.allocate(4).putInt(B[i]).array()[0];
 		}
-		return wantedData;
-	}
-	
-	public int availableLIDARBytes() {
-		return lidarData.size();
-	}
-	
-	public byte[] readUDAR(int bytes) {
-		byte[] wantedData = new byte[bytes];
-		for (int i = 0; i < bytes; i++) {
-			wantedData[i] = udarData.get(0);
-			udarData.remove(0);
-		}
-		return wantedData;
-	}
-	
-	public int availableUDARBytes() {
-		return udarData.size();
-	}
-	
-	public byte[] readEncoder(int encoder, int bytes) {
-		byte[] wantedData = new byte[bytes];
-		for (int i = 0; i < bytes; i++) {
-			switch (encoder) {
-				case 0:
-					wantedData[i] = encoderData0.get(0);
-					encoderData0.remove(0);
-				case 1:
-					wantedData[i] = encoderData1.get(0);
-					encoderData1.remove(0);
-				case 2:
-					wantedData[i] = encoderData2.get(0);
-					encoderData2.remove(0);
-				case 3:
-					wantedData[i] = encoderData3.get(0);
-					encoderData3.remove(0);
-				case 4:
-					wantedData[i] = encoderData4.get(0);
-					encoderData4.remove(0);
-				default:
-					wantedData[i] = 0x00;
-			}
-		}
-		return wantedData;
-	}
-	
-	public int availableEncoderBytes(int channel) {
-		switch (channel) {
-			case 0:
-				return encoderData0.size();
-			case 1:
-				return encoderData1.size();
-			case 2:
-				return encoderData2.size();
-			case 3:
-				return encoderData3.size();
-			case 4:
-				return encoderData4.size();
-			default:
-				return 0;
-		}
-	}
-	
-	public byte[] readIMU(int bytes) {
-		byte[] wantedData = new byte[bytes];
-		for (int i = 0; i < bytes; i++) {
-			wantedData[i] = imuData.get(0);
-			imuData.remove(0);
-		}
-		return wantedData;
-	}
-	
-	public int availableIMUBytes() {
-		return imuData.size();
 	}
 }
