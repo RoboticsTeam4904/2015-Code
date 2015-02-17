@@ -1,7 +1,8 @@
-package org.usfirst.frc4904.robot;
+package org.usfirst.frc4904.robot.driver;
 
 
-import org.usfirst.frc4904.robot.driver.DriverNathan;
+import org.usfirst.frc4904.robot.AutoAlign;
+import org.usfirst.frc4904.robot.LogKitten;
 import org.usfirst.frc4904.robot.input.XboxController;
 import org.usfirst.frc4904.robot.output.Mecanum;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;

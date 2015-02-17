@@ -1,6 +1,10 @@
 package org.usfirst.frc4904.robot;
 
 
+import org.usfirst.frc4904.robot.autonomous.Autonomous;
+import org.usfirst.frc4904.robot.autonomous.AutonomousManager;
+import org.usfirst.frc4904.robot.driver.Driver;
+import org.usfirst.frc4904.robot.driver.DriverManager;
 import org.usfirst.frc4904.robot.input.Camera;
 import org.usfirst.frc4904.robot.input.IMU;
 import org.usfirst.frc4904.robot.input.LIDAR;
@@ -11,6 +15,8 @@ import org.usfirst.frc4904.robot.input.SuperSerial;
 import org.usfirst.frc4904.robot.input.UDAR;
 import org.usfirst.frc4904.robot.input.XboxController;
 import org.usfirst.frc4904.robot.lights.LightSet;
+import org.usfirst.frc4904.robot.operator.Operator;
+import org.usfirst.frc4904.robot.operator.OperatorManager;
 import org.usfirst.frc4904.robot.output.DampenedMotor;
 import org.usfirst.frc4904.robot.output.Grabber;
 import org.usfirst.frc4904.robot.output.Mecanum;
@@ -98,7 +104,7 @@ public class Robot extends SampleRobot {
 	public Robot() {
 		System.out.println("*** CONSTRUCTING ROBOT ***");
 		// Initializing logging
-		logger = new LogKitten("Robot", LogKitten.LEVEL_VERBOSE, LogKitten.LEVEL_VERBOSE);
+		logger = new LogKitten("Robot", LogKitten.LEVEL_VERBOSE, LogKitten.LEVEL_FATAL);
 		logger.v("Constructing", "Constructing");
 		// Initialize serial interface
 		serial = new SuperSerial();
@@ -139,7 +145,7 @@ public class Robot extends SampleRobot {
 		// Initialize managers
 		driverManager = new DriverManager(mecanumDrive, xboxController, align);
 		operatorManager = new OperatorManager(stick, winch, align, grabber);
-		autonomousManager = new AutonomousManager(mecanumDrive, winch, grabber, align, camera, lidar);
+		autonomousManager = new AutonomousManager(mecanumDrive, winch, grabber, align, camera, lidar, imu);
 		modeManager = new ModeManager();
 		// Drivers, operators, autonomous
 		autonomous = autonomousManager.getAutonomous();

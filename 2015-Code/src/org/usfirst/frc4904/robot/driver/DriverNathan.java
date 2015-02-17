@@ -2,7 +2,6 @@ package org.usfirst.frc4904.robot.driver;
 
 
 import org.usfirst.frc4904.robot.AutoAlign;
-import org.usfirst.frc4904.robot.Driver;
 import org.usfirst.frc4904.robot.LogKitten;
 import org.usfirst.frc4904.robot.input.XboxController;
 import org.usfirst.frc4904.robot.output.Mecanum;
@@ -14,7 +13,7 @@ public class DriverNathan extends Driver {
 	public DriverNathan(Mecanum mecanumDrive, XboxController xboxController, AutoAlign align) {
 		super(mecanumDrive, align);
 		this.xboxController = xboxController;
-		logger = new LogKitten("DriverNathan", LogKitten.LEVEL_VERBOSE, LogKitten.LEVEL_WARN);
+		logger = new LogKitten("DriverNathan", LogKitten.LEVEL_VERBOSE, LogKitten.LEVEL_FATAL);
 	}
 	
 	public synchronized void update() {

@@ -13,11 +13,11 @@ public class UDAR implements Updatable {
 	public UDAR(SuperSerial serial) {
 		this.serial = serial;
 		data = new double[3];
-		logger = new LogKitten("UDAR", LogKitten.LEVEL_VERBOSE, LogKitten.LEVEL_VERBOSE);
+		logger = new LogKitten("UDAR", LogKitten.LEVEL_VERBOSE, LogKitten.LEVEL_FATAL);
 	}
 	
 	private int bytesCurrentlyAvailable() {
-		return serial.availableUDARBytes();
+		return serial.availableUDARData();
 	}
 	
 	public double[] read() {

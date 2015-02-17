@@ -1,62 +1,73 @@
 package org.usfirst.frc4904.robot.input;
 
 
+import java.util.Arrays;
 import org.usfirst.frc4904.robot.LogKitten;
 import org.usfirst.frc4904.robot.Updatable;
 
 public class IMU extends MPU9150 implements Updatable {
-	private long updates = 0;
 	private final LogKitten logger;
-	private double currentSpeed;
-	private double currentAngle;
-	private double currentTurnSpeed;
+	private double[] angles; // Angle 0 is perpendicular (yaw), Angle 1 is lateral (pitch), Angle 2 is longitudinal (roll)
+	private double[] lastAngles;
+	private double[] rate; // Same as above
 	private double zeroAngle;
+	private double lastTime;
 	
 	public IMU(SuperSerial serial) {
 		super(serial);
+		logger = new LogKitten("IMU", LogKitten.LEVEL_DEBUG, LogKitten.LEVEL_FATAL);
+		angles = new double[3];
+		lastAngles = new double[3];
+		rate = new double[3];
+		for (int i = 0; i < 3; i++) {
+			angles[i] = 0;
+			lastAngles[i] = 0;
+		}
+		lastTime = getTime();
 		zero();
-		logger = new LogKitten("IMU", LogKitten.LEVEL_DEBUG);
-		currentSpeed = 0;
-		currentAngle = 0;
-		currentTurnSpeed = 0;
 	}
 	
 	public byte test() {
 		return super.test();
 	}
 	
-	public double getAngle() {
-		// TODO return current robot angle relative to beginning of match (0 - 2pi)
-		return 0D;
+	public double turnAngle() {
+		return angles[0];
 	}
 	
-	public void zero() {
+	public double[] readRate() {
+		return rate;
+	}
+	
+	private void zero() {
 		// TODO set current orientation as "forward"
-		zeroAngle = super.read()[2];
 		update();
-		updates = 0;
+		zeroAngle = angles[0];
 	}
 	
 	public synchronized void update() {
+		double time = getTime();
 		super.update();
 		readData();
-		updateKalman();
-	}
-	
-	public double[] getMovement() {
-		return new double[] {currentSpeed, currentAngle, currentTurnSpeed};
+		for (int i = 0; i < 3; i++) {
+			rate[i] = (angles[i] - lastAngles[i]) / (time - lastTime);
+		}
+		lastTime = time;
+		lastAngles = angles;
 	}
 	
 	private void readData() {
-		updates++;
-		// TODO only read data if enough data is available, otherwise return so
-		// that this function is always fast
-		double[] rawData = super.read();
-		if (updates % 30 == 0) {
-			// logger.d("readData", updates / (Robot.time() - startTime) + " hz ");
-			// logger.d("readData", Arrays.toString(rawData));
-		}
+		angles = super.read();
+		logger.d("readData", Arrays.toString(angles));
 	}
 	
-	private void updateKalman() {}
+	private double getTime() {
+		return System.currentTimeMillis();
+	}
+	
+	public boolean isGoingOverScoringPlatform() {
+		double[] eulers = read();
+		double angle = eulers[1];
+		return angle > 5 * Math.PI / 180; // TODO 5 degrees is ballpark - measure
+	}
 }

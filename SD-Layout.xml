@@ -31,13 +31,13 @@
 		<property name="Camera IP Address" value="169.254.0.103"/>
 	</static-widget>
 	<widget field="PDP Temperature: " type="Number" class="edu.wpi.first.smartdashboard.gui.elements.LinePlot">
-		<location x="380" y="130"/>
-		<width>375</width>
+		<location x="360" y="130"/>
+		<width>360</width>
 		<height>275</height>
 	</widget>
 	<widget field="PDP Voltage" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.LinePlot">
 		<location x="0" y="130"/>
-		<width>375</width>
+		<width>360</width>
 		<height>275</height>
 	</widget>
 	<widget field="Mode" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">

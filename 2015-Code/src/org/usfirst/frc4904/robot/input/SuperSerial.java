@@ -60,7 +60,7 @@ public class SuperSerial implements Updatable {
 		return data;
 	}
 	
-	public int availableLIDARBytes() {
+	public int availableLIDARData() {
 		return lidarData.length();
 	}
 	
@@ -71,7 +71,7 @@ public class SuperSerial implements Updatable {
 		return data;
 	}
 	
-	public int availableUDARBytes() {
+	public int availableUDARData() {
 		return udarData.length();
 	}
 	
@@ -82,7 +82,7 @@ public class SuperSerial implements Updatable {
 		return data;
 	}
 	
-	public int availableEncoderBytes(int channel) {
+	public int availableEncoderData(int channel) {
 		return encoderData[channel].length();
 	}
 	
@@ -93,7 +93,7 @@ public class SuperSerial implements Updatable {
 		return data;
 	}
 	
-	public int availableIMUBytes() {
+	public int availableIMUData() {
 		return imuData.length();
 	}
 	

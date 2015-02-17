@@ -2,8 +2,7 @@ package org.usfirst.frc4904.robot.driver;
 
 
 import org.usfirst.frc4904.robot.AutoAlign;
-import org.usfirst.frc4904.robot.Autonomous;
-import org.usfirst.frc4904.robot.Driver;
+import org.usfirst.frc4904.robot.autonomous.Autonomous;
 import org.usfirst.frc4904.robot.output.Mecanum;
 
 public class AutoDriver extends Driver {
