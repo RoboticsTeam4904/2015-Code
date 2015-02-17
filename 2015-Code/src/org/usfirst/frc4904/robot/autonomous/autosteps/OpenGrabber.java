@@ -11,6 +11,8 @@ public class OpenGrabber extends Step {
 		this.align = align;
 	}
 	
+	public void init() {}
+	
 	public boolean run() {
 		if (align.isGrabberEmpty()) {
 			return true;

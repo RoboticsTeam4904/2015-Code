@@ -8,6 +8,8 @@ public class LiftTote extends Step {
 		desiredWinchHeight = stackHeight;
 	}
 	
+	public void init() {}
+	
 	public boolean run() {
 		return currentWinchHeight == desiredWinchHeight;
 	}

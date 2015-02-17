@@ -10,7 +10,7 @@ public abstract class Step {
 	
 	public abstract boolean run();
 	
-	public void init() {}
+	public abstract void init();
 	
 	public double[] getDesiredMovement() {
 		return new double[] {desiredXMovement, desiredYMovement, desiredTurnSpeed};
