@@ -36,7 +36,7 @@ public class EasyLightStep {
 		}
 	}
 	protected RGBRange[] ranges;
-	protected final RGBRange resetRange = new RGBRange(0, 0, 0, 0, ledCount);
+	protected final RGBRange resetRange = new RGBRange(0, 0, 0, 0, ledCount - 1);
 	
 	private void init(long durationMillis) {
 		completeTime = System.currentTimeMillis() + durationMillis;
@@ -52,7 +52,7 @@ public class EasyLightStep {
 	
 	public EasyLightStep(int r, int g, int b, long durationMillis) {
 		init(durationMillis);
-		this.ranges[0] = new RGBRange(r, g, b, 0, ledCount);
+		this.ranges[0] = new RGBRange(r, g, b, 0, ledCount - 1);
 	}
 	
 	public void applyRanges(RGBRange[] ranges) {
@@ -63,7 +63,7 @@ public class EasyLightStep {
 	}
 	
 	public void applyRange(RGBRange range) {
-		if (range.startIndex < 0 || range.endIndex > ledCount) {
+		if (range.startIndex > 0 || range.endIndex < ledCount) {
 			return; // if range is impossible, skip setting the LEDs
 		}
 		for (int led = range.startIndex; led < range.endIndex; led++) {
