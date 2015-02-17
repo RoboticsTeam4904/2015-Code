@@ -36,9 +36,11 @@ public class SuperSerial implements Updatable {
 				current = port.readString(1);
 				data += current;
 			}
+			logger.v("update", port.getBytesReceived() + " bytes received");
 			logger.v("update", "Got data " + data);
 			String[] lines = data.split("\n");
 			for (String line : lines) {
+				logger.v("line", line);
 				line = line.substring(0, line.length() - 1);
 				if (line.startsWith("LIDAR")) {
 					line = line.substring(5);
@@ -48,7 +50,8 @@ public class SuperSerial implements Updatable {
 					udarData += "#" + line + "$";
 				} else if (line.startsWith("IMU")) {
 					line = line.substring(3);
-					imuData += "#" + line + "$";
+					logger.v("imuData", imuData);
+					imuData = line;
 					logger.v("Update", "Added " + line + " to IMU");
 				} else if (line.startsWith("E0")) {
 					line = line.substring(2);
