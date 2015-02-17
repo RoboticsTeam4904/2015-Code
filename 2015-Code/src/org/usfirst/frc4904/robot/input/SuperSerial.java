@@ -21,8 +21,12 @@ public class SuperSerial implements Updatable {
 		for (int i = 1; i < 1 + NUM_LEDS * 3; i++) {
 			ledData[i] = 0x00;
 		}
-		for (int i = 0; i < 5; i++)
+		for (int i = 0; i < 5; i++) {
 			encoderData[i] = "";
+		}
+		lidarData = "";
+		udarData = "";
+		imuData = "";
 	}
 	
 	public void update() {
