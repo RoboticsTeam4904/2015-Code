@@ -29,7 +29,7 @@ public class SuperSerial implements Updatable {
 	public void update() {
 		int available = port.getBytesReceived();
 		logger.v("update", available + " bytes received");
-		while (port.getBytesReceived() > 100) {
+		while (port.getBytesReceived() > 50) {
 			String data = "";
 			String current = "a";
 			while (!current.matches("\n")) {
@@ -37,36 +37,10 @@ public class SuperSerial implements Updatable {
 				data += current;
 			}
 			logger.v("update", "Got data " + data);
-			String[] lines = data.split("\n");
-			for (String line : lines) {
-				line = line.substring(0, line.length() - 1);
-				if (line.startsWith("LIDAR")) {
-					line = line.substring(5);
-					lidarData += "#" + line + "$";
-				} else if (line.startsWith("UDAR")) {
-					line = line.substring(4);
-					udarData += "#" + line + "$";
-				} else if (line.startsWith("IMU")) {
-					line = line.substring(3);
-					imuData += "#" + line + "$";
-					logger.v("Update", "Added " + line + " to IMU");
-				} else if (line.startsWith("E0")) {
-					line = line.substring(2);
-					encoderData[0] += "#" + line + "$";
-				} else if (line.startsWith("E1")) {
-					line = line.substring(2);
-					encoderData[1] += "#" + line + "$";
-				} else if (line.startsWith("E2")) {
-					line = line.substring(2);
-					encoderData[2] += "#" + line + "$";
-				} else if (line.startsWith("E3")) {
-					line = line.substring(2);
-					encoderData[3] += "#" + line + "$";
-				} else if (line.startsWith("E4")) {
-					line = line.substring(2);
-					encoderData[4] += "#" + line + "$";
-				}
-			}
+			imuData = data;
+			/*
+			 * logger.v("update", port.getBytesReceived() + " bytes received"); logger.v("update", "Got data " + data); String[] lines = data.split("\n"); for (String line : lines) { logger.v("line", line); line = line.substring(0, line.length() - 1); if (line.startsWith("LIDAR")) { line = line.substring(5); lidarData += "#" + line + "$"; } else if (line.startsWith("UDAR")) { line = line.substring(4); udarData += "#" + line + "$"; } else if (line.startsWith("IMU")) { line = line.substring(3); logger.v("imuData", imuData); imuData = line; logger.v("Update", "Added " + line + " to IMU"); } else if (line.startsWith("E0")) { line = line.substring(2); encoderData[0] += "#" + line + "$"; } else if (line.startsWith("E1")) { line = line.substring(2); encoderData[1] += "#" + line + "$"; } else if (line.startsWith("E2")) { line = line.substring(2); encoderData[2] += "#" + line + "$"; } else if (line.startsWith("E3")) { line = line.substring(2); encoderData[3] += "#" + line + "$"; } else if (line.startsWith("E4")) { line = line.substring(2); encoderData[4] += "#" + line + "$"; } }
+			 */
 		}
 	}
 	
@@ -78,6 +52,7 @@ public class SuperSerial implements Updatable {
 		}
 		while (lidarData.charAt(iter) != '$') {
 			data += lidarData.charAt(iter);
+			iter++;
 		}
 		lidarData = lidarData.substring(iter, lidarData.length());
 		return data;
@@ -95,6 +70,7 @@ public class SuperSerial implements Updatable {
 		}
 		while (udarData.charAt(iter) != '$') {
 			data += udarData.charAt(iter);
+			iter++;
 		}
 		udarData = udarData.substring(iter, udarData.length());
 		return data;
@@ -112,6 +88,7 @@ public class SuperSerial implements Updatable {
 		}
 		while (encoderData[encoder].charAt(iter) != '$') {
 			data += encoderData[encoder].charAt(iter);
+			iter++;
 		}
 		encoderData[encoder] = encoderData[encoder].substring(iter, imuData.length());
 		return data;
@@ -129,6 +106,7 @@ public class SuperSerial implements Updatable {
 		}
 		while (imuData.charAt(iter) != '$') {
 			data += imuData.charAt(iter);
+			iter++;
 		}
 		imuData = imuData.substring(iter, imuData.length());
 		return data;

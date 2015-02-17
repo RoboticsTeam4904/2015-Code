@@ -46,7 +46,7 @@ public class MPU9150 implements Updatable {
 	
 	public void update() {
 		if (serial.availableIMUData() <= 10) {
-			logger.v("MPU", "data too small");
+			logger.v("MPU", "data too small : " + serial.readIMU());
 			return;
 		}
 		String data = serial.readIMU();
