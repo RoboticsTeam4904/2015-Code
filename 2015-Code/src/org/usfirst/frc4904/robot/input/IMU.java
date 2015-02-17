@@ -51,7 +51,7 @@ public class IMU extends MPU9150 {
 		}
 		lastTime = time;
 		lastAngles = angles;
-		logger.v("update", Double.toString(angles[0] * 180 / Math.PI));
+		// logger.v("update", Double.toString(angles[0] * 180 / Math.PI));
 	}
 	
 	private void readData() {
