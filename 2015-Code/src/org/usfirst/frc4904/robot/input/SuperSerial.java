@@ -9,14 +9,12 @@ import edu.wpi.first.wpilibj.SerialPort;
 
 public class SuperSerial implements Updatable {
 	private final SerialPort port;
-	private volatile ArrayList<String> udarData;
 	private volatile ArrayList<String> imuData;
 	private static final int NUM_LEDS = 209;
 	private final LogKitten logger;
 	
 	public SuperSerial() {
 		port = new SerialPort(115200, SerialPort.Port.kMXP);
-		udarData = new ArrayList<String>();
 		imuData = new ArrayList<String>();
 		logger = new LogKitten("SuperSerial", LogKitten.LEVEL_DEBUG, LogKitten.LEVEL_VERBOSE);
 	}
@@ -30,16 +28,6 @@ public class SuperSerial implements Updatable {
 		}
 		logger.v("update", "Got data " + data);
 		imuData.add(data);
-	}
-	
-	public String readUDAR() { // Reads the first available full UDAR pulse
-		String data = udarData.get(0);
-		udarData.remove(0);
-		return data;
-	}
-	
-	public int availableUDARData() {
-		return udarData.size();
 	}
 	
 	public String readIMU() { // Reads the first available full IMU pulse

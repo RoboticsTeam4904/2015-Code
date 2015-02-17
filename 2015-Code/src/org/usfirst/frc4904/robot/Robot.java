@@ -40,11 +40,13 @@ public class Robot extends SampleRobot {
 	private static final int LEFT_INNER_SWITCH_PORT = 1;
 	private static final int RIGHT_OUTER_SWITCH_PORT = 2;
 	private static final int LEFT_OUTER_SWITCH_PORT = 3;
+	// Various I2C ports
 	private static final int FRONT_LEFT_ENCODER_I2C_PORT = 10;
 	private static final int FRONT_RIGHT_ENCODER_I2C_PORT = 11;
 	private static final int BACK_LEFT_ENCODER_I2C_PORT = 12;
 	private static final int BACK_RIGHT_ENCODER_I2C_PORT = 13;
 	private static final int WINCH_ENCODER_I2C_PORT = 14;
+	private static final int UDAR_I2C_PORT = 4;
 	private static final double WINCH_P_COEFFICIENT = 0.1;
 	private static final double WINCH_I_COEFFICIENT = 0.1;
 	private static final double WINCH_D_COEFFICIENT = 0.1;
@@ -119,7 +121,7 @@ public class Robot extends SampleRobot {
 		backRightEncoder = new SuperEncoder(BACK_RIGHT_ENCODER_I2C_PORT);
 		winchEncoder = new SuperEncoder(WINCH_ENCODER_I2C_PORT);
 		imu = new IMU(serial); // Initialize IMU
-		udar = new UDAR(serial); // Initialize UDAR
+		udar = new UDAR(UDAR_I2C_PORT); // Initialize UDAR
 		lidar = new LIDAR(); // Initialize LIDAR
 		pdp = new PDP(); // Power Distribution Panel interface and logging.
 		/* Lights! */
