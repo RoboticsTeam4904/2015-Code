@@ -1,6 +1,6 @@
 
 #define I2C_SLAVE_BASE_ADDRESS 10 // the 7-bit address (remember to change this when adapting this example)
-#define ENCODER_NUM 0
+#define ENCODER_NUM 4
 #include <TinyWireS.h>
 
 
