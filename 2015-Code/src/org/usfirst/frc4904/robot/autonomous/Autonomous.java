@@ -95,6 +95,5 @@ public class Autonomous implements Updatable, Disablable {
 		desiredYMovement = 0;
 		desiredTurnSpeed = 0;
 		desiredWinchHeight = currentWinchHeight;
-		currentStep = 0;
 	}
 }
