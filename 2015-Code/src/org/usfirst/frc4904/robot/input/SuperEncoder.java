@@ -40,12 +40,8 @@ public class SuperEncoder {
 		logger.v("getTicks", "Begin i2c transaction");
 		i2c.transaction(toSend, 1, toRecieve, 4);
 		logger.v("getTicks", "End i2c transaction");
-		byte[] parsed = new byte[4];
-		parsed[0] = toRecieve[3];
-		parsed[1] = toRecieve[2];
-		parsed[2] = toRecieve[1];
-		parsed[3] = toRecieve[0];
 		int value = new BigInteger(toRecieve).intValue();
+		value = Integer.reverse(value);
 		if (value != 0) {
 			logger.v("getTicks", Integer.toString(value));
 		}

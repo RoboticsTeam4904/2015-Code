@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj.SerialPort;
 public class MPU9150 implements Updatable {
 	private final SerialPort port;
 	private volatile String imuData;
-	private static final int NUM_LEDS = 209;
+	// private static final int NUM_LEDS = 209;
 	private double[] angles;
 	double q[];
 	LogKitten logger;
@@ -18,8 +18,10 @@ public class MPU9150 implements Updatable {
 		logger = new LogKitten("MPU9150", LogKitten.LEVEL_VERBOSE, LogKitten.LEVEL_VERBOSE);
 		port = new SerialPort(115200, SerialPort.Port.kMXP);
 		port.enableTermination();
-		port.setReadBufferSize(100000);
+		port.setReadBufferSize(8192);
+		port.setWriteBufferSize(8192);
 		port.reset();
+		port.flush();
 		imuData = "";
 		angles = new double[3];
 		Arrays.fill(angles, (double) 0);
@@ -47,50 +49,54 @@ public class MPU9150 implements Updatable {
 			return Float.intBitsToFloat(intbits);
 		}
 		catch (Exception e) {
-			e.printStackTrace();
+			if (data.length() == 10) {
+				e.printStackTrace();
+			} else {
+				System.out.println("data: " + data + ", length" + data.length());
+			}
 			return 0;
 		}
 	}
 	
 	public void update() {
-		String dataString = "";
 		// String current = "a";
 		/*
-		 * while (!current.matches("\n") && port.getBytesReceived() > 10) { current = port.readString(1); dataString += current; // logger.v("adding data", dataString); }
+		 * while (!current.matches("\n") && port.getBytesReceived() > 10) { current = port.readString(1); imuData += current; // logger.v("adding data", imuData); }
 		 */
-		if (port.getBytesReceived() < 100) {
-			return;
+		while (port.getBytesReceived() > 48) {
+			System.out.println("Bytes received: " + port.getBytesReceived() + " At " + System.currentTimeMillis());
+			try {
+				imuData = new String(port.read(port.getBytesReceived()));
+			}
+			catch (Exception e) {
+				System.out.println("Error fetching serial data");
+				e.printStackTrace();
+				return;
+			}
+			// System.out.println("Got data " + imuData);
+			// ///////////////////////////////////////////////////////
+			// System.out.println("MPUInput " + imuData);
+			if (imuData.length() < 20) {
+				System.out.println("Too little data");
+				return;
+			}
+			String[] floatString = imuData.split(",");
+			if (floatString.length < 4) {
+				System.out.println("Data array too short :" + floatString.length);
+				return;
+			}
+			double q[] = new double[4];
+			q[0] = (double) parseFloat(floatString[0]);
+			q[1] = (double) parseFloat(floatString[1]);
+			q[2] = (double) parseFloat(floatString[2]);
+			q[3] = (double) parseFloat(floatString[3]);
+			angles[0] = Math.atan2(2 * q[1] * q[2] - 2 * q[0] * q[3], 2 * q[0] * q[0] + 2 * q[1] * q[1] - 1);
+			angles[1] = -1 * Math.asin(2 * q[1] * q[3] + 2 * q[0] * q[2]);
+			angles[2] = Math.atan2(2 * q[2] * q[3] - 2 * q[0] * q[1], 2 * q[0] * q[0] + 2 * q[3] * q[3] - 1);
+			System.out.println("update1 " + Double.toString(angles[0]));
+			System.out.println("update2 " + Double.toString(angles[1]));
+			System.out.println("update3 " + Double.toString(angles[2]));
 		}
-		try {
-			dataString = port.readString();
-		}
-		catch (Exception e) {
-			return;
-		}
-		logger.v("update", "Got data " + dataString);
-		imuData = dataString;
-		// ///////////////////////////////////////////////////////
-		logger.v("MPUInput", dataString);
-		if (dataString.length() < 20) {
-			logger.v("update", "Too little data");
-			return;
-		}
-		dataString = dataString.substring(3);
-		String[] floatString = dataString.split(",");
-		if (floatString.length < 4) {
-			logger.v("update", "Data array too short :" + floatString.length);
-			return;
-		}
-		double q[] = new double[4];
-		q[0] = (double) parseFloat(floatString[0]);
-		q[1] = (double) parseFloat(floatString[1]);
-		q[2] = (double) parseFloat(floatString[2]);
-		q[3] = (double) parseFloat(floatString[3]);
-		angles[0] = Math.atan2(2 * q[1] * q[2] - 2 * q[0] * q[3], 2 * q[0] * q[0] + 2 * q[1] * q[1] - 1);
-		angles[1] = -1 * Math.asin(2 * q[1] * q[3] + 2 * q[0] * q[2]);
-		angles[2] = Math.atan2(2 * q[2] * q[3] - 2 * q[0] * q[1], 2 * q[0] * q[0] + 2 * q[3] * q[3] - 1);
-		logger.v("update1", Double.toString(angles[0]));
-		logger.v("update2", Double.toString(angles[1]));
-		logger.v("update3", Double.toString(angles[2]));
+		port.flush();
 	}
 }

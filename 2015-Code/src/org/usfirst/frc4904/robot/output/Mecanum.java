@@ -60,7 +60,7 @@ public class Mecanum implements Updatable {
 	public synchronized void update() {
 		double turnSpeed = imu.readRate()[0];
 		double setSpeed = Math.sqrt(desiredXSpeed * desiredXSpeed + desiredYSpeed * desiredYSpeed);
-		double setAngle = Math.atan2(desiredXSpeed, desiredYSpeed);
+		double setAngle = Math.atan2(desiredYSpeed, desiredXSpeed);
 		if (turnSpeed > desiredTurnSpeed) {
 			tsAdjust += 0.05;
 		} else if (turnSpeed < desiredTurnSpeed) {
@@ -73,8 +73,8 @@ public class Mecanum implements Updatable {
 	}
 	
 	public void setDesiredXYSpeed(double desiredXSpeed, double desiredYSpeed) {
-		this.desiredXSpeed = desiredXSpeed;
-		this.desiredYSpeed = desiredYSpeed;
+		this.desiredXSpeed = desiredYSpeed;
+		this.desiredYSpeed = desiredXSpeed;
 	}
 	
 	public void setDesiredTurnSpeed(double desiredTurnSpeed) {
