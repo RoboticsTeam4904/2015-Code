@@ -70,11 +70,11 @@ public class Autonomous implements Updatable, Disablable {
 			currentStep++;
 			if (currentStep >= steps.length) {// Otherwise, this would throw an ArrayIndexOutOfBoundsException when the last step finished
 				finished = true;
-				disable();
+				resetMovement();
 				return;
 			}
 			steps[currentStep].init();
-			disable(); // A step might leave the desiredMovement variables in a nonzero state
+			resetMovement(); // A step might leave the desiredMovement variables in a nonzero state
 		}
 	}
 	
@@ -90,10 +90,15 @@ public class Autonomous implements Updatable, Disablable {
 		this.currentWinchHeight = currentWinchHeight;
 	}
 	
-	public void disable() {
+	private void resetMovement() {
 		desiredXMovement = 0;
 		desiredYMovement = 0;
 		desiredTurnSpeed = 0;
 		desiredWinchHeight = currentWinchHeight;
+	}
+	
+	public void disable() {
+		resetMovement();
+		currentStep = 0;
 	}
 }
