@@ -57,44 +57,43 @@ public class MPU9150 implements Updatable {
 	}
 	
 	public void update() {
+		System.out.println(port.getBytesReceived());
 		// String current = "a";
 		/*
 		 * while (!current.matches("\n") && port.getBytesReceived() > 10) { current = port.readString(1); imuData += current; // logger.v("adding data", imuData); }
 		 */
-		if (port.getBytesReceived() < 40) {
-			// System.out.println("In this data" + port.readString());
-			return;
+		if (port.getBytesReceived() > 40) {
+			try {
+				imuData = new String(port.read(port.getBytesReceived()));
+			}
+			catch (Exception e) {
+				System.out.println("Error fetching serial data");
+				e.printStackTrace();
+				return;
+			}
+			// ///////////////////////////////////////////////////////
+			if (imuData.length() < 20) {
+				System.out.println("Too little data");
+				return;
+			}
+			String[] floatString = imuData.split(",");
+			if (floatString.length < 4) {
+				System.out.println("Data array too short :" + floatString.length);
+				return;
+			}
+			double q[] = new double[4];
+			q[0] = (double) parseFloat(floatString[0]);
+			q[1] = (double) parseFloat(floatString[1]);
+			q[2] = (double) parseFloat(floatString[2]);
+			q[3] = (double) parseFloat(floatString[3]);
+			angles[0] = Math.atan2(2 * q[1] * q[2] - 2 * q[0] * q[3], 2 * q[0] * q[0] + 2 * q[1] * q[1] - 1);
+			angles[1] = -1 * Math.asin(2 * q[1] * q[3] + 2 * q[0] * q[2]);
+			angles[2] = Math.atan2(2 * q[2] * q[3] - 2 * q[0] * q[1], 2 * q[0] * q[0] + 2 * q[3] * q[3] - 1);
+			System.out.println("update1 " + Double.toString(angles[0]) + " Time: " + System.currentTimeMillis());
+			/*
+			 * System.out.println("update1 " + Double.toString(angles[0])); System.out.println("update2 " + Double.toString(angles[1])); System.out.println("update3 " + Double.toString(angles[2]));
+			 */
 		}
-		try {
-			imuData = new String(port.read(port.getBytesReceived()));
-		}
-		catch (Exception e) {
-			System.out.println("Error fetching serial data");
-			e.printStackTrace();
-			return;
-		}
-		// ///////////////////////////////////////////////////////
-		if (imuData.length() < 20) {
-			System.out.println("Too little data");
-			return;
-		}
-		String[] floatString = imuData.split(",");
-		if (floatString.length < 4) {
-			System.out.println("Data array too short :" + floatString.length);
-			return;
-		}
-		double q[] = new double[4];
-		q[0] = (double) parseFloat(floatString[0]);
-		q[1] = (double) parseFloat(floatString[1]);
-		q[2] = (double) parseFloat(floatString[2]);
-		q[3] = (double) parseFloat(floatString[3]);
-		angles[0] = Math.atan2(2 * q[1] * q[2] - 2 * q[0] * q[3], 2 * q[0] * q[0] + 2 * q[1] * q[1] - 1);
-		angles[1] = -1 * Math.asin(2 * q[1] * q[3] + 2 * q[0] * q[2]);
-		angles[2] = Math.atan2(2 * q[2] * q[3] - 2 * q[0] * q[1], 2 * q[0] * q[0] + 2 * q[3] * q[3] - 1);
-		System.out.println("update1 " + Double.toString(angles[0]) + " Time: " + System.currentTimeMillis());
-		/*
-		 * System.out.println("update1 " + Double.toString(angles[0])); System.out.println("update2 " + Double.toString(angles[1])); System.out.println("update3 " + Double.toString(angles[2]));
-		 */
-		port.reset();
+		port.flush();
 	}
 }
