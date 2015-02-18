@@ -9,7 +9,7 @@ import edu.wpi.first.wpilibj.SerialPort;
 public class MPU9150 implements Updatable {
 	private final SerialPort port;
 	private volatile String imuData;
-	private static final int NUM_LEDS = 209;
+	// private static final int NUM_LEDS = 209;
 	private double[] angles;
 	double q[];
 	LogKitten logger;
@@ -18,7 +18,7 @@ public class MPU9150 implements Updatable {
 		logger = new LogKitten("MPU9150", LogKitten.LEVEL_VERBOSE, LogKitten.LEVEL_VERBOSE);
 		port = new SerialPort(115200, SerialPort.Port.kMXP);
 		port.enableTermination();
-		port.setReadBufferSize(100000);
+		port.setReadBufferSize(1024);
 		port.reset();
 		imuData = "";
 		angles = new double[3];
@@ -47,38 +47,40 @@ public class MPU9150 implements Updatable {
 			return Float.intBitsToFloat(intbits);
 		}
 		catch (Exception e) {
-			e.printStackTrace();
+			if (data.length() == 10) {
+				e.printStackTrace();
+			} else {
+				System.out.println("data: " + data + ", length" + data.length());
+			}
 			return 0;
 		}
 	}
 	
 	public void update() {
-		String dataString = "";
 		// String current = "a";
 		/*
-		 * while (!current.matches("\n") && port.getBytesReceived() > 10) { current = port.readString(1); dataString += current; // logger.v("adding data", dataString); }
+		 * while (!current.matches("\n") && port.getBytesReceived() > 10) { current = port.readString(1); imuData += current; // logger.v("adding data", imuData); }
 		 */
-		if (port.getBytesReceived() < 100) {
+		if (port.getBytesReceived() < 40) {
+			// System.out.println("In this data" + port.readString());
 			return;
 		}
 		try {
-			dataString = port.readString();
+			imuData = new String(port.read(port.getBytesReceived()));
 		}
 		catch (Exception e) {
+			System.out.println("Error fetching serial data");
+			e.printStackTrace();
 			return;
 		}
-		logger.v("update", "Got data " + dataString);
-		imuData = dataString;
 		// ///////////////////////////////////////////////////////
-		logger.v("MPUInput", dataString);
-		if (dataString.length() < 20) {
-			logger.v("update", "Too little data");
+		if (imuData.length() < 20) {
+			System.out.println("Too little data");
 			return;
 		}
-		dataString = dataString.substring(3);
-		String[] floatString = dataString.split(",");
+		String[] floatString = imuData.split(",");
 		if (floatString.length < 4) {
-			logger.v("update", "Data array too short :" + floatString.length);
+			System.out.println("Data array too short :" + floatString.length);
 			return;
 		}
 		double q[] = new double[4];
@@ -89,8 +91,10 @@ public class MPU9150 implements Updatable {
 		angles[0] = Math.atan2(2 * q[1] * q[2] - 2 * q[0] * q[3], 2 * q[0] * q[0] + 2 * q[1] * q[1] - 1);
 		angles[1] = -1 * Math.asin(2 * q[1] * q[3] + 2 * q[0] * q[2]);
 		angles[2] = Math.atan2(2 * q[2] * q[3] - 2 * q[0] * q[1], 2 * q[0] * q[0] + 2 * q[3] * q[3] - 1);
-		logger.v("update1", Double.toString(angles[0]));
-		logger.v("update2", Double.toString(angles[1]));
-		logger.v("update3", Double.toString(angles[2]));
+		System.out.println("update1 " + Double.toString(angles[0]) + " Time: " + System.currentTimeMillis());
+		/*
+		 * System.out.println("update1 " + Double.toString(angles[0])); System.out.println("update2 " + Double.toString(angles[1])); System.out.println("update3 " + Double.toString(angles[2]));
+		 */
+		port.reset();
 	}
 }
