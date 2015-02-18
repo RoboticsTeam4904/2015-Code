@@ -11,6 +11,7 @@ public class BackwardsCharge extends Step {
 		desiredXMovement = 0;
 		desiredYMovement = -1;
 		desiredTurnSpeed = 0;
+		this.imu = imu;
 	}
 	
 	public void init() {}
