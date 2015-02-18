@@ -7,7 +7,7 @@ import org.usfirst.frc4904.robot.Updatable;
 import edu.wpi.first.wpilibj.SerialPort;
 
 public class MPU9150 implements Updatable {
-	private final SerialPort port;
+	private SerialPort port;
 	private volatile String imuData;
 	// private static final int NUM_LEDS = 209;
 	private double[] angles;
@@ -15,11 +15,11 @@ public class MPU9150 implements Updatable {
 	LogKitten logger;
 	
 	public MPU9150() {
-		logger = new LogKitten("MPU9150", LogKitten.LEVEL_VERBOSE, LogKitten.LEVEL_WARN);
+		logger = new LogKitten("MPU9150", LogKitten.LEVEL_FATAL, LogKitten.LEVEL_VERBOSE);
 		port = new SerialPort(115200, SerialPort.Port.kMXP);
 		port.enableTermination();
-		port.setReadBufferSize(128);
-		port.setWriteBufferSize(128);
+		port.setReadBufferSize(8192);
+		port.setWriteBufferSize(8192);
 		port.reset();
 		port.flush();
 		imuData = "";
@@ -42,11 +42,7 @@ public class MPU9150 implements Updatable {
 		try {
 			byte[] inData = new byte[4];
 			data = data.substring(2, 10); // discard the leading "f:"
-			inData[1] = (byte) Integer.parseInt(data.substring(2, 4), 16);
-			inData[2] = (byte) Integer.parseInt(data.substring(4, 6), 16);
-			inData[3] = (byte) Integer.parseInt(data.substring(6, 8), 16);
-			int intbits = (inData[3] << 24) | ((inData[2] & 0xff) << 16) | ((inData[1] & 0xff) << 8) | (inData[0] & 0xff);
-			return Float.intBitsToFloat(intbits);
+			return Float.intBitsToFloat(Integer.parseInt(data, 16));
 		}
 		catch (Exception e) {
 			if (data.length() == 10) {
@@ -63,8 +59,12 @@ public class MPU9150 implements Updatable {
 		/*
 		 * while (!current.matches("\n") && port.getBytesReceived() > 10) { current = port.readString(1); imuData += current; // logger.v("adding data", imuData); }
 		 */
-		if (port.getBytesReceived() > 48) {
-			logger.v("update", "Bytes received: " + port.getBytesReceived() + " At " + System.currentTimeMillis());
+		boolean newData = false;
+		int br = port.getBytesReceived();
+		// logger.v("update", "bytes recieved = " + br);
+		while (port.getBytesReceived() > 48) {
+			newData = true;
+			// logger.v("update", "Bytes received: " + port.getBytesReceived() + " At " + System.currentTimeMillis());
 			try {
 				imuData = new String(port.read(port.getBytesReceived()));
 			}
@@ -94,9 +94,12 @@ public class MPU9150 implements Updatable {
 			angles[1] = -1 * Math.asin(2 * q[1] * q[3] + 2 * q[0] * q[2]);
 			angles[2] = Math.atan2(2 * q[2] * q[3] - 2 * q[0] * q[1], 2 * q[0] * q[0] + 2 * q[3] * q[3] - 1);
 			logger.v("update", "update1 " + Double.toString(angles[0]));
-			logger.v("update", "update2 " + Double.toString(angles[1]));
-			logger.v("update", "update3 " + Double.toString(angles[2]));
+			// logger.v("update", "update2 " + Double.toString(angles[1]));
+			// logger.v("update", "update3 " + Double.toString(angles[2]));
 		}
-		port.flush();
+		if (newData) {
+			port.flush();
+			port.reset();
+		}
 	}
 }

@@ -22,9 +22,7 @@ public abstract class Operator implements Disablable, Updatable {
 	}
 	
 	protected void changeHeight(int levels) {
-		if (align.isInControl()) {
-			winch.setHeight(levels + winch.getHeight());
-		}
+		winch.setHeight(levels + winch.getHeight());
 	}
 	
 	protected void grab(int mode) {
@@ -36,15 +34,11 @@ public abstract class Operator implements Disablable, Updatable {
 	}
 	
 	protected void adjust(double value) {
-		if (align.isInControl()) {
-			winch.setSpeed(-1 * value); // Sets winch motor speed
-		}
+		winch.set(-1 * value); // Sets winch motor speed
 	}
 	
 	protected void setWinch(int height) {
-		if (align.isInControl()) {
-			winch.setHeight(height);
-		}
+		winch.setHeight(height);
 	}
 	
 	protected int getWinch() {

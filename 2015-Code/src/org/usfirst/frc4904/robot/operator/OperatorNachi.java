@@ -51,10 +51,10 @@ public class OperatorNachi extends Operator {
 			changeHeight(-1); // When button 3 is pressed, lower the winch one level
 		}
 		if (stick.buttons[5].get()) {
-			setWinch(12); // When button 6 is pressed, raise the winch all the way
+			setWinch(8); // When button 6 is pressed, raise the winch all the way
 		}
 		if (stick.buttons[3].get()) {
-			setWinch(-12); // When button 4 is pressed, lower the winch all the way
+			setWinch(0); // When button 4 is pressed, lower the winch all the way
 		}
 		// Grabber override
 		if (stick.buttons[11].getRaw()) {

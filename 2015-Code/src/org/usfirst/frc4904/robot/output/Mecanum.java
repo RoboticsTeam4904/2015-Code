@@ -21,7 +21,7 @@ public class Mecanum implements Updatable {
 	
 	public Mecanum(DampenedMotor frontLeftWheel, DampenedMotor frontRightWheel, DampenedMotor backLeftWheel, DampenedMotor backRightWheel, IMU imu) {
 		// Initialize motor controllers with default ports
-		logger = new LogKitten("Mecanum", LogKitten.LEVEL_VERBOSE, LogKitten.LEVEL_VERBOSE);
+		logger = new LogKitten("Mecanum", LogKitten.LEVEL_FATAL, LogKitten.LEVEL_VERBOSE);
 		this.frontLeftWheel = frontLeftWheel;
 		this.frontRightWheel = frontRightWheel;
 		this.backLeftWheel = backLeftWheel;
@@ -69,8 +69,8 @@ public class Mecanum implements Updatable {
 		logger.v("turnSpeed", "" + turnSpeed);
 		double setSpeed = Math.sqrt(desiredXSpeed * desiredXSpeed + desiredYSpeed * desiredYSpeed);
 		double setAngle = Math.atan2(desiredYSpeed, desiredXSpeed);
-		turnSpeed = desiredTurnSpeed;
-		// turnSpeed = turnSpeedPID.calculate(desiredTurnSpeed, turnSpeed);
+		// turnSpeed = desiredTurnSpeed;
+		turnSpeed = turnSpeedPID.calculate(desiredTurnSpeed, turnSpeed);
 		move(setSpeed, setAngle, turnSpeed, absolute); // This system allows for different updating times and rates
 	}
 	

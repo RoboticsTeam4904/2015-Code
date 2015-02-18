@@ -18,14 +18,10 @@ public abstract class Driver implements Disablable, Updatable {
 	public abstract void update();
 	
 	protected void setMovement(double x, double y) {// All movement passes through here so that autoalign has precedence
-		if (align.isInControl()) {
-			mecanumDrive.setDesiredXYSpeed(x, y);
-		}
+		mecanumDrive.setDesiredXYSpeed(x, y);
 	}
-
+	
 	protected void setTurn(double speed) {
-		if (align.isInControl()) {
-			mecanumDrive.setDesiredTurnSpeed(speed);
-		}
+		mecanumDrive.setDesiredTurnSpeed(speed);
 	}
 }

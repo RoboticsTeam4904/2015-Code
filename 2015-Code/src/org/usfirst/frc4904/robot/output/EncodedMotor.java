@@ -12,7 +12,7 @@ public abstract class EncodedMotor extends VictorSP implements Disablable, Updat
 	protected PID pid;
 	protected double motorOutput;
 	protected boolean override;
-	protected final SuperEncoder encoder;
+	public final SuperEncoder encoder;
 	private LogKitten logger;
 	private boolean cap;
 	

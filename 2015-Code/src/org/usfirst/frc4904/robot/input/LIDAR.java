@@ -20,7 +20,7 @@ public class LIDAR implements Updatable {
 	private final SerialPort port;
 	
 	public LIDAR() {
-		logger = new LogKitten("LIDAR", LogKitten.LEVEL_DEBUG, LogKitten.LEVEL_DEBUG);
+		logger = new LogKitten("LIDAR", LogKitten.LEVEL_FATAL, LogKitten.LEVEL_DEBUG);
 		logger.v("LIDAR", "Started Logging");
 		port = new SerialPort(115200, SerialPort.Port.kOnboard);
 		port.setReadBufferSize(8192 * 2);

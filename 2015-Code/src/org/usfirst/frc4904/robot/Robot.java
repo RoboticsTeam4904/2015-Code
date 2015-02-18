@@ -10,7 +10,6 @@ import org.usfirst.frc4904.robot.input.IMU;
 import org.usfirst.frc4904.robot.input.LIDAR;
 import org.usfirst.frc4904.robot.input.LogitechJoystick;
 import org.usfirst.frc4904.robot.input.PDP;
-import org.usfirst.frc4904.robot.input.SuperEncoder;
 import org.usfirst.frc4904.robot.input.UDAR;
 import org.usfirst.frc4904.robot.input.XboxController;
 import org.usfirst.frc4904.robot.operator.Operator;
@@ -20,6 +19,7 @@ import org.usfirst.frc4904.robot.output.Grabber;
 import org.usfirst.frc4904.robot.output.Mecanum;
 import org.usfirst.frc4904.robot.output.Winch;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.SampleRobot;
 import edu.wpi.first.wpilibj.Timer;
 
@@ -38,8 +38,8 @@ public class Robot extends SampleRobot {
 	private static final int RIGHT_OUTER_SWITCH_PORT = 0;
 	private static final int LEFT_OUTER_SWITCH_PORT = 1;
 	// Various I2C ports
-	private static final int WINCH_ENCODER_PORT = 2;
-	private static final int WINCH_ENCODER_PORT_2 = 3;
+	private static final int WINCH_ENCODER_PORT_1 = 3;
+	private static final int WINCH_ENCODER_PORT_2 = 2;
 	private static final int UDAR_I2C_PORT = 4;
 	private static final double WINCH_P_COEFFICIENT = 0.001;
 	private static final double WINCH_I_COEFFICIENT = 0.001;
@@ -57,7 +57,7 @@ public class Robot extends SampleRobot {
 	private final DigitalInput limitSwitches[] = new DigitalInput[2];
 	private final Camera camera;
 	// private final DemoLightSequence lightSequence;
-	private final SuperEncoder winchEncoder;
+	private final Encoder winchEncoder;
 	// movement controllers
 	private final Winch winch; // the Winch class takes care of moving to specific heights
 	private final Grabber grabber; // the grabber class takes care of opening and closing the grabber
@@ -103,7 +103,7 @@ public class Robot extends SampleRobot {
 		limitSwitches[Grabber.RIGHT_OUTER_SWITCH] = new DigitalInput(RIGHT_OUTER_SWITCH_PORT);
 		limitSwitches[Grabber.LEFT_OUTER_SWITCH] = new DigitalInput(LEFT_OUTER_SWITCH_PORT);
 		// Initialize Encoders
-		winchEncoder = new SuperEncoder(WINCH_ENCODER_PORT, WINCH_ENCODER_PORT_2);
+		winchEncoder = new Encoder(WINCH_ENCODER_PORT_1, WINCH_ENCODER_PORT_2);
 		imu = new IMU(); // Initialize IMU
 		udar = new UDAR(UDAR_I2C_PORT); // Initialize UDAR
 		lidar = new LIDAR(); // Initialize LIDAR
@@ -188,7 +188,7 @@ public class Robot extends SampleRobot {
 				dumpLIDAR(state);
 				return;
 			case ModeManager.TRAIN_WINCH_MODE:
-				trainWinchPID(state);
+				// trainWinchPID(state);
 				return;
 			case ModeManager.NO_MODE:
 				break;
@@ -202,6 +202,7 @@ public class Robot extends SampleRobot {
 		// These should have fast updates
 		new Updater(state, new Updatable[] {driver, operator, mecanumDrive, lidar, frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel, grabber, winch}, fastUpdatePeriod).start();
 		while (getRobotState() == state) {
+			System.out.println(winch.encoder.getDistance());
 			Timer.delay(0.01);
 		}
 	}
@@ -227,21 +228,9 @@ public class Robot extends SampleRobot {
 		}
 	}
 	
-	public void trainWinchPID(RobotState state) {
-		System.out.println("*** TRAIN PID ***");
-		logger.v("trainPID", "trainPID");
-		startAlwaysUpdates(state);
-		new Updater(state, new Updatable[] {winch}, fastUpdatePeriod).start();
-		while (getRobotState() == state) {
-			winch.setHeight(8);
-			winch.trainPID();
-			Timer.delay(5);
-			winch.setHeight(4);
-			winch.trainPID();
-			Timer.delay(5);
-		}
-	}
-	
+	/*
+	 * public void trainWinchPID(RobotState state) { System.out.println("*** TRAIN PID ***"); logger.v("trainPID", "trainPID"); startAlwaysUpdates(state); new Updater(state, new Updatable[] {winch}, fastUpdatePeriod).start(); while (getRobotState() == state) { winch.setHeight(8); winch.trainPID(); Timer.delay(5); winch.setHeight(4); winch.trainPID(); Timer.delay(5); } }
+	 */
 	public void dumpLIDAR(RobotState state) {
 		System.out.println("*** DUMP LIDAR ***");
 		logger.v("dumpLIDAR", "dumpLIDAR");

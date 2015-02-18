@@ -19,7 +19,7 @@ public class PID {
 		this.P = P;
 		this.I = I;
 		this.D = D;
-		logger = new LogKitten("PID", LogKitten.LEVEL_DEBUG, LogKitten.LEVEL_DEBUG);
+		logger = new LogKitten("PID", LogKitten.LEVEL_FATAL, LogKitten.LEVEL_DEBUG);
 		reset();
 	}
 	

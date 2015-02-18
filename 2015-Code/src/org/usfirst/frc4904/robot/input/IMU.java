@@ -14,7 +14,8 @@ public class IMU extends MPU9150 {
 	
 	public IMU() {
 		// super(serial);
-		logger = new LogKitten("IMU", LogKitten.LEVEL_DEBUG, LogKitten.LEVEL_DEBUG);
+		super();
+		logger = new LogKitten("IMU", LogKitten.LEVEL_FATAL, LogKitten.LEVEL_DEBUG);
 		angles = new double[3];
 		lastAngles = new double[3];
 		rate = new double[3];
@@ -49,6 +50,9 @@ public class IMU extends MPU9150 {
 		readData();
 		for (int i = 0; i < 3; i++) {
 			rate[i] = (angles[i] - lastAngles[i]) / (time - lastTime);
+		}
+		if (rate[0] > 0) {
+			logger.v("data change", angles[0] + " " + angles[1] + " " + angles[2]);
 		}
 		lastTime = time;
 		lastAngles = angles;
