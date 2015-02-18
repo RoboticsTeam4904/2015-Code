@@ -102,7 +102,7 @@ public class Robot extends SampleRobot {
 	public Robot() {
 		System.out.println("*** CONSTRUCTING ROBOT ***");
 		// Initializing logging
-		logger = new LogKitten("Robot", LogKitten.LEVEL_VERBOSE, LogKitten.LEVEL_FATAL);
+		logger = new LogKitten("Robot", LogKitten.LEVEL_VERBOSE, LogKitten.LEVEL_VERBOSE);
 		logger.v("Constructing", "Constructing");
 		// Initialize serial interface
 		// serial = new MPUSerial();
@@ -218,7 +218,7 @@ public class Robot extends SampleRobot {
 	}
 	
 	public void startAlwaysUpdates(RobotState state) {
-		// IMU, PDP, and Camera should always update
+		// IMU, and PDP should always update
 		new Updater(state, alwaysUpdate, fastUpdatePeriod).start();
 		// always slow updates
 		new Updater(state, alwaysUpdateSlow, slowUpdatePeriod).start();
@@ -227,22 +227,21 @@ public class Robot extends SampleRobot {
 	public void trainMecanumPID(RobotState state) {
 		System.out.println("*** TRAIN PID ***");
 		logger.v("trainPID", "trainPID");
-		// IMU, PDP, and Camera should always update
-		new Updater(state, alwaysUpdate, fastUpdatePeriod).start();
-		// always slow updates
-		new Updater(state, alwaysUpdateSlow, slowUpdatePeriod).start();
-		new Updater(state, new Updatable[] {frontLeftWheel, mecanumDrive}, fastUpdatePeriod).start();
+		startAlwaysUpdates(state);
+		new Updater(state, new Updatable[] {frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel, mecanumDrive}, fastUpdatePeriod).start();
 		while (getRobotState() == state) {
-			frontLeftWheel.setValue(0.1);
 			logger.v("trainPID", "training cycle");
+			mecanumDrive.setDesiredTurnSpeed(0.2);
+			mecanumDrive.setDesiredXYSpeed(0, 0);
+			mecanumDrive.train();
+			Timer.delay(3);
 		}
 	}
 	
 	public void trainWinchPID(RobotState state) {
 		System.out.println("*** TRAIN PID ***");
 		logger.v("trainPID", "trainPID");
-		new Updater(state, alwaysUpdate, fastUpdatePeriod).start();
-		new Updater(state, alwaysUpdateSlow, slowUpdatePeriod).start();
+		startAlwaysUpdates(state);
 		new Updater(state, new Updatable[] {winch}, fastUpdatePeriod).start();
 		while (getRobotState() == state) {
 			winch.setHeight(8);
@@ -257,9 +256,7 @@ public class Robot extends SampleRobot {
 	public void dumpLIDAR(RobotState state) {
 		System.out.println("*** DUMP LIDAR ***");
 		logger.v("dumpLIDAR", "dumpLIDAR");
-		// IMU, PDP, and Camera should always update
-		new Updater(state, alwaysUpdate, fastUpdatePeriod).start();
-		new Updater(state, alwaysUpdateSlow, slowUpdatePeriod).start();
+		startAlwaysUpdates(state);
 		new Updater(state, new Updatable[] {lidar}, fastUpdatePeriod).start();
 		while (getRobotState() == state) {
 			for (int i = 0; i < 360; i++) {

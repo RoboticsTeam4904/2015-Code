@@ -20,7 +20,7 @@ public class LIDAR implements Updatable {
 	private final SerialPort port;
 	
 	public LIDAR() {
-		logger = new LogKitten("LIDAR", LogKitten.LEVEL_DEBUG, LogKitten.LEVEL_FATAL);
+		logger = new LogKitten("LIDAR", LogKitten.LEVEL_DEBUG, LogKitten.LEVEL_DEBUG);
 		logger.v("LIDAR", "Started Logging");
 		port = new SerialPort(115200, SerialPort.Port.kOnboard);
 		port.setReadBufferSize(8192 * 2);
@@ -101,9 +101,52 @@ public class LIDAR implements Updatable {
 		return inFront.get(0);
 	}
 	
-	public void update() {/*
-						 * if (port.getBytesReceived() < 128) { // LIDAR returns 1980 bytes per cycle logger.v("getBytesReceived", "only " + port.getBytesReceived() + " bytes received"); return; } logger.v("update", "Updating LIDAR"); byte scanhdr = (byte) 0xA0; try { for (int i = 0; i < 90; i++) { // Reading in chunks of 4, so only 90 steps int[] scanrange = scanline_b(scanhdr); int degree = 4 * (scanhdr - (byte) 0xA0); if (scanrange != null) { for (int j = 0; j < 4; j++) { if (scanrange[j] != 53) { dists[degree + j] = scanrange[j]; // No one knows why we are comparing scanrange[j] to 53, so I am too scared to change it } else { dists[degree + j] = 0; } } } if (scanhdr == (byte) 0xF9) { scanhdr = (byte) 0xA0; } else { scanhdr += 1; } } for (int i = 0; i < 90; i++) { // Do it again for redundancy int[] scanrange = scanline_b(scanhdr); int degree = 4 * (scanhdr - (byte) 0xA0); if (scanrange != null) { for (int j = 0; j < 4; j++) { if (scanrange[j] != 53) { dists[degree + j] = scanrange[j]; } } } if (scanhdr == (byte) 0xF9) { scanhdr = (byte) 0xA0; } else { scanhdr += 1; } } } catch (Exception e) { System.out.println("Exception: " + e); }
-						 */
+	public void update() {
+		if (port.getBytesReceived() < 128) { // LIDAR returns 1980 bytes per cycle
+			logger.v("getBytesReceived", "only " + port.getBytesReceived() + " bytes received");
+			return;
+		}
+		logger.v("update", "Updating LIDAR");
+		byte scanhdr = (byte) 0xA0;
+		try {
+			for (int i = 0; i < 90; i++) { // Reading in chunks of 4, so only 90 steps
+				int[] scanrange = scanline_b(scanhdr);
+				int degree = 4 * (scanhdr - (byte) 0xA0);
+				if (scanrange != null) {
+					for (int j = 0; j < 4; j++) {
+						if (scanrange[j] != 53) {
+							dists[degree + j] = scanrange[j]; // No one knows why we are comparing scanrange[j] to 53, so I am too scared to change it
+						} else {
+							dists[degree + j] = 0;
+						}
+					}
+				}
+				if (scanhdr == (byte) 0xF9) {
+					scanhdr = (byte) 0xA0;
+				} else {
+					scanhdr += 1;
+				}
+			}
+			for (int i = 0; i < 90; i++) { // Do it again for redundancy
+				int[] scanrange = scanline_b(scanhdr);
+				int degree = 4 * (scanhdr - (byte) 0xA0);
+				if (scanrange != null) {
+					for (int j = 0; j < 4; j++) {
+						if (scanrange[j] != 53) {
+							dists[degree + j] = scanrange[j];
+						}
+					}
+				}
+				if (scanhdr == (byte) 0xF9) {
+					scanhdr = (byte) 0xA0;
+				} else {
+					scanhdr += 1;
+				}
+			}
+		}
+		catch (Exception e) {
+			System.out.println("Exception: " + e);
+		}
 	}
 	
 	public int[] getXY(int i) {

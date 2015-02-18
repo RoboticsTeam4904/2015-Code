@@ -1,6 +1,7 @@
 package org.usfirst.frc4904.robot.output;
 
 
+import org.usfirst.frc4904.robot.LogKitten;
 import org.usfirst.frc4904.robot.Updatable;
 import org.usfirst.frc4904.robot.input.IMU;
 
@@ -16,16 +17,22 @@ public class Mecanum implements Updatable {
 	private final PID turnSpeedPID;
 	private volatile boolean absolute;
 	private final IMU imu;
+	private final LogKitten logger;
 	
 	public Mecanum(DampenedMotor frontLeftWheel, DampenedMotor frontRightWheel, DampenedMotor backLeftWheel, DampenedMotor backRightWheel, IMU imu) {
 		// Initialize motor controllers with default ports
+		logger = new LogKitten("Mecanum", LogKitten.LEVEL_VERBOSE, LogKitten.LEVEL_VERBOSE);
 		this.frontLeftWheel = frontLeftWheel;
 		this.frontRightWheel = frontRightWheel;
 		this.backLeftWheel = backLeftWheel;
 		this.backRightWheel = backRightWheel;
 		this.imu = imu;
-		this.turnSpeedPID = new PID(0.1, 0.1, 0.1);
+		this.turnSpeedPID = new PID(1, 1, 1);
 		tsAdjust = 0;
+	}
+	
+	public void train() {
+		turnSpeedPID.train();
 	}
 	
 	private void move(double desiredSpeed, double desiredAngle, double turnSpeed, boolean absolute) {
@@ -59,17 +66,11 @@ public class Mecanum implements Updatable {
 	
 	public synchronized void update() {
 		double turnSpeed = imu.readRate()[0];
+		logger.v("turnSpeed", "" + turnSpeed);
 		double setSpeed = Math.sqrt(desiredXSpeed * desiredXSpeed + desiredYSpeed * desiredYSpeed);
 		double setAngle = Math.atan2(desiredYSpeed, desiredXSpeed);
-		if (turnSpeed > desiredTurnSpeed) {
-			tsAdjust += 0.05;
-		} else if (turnSpeed < desiredTurnSpeed) {
-			tsAdjust -= 0.05;
-		}
-		// desiredTurnSpeed += tsAdjust;
-		double setTurnSpeed = desiredTurnSpeed;
-		// setTurnSpeed = turnSpeedPID.calculate(setTurnSpeed, turnSpeed);
-		move(setSpeed, setAngle, setTurnSpeed, absolute); // This system allows for different updating times and rates
+		turnSpeed = turnSpeedPID.calculate(desiredTurnSpeed, turnSpeed);
+		move(setSpeed, setAngle, turnSpeed, absolute); // This system allows for different updating times and rates
 	}
 	
 	public void setDesiredXYSpeed(double desiredXSpeed, double desiredYSpeed) {
