@@ -16,6 +16,7 @@ public class Autonomous implements Updatable, Disablable {
 	protected volatile int desiredWinchHeight = 0;
 	protected volatile int currentWinchHeight = 0;
 	protected final Step[] steps;
+	private boolean finished = false;
 	private boolean firstInit = false;
 	int currentStep = 0;
 	LogKitten logger;
@@ -48,6 +49,9 @@ public class Autonomous implements Updatable, Disablable {
 	}
 	
 	public void update() {
+		if (finished) {
+			return;
+		}
 		if (!firstInit) {
 			firstInit = true;
 			steps[0].init();
@@ -63,6 +67,11 @@ public class Autonomous implements Updatable, Disablable {
 		if (stepCompleted) {
 			System.out.println(currentStep + "completed");
 			currentStep++;
+			if (currentStep >= steps.length) {// Otherwise, this would throw an ArrayIndexOutOfBoundsException when the last step finished
+				finished = true;
+				disable();
+				return;
+			}
 			steps[currentStep].init();
 			disable(); // A step might leave the desiredMovement variables in a nonzero state
 		}
