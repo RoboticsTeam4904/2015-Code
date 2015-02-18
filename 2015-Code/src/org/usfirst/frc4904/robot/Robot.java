@@ -11,7 +11,6 @@ import org.usfirst.frc4904.robot.input.LIDAR;
 import org.usfirst.frc4904.robot.input.LogitechJoystick;
 import org.usfirst.frc4904.robot.input.PDP;
 import org.usfirst.frc4904.robot.input.SuperEncoder;
-import org.usfirst.frc4904.robot.input.SuperSerial;
 import org.usfirst.frc4904.robot.input.UDAR;
 import org.usfirst.frc4904.robot.input.XboxController;
 import org.usfirst.frc4904.robot.operator.Operator;
@@ -36,15 +35,15 @@ public class Robot extends SampleRobot {
 	private static final int WINCH_PORT = 4;
 	private static final int GRABBER_PORT = 5;
 	// Default ports for limit switches
-	private static final int RIGHT_INNER_SWITCH_PORT = 0;
-	private static final int LEFT_INNER_SWITCH_PORT = 1;
-	private static final int RIGHT_OUTER_SWITCH_PORT = 2;
-	private static final int LEFT_OUTER_SWITCH_PORT = 3;
-	private static final int FRONT_LEFT_ENCODER_NUMBER = 0;
-	private static final int FRONT_RIGHT_ENCODER_NUMBER = 1;
-	private static final int BACK_LEFT_ENCODER_NUMBER = 2;
-	private static final int BACK_RIGHT_ENCODER_NUMBER = 3;
-	private static final int WINCH_ENCODER_NUMBER = 4;
+	private static final int RIGHT_OUTER_SWITCH_PORT = 0;
+	private static final int LEFT_OUTER_SWITCH_PORT = 1;
+	// Various I2C ports
+	private static final int FRONT_LEFT_ENCODER_I2C_PORT = 10;
+	private static final int FRONT_RIGHT_ENCODER_I2C_PORT = 11;
+	private static final int BACK_LEFT_ENCODER_I2C_PORT = 12;
+	private static final int BACK_RIGHT_ENCODER_I2C_PORT = 13;
+	private static final int WINCH_ENCODER_I2C_PORT = 14;
+	private static final int UDAR_I2C_PORT = 4;
 	private static final double WINCH_P_COEFFICIENT = 0.1;
 	private static final double WINCH_I_COEFFICIENT = 0.1;
 	private static final double WINCH_D_COEFFICIENT = 0.1;
@@ -54,11 +53,11 @@ public class Robot extends SampleRobot {
 	private final LogitechJoystick stick; // the X3D Extreme3DPro Logitech joystick (right hand) - operator
 	private final XboxController xboxController; // the Xbox 360 controller - driver
 	// Input devices
-	private final SuperSerial serial;
+	// private final MPUSerial serial;
 	private final UDAR udar; // the UDAR (ultrasonic detection and ranging)
 	private final IMU imu;
 	private final LIDAR lidar;
-	private final DigitalInput limitSwitches[] = new DigitalInput[4];
+	private final DigitalInput limitSwitches[] = new DigitalInput[2];
 	private final Camera camera;
 	// private final DemoLightSequence lightSequence;
 	private final SuperEncoder frontLeftEncoder;
@@ -106,21 +105,19 @@ public class Robot extends SampleRobot {
 		logger = new LogKitten("Robot", LogKitten.LEVEL_VERBOSE, LogKitten.LEVEL_FATAL);
 		logger.v("Constructing", "Constructing");
 		// Initialize serial interface
-		serial = new SuperSerial();
+		// serial = new MPUSerial();
 		// Initialize sensors
-		limitSwitches[Grabber.RIGHT_INNER_SWITCH] = new DigitalInput(RIGHT_INNER_SWITCH_PORT);
-		limitSwitches[Grabber.LEFT_INNER_SWITCH] = new DigitalInput(LEFT_INNER_SWITCH_PORT);
 		limitSwitches[Grabber.RIGHT_OUTER_SWITCH] = new DigitalInput(RIGHT_OUTER_SWITCH_PORT);
 		limitSwitches[Grabber.LEFT_OUTER_SWITCH] = new DigitalInput(LEFT_OUTER_SWITCH_PORT);
 		// Initialize Encoders
-		frontLeftEncoder = new SuperEncoder(FRONT_LEFT_ENCODER_NUMBER, serial);
-		frontRightEncoder = new SuperEncoder(FRONT_RIGHT_ENCODER_NUMBER, serial);
-		backLeftEncoder = new SuperEncoder(BACK_LEFT_ENCODER_NUMBER, serial);
-		backRightEncoder = new SuperEncoder(BACK_RIGHT_ENCODER_NUMBER, serial);
-		winchEncoder = new SuperEncoder(WINCH_ENCODER_NUMBER, serial);
-		imu = new IMU(serial); // Initialize IMU
-		udar = new UDAR(serial); // Initialize UDAR
-		lidar = new LIDAR(serial); // Initialize LIDAR
+		frontLeftEncoder = new SuperEncoder(FRONT_LEFT_ENCODER_I2C_PORT);
+		frontRightEncoder = new SuperEncoder(FRONT_RIGHT_ENCODER_I2C_PORT);
+		backLeftEncoder = new SuperEncoder(BACK_LEFT_ENCODER_I2C_PORT);
+		backRightEncoder = new SuperEncoder(BACK_RIGHT_ENCODER_I2C_PORT);
+		winchEncoder = new SuperEncoder(WINCH_ENCODER_I2C_PORT);
+		imu = new IMU(); // Initialize IMU
+		udar = new UDAR(UDAR_I2C_PORT); // Initialize UDAR
+		lidar = new LIDAR(); // Initialize LIDAR
 		pdp = new PDP(); // Power Distribution Panel interface and logging.
 		/* Lights! */
 		// lightSequence = new DemoLightSequence(serial);
@@ -129,7 +126,7 @@ public class Robot extends SampleRobot {
 		/* Action! */
 		// Initialize movement controllers
 		winch = new Winch(WINCH_PORT, winchEncoder); // Initialize Winch control
-		grabber = new Grabber(GRABBER_PORT, limitSwitches, pdp); // Initialize Grabber control -- only autoalign has access to this, by design
+		grabber = new Grabber(GRABBER_PORT, limitSwitches, pdp); // Initialize Grabber control
 		// Initialize motor controllers with default ports
 		frontLeftWheel = new DampenedMotor(FRONT_LEFT_WHEEL_PORT);
 		frontRightWheel = new DampenedMotor(FRONT_RIGHT_WHEEL_PORT);
@@ -150,7 +147,7 @@ public class Robot extends SampleRobot {
 		autonomous = autonomousManager.getAutonomous();
 		// This list should include everything with a motor
 		toDisable = new Disablable[] {winch, grabber, driver, operator, autonomous, frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel};
-		alwaysUpdate = new Updatable[] {serial, imu, pdp, camera};
+		alwaysUpdate = new Updatable[] {imu, pdp, camera};
 		alwaysUpdateSlow = new Updatable[] {};
 	}
 	
@@ -206,10 +203,13 @@ public class Robot extends SampleRobot {
 		RobotState state = RobotState.OPERATOR;
 		switch (modeManager.useMode()) {
 			case ModeManager.TRAIN_PID_MODE:
-				trainPID(state);
+				trainMecanumPID(state);
 				return;
 			case ModeManager.DUMP_LIDAR_MODE:
 				dumpLIDAR(state);
+				return;
+			case ModeManager.TRAIN_WINCH_MODE:
+				trainWinchPID(state);
 				return;
 			case ModeManager.NO_MODE:
 				break;
@@ -230,7 +230,7 @@ public class Robot extends SampleRobot {
 		}
 	}
 	
-	public void trainPID(RobotState state) {
+	public void trainMecanumPID(RobotState state) {
 		System.out.println("*** TRAIN PID ***");
 		logger.v("trainPID", "trainPID");
 		// IMU, PDP, and Camera should always update
@@ -241,6 +241,22 @@ public class Robot extends SampleRobot {
 		while (getRobotState() == state) {
 			frontLeftWheel.setValue(0.1);
 			logger.v("trainPID", "training cycle");
+		}
+	}
+	
+	public void trainWinchPID(RobotState state) {
+		System.out.println("*** TRAIN PID ***");
+		logger.v("trainPID", "trainPID");
+		new Updater(state, alwaysUpdate, fastUpdatePeriod).start();
+		new Updater(state, alwaysUpdateSlow, slowUpdatePeriod).start();
+		new Updater(state, new Updatable[] {winch}, fastUpdatePeriod).start();
+		while (getRobotState() == state) {
+			winch.setHeight(8);
+			winch.trainPID();
+			Timer.delay(5);
+			winch.setHeight(4);
+			winch.trainPID();
+			Timer.delay(5);
 		}
 	}
 	

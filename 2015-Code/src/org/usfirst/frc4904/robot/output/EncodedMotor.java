@@ -11,9 +11,6 @@ public abstract class EncodedMotor extends VictorSP implements Disablable, Updat
 	protected volatile double target;
 	protected PID pid;
 	protected double motorOutput;
-	protected double P = 1.0; // ticks per second Assuming this is updated at 200Hz, this should result in 0.5 seconds to full speed
-	protected double I = 0.3; // ticks
-	protected double D = 0.3; // ticks per second per second
 	protected boolean override;
 	protected final SuperEncoder encoder;
 	private LogKitten logger;

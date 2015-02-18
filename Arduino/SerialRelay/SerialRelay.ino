@@ -16,12 +16,6 @@ boolean dataReady = false;
 
 #include <Wire.h>
 
-#include <Adafruit_NeoPixel.h>
-
-#define NUMPIXELS  209
-#define LED_PIN    6
-Adafruit_NeoPixel pixels = Adafruit_NeoPixel(NUMPIXELS, LED_PIN, NEO_GRB + NEO_KHZ800);
-
 int echoPin1 = 5;
 int echoPin2 = 6;
 int echoPin3 = 7;
@@ -45,12 +39,11 @@ unsigned long echoPin3fallTime;
 
 void setup() {
   Wire.begin();
-  Serial.begin(230400);
+  Serial.begin(115200);
   SerOut.begin(115200);
   //SerOut.begin(230400);
   SerLidar.begin(115200);
   SerIMU.begin(115200);
-  pixels.begin();
   /*
   attatchInterrupt(echoPin1, echoPin1high, RISING);
    attatchInterrupt(echoPin1, echoPin1low, FALLING);
@@ -61,10 +54,6 @@ void setup() {
    attatchInterrupt(echoPin3, echoPin3high, RISING);
    attatchInterrupt(echoPin3, echoPin3low, FALLING);
    */
-  for(int i=0; i<pixels.numPixels(); i++) {
-    pixels.setPixelColor(i, pixels.Color(8, 0, 8));
-  }
-  pixels.show();
 }
 
 
@@ -74,6 +63,7 @@ void loop() {
 
   while (SerLidar.available() > 0) {
     char c = SerLidar.read();
+    //Serial.write(c);
     /*
     decodeData(c);
      //Serial.println(Data_loop_index);
@@ -104,7 +94,7 @@ void loop() {
   while (SerIMU.available() > 50) {
     //Serial.println(SerIMU.available());
     SerOut.print("IMU");
-    //Serial.print("IMU");
+    Serial.print("IMU");
     char c = SerIMU.read();
     while ( c != '\n') {
       SerOut.write(c);
@@ -112,63 +102,9 @@ void loop() {
       Serial.write(c);
       c = SerIMU.read();
     }
-    Serial.println();
+    //Serial.println();
+    Serial.print("\n");
     SerOut.println();
-  }
-
-
-  while (Serial.available() > 0) {
-    char c = Serial.read(); // receive byte as a character
-
-    if (c == 'w' && Serial.available() > 4) {
-      byte n = Serial.read();
-      byte r = Serial.read();
-      byte g = Serial.read();
-      byte b = Serial.read();
-      pixels.setPixelColor(n, pixels.Color(r,g,b));
-    } 
-    else if (c == 'a') {
-      for (int i=0; i<209; i++) {
-        unsigned long itters = 0;
-        while (Serial.available() < 3) if (itters++ > 1000000) break;
-        byte r = Serial.read();
-        byte g = Serial.read();
-        byte b = Serial.read();
-        pixels.setPixelColor(i, pixels.Color(r,g,b));
-      }
-      pixels.show();
-    }
-    else if (c == 'u') {
-      pixels.show();
-    }
-  }
-
-
-
-  while (SerOut.available() > 0) {
-    char c = SerOut.read(); // receive byte as a character
-
-    if (c == 'w' && SerOut.available() > 4) {
-      byte n = SerOut.read();
-      byte r = SerOut.read();
-      byte g = SerOut.read();
-      byte b = SerOut.read();
-      pixels.setPixelColor(n, pixels.Color(r,g,b));
-    } 
-    else if (c == 'a') {
-      for (int i=0; i<209; i++) {
-        unsigned long itters = 0;
-        while (SerOut.available() < 3) if (itters++ > 1000000) break;
-        byte r = SerOut.read();
-        byte g = SerOut.read();
-        byte b = SerOut.read();
-        pixels.setPixelColor(i, pixels.Color(r,g,b));
-      }
-      pixels.show();
-    }
-    else if (c == 'u') {
-      pixels.show();
-    }
   }
 
 }

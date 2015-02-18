@@ -3,9 +3,8 @@ package org.usfirst.frc4904.robot.input;
 
 import java.util.Arrays;
 import org.usfirst.frc4904.robot.LogKitten;
-import org.usfirst.frc4904.robot.Updatable;
 
-public class IMU extends MPU9150 implements Updatable {
+public class IMU extends MPU9150 {
 	private final LogKitten logger;
 	private double[] angles; // Angle 0 is perpendicular (yaw), Angle 1 is lateral (pitch), Angle 2 is longitudinal (roll)
 	private double[] lastAngles;
@@ -13,16 +12,14 @@ public class IMU extends MPU9150 implements Updatable {
 	private double zeroAngle;
 	private double lastTime;
 	
-	public IMU(SuperSerial serial) {
-		super(serial);
+	public IMU() {
+		// super(serial);
 		logger = new LogKitten("IMU", LogKitten.LEVEL_DEBUG, LogKitten.LEVEL_VERBOSE);
 		angles = new double[3];
 		lastAngles = new double[3];
 		rate = new double[3];
-		for (int i = 0; i < 3; i++) {
-			angles[i] = 0;
-			lastAngles[i] = 0;
-		}
+		Arrays.fill(angles, (double) 0);
+		Arrays.fill(lastAngles, (double) 0);
 		lastTime = getTime();
 		zero();
 	}
@@ -54,7 +51,7 @@ public class IMU extends MPU9150 implements Updatable {
 		}
 		lastTime = time;
 		lastAngles = angles;
-		logger.v("update", Double.toString(angles[0] * 180 / Math.PI));
+		// logger.v("update", Double.toString(angles[0] * 180 / Math.PI));
 	}
 	
 	private void readData() {

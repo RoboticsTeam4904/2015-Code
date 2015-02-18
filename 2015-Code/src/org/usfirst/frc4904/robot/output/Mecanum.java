@@ -66,7 +66,7 @@ public class Mecanum implements Updatable {
 		} else if (turnSpeed < desiredTurnSpeed) {
 			tsAdjust -= 0.05;
 		}
-		desiredTurnSpeed += tsAdjust;
+		// desiredTurnSpeed += tsAdjust;
 		double setTurnSpeed = desiredTurnSpeed;
 		// setTurnSpeed = turnSpeedPID.calculate(setTurnSpeed, turnSpeed);
 		move(setSpeed, setAngle, setTurnSpeed, absolute); // This system allows for different updating times and rates
