@@ -160,10 +160,7 @@ public class Robot extends SampleRobot {
 		System.out.println("*** DISABLED ***");
 		logger.v("Disabled", "Disabled");
 		RobotState state = RobotState.DISABLED;
-		// IMU, PDP, and Camera should always update
-		new Updater(state, alwaysUpdate, fastUpdatePeriod).start();
-		// always slow updates
-		new Updater(state, alwaysUpdateSlow, slowUpdatePeriod).start();
+		startAlwaysUpdates(state);
 		while (isDisabled()) {
 			for (Disablable implementsdisable : toDisable) {
 				if (implementsdisable != null) {
@@ -182,10 +179,7 @@ public class Robot extends SampleRobot {
 		driver = autonomous.getAutoDriver();
 		operator = autonomous.getAutoOperator();
 		new Updater(state, new Updatable[] {align, camera}, slowUpdatePeriod).start(); // Controller and align are potentially slower
-		// IMU, PDP, and Camera should always update
-		new Updater(state, alwaysUpdate, fastUpdatePeriod).start();
-		// always slow updates
-		new Updater(state, alwaysUpdateSlow, slowUpdatePeriod).start();
+		startAlwaysUpdates(state);
 		// These should have fast updates
 		new Updater(state, new Updatable[] {autonomous, driver, operator, mecanumDrive, lidar, frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel, grabber, winch}, fastUpdatePeriod).start();
 		while (getRobotState() == state) {
@@ -215,15 +209,19 @@ public class Robot extends SampleRobot {
 		operator = operatorManager.getOperator();
 		driver = driverManager.getDriver();
 		new Updater(state, new Updatable[] {align}, slowUpdatePeriod).start(); // align is potentially slower
-		// IMU, PDP, and Camera should always update
-		new Updater(state, alwaysUpdate, fastUpdatePeriod).start();
+		startAlwaysUpdates(state);
 		// These should have fast updates
 		new Updater(state, new Updatable[] {driver, operator, mecanumDrive, lidar, frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel, grabber, winch}, fastUpdatePeriod).start();
-		// always slow updates
-		new Updater(state, alwaysUpdateSlow, slowUpdatePeriod).start();
 		while (getRobotState() == state) {
 			Timer.delay(0.01);
 		}
+	}
+	
+	public void startAlwaysUpdates(RobotState state) {
+		// IMU, PDP, and Camera should always update
+		new Updater(state, alwaysUpdate, fastUpdatePeriod).start();
+		// always slow updates
+		new Updater(state, alwaysUpdateSlow, slowUpdatePeriod).start();
 	}
 	
 	public void trainMecanumPID(RobotState state) {
