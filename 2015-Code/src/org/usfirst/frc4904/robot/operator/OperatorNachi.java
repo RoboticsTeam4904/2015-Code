@@ -9,14 +9,13 @@ import org.usfirst.frc4904.robot.output.Winch;
 
 public class OperatorNachi extends Operator {
 	private final LogitechJoystick stick;
-	private final AutoAlign align;
 	private final LogKitten logger;
 	
 	public OperatorNachi(LogitechJoystick stick, Winch winch, AutoAlign align, Grabber grabber) {
 		super(winch, align, grabber);
 		this.stick = stick;
 		this.align = align;
-		logger = new LogKitten("OperatorNachi", LogKitten.LEVEL_VERBOSE, LogKitten.LEVEL_FATAL);
+		logger = new LogKitten("OperatorNachi", LogKitten.LEVEL_VERBOSE, LogKitten.LEVEL_VERBOSE);
 	}
 	
 	public synchronized void update() {
@@ -27,7 +26,7 @@ public class OperatorNachi extends Operator {
 		}
 		if (stick.buttons[0].get()) { // When button 1 is pressed, toggle tote grabbing
 			System.out.print("TOTE");
-			if (align.isGrabberEmpty()) {
+			if (grabber.getState() == Grabber.GrabberState.OPEN) {
 				System.out.println("Grab");
 				grab(MODE_TOTE);
 			} else {
@@ -37,7 +36,7 @@ public class OperatorNachi extends Operator {
 		}
 		if (stick.buttons[1].get()) { // When button 2 is pressed, toggle can grabbing
 			System.out.print("CAN");
-			if (align.isGrabberEmpty()) {
+			if (grabber.getState() == Grabber.GrabberState.OPEN) {
 				System.out.println("Grab");
 				grab(MODE_CAN);
 			} else {

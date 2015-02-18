@@ -5,13 +5,13 @@ import org.usfirst.frc4904.robot.AutoAlign;
 import org.usfirst.frc4904.robot.Disablable;
 import org.usfirst.frc4904.robot.Updatable;
 import org.usfirst.frc4904.robot.output.Grabber;
-import org.usfirst.frc4904.robot.output.Winch;
 import org.usfirst.frc4904.robot.output.Grabber.GrabberState;
+import org.usfirst.frc4904.robot.output.Winch;
 
 public abstract class Operator implements Disablable, Updatable {
-	private final Winch winch;
-	private final AutoAlign align;
-	private final Grabber grabber;
+	protected Winch winch;
+	protected AutoAlign align;
+	protected Grabber grabber;
 	public static final int MODE_TOTE = 0;
 	public static final int MODE_CAN = 1;
 	public static final int MODE_EMPTY = 2;

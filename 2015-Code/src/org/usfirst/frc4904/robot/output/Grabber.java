@@ -5,8 +5,6 @@ import org.usfirst.frc4904.robot.Disablable;
 import org.usfirst.frc4904.robot.LogKitten;
 import org.usfirst.frc4904.robot.Updatable;
 import org.usfirst.frc4904.robot.input.PDP;
-import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.Talon;
 
 public class Grabber extends Talon implements Disablable, Updatable {
 	public static final int RIGHT_OUTER_SWITCH = 0;
@@ -20,7 +18,7 @@ public class Grabber extends Talon implements Disablable, Updatable {
 	private PDP pdp;
 	
 	public enum GrabberState { // an enum containing grabber states and their values
-		OPEN(0), CLOSED(-0.1), OPENING(0.1), CLOSING(-0.25), DISABLED(0); // grabber state and values
+		OPEN(0), CLOSED(-0.25), OPENING(0.25), CLOSING(-0.5), DISABLED(0); // grabber state and values
 		public final double motorSpeed; // the architecture allowing the enum states to have values
 		
 		private GrabberState(double speed) {
@@ -34,14 +32,14 @@ public class Grabber extends Talon implements Disablable, Updatable {
 		this.limitSwitches = limitSwitches;
 		this.pdp = pdp;
 		grabberState = GrabberState.OPEN;
-		logger = new LogKitten("Grabber", LogKitten.LEVEL_VERBOSE, LogKitten.LEVEL_FATAL);
+		logger = new LogKitten("Grabber", LogKitten.LEVEL_VERBOSE, LogKitten.LEVEL_VERBOSE);
 		overrideSpeed = 0;
 		override = false;
 	}
 	
 	public void setDesiredGrabberState(GrabberState state) {
 		if (state == grabberState) {
-			logger.v("setDesiredGrabberState", "Not changing state");
+			logger.d("setDesiredGrabberState", "Not changing state");
 			return;
 		}
 		switch (state) {
@@ -50,14 +48,14 @@ public class Grabber extends Talon implements Disablable, Updatable {
 					break;
 				}
 				grabberState = GrabberState.OPENING;
-				logger.v("setDesiredGrabberState", "Setting state to opening");
+				logger.w("setDesiredGrabberState", "Setting state to opening");
 				break;
 			case CLOSED:
 				if (grabberState == GrabberState.CLOSING) {
 					break;
 				}
 				grabberState = GrabberState.CLOSING;
-				logger.v("setDesiredGrabberState", "Setting state to closing");
+				logger.w("setDesiredGrabberState", "Setting state to closing");
 				break;
 			default:
 				throw new Error("Invalid or unsupported state passed to setDesiredGrabberState");
@@ -72,7 +70,7 @@ public class Grabber extends Talon implements Disablable, Updatable {
 		} else {
 			set(overrideSpeed);
 		}
-		logger.v("update", "motorSpeed: " + grabberState.motorSpeed);
+		logger.d("update", "motorSpeed: " + grabberState.motorSpeed);
 	}
 	
 	private void checkLimitSwitches() {
