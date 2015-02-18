@@ -25,22 +25,22 @@ public class OperatorNachi extends Operator {
 			adjust(0);
 		}
 		if (stick.buttons[0].get()) { // When button 1 is pressed, toggle tote grabbing
-			System.out.print("TOTE");
+			logger.v("update", "TOTE");
 			if (grabber.getState() == Grabber.GrabberState.OPEN || grabber.getState() == Grabber.GrabberState.DISABLED) {
-				System.out.println("Grab");
+				logger.v("update tote", "Grab");
 				grab(MODE_TOTE);
 			} else {
-				System.out.println("Release");
+				logger.v("update tote", "Release");
 				release();
 			}
 		}
 		if (stick.buttons[1].get()) { // When button 2 is pressed, toggle can grabbing
-			System.out.print("CAN");
+			logger.v("update", "CAN");
 			if (grabber.getState() == Grabber.GrabberState.OPEN) {
-				System.out.println("Grab");
+				logger.v("update can", "Grab");
 				grab(MODE_CAN);
 			} else {
-				System.out.println("Release");
+				logger.v("update can", "Release");
 				release();
 			}
 		}

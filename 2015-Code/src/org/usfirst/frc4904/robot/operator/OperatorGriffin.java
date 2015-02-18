@@ -25,10 +25,10 @@ public class OperatorGriffin extends Operator {
 		// Method 1
 		if (!untouched) {
 			if (stick.buttons[0].get() && grabber.getState() == Grabber.GrabberState.OPEN) { // if trigger pressed and grabber empty
-				System.out.print("TOTE Grab");
+				logger.v("update", "TOTE Grab");
 				grab(MODE_TOTE);
 			} else if (!stick.buttons[0].get() && grabber.getState() != Grabber.GrabberState.OPEN) { // if trigger not pressed and grabber not empty
-				System.out.println("TOTE Release");
+				logger.v("update", "TOTE Release");
 				release();
 			}
 		} else {
