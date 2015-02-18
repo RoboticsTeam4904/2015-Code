@@ -5,8 +5,8 @@ import org.usfirst.frc4904.robot.AutoAlign;
 import org.usfirst.frc4904.robot.Disablable;
 import org.usfirst.frc4904.robot.Updatable;
 import org.usfirst.frc4904.robot.output.Grabber;
-import org.usfirst.frc4904.robot.output.Winch;
 import org.usfirst.frc4904.robot.output.Grabber.GrabberState;
+import org.usfirst.frc4904.robot.output.Winch;
 
 public abstract class Operator implements Disablable, Updatable {
 	private final Winch winch;
@@ -14,7 +14,6 @@ public abstract class Operator implements Disablable, Updatable {
 	private final Grabber grabber;
 	public static final int MODE_TOTE = 0;
 	public static final int MODE_CAN = 1;
-	public static final int MODE_EMPTY = 2;
 	
 	public Operator(Winch winch, AutoAlign align, Grabber grabber) {
 		this.winch = winch;
