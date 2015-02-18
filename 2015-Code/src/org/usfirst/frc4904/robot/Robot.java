@@ -170,10 +170,6 @@ public class Robot extends SampleRobot {
 					implementsdisable.disable();
 				}
 			}
-			frontLeftWheel.set(0);
-			frontRightWheel.set(0);
-			backLeftWheel.set(0);
-			backRightWheel.set(0);
 			Timer.delay(0.01);
 		}
 	}
