@@ -33,18 +33,16 @@ public class SuperEncoder {
 	}
 	
 	public int getTicks() {
-		logger.v("getTicks", "Tick request");
+		logger.d("getTicks", "Tick request");
 		byte[] toRecieve = new byte[4];
 		byte[] toSend = new byte[1];
 		toSend = new byte[] {0};
-		logger.v("getTicks", "Begin i2c transaction");
+		logger.d("getTicks", "Begin i2c transaction");
 		i2c.transaction(toSend, 1, toRecieve, 4);
-		logger.v("getTicks", "End i2c transaction");
+		logger.d("getTicks", "End i2c transaction");
 		int value = new BigInteger(toRecieve).intValue();
 		value = Integer.reverse(value);
-		if (value != 0) {
-			logger.v("getTicks", Integer.toString(value));
-		}
+		logger.v("getTicks", Integer.toString(value));
 		return value;
 	}
 	

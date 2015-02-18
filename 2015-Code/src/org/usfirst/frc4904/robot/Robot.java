@@ -44,9 +44,9 @@ public class Robot extends SampleRobot {
 	private static final int BACK_RIGHT_ENCODER_I2C_PORT = 13;
 	private static final int WINCH_ENCODER_I2C_PORT = 14;
 	private static final int UDAR_I2C_PORT = 4;
-	private static final double WINCH_P_COEFFICIENT = 0.1;
-	private static final double WINCH_I_COEFFICIENT = 0.1;
-	private static final double WINCH_D_COEFFICIENT = 0.1;
+	private static final double WINCH_P_COEFFICIENT = 0.001;
+	private static final double WINCH_I_COEFFICIENT = 0.001;
+	private static final double WINCH_D_COEFFICIENT = 0.001;
 	private static final double MECANUM_P_COEFFICIENT = 0.1;
 	private static final double MECANUM_I_COEFFICIENT = 0.1;
 	private static final double MECANUM_D_COEFFICIENT = 0.1;

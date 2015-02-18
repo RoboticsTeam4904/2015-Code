@@ -15,7 +15,7 @@ public class MPU9150 implements Updatable {
 	LogKitten logger;
 	
 	public MPU9150() {
-		logger = new LogKitten("MPU9150", LogKitten.LEVEL_VERBOSE, LogKitten.LEVEL_VERBOSE);
+		logger = new LogKitten("MPU9150", LogKitten.LEVEL_VERBOSE, LogKitten.LEVEL_WARN);
 		port = new SerialPort(115200, SerialPort.Port.kMXP);
 		port.enableTermination();
 		port.setReadBufferSize(8192);
@@ -52,7 +52,7 @@ public class MPU9150 implements Updatable {
 			if (data.length() == 10) {
 				e.printStackTrace();
 			} else {
-				System.out.println("data: " + data + ", length" + data.length());
+				logger.w("update", "data: " + data + ", length" + data.length());
 			}
 			return 0;
 		}
@@ -64,7 +64,7 @@ public class MPU9150 implements Updatable {
 		 * while (!current.matches("\n") && port.getBytesReceived() > 10) { current = port.readString(1); imuData += current; // logger.v("adding data", imuData); }
 		 */
 		while (port.getBytesReceived() > 48) {
-			System.out.println("Bytes received: " + port.getBytesReceived() + " At " + System.currentTimeMillis());
+			logger.v("update", "Bytes received: " + port.getBytesReceived() + " At " + System.currentTimeMillis());
 			try {
 				imuData = new String(port.read(port.getBytesReceived()));
 			}
@@ -77,12 +77,12 @@ public class MPU9150 implements Updatable {
 			// ///////////////////////////////////////////////////////
 			// System.out.println("MPUInput " + imuData);
 			if (imuData.length() < 20) {
-				System.out.println("Too little data");
+				logger.w("update", "Too little data");
 				return;
 			}
 			String[] floatString = imuData.split(",");
 			if (floatString.length < 4) {
-				System.out.println("Data array too short :" + floatString.length);
+				logger.w("update", "Data array too short :" + floatString.length);
 				return;
 			}
 			double q[] = new double[4];
@@ -93,9 +93,9 @@ public class MPU9150 implements Updatable {
 			angles[0] = Math.atan2(2 * q[1] * q[2] - 2 * q[0] * q[3], 2 * q[0] * q[0] + 2 * q[1] * q[1] - 1);
 			angles[1] = -1 * Math.asin(2 * q[1] * q[3] + 2 * q[0] * q[2]);
 			angles[2] = Math.atan2(2 * q[2] * q[3] - 2 * q[0] * q[1], 2 * q[0] * q[0] + 2 * q[3] * q[3] - 1);
-			System.out.println("update1 " + Double.toString(angles[0]));
-			System.out.println("update2 " + Double.toString(angles[1]));
-			System.out.println("update3 " + Double.toString(angles[2]));
+			logger.v("update", "update1 " + Double.toString(angles[0]));
+			logger.v("update", "update2 " + Double.toString(angles[1]));
+			logger.v("update", "update3 " + Double.toString(angles[2]));
 		}
 		port.flush();
 	}

@@ -10,7 +10,7 @@ public class Winch extends PositionEncodedMotor implements Disablable {
 	private int currentHeight;
 	
 	public Winch(int channel, SuperEncoder encoder) {
-		super(channel, encoder, new PID(1.0, 0.0, 0.3));
+		super(channel, encoder, new PID(0.01, 0.01, 0.03));
 		currentHeight = 0;
 	}
 	

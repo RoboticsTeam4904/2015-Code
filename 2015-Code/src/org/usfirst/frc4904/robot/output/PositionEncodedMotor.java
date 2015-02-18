@@ -9,7 +9,7 @@ public class PositionEncodedMotor extends EncodedMotor {
 	
 	public PositionEncodedMotor(int channel, SuperEncoder encoder, PID pid) {
 		super(channel, encoder, pid);
-		logger = new LogKitten("PositionEncodedMotor" + channel, LogKitten.LEVEL_VERBOSE);
+		logger = new LogKitten("PositionEncodedMotor" + channel, LogKitten.LEVEL_DEBUG, LogKitten.LEVEL_DEBUG);
 	}
 	
 	public void setValue(double value) {
