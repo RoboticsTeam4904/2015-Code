@@ -9,9 +9,9 @@ import org.usfirst.frc4904.robot.output.Grabber.GrabberState;
 import org.usfirst.frc4904.robot.output.Winch;
 
 public abstract class Operator implements Disablable, Updatable {
-	private final Winch winch;
-	private final AutoAlign align;
-	private final Grabber grabber;
+	protected Winch winch;
+	protected AutoAlign align;
+	protected Grabber grabber;
 	public static final int MODE_TOTE = 0;
 	public static final int MODE_CAN = 1;
 	
