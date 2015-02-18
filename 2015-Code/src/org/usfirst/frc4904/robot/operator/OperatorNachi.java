@@ -26,7 +26,7 @@ public class OperatorNachi extends Operator {
 		}
 		if (stick.buttons[0].get()) { // When button 1 is pressed, toggle tote grabbing
 			System.out.print("TOTE");
-			if (grabber.getState() == Grabber.GrabberState.OPEN) {
+			if (grabber.getState() == Grabber.GrabberState.OPEN || grabber.getState() == Grabber.GrabberState.DISABLED) {
 				System.out.println("Grab");
 				grab(MODE_TOTE);
 			} else {

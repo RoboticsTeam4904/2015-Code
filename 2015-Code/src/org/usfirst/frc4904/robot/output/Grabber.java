@@ -5,12 +5,14 @@ import org.usfirst.frc4904.robot.Disablable;
 import org.usfirst.frc4904.robot.LogKitten;
 import org.usfirst.frc4904.robot.Updatable;
 import org.usfirst.frc4904.robot.input.PDP;
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Talon;
 
 public class Grabber extends Talon implements Disablable, Updatable {
 	public static final int RIGHT_OUTER_SWITCH = 0;
 	public static final int LEFT_OUTER_SWITCH = 1;
 	public static final int PDP_PORT = 1;
-	private static final double MAX_AMPS = 4; // Tune this value
+	private static final double MAX_AMPS = 6; // Tune this value
 	private final DigitalInput[] limitSwitches;
 	private LogKitten logger;
 	private double overrideSpeed;
@@ -32,7 +34,7 @@ public class Grabber extends Talon implements Disablable, Updatable {
 		this.limitSwitches = limitSwitches;
 		this.pdp = pdp;
 		grabberState = GrabberState.OPEN;
-		logger = new LogKitten("Grabber", LogKitten.LEVEL_VERBOSE, LogKitten.LEVEL_VERBOSE);
+		logger = new LogKitten("Grabber", LogKitten.LEVEL_DEBUG, LogKitten.LEVEL_VERBOSE);
 		overrideSpeed = 0;
 		override = false;
 	}
@@ -96,9 +98,11 @@ public class Grabber extends Talon implements Disablable, Updatable {
 			switch (grabberState) {
 				case OPENING:
 					grabberState = GrabberState.OPEN;
+					logger.v("checkPowerUsage", "stopped open");
 					return;
 				case CLOSING:
 					grabberState = GrabberState.CLOSED;
+					logger.v("checkPowerUsage", "stopped close");
 					return;
 				default:
 					return;
@@ -112,6 +116,7 @@ public class Grabber extends Talon implements Disablable, Updatable {
 	}
 	
 	public GrabberState getState() {
+		System.out.println("State: " + grabberState);
 		return grabberState;
 	}
 	

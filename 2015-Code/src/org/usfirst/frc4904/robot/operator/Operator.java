@@ -28,16 +28,11 @@ public abstract class Operator implements Disablable, Updatable {
 	}
 	
 	protected void grab(int mode) {
-		grabber.setDesiredGrabberState(GrabberState.OPEN);
-		if (mode == MODE_TOTE) {
-			align.grabTote();
-		} else if (mode == MODE_CAN) {
-			align.grabCan();
-		}
+		grabber.setDesiredGrabberState(GrabberState.CLOSED);
 	}
 	
 	protected void release() {
-		align.release();
+		grabber.setDesiredGrabberState(GrabberState.OPEN);
 	}
 	
 	protected void adjust(double value) {
