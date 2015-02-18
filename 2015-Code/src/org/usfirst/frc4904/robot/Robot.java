@@ -147,7 +147,7 @@ public class Robot extends SampleRobot {
 		autonomous = autonomousManager.getAutonomous();
 		// This list should include everything with a motor
 		toDisable = new Disablable[] {winch, grabber, driver, operator, autonomous, frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel};
-		alwaysUpdate = new Updatable[] {imu, pdp, camera};
+		alwaysUpdate = new Updatable[] {imu, pdp};
 		alwaysUpdateSlow = new Updatable[] {};
 	}
 	
@@ -185,7 +185,7 @@ public class Robot extends SampleRobot {
 		autonomous = autonomousManager.getAutonomous();
 		driver = autonomous.getAutoDriver();
 		operator = autonomous.getAutoOperator();
-		new Updater(state, new Updatable[] {align}, slowUpdatePeriod).start(); // Controller and align are potentially slower
+		new Updater(state, new Updatable[] {align, camera}, slowUpdatePeriod).start(); // Controller and align are potentially slower
 		// IMU, PDP, and Camera should always update
 		new Updater(state, alwaysUpdate, fastUpdatePeriod).start();
 		// always slow updates
