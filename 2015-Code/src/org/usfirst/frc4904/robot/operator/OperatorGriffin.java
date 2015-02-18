@@ -10,54 +10,29 @@ import org.usfirst.frc4904.robot.output.Winch;
 public class OperatorGriffin extends Operator {
 	private final LogitechJoystick stick;
 	private final LogKitten logger;
+	private final AutoAlign align;
+	private boolean untouched = true;
 	
 	public OperatorGriffin(LogitechJoystick stick, Winch winch, AutoAlign align, Grabber grabber) {
 		super(winch, align, grabber);
 		this.stick = stick;
+		this.align = align;
 		logger = new LogKitten("OperatorGriffin", LogKitten.LEVEL_VERBOSE, LogKitten.LEVEL_FATAL);
 	}
 	
 	public synchronized void update() {
-		if (stick.buttons[1].getRaw()) {
-			adjust(stick.getY()); // When button 2 is pressed, adjust the winch
+		adjust(stick.getY()); // Always adjust the winch speed via the stick value
+		// Method 1
+		if (!untouched) {
+			if (stick.buttons[0].get() && grabber.getState() == Grabber.GrabberState.OPEN) { // if trigger pressed and grabber empty
+				System.out.print("TOTE Grab");
+				grab(MODE_TOTE);
+			} else if (!stick.buttons[0].get() && grabber.getState() != Grabber.GrabberState.OPEN) { // if trigger not pressed and grabber not empty
+				System.out.println("TOTE Release");
+				release();
+			}
 		} else {
-			adjust(0);
-		}
-		if (stick.buttons[3].get()) {
-			changeHeight(1); // When button 4 is pressed, raise the winch one level
-		}
-		if (stick.buttons[2].get()) {
-			changeHeight(-1); // When button 3 is pressed, lower the winch one level
-		}
-		if (stick.buttons[5].get()) {
-			changeHeight(12); // When button 6 is pressed, raise the winch all the way
-		}
-		if (stick.buttons[4].get()) {
-			changeHeight(-12); // When button 5 is pressed, lower the winch all the way
-		}
-		if (stick.buttons[9].get()) {
-			grab(MODE_TOTE); // When button 10 is pressed, grab a wide tote
-		}
-		if (stick.buttons[7].get()) {
-			grab(MODE_CAN); // When button 8 is pressed, grab a can
-		}
-		if (stick.buttons[10].get()) {
-			release(); // When button 11 is pressed, release a thin tote
-		}
-		if (stick.buttons[8].get()) {
-			release(); // When button 9 is pressed, release a wide tote
-		}
-		if (stick.buttons[6].get()) {
-			release(); // When button 7 is pressed, release a can
-		}
-		// Grabber override
-		if (stick.buttons[11].getRaw()) {
-			overrideGrabber(stick.getY());
-		}
-		// Disable
-		if (stick.buttons[0].get()) {
-			disable();
-			logger.w("update", "disabled");
+			untouched = !stick.buttons[0].getRaw(); // technically only runs once
 		}
 	}
 	
