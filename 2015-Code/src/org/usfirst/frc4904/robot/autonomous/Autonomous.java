@@ -50,6 +50,7 @@ public class Autonomous implements Updatable, Disablable {
 	
 	public void update() {
 		if (finished) {
+			disable();
 			return;
 		}
 		if (!firstInit) {
