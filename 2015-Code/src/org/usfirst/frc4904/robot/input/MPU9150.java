@@ -18,8 +18,10 @@ public class MPU9150 implements Updatable {
 		logger = new LogKitten("MPU9150", LogKitten.LEVEL_VERBOSE, LogKitten.LEVEL_VERBOSE);
 		port = new SerialPort(115200, SerialPort.Port.kMXP);
 		port.enableTermination();
-		port.setReadBufferSize(1024);
+		port.setReadBufferSize(8192);
+		port.setWriteBufferSize(8192);
 		port.reset();
+		port.flush();
 		imuData = "";
 		angles = new double[3];
 		Arrays.fill(angles, (double) 0);
@@ -57,12 +59,12 @@ public class MPU9150 implements Updatable {
 	}
 	
 	public void update() {
-		System.out.println(port.getBytesReceived());
 		// String current = "a";
 		/*
 		 * while (!current.matches("\n") && port.getBytesReceived() > 10) { current = port.readString(1); imuData += current; // logger.v("adding data", imuData); }
 		 */
-		if (port.getBytesReceived() > 40) {
+		while (port.getBytesReceived() > 48) {
+			System.out.println("Bytes received: " + port.getBytesReceived() + " At " + System.currentTimeMillis());
 			try {
 				imuData = new String(port.read(port.getBytesReceived()));
 			}
@@ -71,7 +73,9 @@ public class MPU9150 implements Updatable {
 				e.printStackTrace();
 				return;
 			}
+			// System.out.println("Got data " + imuData);
 			// ///////////////////////////////////////////////////////
+			// System.out.println("MPUInput " + imuData);
 			if (imuData.length() < 20) {
 				System.out.println("Too little data");
 				return;
@@ -89,10 +93,9 @@ public class MPU9150 implements Updatable {
 			angles[0] = Math.atan2(2 * q[1] * q[2] - 2 * q[0] * q[3], 2 * q[0] * q[0] + 2 * q[1] * q[1] - 1);
 			angles[1] = -1 * Math.asin(2 * q[1] * q[3] + 2 * q[0] * q[2]);
 			angles[2] = Math.atan2(2 * q[2] * q[3] - 2 * q[0] * q[1], 2 * q[0] * q[0] + 2 * q[3] * q[3] - 1);
-			System.out.println("update1 " + Double.toString(angles[0]) + " Time: " + System.currentTimeMillis());
-			/*
-			 * System.out.println("update1 " + Double.toString(angles[0])); System.out.println("update2 " + Double.toString(angles[1])); System.out.println("update3 " + Double.toString(angles[2]));
-			 */
+			System.out.println("update1 " + Double.toString(angles[0]));
+			System.out.println("update2 " + Double.toString(angles[1]));
+			System.out.println("update3 " + Double.toString(angles[2]));
 		}
 		port.flush();
 	}
