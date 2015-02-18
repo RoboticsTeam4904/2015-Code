@@ -1,17 +1,15 @@
 package org.usfirst.frc4904.robot.lights;
 
 
-public class EasyLightStep {
+public class EasyLightStep extends LightStep {
 	protected volatile int redValue;
 	protected volatile int blueValue;
 	protected volatile int greenValue;
 	protected volatile long duration;
 	private volatile long completeTime;
 	private volatile boolean lightsAreSet;
-	private int ledCount = 209;
-	private byte[] ledData = new byte[ledCount * 3]; // length of 209
 	
-	public class RGBRange {
+	public static class RGBRange {
 		public int r;
 		public int g;
 		public int b;
@@ -38,20 +36,15 @@ public class EasyLightStep {
 	protected RGBRange[] ranges;
 	protected final RGBRange resetRange = new RGBRange(0, 0, 0, 0, ledCount - 1);
 	
-	private void init(long durationMillis) {
-		completeTime = System.currentTimeMillis() + durationMillis;
-		for (int i = ledData.length; i >= 0; i--) {
-			ledData[i] = (byte) 0;
-		}
-	}
-	
 	public EasyLightStep(RGBRange[] ranges, long durationMillis) {
-		init(durationMillis);
+		super(); // init leds
+		completeTime = System.currentTimeMillis() + durationMillis;
 		this.ranges = ranges;
 	}
 	
 	public EasyLightStep(int r, int g, int b, long durationMillis) {
-		init(durationMillis);
+		super(); // init leds
+		completeTime = System.currentTimeMillis() + durationMillis;
 		this.ranges[0] = new RGBRange(r, g, b, 0, ledCount - 1);
 	}
 	
@@ -82,13 +75,5 @@ public class EasyLightStep {
 		}
 		resetLights();
 		return true;
-	}
-	
-	public void resetLights() {
-		applyRange(this.resetRange);
-	}
-	
-	public byte[] getLedData() {
-		return ledData;
 	}
 }
