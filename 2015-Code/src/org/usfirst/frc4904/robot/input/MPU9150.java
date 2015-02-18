@@ -18,8 +18,8 @@ public class MPU9150 implements Updatable {
 		logger = new LogKitten("MPU9150", LogKitten.LEVEL_VERBOSE, LogKitten.LEVEL_WARN);
 		port = new SerialPort(115200, SerialPort.Port.kMXP);
 		port.enableTermination();
-		port.setReadBufferSize(8192);
-		port.setWriteBufferSize(8192);
+		port.setReadBufferSize(128);
+		port.setWriteBufferSize(128);
 		port.reset();
 		port.flush();
 		imuData = "";
@@ -63,7 +63,7 @@ public class MPU9150 implements Updatable {
 		/*
 		 * while (!current.matches("\n") && port.getBytesReceived() > 10) { current = port.readString(1); imuData += current; // logger.v("adding data", imuData); }
 		 */
-		while (port.getBytesReceived() > 48) {
+		if (port.getBytesReceived() > 48) {
 			logger.v("update", "Bytes received: " + port.getBytesReceived() + " At " + System.currentTimeMillis());
 			try {
 				imuData = new String(port.read(port.getBytesReceived()));

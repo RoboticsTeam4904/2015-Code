@@ -38,11 +38,8 @@ public class Robot extends SampleRobot {
 	private static final int RIGHT_OUTER_SWITCH_PORT = 0;
 	private static final int LEFT_OUTER_SWITCH_PORT = 1;
 	// Various I2C ports
-	private static final int FRONT_LEFT_ENCODER_I2C_PORT = 10;
-	private static final int FRONT_RIGHT_ENCODER_I2C_PORT = 11;
-	private static final int BACK_LEFT_ENCODER_I2C_PORT = 12;
-	private static final int BACK_RIGHT_ENCODER_I2C_PORT = 13;
-	private static final int WINCH_ENCODER_I2C_PORT = 14;
+	private static final int WINCH_ENCODER_PORT = 2;
+	private static final int WINCH_ENCODER_PORT_2 = 3;
 	private static final int UDAR_I2C_PORT = 4;
 	private static final double WINCH_P_COEFFICIENT = 0.001;
 	private static final double WINCH_I_COEFFICIENT = 0.001;
@@ -60,10 +57,6 @@ public class Robot extends SampleRobot {
 	private final DigitalInput limitSwitches[] = new DigitalInput[2];
 	private final Camera camera;
 	// private final DemoLightSequence lightSequence;
-	private final SuperEncoder frontLeftEncoder;
-	private final SuperEncoder frontRightEncoder;
-	private final SuperEncoder backLeftEncoder;
-	private final SuperEncoder backRightEncoder;
 	private final SuperEncoder winchEncoder;
 	// movement controllers
 	private final Winch winch; // the Winch class takes care of moving to specific heights
@@ -110,11 +103,7 @@ public class Robot extends SampleRobot {
 		limitSwitches[Grabber.RIGHT_OUTER_SWITCH] = new DigitalInput(RIGHT_OUTER_SWITCH_PORT);
 		limitSwitches[Grabber.LEFT_OUTER_SWITCH] = new DigitalInput(LEFT_OUTER_SWITCH_PORT);
 		// Initialize Encoders
-		frontLeftEncoder = new SuperEncoder(FRONT_LEFT_ENCODER_I2C_PORT);
-		frontRightEncoder = new SuperEncoder(FRONT_RIGHT_ENCODER_I2C_PORT);
-		backLeftEncoder = new SuperEncoder(BACK_LEFT_ENCODER_I2C_PORT);
-		backRightEncoder = new SuperEncoder(BACK_RIGHT_ENCODER_I2C_PORT);
-		winchEncoder = new SuperEncoder(WINCH_ENCODER_I2C_PORT);
+		winchEncoder = new SuperEncoder(WINCH_ENCODER_PORT, WINCH_ENCODER_PORT_2);
 		imu = new IMU(); // Initialize IMU
 		udar = new UDAR(UDAR_I2C_PORT); // Initialize UDAR
 		lidar = new LIDAR(); // Initialize LIDAR
