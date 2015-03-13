@@ -9,18 +9,19 @@ public class IMU extends MPU9150 {
 	private double[] angles; // Angle 0 is perpendicular (yaw), Angle 1 is lateral (pitch), Angle 2 is longitudinal (roll)
 	private double[] lastAngles;
 	private double[] rate; // Same as above
-	private double zeroAngle;
+	private double[] zeroAngles;
 	private double lastTime;
 	
 	public IMU() {
-		// super(serial);
 		super();
 		logger = new LogKitten("IMU", LogKitten.LEVEL_FATAL, LogKitten.LEVEL_DEBUG);
 		angles = new double[3];
 		lastAngles = new double[3];
+		zeroAngles = new double[3];
 		rate = new double[3];
 		Arrays.fill(angles, (double) 0);
 		Arrays.fill(lastAngles, (double) 0);
+		Arrays.fill(zeroAngles, (double) 0);
 		lastTime = getTime();
 		zero();
 	}
@@ -41,7 +42,9 @@ public class IMU extends MPU9150 {
 	private void zero() {
 		// TODO set current orientation as "forward"
 		update();
-		zeroAngle = angles[0];
+		zeroAngles[0] += angles[0];
+		zeroAngles[1] += angles[1];
+		zeroAngles[2] += angles[2];
 	}
 	
 	public synchronized void update() {
@@ -61,6 +64,9 @@ public class IMU extends MPU9150 {
 	
 	private void readData() {
 		angles = super.read();
+		angles[0] -= zeroAngles[0];
+		angles[1] -= zeroAngles[1];
+		angles[2] -= zeroAngles[2];
 		logger.d("readData", Arrays.toString(angles));
 	}
 	

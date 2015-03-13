@@ -5,7 +5,6 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import org.usfirst.frc4904.robot.LogKitten;
 import org.usfirst.frc4904.robot.Updatable;
-import edu.wpi.first.wpilibj.SerialPort;
 
 public class LIDAR implements Updatable {
 	int[] dists = new int[360];
@@ -17,21 +16,17 @@ public class LIDAR implements Updatable {
 	public static final int LIDAR_MOUNT_OFFSET = -100; // mm to right. Cartesian. Because.
 	public static final int GRABBER_LENGTH = 700; // Distance from LIDAR to grabber
 	public static final int GRABBER_LENGTH_OFFSET = GRABBER_LENGTH + 100; // Go an extra 100 mm (to tell if lines are the grabber or totes)
-	private final SerialPort port;
 	
+	// private final SerialPort port;
 	public LIDAR() {
 		logger = new LogKitten("LIDAR", LogKitten.LEVEL_FATAL, LogKitten.LEVEL_DEBUG);
 		logger.v("LIDAR", "Started Logging");
-		port = new SerialPort(115200, SerialPort.Port.kOnboard);
-		port.setReadBufferSize(8192 * 2);
-		port.setWriteBufferSize(8192 * 2);
-		port.reset();
-		port.flush();
+		// port = new SerialPort(115200, SerialPort.Port.kOnboard);
 	}
 	
 	private byte[] read(int bytes) throws Exception {
 		byte[] b = new byte[bytes];
-		b = port.read(bytes);
+		// b = port.read(bytes);
 		for (int i = 0; i < bytes; i++) {
 			logger.d("read", Integer.toString(i) + " " + Byte.toString(b[i]));
 		}
@@ -102,10 +97,12 @@ public class LIDAR implements Updatable {
 	}
 	
 	public void update() {
-		if (port.getBytesReceived() < 128) { // LIDAR returns 1980 bytes per cycle
-			logger.v("getBytesReceived", "only " + port.getBytesReceived() + " bytes received");
+		if (10 < 20) {
 			return;
 		}
+		// if (port.getBytesReceived() < 128) { // LIDAR returns 1980 bytes per cycle
+		// logger.v("getBytesReceived", "only " + port.getBytesReceived() + " bytes received");
+		// }
 		logger.v("update", "Updating LIDAR");
 		byte scanhdr = (byte) 0xA0;
 		try {
