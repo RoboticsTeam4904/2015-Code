@@ -4,6 +4,7 @@ package org.usfirst.frc4904.robot.input;
 import java.util.Arrays;
 import org.usfirst.frc4904.robot.Updatable;
 import edu.wpi.first.wpilibj.PIDSource;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class IMU extends MPU9150 implements PIDSource, Updatable {
 	private double[] angles; // Angle 0 is perpendicular (yaw), Angle 1 is lateral (pitch), Angle 2 is longitudinal (roll)
@@ -11,6 +12,7 @@ public class IMU extends MPU9150 implements PIDSource, Updatable {
 	private double[] rate; // Same as above
 	private double[] zeroAngles;
 	private double lastTime;
+	private boolean pdpLogging = true;
 	
 	public IMU() {
 		super();
@@ -52,6 +54,9 @@ public class IMU extends MPU9150 implements PIDSource, Updatable {
 		angles[0] = ((angles[0] - zeroAngles[0] + 3600) % 360);
 		angles[1] = ((angles[1] - zeroAngles[1] + 3600) % 360);
 		angles[2] = ((angles[2] - zeroAngles[2] + 3600) % 360);
+		SmartDashboard.putNumber("Yaw", angles[0]);
+		SmartDashboard.putNumber("Pitch", angles[1]); // This might be roll
+		SmartDashboard.putNumber("Roll", angles[2]); // This might be pitch
 	}
 	
 	public double[] read() {
