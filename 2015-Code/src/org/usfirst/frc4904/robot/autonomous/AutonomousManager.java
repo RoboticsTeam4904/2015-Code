@@ -14,9 +14,11 @@ import org.usfirst.frc4904.robot.output.Winch;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class AutonomousManager {
-	private final Autonomous[] autonomouses = new Autonomous[2];
+	private final Autonomous[] autonomouses = new Autonomous[3];
 	private static final int YELLOW_TOTE_STACK = 0;
 	private static final int LANDFILL_STACK = 1;
+	private static final int ONE_TOTE_MOVE = 2;
+	private static final int AUTO_ZONE_MOVE = 3;
 	private static final int AUTO_DEFAULT = YELLOW_TOTE_STACK;
 	private final Mecanum mecanumDrive;
 	private final Winch winch;
@@ -25,8 +27,10 @@ public class AutonomousManager {
 	private final LogKitten logger;
 	
 	public AutonomousManager(Mecanum mecanumDrive, Winch winch, Grabber grabber, AutoAlign align, Camera camera, LIDAR lidar, IMU imu) {
-		autonomouses[YELLOW_TOTE_STACK] = new YellowToteStack(camera, align, lidar, imu);
-		autonomouses[LANDFILL_STACK] = new LandfillStack(lidar, align);
+		autonomouses[YELLOW_TOTE_STACK] = new YellowToteStack(camera, grabber, lidar, imu);
+		autonomouses[LANDFILL_STACK] = new LandfillStack(lidar, grabber);
+		autonomouses[ONE_TOTE_MOVE] = new OneToteMove(imu, grabber);
+		autonomouses[AUTO_ZONE_MOVE] = new AutoZoneMove(imu);
 		this.mecanumDrive = mecanumDrive;
 		this.winch = winch;
 		this.align = align;

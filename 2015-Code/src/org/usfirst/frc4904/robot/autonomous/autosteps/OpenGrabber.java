@@ -1,25 +1,24 @@
 package org.usfirst.frc4904.robot.autonomous.autosteps;
 
 
-import org.usfirst.frc4904.robot.AutoAlign;
 import org.usfirst.frc4904.robot.autonomous.Step;
+import org.usfirst.frc4904.robot.output.Grabber;
+import org.usfirst.frc4904.robot.output.Grabber.GrabberState;
 
 public class OpenGrabber extends Step {
-	private final AutoAlign align;
+	private final Grabber grabber;
 	
-	public OpenGrabber(AutoAlign align) {
-		this.align = align;
+	public OpenGrabber(Grabber grabber) {
+		this.grabber = grabber;
 	}
 	
 	public void init() {}
 	
 	public boolean run() {
-		if (align.isGrabberEmpty()) {
+		grabber.setDesiredGrabberState(GrabberState.OPEN);
+		if (grabber.getState() == GrabberState.OPEN) {
 			return true;
 		} else {
-			if (!align.isCurrentlyReleasing()) {
-				align.release();
-			}
 			return false;
 		}
 	}
