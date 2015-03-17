@@ -81,6 +81,7 @@ public class Robot extends SampleRobot {
 	// Logging system
 	private final LogKitten logger;
 	// Disables
+	private final Enablable[] toEnable;
 	private final Disablable[] toDisable;
 	private final Updatable[] alwaysUpdate;
 	private final Updatable[] alwaysUpdateSlow;
@@ -134,6 +135,7 @@ public class Robot extends SampleRobot {
 		autonomous = autonomousManager.getAutonomous();
 		// This list should include everything with a motor
 		toDisable = new Disablable[] {winch, grabber, driver, operator, autonomous, frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel};
+		toEnable = new Enablable[] {mecanumDrive, winch};
 		alwaysUpdate = new Updatable[] {imu, pdp};
 		alwaysUpdateSlow = new Updatable[] {};
 	}
@@ -165,7 +167,11 @@ public class Robot extends SampleRobot {
 		autonomous = autonomousManager.getAutonomous();
 		driver = autonomous.getAutoDriver();
 		operator = autonomous.getAutoOperator();
-		mecanumDrive.enable();
+		for (Enablable implementsenable : toEnable) {
+			if (implementsenable != null) {
+				implementsenable.enable();
+			}
+		}
 		new Updater(state, new Updatable[] {camera}, slowUpdatePeriod).start(); // Controller and align are potentially slower
 		startAlwaysUpdates(state);
 		// These should have fast updates
@@ -194,7 +200,11 @@ public class Robot extends SampleRobot {
 			default:
 				break;
 		}
-		mecanumDrive.enable();
+		for (Enablable implementsenable : toEnable) {
+			if (implementsenable != null) {
+				implementsenable.enable();
+			}
+		}
 		operator = operatorManager.getOperator();
 		driver = driverManager.getDriver();
 		new Updater(state, new Updatable[] {}, slowUpdatePeriod).start(); // align is potentially slower

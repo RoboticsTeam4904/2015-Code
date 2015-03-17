@@ -2,12 +2,13 @@ package org.usfirst.frc4904.robot.output;
 
 
 import org.usfirst.frc4904.robot.Disablable;
+import org.usfirst.frc4904.robot.Enablable;
 import org.usfirst.frc4904.robot.LogKitten;
 import org.usfirst.frc4904.robot.Updatable;
 import org.usfirst.frc4904.robot.input.IMU;
 import edu.wpi.first.wpilibj.PIDController;
 
-public class Mecanum implements Updatable, Disablable {
+public class Mecanum implements Updatable, Disablable, Enablable {
 	private final DampenedMotor frontLeftWheel;
 	private final DampenedMotor frontRightWheel;
 	private final DampenedMotor backLeftWheel;
