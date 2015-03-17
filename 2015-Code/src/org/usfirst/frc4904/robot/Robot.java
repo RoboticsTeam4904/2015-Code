@@ -165,6 +165,7 @@ public class Robot extends SampleRobot {
 		autonomous = autonomousManager.getAutonomous();
 		driver = autonomous.getAutoDriver();
 		operator = autonomous.getAutoOperator();
+		mecanumDrive.enable();
 		new Updater(state, new Updatable[] {camera}, slowUpdatePeriod).start(); // Controller and align are potentially slower
 		startAlwaysUpdates(state);
 		// These should have fast updates
@@ -193,6 +194,7 @@ public class Robot extends SampleRobot {
 			default:
 				break;
 		}
+		mecanumDrive.enable();
 		operator = operatorManager.getOperator();
 		driver = driverManager.getDriver();
 		new Updater(state, new Updatable[] {}, slowUpdatePeriod).start(); // align is potentially slower
@@ -221,7 +223,6 @@ public class Robot extends SampleRobot {
 			logger.v("trainPID", "training cycle");
 			mecanumDrive.setDesiredTurnSpeed(0.2);
 			mecanumDrive.setDesiredXYSpeed(0, 0);
-			mecanumDrive.train();
 			Timer.delay(3);
 		}
 	}

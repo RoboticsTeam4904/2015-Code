@@ -1,23 +1,27 @@
 package org.usfirst.frc4904.robot.output;
 
 
+import org.usfirst.frc4904.robot.Disablable;
 import org.usfirst.frc4904.robot.LogKitten;
 import org.usfirst.frc4904.robot.Updatable;
 import org.usfirst.frc4904.robot.input.IMU;
+import edu.wpi.first.wpilibj.PIDController;
 
-public class Mecanum implements Updatable {
+public class Mecanum implements Updatable, Disablable {
 	private final DampenedMotor frontLeftWheel;
 	private final DampenedMotor frontRightWheel;
 	private final DampenedMotor backLeftWheel;
 	private final DampenedMotor backRightWheel;
+	private final PIDController pid;
+	private final PIDVariable turnSpeed;
 	private volatile double desiredXSpeed;
 	private volatile double desiredYSpeed;
 	private volatile double desiredTurnSpeed;
 	private volatile double tsAdjust; // Turn speed adjust
-	private final PID turnSpeedPID;
 	private volatile boolean absolute;
 	private final IMU imu;
 	private final LogKitten logger;
+	private final boolean overridePID = false;
 	
 	public Mecanum(DampenedMotor frontLeftWheel, DampenedMotor frontRightWheel, DampenedMotor backLeftWheel, DampenedMotor backRightWheel, IMU imu) {
 		// Initialize motor controllers with default ports
@@ -27,12 +31,27 @@ public class Mecanum implements Updatable {
 		this.backLeftWheel = backLeftWheel;
 		this.backRightWheel = backRightWheel;
 		this.imu = imu;
-		this.turnSpeedPID = new PID(1, 1, 1);
+		this.turnSpeed = new PIDVariable();
+		pid = new PIDController(-1.25F / 180F, -0.001F / 180F, 0, imu, turnSpeed);
+		if (!overridePID) {
+			pid.setContinuous();
+			pid.setInputRange(0, 360);
+			pid.setOutputRange(-1, 1);
+			pid.setAbsoluteTolerance(0.5);
+		}
 		tsAdjust = 0;
 	}
 	
-	public void train() {
-		turnSpeedPID.train();
+	public void enable() {
+		if (!overridePID) {
+			pid.enable();
+		} else {
+			pid.disable();
+		}
+	}
+	
+	public void disable() {
+		pid.disable();
 	}
 	
 	private void move(double desiredSpeed, double desiredAngle, double turnSpeed, boolean absolute) {
@@ -42,7 +61,7 @@ public class Mecanum implements Updatable {
 		// @param absolute boolean specifying whether to move relative to the robot or absolutely (relative to the compass)
 		double workingAngle;
 		if (absolute) {
-			workingAngle = (desiredAngle - imu.turnAngle()) % (Math.PI * 2);
+			workingAngle = (desiredAngle - imu.read()[0]) % (Math.PI * 2);
 		} else {
 			workingAngle = desiredAngle;
 		}
@@ -65,13 +84,14 @@ public class Mecanum implements Updatable {
 	}
 	
 	public synchronized void update() {
-		double turnSpeed = imu.readRate()[0];
-		logger.v("turnSpeed", "" + turnSpeed);
 		double setSpeed = Math.sqrt(desiredXSpeed * desiredXSpeed + desiredYSpeed * desiredYSpeed);
 		double setAngle = Math.atan2(desiredYSpeed, desiredXSpeed);
-		// turnSpeed = desiredTurnSpeed;
-		turnSpeed = turnSpeedPID.calculate(desiredTurnSpeed, turnSpeed);
-		move(setSpeed, setAngle, turnSpeed, absolute); // This system allows for different updating times and rates
+		if (!overridePID) {
+			pid.setSetpoint(desiredTurnSpeed);
+		} else {
+			turnSpeed.pidWrite(desiredTurnSpeed);
+		}
+		move(setSpeed, setAngle, turnSpeed.read(), absolute); // This system allows for different updating times and rates
 	}
 	
 	public void setDesiredXYSpeed(double desiredXSpeed, double desiredYSpeed) {
