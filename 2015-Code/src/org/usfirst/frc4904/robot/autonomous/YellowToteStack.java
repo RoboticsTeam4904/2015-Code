@@ -7,9 +7,13 @@
 package org.usfirst.frc4904.robot.autonomous;
 
 
-import org.usfirst.frc4904.robot.autonomous.autosteps.GrabTote;
+import org.usfirst.frc4904.robot.autonomous.autosteps.BackwardsCharge;
+import org.usfirst.frc4904.robot.autonomous.autosteps.CloseGrabber;
+import org.usfirst.frc4904.robot.autonomous.autosteps.LiftToteWithClearance;
+import org.usfirst.frc4904.robot.autonomous.autosteps.OpenGrabber;
+import org.usfirst.frc4904.robot.autonomous.autosteps.SetWinch;
+import org.usfirst.frc4904.robot.autonomous.autosteps.SidewaysToteFind;
 import org.usfirst.frc4904.robot.autonomous.autosteps.TimedDrive;
-import org.usfirst.frc4904.robot.autonomous.autosteps.WaitWithMessage;
 import org.usfirst.frc4904.robot.input.Camera;
 import org.usfirst.frc4904.robot.input.IMU;
 import org.usfirst.frc4904.robot.input.LIDAR;
@@ -17,7 +21,6 @@ import org.usfirst.frc4904.robot.output.Grabber;
 
 public class YellowToteStack extends Autonomous {
 	public YellowToteStack(Camera camera, Grabber grabber, LIDAR lidar, IMU imu) {
-		// super(new Step[] {new GrabTote(align), new LiftToteWithClearance(6), new SidewaysToteFind(lidar), new OpenGrabber(align), new LowerGrabber(6), new GrabTote(align), new LiftToteWithClearance(6), new SidewaysToteFind(lidar), new OpenGrabber(align), new LowerGrabber(6), new GrabTote(align), new BackwardsCharge(imu), new TimedDrive(1, 0, 0.5), new OpenGrabber(align), new Stop()});
-		super(new Step[] {new GrabTote(grabber), new WaitWithMessage(1, "LiftToteWithClearance"), new TimedDrive(1, 0, 1), new WaitWithMessage(1, "OpenGrabber"), new WaitWithMessage(1, "LowerGrabber"), new WaitWithMessage(1, "GrabTote"), new WaitWithMessage(1, "LiftToteWithClearance"), new TimedDrive(1, 0, 1), new WaitWithMessage(1, "OpenGrabber"), new WaitWithMessage(1, "LowerGrabber"), new WaitWithMessage(1, "GrabTote"), new TimedDrive(0, -1, 1), new TimedDrive(1, 0, 0.5), new WaitWithMessage(1, "OpenGrabber")});
+		super(new Step[] {new CloseGrabber(grabber), new LiftToteWithClearance(5), new SidewaysToteFind(lidar), new OpenGrabber(grabber), new SetWinch(0), new CloseGrabber(grabber), new LiftToteWithClearance(5), new SidewaysToteFind(lidar), new OpenGrabber(grabber), new SetWinch(0), new CloseGrabber(grabber), new BackwardsCharge(imu), new TimedDrive(1, 0, 0.5), new OpenGrabber(grabber)});
 	}
 }
