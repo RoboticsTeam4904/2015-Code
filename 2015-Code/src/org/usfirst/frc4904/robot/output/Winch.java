@@ -10,8 +10,8 @@ import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.Talon;
 
 public class Winch extends Talon implements Disablable, Enablable, Updatable, PIDOutput {
-	private static final double MAX_HEIGHT = 12; // each level is half a tote height
-	private static final double DISTANCE_PER_PULSE = 1.0 / 28.75; // Some number of ticks is one level. Needs to be determined
+	private static final double MAX_HEIGHT = 12; // each level is half a tote height off the bottom-most position of the winch
+	private static final double DISTANCE_PER_PULSE = 1.0 / 28.75; // TODO Some number of ticks is one level. Needs to be determined
 	private final Encoder encoder;
 	private final PIDController pid;
 	private final boolean overridePID = false;
