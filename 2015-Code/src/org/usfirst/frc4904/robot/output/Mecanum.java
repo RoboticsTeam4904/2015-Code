@@ -18,8 +18,6 @@ public class Mecanum implements Updatable, Disablable, Enablable {
 	private volatile double desiredXSpeed;
 	private volatile double desiredYSpeed;
 	private volatile double desiredTurnSpeed;
-	private volatile boolean absolute;
-	private final IMU imu;
 	private final LogKitten logger;
 	private final boolean overridePID = false;
 	
@@ -30,7 +28,6 @@ public class Mecanum implements Updatable, Disablable, Enablable {
 		this.frontRightWheel = frontRightWheel;
 		this.backLeftWheel = backLeftWheel;
 		this.backRightWheel = backRightWheel;
-		this.imu = imu;
 		this.turnSpeed = new PIDVariable();
 		pid = new PIDController(Kp, Ki, Kd, imu, turnSpeed);
 		pid.setContinuous();
@@ -49,21 +46,14 @@ public class Mecanum implements Updatable, Disablable, Enablable {
 		pid.disable();
 	}
 	
-	private void move(double desiredSpeed, double desiredAngle, double turnSpeed, boolean absolute) {
+	private void move(double desiredSpeed, double desiredAngle, double turnSpeed) {
 		// @param desiredSpeed double between 0 and 1 specifying wanted movement speed
 		// @param desiredAngle double between 0 and 2pi specifying wanted movement angle in radians
 		// @param turnSpeed double between 0 and 1 specifying rotational speed
-		// @param absolute boolean specifying whether to move relative to the robot or absolutely (relative to the compass)
-		double workingAngle;
-		if (absolute) {
-			workingAngle = (desiredAngle - imu.read()[0]) % (Math.PI * 2);
-		} else {
-			workingAngle = desiredAngle;
-		}
-		double frontLeft = desiredSpeed * Math.sin(workingAngle + Math.PI / 4) + turnSpeed;
-		double frontRight = desiredSpeed * Math.cos(workingAngle + Math.PI / 4) - turnSpeed;
-		double backLeft = desiredSpeed * Math.cos(workingAngle + Math.PI / 4) + turnSpeed;
-		double backRight = desiredSpeed * Math.sin(workingAngle + Math.PI / 4) - turnSpeed;
+		double frontLeft = desiredSpeed * Math.sin(desiredAngle + Math.PI / 4) + turnSpeed;
+		double frontRight = desiredSpeed * Math.cos(desiredAngle + Math.PI / 4) - turnSpeed;
+		double backLeft = desiredSpeed * Math.cos(desiredAngle + Math.PI / 4) + turnSpeed;
+		double backRight = desiredSpeed * Math.sin(desiredAngle + Math.PI / 4) - turnSpeed;
 		double scaleFactor = Math.max(Math.max(Math.max(Math.abs(frontLeft), Math.abs(frontRight)), Math.abs(backLeft)), Math.abs(backRight));
 		if (scaleFactor < 1) {
 			scaleFactor = 1;
@@ -83,7 +73,7 @@ public class Mecanum implements Updatable, Disablable, Enablable {
 			turnSpeed.pidWrite(desiredTurnSpeed);
 		}
 		desiredTurnSpeed += turnSpeed.read();
-		move(setSpeed, setAngle, desiredTurnSpeed, absolute); // This system allows for different updating times and rates
+		move(setSpeed, setAngle, desiredTurnSpeed); // This system allows for different updating times and rates
 	}
 	
 	public void setDesiredXYSpeed(double desiredXSpeed, double desiredYSpeed) {
@@ -93,9 +83,5 @@ public class Mecanum implements Updatable, Disablable, Enablable {
 	
 	public void setDesiredTurnSpeed(double desiredTurnSpeed) {
 		this.desiredTurnSpeed = desiredTurnSpeed;
-	}
-	
-	public void setAbsolute(boolean absolute) {
-		this.absolute = absolute;
 	}
 }
