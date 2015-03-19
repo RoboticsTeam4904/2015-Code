@@ -3,6 +3,7 @@ package org.usfirst.frc4904.robot.input;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Arrays;
 import org.usfirst.frc4904.robot.LogKitten;
 import org.usfirst.frc4904.robot.Updatable;
 
@@ -16,6 +17,7 @@ public class LIDAR implements Updatable {
 	public static final int LIDAR_MOUNT_OFFSET = -100; // mm to right. Cartesian. Because.
 	public static final int GRABBER_LENGTH = 700; // Distance from LIDAR to grabber
 	public static final int GRABBER_LENGTH_OFFSET = GRABBER_LENGTH + 100; // Go an extra 100 mm (to tell if lines are the grabber or totes)
+	public static final int CORRECTED_ANGLE_BREADTH = 16; // How many angles to average when correcting an angle. Should be divisible by 4
 	
 	// private final SerialPort port;
 	public LIDAR() {
@@ -94,6 +96,16 @@ public class LIDAR implements Updatable {
 		// TODO check the length of the lines to see which is the most reasonable
 		logger.v("getLines", "Line: " + Integer.toString(inFront.get(0)[0]) + " " + Integer.toString(inFront.get(0)[1]) + " " + Integer.toString(inFront.get(0)[2]) + " " + Integer.toString(inFront.get(0)[3]));
 		return inFront.get(0);
+	}
+	
+	public int getCorrectedAngleDist(int angle) {
+		int[] avDists = Arrays.copyOfRange(dists, angle - LIDAR.CORRECTED_ANGLE_BREADTH / 2, angle + LIDAR.CORRECTED_ANGLE_BREADTH / 2);
+		Arrays.sort(avDists);
+		int firstQuartile = avDists[LIDAR.CORRECTED_ANGLE_BREADTH * (1 / 4)];
+		int median = avDists[LIDAR.CORRECTED_ANGLE_BREADTH * (2 / 4)];
+		int thirdQuartile = avDists[LIDAR.CORRECTED_ANGLE_BREADTH * (3 / 4)];
+		int trimean = (firstQuartile + median + thirdQuartile) / 3;
+		return trimean;
 	}
 	
 	public void update() {
