@@ -24,7 +24,7 @@ public class OperatorGriffin extends Operator {
 		adjust(stick.getY()); // Always adjust the winch speed via the stick value
 		// Method 1
 		if (!untouched) {
-			if (stick.buttons[0].get() && grabber.getState() == Grabber.GrabberState.OPEN) { // if trigger pressed and grabber empty
+			if (stick.buttons[0].get() && (grabber.getState() == Grabber.GrabberState.OPEN || grabber.getState() == Grabber.GrabberState.DISABLED)) { // if trigger pressed and grabber empty
 				logger.v("update", "TOTE Grab");
 				grab(MODE_TOTE);
 			} else if (!stick.buttons[0].getRaw() && grabber.getState() != Grabber.GrabberState.OPEN) { // if trigger not pressed and grabber not empty
