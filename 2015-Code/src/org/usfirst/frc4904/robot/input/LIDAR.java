@@ -18,6 +18,7 @@ public class LIDAR implements Updatable {
 	public static final int GRABBER_LENGTH = 700; // Distance from LIDAR to grabber
 	public static final int GRABBER_LENGTH_OFFSET = GRABBER_LENGTH + 100; // Go an extra 100 mm (to tell if lines are the grabber or totes)
 	public static final int CORRECTED_ANGLE_BREADTH = 16; // How many angles to average when correcting an angle. Should be divisible by 4
+	public static final boolean DISABLED = true;
 	
 	// private final SerialPort port;
 	public LIDAR() {
@@ -109,7 +110,7 @@ public class LIDAR implements Updatable {
 	}
 	
 	public void update() {
-		if (10 < 20) {
+		if (LIDAR.DISABLED) {
 			return;
 		}
 		// if (port.getBytesReceived() < 128) { // LIDAR returns 1980 bytes per cycle
