@@ -8,13 +8,14 @@ import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.Talon;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Winch extends Talon implements Disablable, Enablable, Updatable, PIDOutput {
 	private static final double MAX_HEIGHT = 12; // each level is half a tote height off the bottom-most position of the winch
 	private static final double DISTANCE_PER_PULSE = 1.0 / 28.75; // TODO Some number of ticks is one level. Needs to be determined
 	private final Encoder encoder;
 	private final PIDController pid;
-	private final boolean overridePID = false;
+	private boolean overridePID = false;
 	
 	public Winch(int channel, Encoder encoder, double Kp, double Ki, double Kd) {
 		super(channel);
@@ -32,6 +33,8 @@ public class Winch extends Talon implements Disablable, Enablable, Updatable, PI
 		pid.setInputRange(0, MAX_HEIGHT);
 		pid.setOutputRange(-1, 1);
 		pid.setAbsoluteTolerance(0.5);
+		// Add SmartDashboard button to disable PID
+		SmartDashboard.putBoolean("Turn PID Disable", false);
 	}
 	
 	public void setHeight(double height) { // Set winch to specific height
@@ -65,6 +68,7 @@ public class Winch extends Talon implements Disablable, Enablable, Updatable, PI
 	}
 	
 	public void update() {
+		overridePID = SmartDashboard.getBoolean("Turn PID Disable");
 		if (overridePID) {
 			pid.disable();
 			if (encoder.getDistance() < pid.getSetpoint()) {
