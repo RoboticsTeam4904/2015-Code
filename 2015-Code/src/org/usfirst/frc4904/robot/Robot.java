@@ -50,7 +50,6 @@ public class Robot extends SampleRobot {
 	private final LogitechJoystick stick; // the X3D Extreme3DPro Logitech joystick (right hand) - operator
 	private final XboxController xboxController; // the Xbox 360 controller - driver
 	// Input devices
-	// private final MPUSerial serial;
 	private final UDAR udar; // the UDAR (ultrasonic detection and ranging)
 	private final IMU imu;
 	private final LIDAR lidar;
@@ -77,11 +76,12 @@ public class Robot extends SampleRobot {
 	private Autonomous autonomous;
 	private final AutoAlign align; // the AutoAlign class contains code to align the robot with totes and cans
 	// Update system
-	public static final double fastUpdatePeriod = 0.01; // update every 0.005 seconds/5 milliseconds (200Hz)
+	public static final double fastUpdatePeriod = 0.01; // update every 0.01 seconds/10 milliseconds (100Hz) This is IMU speed
 	public static final double slowUpdatePeriod = 0.2; // update every 0.2 seconds/200 milliseconds (5Hz)
 	// Logging system
 	private final LogKitten logger;
 	// Disables
+	private final Enablable[] toEnable;
 	private final Disablable[] toDisable;
 	private final Updatable[] alwaysUpdate;
 	private final Updatable[] alwaysUpdateSlow;
@@ -98,7 +98,6 @@ public class Robot extends SampleRobot {
 		logger = new LogKitten("Robot", LogKitten.LEVEL_VERBOSE, LogKitten.LEVEL_VERBOSE);
 		logger.v("Constructing", "Constructing");
 		// Initialize serial interface
-		// serial = new MPUSerial();
 		// Initialize sensors
 		limitSwitches[Grabber.RIGHT_OUTER_SWITCH] = new DigitalInput(RIGHT_OUTER_SWITCH_PORT);
 		limitSwitches[Grabber.LEFT_OUTER_SWITCH] = new DigitalInput(LEFT_OUTER_SWITCH_PORT);
@@ -108,20 +107,17 @@ public class Robot extends SampleRobot {
 		udar = new UDAR(UDAR_I2C_PORT); // Initialize UDAR
 		lidar = new LIDAR(); // Initialize LIDAR
 		pdp = new PDP(); // Power Distribution Panel interface and logging.
-		/* Lights! */
-		// lightSequence = new DemoLightSequence(serial);
-		/* Camera! */
 		camera = new Camera();
 		/* Action! */
 		// Initialize movement controllers
-		winch = new Winch(WINCH_PORT, winchEncoder); // Initialize Winch control
+		winch = new Winch(WINCH_PORT, winchEncoder, WINCH_P_COEFFICIENT, WINCH_I_COEFFICIENT, WINCH_D_COEFFICIENT); // Initialize Winch control
 		grabber = new Grabber(GRABBER_PORT, limitSwitches, pdp); // Initialize Grabber control
 		// Initialize motor controllers with default ports
 		frontLeftWheel = new DampenedMotor(FRONT_LEFT_WHEEL_PORT);
 		frontRightWheel = new DampenedMotor(FRONT_RIGHT_WHEEL_PORT);
 		backLeftWheel = new DampenedMotor(BACK_LEFT_WHEEL_PORT);
 		backRightWheel = new DampenedMotor(BACK_RIGHT_WHEEL_PORT);
-		mecanumDrive = new Mecanum(frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel, imu); // Initialize Mecanum control
+		mecanumDrive = new Mecanum(frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel, imu, MECANUM_P_COEFFICIENT, MECANUM_I_COEFFICIENT, MECANUM_D_COEFFICIENT); // Initialize Mecanum control
 		// Initialize joysticks (numbers correspond to value set by driver station)
 		stick = new LogitechJoystick(JOYSTICK_PORT);
 		xboxController = new XboxController(CONTROLLER_PORT);
@@ -136,6 +132,7 @@ public class Robot extends SampleRobot {
 		autonomous = autonomousManager.getAutonomous();
 		// This list should include everything with a motor
 		toDisable = new Disablable[] {winch, grabber, driver, operator, autonomous, frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel};
+		toEnable = new Enablable[] {mecanumDrive, winch};
 		alwaysUpdate = new Updatable[] {imu, pdp};
 		alwaysUpdateSlow = new Updatable[] {};
 	}
@@ -167,6 +164,11 @@ public class Robot extends SampleRobot {
 		autonomous = autonomousManager.getAutonomous();
 		driver = autonomous.getAutoDriver();
 		operator = autonomous.getAutoOperator();
+		for (Enablable implementsenable : toEnable) {
+			if (implementsenable != null) {
+				implementsenable.enable();
+			}
+		}
 		new Updater(state, new Updatable[] {camera}, slowUpdatePeriod).start(); // Controller and align are potentially slower
 		startAlwaysUpdates(state);
 		// These should have fast updates
@@ -195,6 +197,11 @@ public class Robot extends SampleRobot {
 			default:
 				break;
 		}
+		for (Enablable implementsenable : toEnable) {
+			if (implementsenable != null) {
+				implementsenable.enable();
+			}
+		}
 		operator = operatorManager.getOperator();
 		driver = driverManager.getDriver();
 		new Updater(state, new Updatable[] {}, slowUpdatePeriod).start(); // align is potentially slower
@@ -202,7 +209,6 @@ public class Robot extends SampleRobot {
 		// These should have fast updates
 		new Updater(state, new Updatable[] {driver, operator, mecanumDrive, lidar, frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel, grabber, winch}, fastUpdatePeriod).start();
 		while (getRobotState() == state) {
-			System.out.println(winch.encoder.getDistance());
 			Timer.delay(0.01);
 		}
 	}
@@ -223,7 +229,6 @@ public class Robot extends SampleRobot {
 			logger.v("trainPID", "training cycle");
 			mecanumDrive.setDesiredTurnSpeed(0.2);
 			mecanumDrive.setDesiredXYSpeed(0, 0);
-			mecanumDrive.train();
 			Timer.delay(3);
 		}
 	}

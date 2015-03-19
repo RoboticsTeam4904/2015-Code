@@ -3,12 +3,12 @@ package org.usfirst.frc4904.robot.input;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Arrays;
 import org.usfirst.frc4904.robot.LogKitten;
 import org.usfirst.frc4904.robot.Updatable;
-import edu.wpi.first.wpilibj.SerialPort;
 
 public class LIDAR implements Updatable {
-	int[] dists = new int[360];
+	private volatile int[] dists;
 	private final LogKitten logger;
 	private static final int width = 1280;// This is the resolution of my screen, because that seemed to work
 	private static final int height = 720;
@@ -17,21 +17,20 @@ public class LIDAR implements Updatable {
 	public static final int LIDAR_MOUNT_OFFSET = -100; // mm to right. Cartesian. Because.
 	public static final int GRABBER_LENGTH = 700; // Distance from LIDAR to grabber
 	public static final int GRABBER_LENGTH_OFFSET = GRABBER_LENGTH + 100; // Go an extra 100 mm (to tell if lines are the grabber or totes)
-	private final SerialPort port;
+	public static final int CORRECTED_ANGLE_BREADTH = 16; // How many angles to average when correcting an angle. Should be divisible by 4
+	public static final boolean DISABLED = true;
 	
+	// private final SerialPort port;
 	public LIDAR() {
+		dists = new int[360];
 		logger = new LogKitten("LIDAR", LogKitten.LEVEL_FATAL, LogKitten.LEVEL_DEBUG);
 		logger.v("LIDAR", "Started Logging");
-		port = new SerialPort(115200, SerialPort.Port.kOnboard);
-		port.setReadBufferSize(8192 * 2);
-		port.setWriteBufferSize(8192 * 2);
-		port.reset();
-		port.flush();
+		// port = new SerialPort(115200, SerialPort.Port.kOnboard);
 	}
 	
 	private byte[] read(int bytes) throws Exception {
 		byte[] b = new byte[bytes];
-		b = port.read(bytes);
+		// b = port.read(bytes);
 		for (int i = 0; i < bytes; i++) {
 			logger.d("read", Integer.toString(i) + " " + Byte.toString(b[i]));
 		}
@@ -101,11 +100,23 @@ public class LIDAR implements Updatable {
 		return inFront.get(0);
 	}
 	
+	public int getCorrectedAngleDist(int angle) {
+		int[] avDists = Arrays.copyOfRange(dists, angle - LIDAR.CORRECTED_ANGLE_BREADTH / 2, angle + LIDAR.CORRECTED_ANGLE_BREADTH / 2);
+		Arrays.sort(avDists);
+		int firstQuartile = avDists[LIDAR.CORRECTED_ANGLE_BREADTH * (1 / 4)];
+		int median = avDists[LIDAR.CORRECTED_ANGLE_BREADTH * (2 / 4)];
+		int thirdQuartile = avDists[LIDAR.CORRECTED_ANGLE_BREADTH * (3 / 4)];
+		int trimean = (firstQuartile + median + thirdQuartile) / 3;
+		return trimean;
+	}
+	
 	public void update() {
-		if (port.getBytesReceived() < 128) { // LIDAR returns 1980 bytes per cycle
-			logger.v("getBytesReceived", "only " + port.getBytesReceived() + " bytes received");
+		if (LIDAR.DISABLED) {
 			return;
 		}
+		// if (port.getBytesReceived() < 128) { // LIDAR returns 1980 bytes per cycle
+		// logger.v("getBytesReceived", "only " + port.getBytesReceived() + " bytes received");
+		// }
 		logger.v("update", "Updating LIDAR");
 		byte scanhdr = (byte) 0xA0;
 		try {

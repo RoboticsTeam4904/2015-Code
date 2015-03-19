@@ -35,19 +35,19 @@ public class AutoAlign implements Updatable {
 	}
 	
 	public void grabTote() {
-		if (currentState != State.EMPTY) {// Don't do anything if grabber isn't empty
+		if (currentState != State.EMPTY) { // Don't do anything if grabber isn't empty
 			return;
 		}
 		currentState = State.ALIGNING_WITH_TOTE;
-		logger.v("grabTote", "Grabbing tote" + " tote distance " + lidar.getDists()[0]);
+		logger.v("grabTote", "Grabbing tote" + " tote distance " + lidar.getCorrectedAngleDist(0));
 	}
 	
 	public void grabCan() {
-		if (currentState != State.EMPTY) {// Don't do anything if grabber isn't empty
+		if (currentState != State.EMPTY) { // Don't do anything if grabber isn't empty
 			return;
 		}
 		currentState = State.ALIGNING_WITH_CAN; // NOTE: Setting the grabber is NOT done in these functions and is instead done the next time update is called
-		logger.v("grabCan", "Grabbing can" + " can distance " + lidar.getDists()[0]);
+		logger.v("grabCan", "Grabbing can" + " can distance " + lidar.getCorrectedAngleDist(0));
 	}
 	
 	private void releaseTote(boolean wide) {
