@@ -14,7 +14,7 @@ import org.usfirst.frc4904.robot.output.Winch;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class AutonomousManager {
-	private final Autonomous[] autonomouses = new Autonomous[3];
+	private final Autonomous[] autonomouses = new Autonomous[4];
 	private static final int YELLOW_TOTE_STACK = 0;
 	private static final int LANDFILL_STACK = 1;
 	private static final int ONE_TOTE_MOVE = 2;
