@@ -13,8 +13,8 @@ public class Autonomous implements Updatable, Disablable {
 	protected volatile double desiredXMovement = 0;
 	protected volatile double desiredYMovement = 0;
 	protected volatile double desiredTurnSpeed = 0;
-	protected volatile int desiredWinchHeight = 0;
-	protected volatile int currentWinchHeight = 0;
+	protected volatile double desiredWinchHeight = 0;
+	protected volatile double currentWinchHeight = 0;
 	protected final Step[] steps;
 	private boolean finished = false;
 	private boolean firstInit = false;
@@ -82,11 +82,11 @@ public class Autonomous implements Updatable, Disablable {
 		return new double[] {desiredXMovement, desiredYMovement, desiredTurnSpeed};
 	}
 	
-	public int getDesiredWinchHeight() {
+	public double getDesiredWinchHeight() {
 		return desiredWinchHeight;
 	}
 	
-	public void setCurrentWinchHeight(int currentWinchHeight) {
+	public void setCurrentWinchHeight(double currentWinchHeight) {
 		this.currentWinchHeight = currentWinchHeight;
 	}
 	

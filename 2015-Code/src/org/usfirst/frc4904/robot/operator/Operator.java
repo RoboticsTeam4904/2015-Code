@@ -37,11 +37,11 @@ public abstract class Operator implements Disablable, Updatable {
 		winch.set(-1 * value); // Sets winch motor speed
 	}
 	
-	protected void setWinch(int height) {
+	protected void setWinch(double height) {
 		winch.setHeight(height);
 	}
 	
-	protected int getWinch() {
+	protected double getWinch() {
 		return winch.getHeight();
 	}
 	

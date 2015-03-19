@@ -107,20 +107,17 @@ public class Robot extends SampleRobot {
 		udar = new UDAR(UDAR_I2C_PORT); // Initialize UDAR
 		lidar = new LIDAR(); // Initialize LIDAR
 		pdp = new PDP(); // Power Distribution Panel interface and logging.
-		/* Lights! */
-		// lightSequence = new DemoLightSequence(serial);
-		/* Camera! */
 		camera = new Camera();
 		/* Action! */
 		// Initialize movement controllers
-		winch = new Winch(WINCH_PORT, winchEncoder); // Initialize Winch control
+		winch = new Winch(WINCH_PORT, winchEncoder, WINCH_P_COEFFICIENT, WINCH_I_COEFFICIENT, WINCH_D_COEFFICIENT); // Initialize Winch control
 		grabber = new Grabber(GRABBER_PORT, limitSwitches, pdp); // Initialize Grabber control
 		// Initialize motor controllers with default ports
 		frontLeftWheel = new DampenedMotor(FRONT_LEFT_WHEEL_PORT);
 		frontRightWheel = new DampenedMotor(FRONT_RIGHT_WHEEL_PORT);
 		backLeftWheel = new DampenedMotor(BACK_LEFT_WHEEL_PORT);
 		backRightWheel = new DampenedMotor(BACK_RIGHT_WHEEL_PORT);
-		mecanumDrive = new Mecanum(frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel, imu); // Initialize Mecanum control
+		mecanumDrive = new Mecanum(frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel, imu, MECANUM_P_COEFFICIENT, MECANUM_I_COEFFICIENT, MECANUM_D_COEFFICIENT); // Initialize Mecanum control
 		// Initialize joysticks (numbers correspond to value set by driver station)
 		stick = new LogitechJoystick(JOYSTICK_PORT);
 		xboxController = new XboxController(CONTROLLER_PORT);
@@ -212,7 +209,6 @@ public class Robot extends SampleRobot {
 		// These should have fast updates
 		new Updater(state, new Updatable[] {driver, operator, mecanumDrive, lidar, frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel, grabber, winch}, fastUpdatePeriod).start();
 		while (getRobotState() == state) {
-			System.out.println(winch.encoder.getDistance());
 			Timer.delay(0.01);
 		}
 	}

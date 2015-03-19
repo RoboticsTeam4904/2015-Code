@@ -18,13 +18,12 @@ public class Mecanum implements Updatable, Disablable, Enablable {
 	private volatile double desiredXSpeed;
 	private volatile double desiredYSpeed;
 	private volatile double desiredTurnSpeed;
-	private volatile double tsAdjust; // Turn speed adjust
 	private volatile boolean absolute;
 	private final IMU imu;
 	private final LogKitten logger;
 	private final boolean overridePID = false;
 	
-	public Mecanum(DampenedMotor frontLeftWheel, DampenedMotor frontRightWheel, DampenedMotor backLeftWheel, DampenedMotor backRightWheel, IMU imu) {
+	public Mecanum(DampenedMotor frontLeftWheel, DampenedMotor frontRightWheel, DampenedMotor backLeftWheel, DampenedMotor backRightWheel, IMU imu, double Kp, double Ki, double Kd) {
 		// Initialize motor controllers with default ports
 		logger = new LogKitten("Mecanum", LogKitten.LEVEL_FATAL, LogKitten.LEVEL_VERBOSE);
 		this.frontLeftWheel = frontLeftWheel;
@@ -33,21 +32,16 @@ public class Mecanum implements Updatable, Disablable, Enablable {
 		this.backRightWheel = backRightWheel;
 		this.imu = imu;
 		this.turnSpeed = new PIDVariable();
-		pid = new PIDController(-1.25F / 180F, -0.001F / 180F, 0, imu, turnSpeed);
-		if (!overridePID) {
-			pid.setContinuous();
-			pid.setInputRange(0, 360);
-			pid.setOutputRange(-1, 1);
-			pid.setAbsoluteTolerance(0.5);
-		}
-		tsAdjust = 0;
+		pid = new PIDController(Kp, Ki, Kd, imu, turnSpeed);
+		pid.setContinuous();
+		pid.setInputRange(0, 360);
+		pid.setOutputRange(-1, 1);
+		pid.setAbsoluteTolerance(0.5);
 	}
 	
 	public void enable() {
 		if (!overridePID) {
 			pid.enable();
-		} else {
-			pid.disable();
 		}
 	}
 	
@@ -78,10 +72,6 @@ public class Mecanum implements Updatable, Disablable, Enablable {
 		frontRightWheel.setValue(-frontRight / scaleFactor);
 		backLeftWheel.setValue(backLeft / scaleFactor); // Negated because of motors being of the inside of chassis
 		backRightWheel.setValue(-backRight / scaleFactor);
-	}
-	
-	public static double time() {
-		return (double) System.currentTimeMillis() / 1000;
 	}
 	
 	public synchronized void update() {
