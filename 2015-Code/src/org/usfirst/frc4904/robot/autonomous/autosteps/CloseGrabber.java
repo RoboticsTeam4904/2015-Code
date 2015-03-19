@@ -5,10 +5,10 @@ import org.usfirst.frc4904.robot.autonomous.Step;
 import org.usfirst.frc4904.robot.output.Grabber;
 import org.usfirst.frc4904.robot.output.Grabber.GrabberState;
 
-public class GrabTote extends Step {
+public class CloseGrabber extends Step {
 	private final Grabber grabber;
 	
-	public GrabTote(Grabber grabber) {
+	public CloseGrabber(Grabber grabber) {
 		this.grabber = grabber;
 	}
 	
