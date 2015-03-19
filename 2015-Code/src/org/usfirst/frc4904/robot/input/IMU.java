@@ -72,6 +72,6 @@ public class IMU extends MPU9150 implements PIDSource, Updatable {
 	}
 	
 	public double pidGet() {
-		return read()[0];
+		return readRate()[0];
 	}
 }
