@@ -34,6 +34,15 @@ public class DriverNathan extends Driver {
 			disable();
 			logger.w("update", "disabled");
 		}
+		if (xboxController.getButton(XboxController.X_BUTTON)) {
+			autoAlign(true);
+		}
+		if (xboxController.getButton(XboxController.Y_BUTTON)) {
+			autoAlign(false);
+		}
+		if (xboxController.getButton(XboxController.B_BUTTON)) {
+			abortAlign();
+		}
 	}
 	
 	public void disable() {

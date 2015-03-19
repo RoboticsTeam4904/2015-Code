@@ -122,7 +122,7 @@ public class Robot extends SampleRobot {
 		stick = new LogitechJoystick(JOYSTICK_PORT);
 		xboxController = new XboxController(CONTROLLER_PORT);
 		// Initalize subsystems
-		align = new AutoAlign(mecanumDrive, udar, lidar, imu, grabber, winch); // Initialize AutoAlign system
+		align = new AutoAlign(mecanumDrive, udar, lidar, imu); // Initialize AutoAlign system
 		// Initialize managers
 		driverManager = new DriverManager(mecanumDrive, xboxController, align);
 		operatorManager = new OperatorManager(stick, winch, align, grabber);

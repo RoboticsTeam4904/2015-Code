@@ -1,15 +1,16 @@
 package org.usfirst.frc4904.robot.input;
 
 
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import org.usfirst.frc4904.robot.LogKitten;
 import org.usfirst.frc4904.robot.Updatable;
+import edu.wpi.first.wpilibj.I2C;
 
 public class LIDAR implements Updatable {
 	private volatile int[] dists;
 	private final LogKitten logger;
+	private final I2C i2c;
 	private static final int width = 1280;// This is the resolution of my screen, because that seemed to work
 	private static final int height = 720;
 	private static final double d = 5;// Settings from my screen
@@ -25,43 +26,11 @@ public class LIDAR implements Updatable {
 		dists = new int[360];
 		logger = new LogKitten("LIDAR", LogKitten.LEVEL_FATAL, LogKitten.LEVEL_DEBUG);
 		logger.v("LIDAR", "Started Logging");
-		// port = new SerialPort(115200, SerialPort.Port.kOnboard);
+		i2c = new I2C(I2C.Port.kOnboard, 5);
 	}
 	
-	private byte[] read(int bytes) throws Exception {
-		byte[] b = new byte[bytes];
-		// b = port.read(bytes);
-		for (int i = 0; i < bytes; i++) {
-			logger.d("read", Integer.toString(i) + " " + Byte.toString(b[i]));
-		}
-		return b;
-	}
-	
-	private int[] scanline_b(byte angle) throws Exception {
-		boolean insync = false;
-		while (!insync) { // Wait until beginning of distance data
-			byte header = read(1)[0]; // Header is one byte
-			if (header == (byte) 0xFA) {
-				byte scan = read(1)[0];
-				if (scan == angle) {
-					insync = true;
-				}
-			}
-		}
-		if (insync) {
-			byte[][] b_data = new byte[4][]; // Read four values at a time
-			for (int i = 0; i < 4; i++) {
-				b_data[i] = read(4);
-			}
-			int[] dist = new int[4];
-			for (int i = 0; i < 4; i++) {
-				b_data[i][1] &= 0x3F;
-				dist[i] = new BigInteger(new byte[] {0, b_data[i][1], b_data[i][0]}).intValue();
-			}
-			logger.d("scanline", Integer.toString(dist[0]) + " " + Integer.toString(dist[1]) + " " + Integer.toString(dist[2]) + " " + Integer.toString(3));
-			return dist;
-		}
-		return null;
+	private int read(int angle) throws Exception {
+		return 0;
 	}
 	
 	public int[] getDists() {
@@ -120,39 +89,11 @@ public class LIDAR implements Updatable {
 		logger.v("update", "Updating LIDAR");
 		byte scanhdr = (byte) 0xA0;
 		try {
-			for (int i = 0; i < 90; i++) { // Reading in chunks of 4, so only 90 steps
-				int[] scanrange = scanline_b(scanhdr);
-				int degree = 4 * (scanhdr - (byte) 0xA0);
-				if (scanrange != null) {
-					for (int j = 0; j < 4; j++) {
-						if (scanrange[j] != 53) {
-							dists[degree + j] = scanrange[j]; // No one knows why we are comparing scanrange[j] to 53, so I am too scared to change it
-						} else {
-							dists[degree + j] = 0;
-						}
-					}
-				}
-				if (scanhdr == (byte) 0xF9) {
-					scanhdr = (byte) 0xA0;
-				} else {
-					scanhdr += 1;
-				}
+			for (int i = 0; i < 180; i++) { // Reading in chunks of 4, so only 90 steps
+				dists[i] = read(i);
 			}
-			for (int i = 0; i < 90; i++) { // Do it again for redundancy
-				int[] scanrange = scanline_b(scanhdr);
-				int degree = 4 * (scanhdr - (byte) 0xA0);
-				if (scanrange != null) {
-					for (int j = 0; j < 4; j++) {
-						if (scanrange[j] != 53) {
-							dists[degree + j] = scanrange[j];
-						}
-					}
-				}
-				if (scanhdr == (byte) 0xF9) {
-					scanhdr = (byte) 0xA0;
-				} else {
-					scanhdr += 1;
-				}
+			for (int i = 0; i < 180; i++) { // Do it again for redundancy
+				if (dists[i] != 0) dists[i] = read(i);
 			}
 		}
 		catch (Exception e) {
