@@ -12,14 +12,15 @@ int dataIndex;
 void setup() {
   delay(500);
   Serial.begin(115200); // USB serial
+  Serial1.begin(115200);
   Serial.println("Arduino Neato XV-11 Motor control board v0.1 by Cheng-Lung Lee, modified by Andrew");
 }
 
 void loop() {
   // if we get a valid byte from LDS, read it and send it to USB-serial
-  if (Serial.available() > 0) {
+  if (Serial1.available() > 0) {
     // get incoming byte:
-    inByte = Serial.read();
+    inByte = Serial1.read();
     //Serial.write(inByte);
     decodeData(inByte);
 
@@ -35,7 +36,6 @@ void loop() {
         }
       }
       Serial.println();
-      delay(250);
     }
   }
 }
