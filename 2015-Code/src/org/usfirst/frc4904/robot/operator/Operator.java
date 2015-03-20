@@ -33,11 +33,11 @@ public abstract class Operator implements Disablable, Updatable {
 		grabber.setDesiredGrabberState(GrabberState.OPEN);
 	}
 	
-	protected void adjust(double value) {
+	protected void setWinchSpeed(double value) {
 		winch.overrideSet(-1 * value); // Sets winch motor speed
 	}
 	
-	protected void setWinch(double height) {
+	protected void setWinchHeight(double height) {
 		winch.setHeight(height);
 	}
 	

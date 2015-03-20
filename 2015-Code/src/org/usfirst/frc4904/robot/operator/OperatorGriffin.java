@@ -21,7 +21,7 @@ public class OperatorGriffin extends Operator {
 	}
 	
 	public synchronized void update() {
-		adjust(stick.getY()); // Always adjust the winch speed via the stick value
+		setWinchSpeed(stick.getY()); // Always adjust the winch speed via the stick value
 		// Method 1
 		if (!untouched) {
 			if (stick.buttons[0].get() && (grabber.getState() == Grabber.GrabberState.OPEN || grabber.getState() == Grabber.GrabberState.DISABLED)) { // if trigger pressed and grabber empty
@@ -37,6 +37,6 @@ public class OperatorGriffin extends Operator {
 	}
 	
 	public void disable() {
-		adjust(0);
+		setWinchSpeed(0);
 	}
 }
