@@ -87,7 +87,6 @@ public class LIDAR implements Updatable {
 		// logger.v("getBytesReceived", "only " + port.getBytesReceived() + " bytes received");
 		// }
 		logger.v("update", "Updating LIDAR");
-		byte scanhdr = (byte) 0xA0;
 		try {
 			for (int i = 0; i < 180; i++) { // Reading in chunks of 4, so only 90 steps
 				dists[i] = read(i);
