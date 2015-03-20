@@ -71,15 +71,7 @@ public class Winch extends Talon implements Disablable, Enablable, Updatable, PI
 	
 	public void update() {
 		pid.setPID(SmartDashboard.getNumber("Kp Winch"), SmartDashboard.getNumber("Ki Winch"), SmartDashboard.getNumber("Kd Winch"));
-		if (overridePID) {
-			if (encoder.getDistance() < pid.getSetpoint()) {
-				set(1);
-			} else if (encoder.getDistance() > pid.getSetpoint()) {
-				set(-1);
-			} else {
-				set(0); // will never happen but whatevs
-			}
-		}
+		if (overridePID) {}
 	}
 	
 	public void overrideSet(double speed) {
