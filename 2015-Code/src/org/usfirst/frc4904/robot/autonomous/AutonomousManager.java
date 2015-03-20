@@ -48,7 +48,7 @@ public class AutonomousManager {
 		if (autoMode > 0) {
 			autoMode = 0;
 		}
-		logger.v("getAutonomous", "Auto mode " + Integer.toString(autoMode));
+		logger.f("getAutonomous", "Auto mode " + Integer.toString(autoMode));
 		return autonomouses[autoMode];
 	}
 	

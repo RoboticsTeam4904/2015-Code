@@ -82,7 +82,6 @@ public class Mecanum implements Updatable, Disablable, Enablable {
 			pid.setSetpoint(desiredTurnSpeed);
 			actualTurnSpeed += turnSpeed.read();
 		} else {
-			System.out.println("OVERRIDEN");
 			actualTurnSpeed = desiredTurnSpeed;
 		}
 		move(setSpeed, setAngle, actualTurnSpeed); // This system allows for different updating times and rates
