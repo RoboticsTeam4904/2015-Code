@@ -94,19 +94,9 @@ public class Grabber extends Talon implements Disablable, Updatable {
 	
 	private void checkPowerUsage() {
 		double currentCurrent = pdp.getCurrent(PDP_PORT);
-		if (currentCurrent > MAX_AMPS) {
-			switch (grabberState) {
-				case OPENING:
-					grabberState = GrabberState.OPEN;
-					logger.v("checkPowerUsage", "stopped open");
-					return;
-				case CLOSING:
-					grabberState = GrabberState.CLOSED;
-					logger.v("checkPowerUsage", "stopped close");
-					return;
-				default:
-					return;
-			}
+		if (currentCurrent > MAX_AMPS && grabberState == GrabberState.CLOSING) {
+			grabberState = GrabberState.CLOSED;
+			logger.v("checkPowerUsage", "stopped close");
 		}
 	}
 	
@@ -116,7 +106,6 @@ public class Grabber extends Talon implements Disablable, Updatable {
 	}
 	
 	public GrabberState getState() {
-		System.out.println("State: " + grabberState);
 		return grabberState;
 	}
 	

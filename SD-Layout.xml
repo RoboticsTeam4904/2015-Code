@@ -1,58 +1,56 @@
 <xml version="1.0">
 <dashboard>
-	<widget field="PDP Port 5 Current" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="429" y="63"/>
-	</widget>
-	<widget field="PDP Port 6 Current" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="429" y="42"/>
-	</widget>
-	<widget field="PDP Port 8 Current" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="429" y="21"/>
-	</widget>
-	<widget field="PDP Port 10 Current" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="613" y="436"/>
-	</widget>
-	<widget field="PDP Port 11 Current" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="613" y="415"/>
-	</widget>
-	<widget field="PDP Port 13 Current" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="429" y="0"/>
-	</widget>
-	<widget field="PDP Port 0 Current" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="251" y="427"/>
-	</widget>
-	<widget field="PDP Port 15 Current" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="251" y="406"/>
-	</widget>
-	<widget field="PDP Port 2 Current" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="251" y="104"/>
-	</widget>
-	<widget field="PDP Port 4 Current" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="251" y="83"/>
-	</widget>
-	<widget field="PDP Voltage: " type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="251" y="62"/>
-	</widget>
-	<widget field="PDP Port 7 Current" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="251" y="41"/>
-	</widget>
-	<widget field="PDP Port 9 Current" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="251" y="20"/>
-	</widget>
-	<widget field="PDP Current" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+	<widget field="Kd" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
 		<location x="0" y="427"/>
 	</widget>
-	<widget field="PDP Port 12 Current" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+	<widget field="Ki" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
 		<location x="0" y="406"/>
 	</widget>
-	<widget field="PDP Port 1 Current" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="0" y="103"/>
+	<widget field="Kp" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="105"/>
 	</widget>
-	<widget field="PDP Port 14 Current" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="0" y="82"/>
+	<widget field="Kd Winch" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="84"/>
 	</widget>
-	<widget field="PDP Port 3 Current" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="0" y="61"/>
+	<widget field="Q3" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="638" y="83"/>
+	</widget>
+	<widget field="Q2" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="636" y="56"/>
+	</widget>
+	<widget field="Q1" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="635" y="32"/>
+	</widget>
+	<widget field="Q0" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="634" y="10"/>
+	</widget>
+	<widget field="Kd Mecanum" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="251" y="107"/>
+	</widget>
+	<widget field="Ki Mecanum" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="251" y="86"/>
+	</widget>
+	<widget field="Kp Mecanum" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="249" y="60"/>
+	</widget>
+	<widget field="Ki Winch" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="258" y="24"/>
+	</widget>
+	<widget field="Kp Winch" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="258" y="4"/>
+	</widget>
+	<widget field="Turn PID Disable" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="6" y="63"/>
+		<height>20</height>
+	</widget>
+	<widget field="Roll" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="509" y="73"/>
+	</widget>
+	<widget field="Pitch" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="506" y="44"/>
+	</widget>
+	<widget field="Yaw" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="508" y="17"/>
 	</widget>
 	<static-widget class="edu.wpi.first.smartdashboard.gui.elements.ConnectionIndicator">
 		<location x="1309" y="0"/>
@@ -85,7 +83,7 @@
 		<property name="Camera IP Address" value="169.254.0.103"/>
 	</static-widget>
 	<widget field="PDP Temperature: " type="Number" class="edu.wpi.first.smartdashboard.gui.elements.LinePlot">
-		<location x="360" y="130"/>
+		<location x="366" y="131"/>
 		<width>360</width>
 		<height>275</height>
 	</widget>
@@ -95,7 +93,7 @@
 		<height>275</height>
 	</widget>
 	<widget field="Mode" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
-		<location x="260" y="-1"/>
+		<location x="143" y="23"/>
 	</widget>
 	<widget field="UseMode" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
 		<location x="120" y="0"/>
@@ -111,5 +109,65 @@
 	</widget>
 </dashboard>
 <live-window>
+	<widget field="Ungrouped" type="LW Subsystem" class="edu.wpi.first.smartdashboard.livewindow.elements.LWSubsystem">
+		<widget field="Talon[5]" type="Table" class="edu.wpi.first.smartdashboard.livewindow.elements.SpeedController">
+			<location x="6" y="16"/>
+			<height>46</height>
+			<width>293</width>
+		</widget>
+		<widget field="Talon[4]" type="Table" class="edu.wpi.first.smartdashboard.livewindow.elements.SpeedController">
+			<location x="6" y="62"/>
+			<height>46</height>
+			<width>293</width>
+		</widget>
+		<widget field="DigitalInput[3]" type="Table" class="edu.wpi.first.smartdashboard.livewindow.elements.DigitalInputDisplay">
+			<location x="6" y="108"/>
+			<height>20</height>
+			<width>293</width>
+		</widget>
+		<widget field="Encoder[3]" type="Table" class="edu.wpi.first.smartdashboard.livewindow.elements.EncoderDisplay">
+			<location x="6" y="128"/>
+			<height>98</height>
+			<width>293</width>
+		</widget>
+		<widget field="VictorSP[3]" type="Table" class="edu.wpi.first.smartdashboard.livewindow.elements.SpeedController">
+			<location x="6" y="226"/>
+			<height>46</height>
+			<width>293</width>
+		</widget>
+		<widget field="VictorSP[0]" type="Table" class="edu.wpi.first.smartdashboard.livewindow.elements.SpeedController">
+			<location x="6" y="272"/>
+			<height>46</height>
+			<width>293</width>
+		</widget>
+		<widget field="DigitalInput[1]" type="Table" class="edu.wpi.first.smartdashboard.livewindow.elements.DigitalInputDisplay">
+			<location x="6" y="318"/>
+			<height>20</height>
+			<width>293</width>
+		</widget>
+		<widget field="VictorSP[2]" type="Table" class="edu.wpi.first.smartdashboard.livewindow.elements.SpeedController">
+			<location x="6" y="338"/>
+			<height>46</height>
+			<width>293</width>
+		</widget>
+		<widget field="VictorSP[1]" type="Table" class="edu.wpi.first.smartdashboard.livewindow.elements.SpeedController">
+			<location x="6" y="384"/>
+			<height>46</height>
+			<width>293</width>
+		</widget>
+		<widget field="DigitalInput[0]" type="Table" class="edu.wpi.first.smartdashboard.livewindow.elements.DigitalInputDisplay">
+			<location x="6" y="430"/>
+			<height>20</height>
+			<width>293</width>
+		</widget>
+		<widget field="DigitalInput[2]" type="Table" class="edu.wpi.first.smartdashboard.livewindow.elements.DigitalInputDisplay">
+			<location x="6" y="450"/>
+			<height>20</height>
+			<width>293</width>
+		</widget>
+		<location x="0" y="0"/>
+		<width>305</width>
+		<height>477</height>
+	</widget>
 </live-window>
 </xml>

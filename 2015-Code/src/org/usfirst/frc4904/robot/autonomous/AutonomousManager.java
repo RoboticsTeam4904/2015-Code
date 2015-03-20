@@ -19,7 +19,7 @@ public class AutonomousManager {
 	private static final int LANDFILL_STACK = 1;
 	private static final int ONE_TOTE_MOVE = 2;
 	private static final int AUTO_ZONE_MOVE = 3;
-	private static final int AUTO_DEFAULT = YELLOW_TOTE_STACK;
+	private static final int AUTO_DEFAULT = AUTO_ZONE_MOVE;
 	private final Mecanum mecanumDrive;
 	private final Winch winch;
 	private final Grabber grabber;
@@ -48,7 +48,7 @@ public class AutonomousManager {
 		if (autoMode > 0) {
 			autoMode = 0;
 		}
-		logger.v("getAutonomous", "Auto mode " + Integer.toString(autoMode));
+		logger.f("getAutonomous", "Auto mode " + Integer.toString(autoMode));
 		return autonomouses[autoMode];
 	}
 	

@@ -12,7 +12,6 @@ public class IMU extends MPU9150 implements PIDSource, Updatable {
 	private double[] rate; // Same as above
 	private double[] zeroAngles;
 	private double lastTime;
-	private boolean pdpLogging = true;
 	
 	public IMU() {
 		super();
@@ -42,6 +41,7 @@ public class IMU extends MPU9150 implements PIDSource, Updatable {
 		double time = getTime();
 		super.update();
 		updateData();
+		// System.out.println(angles[0] + " " + angles[1] + " " + angles[2]);
 		for (int i = 0; i < 3; i++) {
 			rate[i] = (angles[i] - lastAngles[i]) / (time - lastTime);
 		}

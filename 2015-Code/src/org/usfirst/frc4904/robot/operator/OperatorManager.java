@@ -12,7 +12,7 @@ public class OperatorManager {
 	private Operator[] operators;
 	public static final int OPERATOR_GRIFFIN = 1;
 	public static final int OPERATOR_NACHI = 0;
-	private static final int OPERATOR_DEFAULT = OPERATOR_NACHI;
+	private static final int OPERATOR_DEFAULT = OPERATOR_GRIFFIN;
 	private final LogKitten logger;
 	
 	public OperatorManager(LogitechJoystick stick, Winch winch, AutoAlign align, Grabber grabber) {
