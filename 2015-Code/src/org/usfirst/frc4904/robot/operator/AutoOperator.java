@@ -15,7 +15,7 @@ public class AutoOperator extends Operator {
 	}
 	
 	public void update() {
-		setWinch(auto.getDesiredWinchHeight());
+		setWinchHeight(auto.getDesiredWinchHeight());
 		auto.setCurrentWinchHeight(getWinch());
 	}
 }

@@ -20,9 +20,9 @@ public class OperatorNachi extends Operator {
 	
 	public synchronized void update() {
 		if (stick.buttons[10].getRaw()) {
-			adjust(stick.getY()); // When button 11 is pressed, adjust the winch
+			setWinchSpeed(stick.getY()); // When button 11 is pressed, adjust the winch
 		} else {
-			adjust(0);
+			setWinchSpeed(0);
 		}
 		if (stick.buttons[0].get()) { // When button 1 is pressed, toggle tote grabbing
 			logger.v("update", "TOTE");
@@ -51,10 +51,10 @@ public class OperatorNachi extends Operator {
 			changeHeight(-1); // When button 3 is pressed, lower the winch one level
 		}
 		if (stick.buttons[5].get()) {
-			setWinch(8); // When button 6 is pressed, raise the winch all the way
+			setWinchHeight(8); // When button 6 is pressed, raise the winch all the way
 		}
 		if (stick.buttons[3].get()) {
-			setWinch(0); // When button 4 is pressed, lower the winch all the way
+			setWinchHeight(0); // When button 4 is pressed, lower the winch all the way
 		}
 		// Grabber override
 		if (stick.buttons[11].getRaw()) {
@@ -68,6 +68,6 @@ public class OperatorNachi extends Operator {
 	}
 	
 	public void disable() {
-		adjust(0);
+		setWinchSpeed(0);
 	}
 }

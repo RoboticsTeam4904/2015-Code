@@ -74,6 +74,7 @@ public class Mecanum implements Updatable, Disablable, Enablable {
 	}
 	
 	public synchronized void update() {
+		SmartDashboard.putNumber("Turn Speed PID Output", turnSpeed.read());
 		overridePID = SmartDashboard.getBoolean("Turn PID Disable");
 		pid.setPID(SmartDashboard.getNumber("Kp Mecanum"), SmartDashboard.getNumber("Ki Mecanum"), SmartDashboard.getNumber("Kd Mecanum"));
 		double setSpeed = Math.sqrt(desiredXSpeed * desiredXSpeed + desiredYSpeed * desiredYSpeed);
