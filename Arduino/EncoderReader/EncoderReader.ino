@@ -16,7 +16,7 @@ void setup() {
   Wire.begin();        // join i2c bus (address optional for master)
   Serial.begin(115200);  // start serial for output
   while (!Serial);
-  Serial.print("Running");
+  Serial.println("Running");
 }
 
 void loop() {
@@ -32,7 +32,7 @@ void loop() {
   Serial.println();
   
 
-  delay(100);
+  delay(10);
 }
 
 long readEncoder(int i2cAddr) {

@@ -102,8 +102,7 @@ void loop() {
       Serial.write(c);
       c = SerIMU.read();
     }
-    //Serial.println();
-    Serial.print("\n");
+    Serial.println();
     SerOut.println();
   }
 
