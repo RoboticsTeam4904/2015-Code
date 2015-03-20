@@ -29,9 +29,9 @@ public class MPU9150 {
 	public void update() {
 		byte[] buffer = new byte[1];
 		buffer[0] = 'e';
+		port.flush();
 		port.write(buffer, 1);
 		String returnData = port.readString();
-		port.flush();
 		String[] floatString = returnData.split(",");
 		double q[] = new double[4];
 		if (floatString.length > 3) {
@@ -41,7 +41,10 @@ public class MPU9150 {
 				q[1] = parseFloat(floatString[2]);
 				q[0] = parseFloat(floatString[3]);
 			}
-			catch (Exception e) {}
+			catch (Exception e) {
+				// System.out.println("Error parsing IMU data...");
+				// System.out.println(returnData);
+			}
 			angles[0] = -1 * Math.atan2(2 * q[1] * q[2] - 2 * q[0] * q[3], 2 * q[0] * q[0] + 2 * q[1] * q[1] - 1) * (180 / Math.PI); // psi
 			angles[1] = -1 * Math.asin(2 * q[1] * q[3] + 2 * q[0] * q[2]) * 180 / Math.PI; // theta
 			angles[2] = Math.atan2(2 * q[2] * q[3] - 2 * q[0] * q[1], 2 * q[0] * q[0] + 2 * q[3] * q[3] - 1) * 180 / Math.PI; // phi
