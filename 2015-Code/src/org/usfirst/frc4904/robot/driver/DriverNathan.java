@@ -25,7 +25,6 @@ public class DriverNathan extends Driver {
 		// PHI is used because the golden ration is pretty.
 		double turnSpeed = xboxController.getValue(XboxController.TWIST_STICK) / 2; // Turns way too fast otherwise
 		setTurn(turnSpeed); // Actually do the turning
-		System.out.println(xboxController.getValue(XboxController.X_STICK) * MathPHI / Math.PI + " " + -xboxController.getValue(XboxController.Y_STICK) * MathPHI / Math.PI);
 		if (xboxController.getButton(xboxController.A_BUTTON)) {
 			xboxController.rumble(1);
 		} else {

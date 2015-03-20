@@ -65,7 +65,6 @@ public class Winch extends Talon implements Disablable, Enablable, Updatable, PI
 	
 	public void disable() {
 		set(0);
-		System.out.println("WINCH DISABLE");
 		pid.setSetpoint(encoder.getDistance());
 		pid.disable();
 	}
