@@ -81,4 +81,13 @@ public class Winch extends Talon implements Disablable, Enablable, Updatable, PI
 			}
 		}
 	}
+	
+	public void overrideSet(double speed) {
+		if (Math.abs(speed) > 0.05 && pid.isEnable()) {
+			pid.disable();
+			super.set(speed);
+		} else if (Math.abs(speed) < 0.05) {
+			pid.enable();
+		}
+	}
 }
