@@ -15,7 +15,7 @@ public class Winch extends Talon implements Disablable, Enablable, Updatable, PI
 	private static final double DISTANCE_PER_PULSE = 1.0 / 28.75; // TODO Some number of ticks is one level. Needs to be determined
 	private final Encoder encoder;
 	private final PIDController pid;
-	private boolean overridePID = false;
+	private boolean overridePID = true;
 	
 	public Winch(int channel, Encoder encoder, double Kp, double Ki, double Kd) {
 		super(channel);
@@ -33,8 +33,9 @@ public class Winch extends Talon implements Disablable, Enablable, Updatable, PI
 		pid.setInputRange(0, MAX_HEIGHT);
 		pid.setOutputRange(-1, 1);
 		pid.setAbsoluteTolerance(0.5);
-		// Add SmartDashboard button to disable PID
-		SmartDashboard.putBoolean("Turn PID Disable", false);
+		SmartDashboard.putNumber("Kp Winch", 0);
+		SmartDashboard.putNumber("Ki Winch", 0);
+		SmartDashboard.putNumber("Kd Winch", 0);
 	}
 	
 	public void setHeight(double height) { // Set winch to specific height
@@ -68,7 +69,7 @@ public class Winch extends Talon implements Disablable, Enablable, Updatable, PI
 	}
 	
 	public void update() {
-		overridePID = SmartDashboard.getBoolean("Turn PID Disable");
+		pid.setPID(SmartDashboard.getNumber("Kp Winch"), SmartDashboard.getNumber("Ki Winch"), SmartDashboard.getNumber("Kd Winch"));
 		if (overridePID) {
 			pid.disable();
 			if (encoder.getDistance() < pid.getSetpoint()) {
