@@ -11,6 +11,6 @@ public class SetWinch extends Step {
 	public void init() {}
 	
 	public boolean run() {
-		return desiredWinchHeight == currentWinchHeight;
+		return Math.abs(desiredWinchHeight - currentWinchHeight) < 0.1;
 	}
 }
