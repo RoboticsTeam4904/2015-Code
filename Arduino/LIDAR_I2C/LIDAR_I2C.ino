@@ -53,14 +53,56 @@ void loop() {
     Data_4deg_index = 0; 
     Data_loop_index = 0;
     Serial.print("|");
-    for (int i=0; i<180; i++) {
+    for (int i=270; i<360; i++) {
       if (distance_array[i] != 0) {
-        Serial.print("#");
+        switch (min(distance_array[i], 1024)/256){
+          case 0:
+          Serial.print("#");
+          break;
+          case 1:
+          Serial.print("B");
+          break;
+          case 2:
+          Serial.print("!");
+          break;
+          case 3:
+          Serial.print(".");
+          break;
+          
+        }
       }
       else {
         Serial.print(" ");
       }
     }
+    
+    
+    for (int i=0; i<90; i++) {
+      if (distance_array[i] != 0) {
+        switch (min(distance_array[i], 1024)/256){
+          case 0:
+          Serial.print("#");
+          break;
+          case 1:
+          Serial.print("B");
+          break;
+          case 2:
+          Serial.print("!");
+          break;
+          case 3:
+          Serial.print(".");
+          break;
+          
+        }
+      }
+      else {
+        Serial.print(" ");
+      }
+    }
+    
+    
+    
+    
     Serial.println("|");
   }
 
@@ -91,10 +133,18 @@ void loop() {
 }
 
 void sendData() {
-  uint8_t buffer[2];
-  buffer[0] = distance_array[10] >> 8;
-  buffer[1] = distance_array[10] & 0xff;
-  Wire.write(buffer, 2);
+  uint8_t buffer[360*2];
+  for (int i=0; i<360; i++) {
+    buffer[2*i] = distance_array[i] >> 8;
+    buffer[2*i+1] = distance_array[i] & 0xff;
+  }
+  Serial.print("I2C data:");
+  for (int i=0; i<96; i++) {
+    Serial.print(buffer[i]);
+  }
+  Serial.println();
+  Wire.write(buffer, 30);
+  Wire.write(buffer+30, 30);
 }
 
 
@@ -267,6 +317,8 @@ void readData(unsigned char inByte) {
     break;
   }  
 }
+
+
 
 
 

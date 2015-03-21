@@ -324,6 +324,7 @@ void loop() {
       
     if (Serial1.available()) {
       Serial1.read();
+      Serial.println("Received a request for new data");
 
       //Serial1.print(millis());
       //Serial1.print(",");
