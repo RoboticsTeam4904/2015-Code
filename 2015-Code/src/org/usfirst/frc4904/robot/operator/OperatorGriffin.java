@@ -1,22 +1,16 @@
 package org.usfirst.frc4904.robot.operator;
 
 
-import org.usfirst.frc4904.robot.AutoAlign;
 import org.usfirst.frc4904.robot.LogKitten;
-import org.usfirst.frc4904.robot.input.LogitechJoystick;
 import org.usfirst.frc4904.robot.output.Grabber;
 import org.usfirst.frc4904.robot.output.Winch;
 
 public class OperatorGriffin extends Operator {
-	private final LogitechJoystick stick;
 	private final LogKitten logger;
-	private final AutoAlign align;
 	private boolean untouched = true;
 	
-	public OperatorGriffin(LogitechJoystick stick, Winch winch, AutoAlign align, Grabber grabber) {
-		super(winch, align, grabber);
-		this.stick = stick;
-		this.align = align;
+	public OperatorGriffin() {
+		super("Griffin");
 		logger = new LogKitten("OperatorGriffin", LogKitten.LEVEL_VERBOSE, LogKitten.LEVEL_FATAL);
 	}
 	

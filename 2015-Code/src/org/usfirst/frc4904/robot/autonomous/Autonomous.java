@@ -3,6 +3,7 @@ package org.usfirst.frc4904.robot.autonomous;
 
 import org.usfirst.frc4904.robot.Disablable;
 import org.usfirst.frc4904.robot.LogKitten;
+import org.usfirst.frc4904.robot.Named;
 import org.usfirst.frc4904.robot.Updatable;
 import org.usfirst.frc4904.robot.driver.AutoDriver;
 import org.usfirst.frc4904.robot.input.Camera;
@@ -11,7 +12,7 @@ import org.usfirst.frc4904.robot.input.LIDAR;
 import org.usfirst.frc4904.robot.operator.AutoOperator;
 import org.usfirst.frc4904.robot.output.Grabber;
 
-public class Autonomous implements Updatable, Disablable {
+public class Autonomous implements Updatable, Disablable, Named {
 	private AutoOperator operator = null;
 	private AutoDriver driver = null;
 	protected volatile double desiredXMovement = 0;
@@ -26,7 +27,7 @@ public class Autonomous implements Updatable, Disablable {
 	protected final Step[] steps;
 	private boolean finished = false;
 	private boolean firstInit = false;
-	private String name;
+	private final String name;
 	private int currentStep = 0;
 	private final LogKitten logger;
 	

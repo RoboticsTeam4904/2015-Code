@@ -1,20 +1,14 @@
 package org.usfirst.frc4904.robot.operator;
 
 
-import org.usfirst.frc4904.robot.AutoAlign;
 import org.usfirst.frc4904.robot.LogKitten;
-import org.usfirst.frc4904.robot.input.LogitechJoystick;
 import org.usfirst.frc4904.robot.output.Grabber;
-import org.usfirst.frc4904.robot.output.Winch;
 
 public class OperatorNachi extends Operator {
-	private final LogitechJoystick stick;
 	private final LogKitten logger;
 	
-	public OperatorNachi(LogitechJoystick stick, Winch winch, AutoAlign align, Grabber grabber) {
-		super(winch, align, grabber);
-		this.stick = stick;
-		this.align = align;
+	public OperatorNachi() {
+		super("Nachi");
 		logger = new LogKitten("OperatorNachi", LogKitten.LEVEL_VERBOSE, LogKitten.LEVEL_FATAL);
 	}
 	

@@ -1,19 +1,15 @@
 package org.usfirst.frc4904.robot.driver;
 
 
-import org.usfirst.frc4904.robot.AutoAlign;
 import org.usfirst.frc4904.robot.LogKitten;
 import org.usfirst.frc4904.robot.input.XboxController;
-import org.usfirst.frc4904.robot.output.Mecanum;
 
 public class DriverNathan extends Driver {
-	private final XboxController xboxController;
 	private final LogKitten logger;
 	private static final double MathPHI = 1.618;
 	
-	public DriverNathan(Mecanum mecanumDrive, XboxController xboxController, AutoAlign align) {
-		super(mecanumDrive, align);
-		this.xboxController = xboxController;
+	public DriverNathan() {
+		super("Nathan");
 		logger = new LogKitten("DriverNathan", LogKitten.LEVEL_VERBOSE, LogKitten.LEVEL_FATAL);
 	}
 	
@@ -25,7 +21,7 @@ public class DriverNathan extends Driver {
 		// PHI is used because the golden ration is pretty.
 		double turnSpeed = xboxController.getValue(XboxController.TWIST_STICK) / 2; // Turns way too fast otherwise
 		setTurn(turnSpeed); // Actually do the turning
-		if (xboxController.getButton(xboxController.A_BUTTON)) {
+		if (xboxController.getButton(XboxController.A_BUTTON)) {
 			xboxController.rumble(1);
 		} else {
 			xboxController.rumble(0);

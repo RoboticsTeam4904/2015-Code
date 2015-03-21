@@ -124,7 +124,7 @@ public class Robot extends SampleRobot {
 		// Initalize subsystems
 		align = new AutoAlign(mecanumDrive, udar, lidar, imu); // Initialize AutoAlign system
 		// Initialize managers
-		driverManager = new DriverManager(mecanumDrive, xboxController, align);
+		driverManager = new DriverManager(mecanumDrive, align, xboxController);
 		operatorManager = new OperatorManager(stick, winch, align, grabber);
 		autonomousManager = new AutonomousManager(mecanumDrive, winch, grabber, align, camera, lidar, imu);
 		modeManager = new ModeManager();
@@ -203,8 +203,8 @@ public class Robot extends SampleRobot {
 				implementsenable.enable();
 			}
 		}
-		operator = operatorManager.getOperator();
-		driver = driverManager.getDriver();
+		operator = operatorManager.getSelected();
+		driver = driverManager.getSelected();
 		new Updater(state, new Updatable[] {}, slowUpdatePeriod).start(); // align is potentially slower
 		startAlwaysUpdates(state);
 		// These should have fast updates

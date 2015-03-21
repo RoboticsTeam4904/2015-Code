@@ -1,16 +1,13 @@
 package org.usfirst.frc4904.robot.operator;
 
 
-import org.usfirst.frc4904.robot.AutoAlign;
 import org.usfirst.frc4904.robot.autonomous.Autonomous;
-import org.usfirst.frc4904.robot.output.Grabber;
-import org.usfirst.frc4904.robot.output.Winch;
 
 public class AutoOperator extends Operator {
 	private final Autonomous auto;
 	
-	public AutoOperator(Winch winch, AutoAlign align, Grabber grabber, Autonomous auto) {
-		super(winch, align, grabber);
+	public AutoOperator(Autonomous auto) {
+		super("AutoOperator");
 		this.auto = auto;
 	}
 	

@@ -3,20 +3,33 @@ package org.usfirst.frc4904.robot.operator;
 
 import org.usfirst.frc4904.robot.AutoAlign;
 import org.usfirst.frc4904.robot.Disablable;
+import org.usfirst.frc4904.robot.Named;
 import org.usfirst.frc4904.robot.Updatable;
+import org.usfirst.frc4904.robot.input.LogitechJoystick;
 import org.usfirst.frc4904.robot.output.Grabber;
 import org.usfirst.frc4904.robot.output.Grabber.GrabberState;
 import org.usfirst.frc4904.robot.output.Winch;
 
-public abstract class Operator implements Disablable, Updatable {
-	protected Winch winch;
-	protected AutoAlign align;
-	protected Grabber grabber;
+public abstract class Operator implements Disablable, Updatable, Named {
+	protected static LogitechJoystick stick;
+	protected static Winch winch;
+	protected static AutoAlign align;
+	protected static Grabber grabber;
+	private final String name;
 	
-	public Operator(Winch winch, AutoAlign align, Grabber grabber) {
-		this.winch = winch;
-		this.align = align;
-		this.grabber = grabber;
+	public Operator(String name) {
+		this.name = name;
+	}
+	
+	public static void passSensors(LogitechJoystick stick, Winch winch, AutoAlign align, Grabber grabber) {
+		Operator.winch = winch;
+		Operator.align = align;
+		Operator.grabber = grabber;
+		Operator.stick = stick;
+	}
+	
+	public String getName() {
+		return name;
 	}
 	
 	protected void changeHeight(int levels) {
