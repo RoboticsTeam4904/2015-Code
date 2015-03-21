@@ -23,10 +23,11 @@ public class AutonomousManager extends SendableChooser {
 	
 	public AutonomousManager(Mecanum mecanumDrive, Winch winch, Grabber grabber, AutoAlign align, Camera camera, LIDAR lidar, IMU imu) {
 		super();
-		addObject(new YellowToteStack(camera, grabber, lidar, imu));
-		addObject(new LandfillStack(lidar, grabber));
-		addObject(new OneToteMove(imu, grabber));
-		addDefault(new AutoZoneMove(imu));
+		Autonomous.passSensors(camera, grabber, lidar, imu);
+		addObject(new YellowToteStack());
+		addObject(new LandfillStack());
+		addObject(new OneToteMove());
+		addDefault(new AutoZoneMove());
 		addObject(new Freeze());
 		addObject(new TimedBackwardsMove());
 		this.mecanumDrive = mecanumDrive;

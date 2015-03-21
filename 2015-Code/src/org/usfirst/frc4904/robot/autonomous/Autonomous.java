@@ -5,7 +5,11 @@ import org.usfirst.frc4904.robot.Disablable;
 import org.usfirst.frc4904.robot.LogKitten;
 import org.usfirst.frc4904.robot.Updatable;
 import org.usfirst.frc4904.robot.driver.AutoDriver;
+import org.usfirst.frc4904.robot.input.Camera;
+import org.usfirst.frc4904.robot.input.IMU;
+import org.usfirst.frc4904.robot.input.LIDAR;
 import org.usfirst.frc4904.robot.operator.AutoOperator;
+import org.usfirst.frc4904.robot.output.Grabber;
 
 public class Autonomous implements Updatable, Disablable {
 	private AutoOperator operator = null;
@@ -15,17 +19,28 @@ public class Autonomous implements Updatable, Disablable {
 	protected volatile double desiredTurnSpeed = 0;
 	protected volatile double desiredWinchHeight = 0;
 	protected volatile double currentWinchHeight = 0;
+	protected static Camera camera;
+	protected static Grabber grabber;
+	protected static LIDAR lidar;
+	protected static IMU imu;
 	protected final Step[] steps;
 	private boolean finished = false;
 	private boolean firstInit = false;
 	private String name;
-	int currentStep = 0;
-	LogKitten logger;
+	private int currentStep = 0;
+	private final LogKitten logger;
 	
 	protected Autonomous(String name, Step[] steps) {
 		this.steps = steps;
 		logger = new LogKitten("Autonomous", LogKitten.LEVEL_DEBUG);
 		this.name = name;
+	}
+	
+	public static void passSensors(Camera camera, Grabber grabber, LIDAR lidar, IMU imu) {
+		Autonomous.camera = camera;
+		Autonomous.grabber = grabber;
+		Autonomous.lidar = lidar;
+		Autonomous.imu = imu;
 	}
 	
 	public AutoDriver getAutoDriver() {
@@ -72,7 +87,7 @@ public class Autonomous implements Updatable, Disablable {
 		this.desiredXMovement = movement[0];
 		this.desiredYMovement = movement[1];
 		if (stepCompleted) {
-			System.out.println(currentStep + " completed");
+			logger.d("Step", currentStep + " completed");
 			currentStep++;
 			if (currentStep >= steps.length) {// Otherwise, this would throw an ArrayIndexOutOfBoundsException when the last step finished
 				finished = true;
