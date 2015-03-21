@@ -36,8 +36,7 @@ public class Mecanum implements Updatable, Disablable, Enablable {
 		pid.setInputRange(0, 360);
 		pid.setOutputRange(-1, 1);
 		pid.setAbsoluteTolerance(0.5);
-		// Add SmartDashboard button to disable PID
-		SmartDashboard.putBoolean("Turn PID Disable", true);
+		// Add SmartDashboard fields for PID constants
 		SmartDashboard.putNumber("Kp Mecanum", 0);
 		SmartDashboard.putNumber("Ki Mecanum", 0);
 		SmartDashboard.putNumber("Kd Mecanum", 0);
@@ -67,15 +66,14 @@ public class Mecanum implements Updatable, Disablable, Enablable {
 		if (scaleFactor < 1) {
 			scaleFactor = 1;
 		}
-		frontLeftWheel.setValue(frontLeft / scaleFactor); // Negated because of motors being of the inside of chassis
-		frontRightWheel.setValue(-frontRight / scaleFactor);
-		backLeftWheel.setValue(backLeft / scaleFactor); // Negated because of motors being of the inside of chassis
-		backRightWheel.setValue(-backRight / scaleFactor);
+		frontLeftWheel.setValue(frontLeft / scaleFactor);
+		frontRightWheel.setValue(-frontRight / scaleFactor); // Negated because of motors being of the inside of chassis
+		backLeftWheel.setValue(backLeft / scaleFactor);
+		backRightWheel.setValue(-backRight / scaleFactor); // Negated because of motors being of the inside of chassis
 	}
 	
 	public synchronized void update() {
 		SmartDashboard.putNumber("Turn Speed PID Output", turnSpeed.read());
-		overridePID = SmartDashboard.getBoolean("Turn PID Disable");
 		pid.setPID(SmartDashboard.getNumber("Kp Mecanum"), SmartDashboard.getNumber("Ki Mecanum"), SmartDashboard.getNumber("Kd Mecanum"));
 		double setSpeed = Math.sqrt(desiredXSpeed * desiredXSpeed + desiredYSpeed * desiredYSpeed);
 		double setAngle = Math.atan2(desiredYSpeed, desiredXSpeed);
