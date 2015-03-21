@@ -12,8 +12,6 @@ public abstract class Operator implements Disablable, Updatable {
 	protected Winch winch;
 	protected AutoAlign align;
 	protected Grabber grabber;
-	public static final int MODE_TOTE = 0;
-	public static final int MODE_CAN = 1;
 	
 	public Operator(Winch winch, AutoAlign align, Grabber grabber) {
 		this.winch = winch;
@@ -25,7 +23,7 @@ public abstract class Operator implements Disablable, Updatable {
 		winch.setHeight(levels + winch.getHeight());
 	}
 	
-	protected void grab(int mode) {
+	protected void grab() {
 		grabber.setDesiredGrabberState(GrabberState.CLOSED);
 	}
 	

@@ -27,20 +27,10 @@ public class OperatorNachi extends Operator {
 		if (stick.buttons[0].get()) { // When button 1 is pressed, toggle tote grabbing
 			logger.v("update", "TOTE");
 			if (grabber.getState() == Grabber.GrabberState.OPEN || grabber.getState() == Grabber.GrabberState.DISABLED) {
-				logger.v("update tote", "Grab");
-				grab(MODE_TOTE);
+				logger.v("update", "Grab");
+				grab();
 			} else {
-				logger.v("update tote", "Release");
-				release();
-			}
-		}
-		if (stick.buttons[1].get()) { // When button 2 is pressed, toggle can grabbing
-			logger.v("update", "CAN");
-			if (grabber.getState() == Grabber.GrabberState.OPEN) {
-				logger.v("update can", "Grab");
-				grab(MODE_CAN);
-			} else {
-				logger.v("update can", "Release");
+				logger.v("update", "Release");
 				release();
 			}
 		}

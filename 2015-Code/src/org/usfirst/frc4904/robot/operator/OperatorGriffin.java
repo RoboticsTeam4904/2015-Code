@@ -39,7 +39,7 @@ public class OperatorGriffin extends Operator {
 				logger.v("update", "TOTE");
 				if (grabber.getState() == Grabber.GrabberState.OPEN || grabber.getState() == Grabber.GrabberState.DISABLED) {
 					logger.v("update tote", "Grab");
-					grab(MODE_TOTE);
+					grab();
 				} else {
 					logger.v("update tote", "Release");
 					release();
