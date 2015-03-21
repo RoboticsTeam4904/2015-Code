@@ -22,9 +22,9 @@ public class AutonomousManager extends TypedNamedSendableChooser<Autonomous> {
 		addObject(new YellowToteStack());
 		addObject(new LandfillStack());
 		addObject(new OneToteMove());
-		addDefault(new AutoZoneMove());
+		addObject(new AutoZoneMove());
 		addObject(new Freeze());
-		addObject(new TimedBackwardsMove());
+		addDefault(new TimedBackwardsMove());
 		logger = new LogKitten("AutonomousManager", LogKitten.LEVEL_VERBOSE);
 		SmartDashboard.putData("Autonomous Chooser", this);
 	}
