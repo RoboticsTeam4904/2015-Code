@@ -69,7 +69,6 @@ public class Robot extends SampleRobot {
 	private final DriverManager driverManager;
 	private final OperatorManager operatorManager;
 	private final AutonomousManager autonomousManager;
-	private final ModeManager modeManager;
 	// Drivers and operators
 	private Driver driver;
 	private Operator operator;
@@ -127,7 +126,6 @@ public class Robot extends SampleRobot {
 		driverManager = new DriverManager(mecanumDrive, align, xboxController);
 		operatorManager = new OperatorManager(stick, winch, align, grabber);
 		autonomousManager = new AutonomousManager(mecanumDrive, winch, grabber, align, camera, lidar, imu);
-		modeManager = new ModeManager();
 		// Drivers, operators, autonomous
 		autonomous = autonomousManager.getSelected();
 		// This list should include everything with a motor
@@ -183,21 +181,6 @@ public class Robot extends SampleRobot {
 		System.out.println("*** TELEOPERATED ***");
 		logger.v("Teleoperated", "Teleoperated");
 		RobotState state = RobotState.OPERATOR;
-		switch (modeManager.useMode()) {
-			case ModeManager.TRAIN_PID_MODE:
-				trainMecanumPID(state);
-				return;
-			case ModeManager.DUMP_LIDAR_MODE:
-				dumpLIDAR(state);
-				return;
-			case ModeManager.TRAIN_WINCH_MODE:
-				// trainWinchPID(state);
-				return;
-			case ModeManager.NO_MODE:
-				break;
-			default:
-				break;
-		}
 		for (Enablable implementsenable : toEnable) {
 			if (implementsenable != null) {
 				implementsenable.enable();
