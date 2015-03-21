@@ -13,8 +13,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Grabber extends Talon implements Disablable, Updatable {
 	public static final int RIGHT_OUTER_SWITCH = 0;
 	public static final int LEFT_OUTER_SWITCH = 1;
-	public static final int RIGHT_INNER_SWITCH = 8;
-	public static final int LEFT_INNER_SWITCH = 9;
+	public static final int RIGHT_INNER_SWITCH = 2;
+	public static final int LEFT_INNER_SWITCH = 3;
 	public static final int PDP_PORT = 1;
 	private static final double MAX_AMPS = 8; // Tune this value
 	private static final double LIMIT_AMPS = 15;
