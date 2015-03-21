@@ -26,9 +26,9 @@ public class DampenedMotor extends VictorSP implements Disablable, Updatable {
 		} else {
 			if (Math.abs(targetSpeed - currentSpeed) > maxRate) {
 				if (targetSpeed > currentSpeed) {
-					currentSpeed = currentSpeed + maxRate;
+					currentSpeed += maxRate;
 				} else if (targetSpeed < currentSpeed) {
-					currentSpeed = currentSpeed - maxRate;
+					currentSpeed -= maxRate;
 				}
 			} else {
 				currentSpeed = targetSpeed;
