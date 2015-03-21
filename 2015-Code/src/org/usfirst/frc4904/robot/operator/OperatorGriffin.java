@@ -30,9 +30,6 @@ public class OperatorGriffin extends Operator {
 		} else {
 			untouched = !stick.buttons[0].getRaw(); // technically only runs once
 		}
-		if (stick.buttons[1].get()) {
-			grabber.setDesiredGrabberState(Grabber.GrabberState.FREEZE);
-		}
 		// Grabber override
 		if (stick.buttons[11].getRaw()) {
 			overrideGrabber(stick.getX());
