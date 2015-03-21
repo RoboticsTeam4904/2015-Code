@@ -8,12 +8,13 @@ import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.Talon;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Winch extends Talon implements Disablable, Enablable, Updatable, PIDOutput {
 	public static final double MAX_HEIGHT = 9.5; // each level is half a tote height off the bottom-most position of the winch
-	private static final double MAX_TICKS = 375.00;
-	private static final double DISTANCE_PER_PULSE = (58.0 / 6.0) / MAX_TICKS; // Makerslide height: 57-58". Half-tote: 6". Winch pulses per makerslide: 255.
+	private static final double MAX_TICKS = 375.00; // how many pulses from the bottom to the top of the makerslide
+	private static final double WINCH_HEIGHT = 58.0; // height of winch makerslide (in inches)
+	private static final double HALF_TOTE_HEIGHT = 6.0; // height of half tote (in inches)
+	private static final double DISTANCE_PER_PULSE = (WINCH_HEIGHT / HALF_TOTE_HEIGHT) / MAX_TICKS;
 	private final Encoder encoder;
 	private final PIDController pid;
 	private boolean overridePID = false;
@@ -35,19 +36,13 @@ public class Winch extends Talon implements Disablable, Enablable, Updatable, PI
 		pid.setOutputRange(-1, 1);
 		pid.setAbsoluteTolerance(0.5);
 		pid.disable();
-		SmartDashboard.putNumber("Kp Winch", -0.7);
-		SmartDashboard.putNumber("Ki Winch", 0);
-		SmartDashboard.putNumber("Kd Winch", 0);
+		// SmartDashboard.putNumber("Kp Winch", -0.7);
+		// SmartDashboard.putNumber("Ki Winch", 0);
+		// SmartDashboard.putNumber("Kd Winch", 0);
 	}
 	
 	public void setHeight(double height) { // Set winch to specific height
-		if (height > MAX_HEIGHT) {
-			pid.setSetpoint(MAX_HEIGHT);
-		} else if (height < 0) {
-			pid.setSetpoint(0);
-		} else {
-			pid.setSetpoint(height);
-		}
+		pid.setSetpoint(height);
 	}
 	
 	public void changeHeight(int heightChange) {
@@ -71,7 +66,7 @@ public class Winch extends Talon implements Disablable, Enablable, Updatable, PI
 	}
 	
 	public void update() {
-		pid.setPID(SmartDashboard.getNumber("Kp Winch"), SmartDashboard.getNumber("Ki Winch"), SmartDashboard.getNumber("Kd Winch"));
+		// pid.setPID(SmartDashboard.getNumber("Kp Winch"), SmartDashboard.getNumber("Ki Winch"), SmartDashboard.getNumber("Kd Winch"));
 		if (overridePID) {}
 		// System.out.println(pid.getSetpoint() + " | " + encoder.get() + " | " + get());
 	}
