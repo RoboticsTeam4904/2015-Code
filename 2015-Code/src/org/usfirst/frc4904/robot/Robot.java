@@ -125,7 +125,7 @@ public class Robot extends SampleRobot {
 		// Initialize managers
 		driverManager = new DriverManager(mecanumDrive, align, xboxController);
 		operatorManager = new OperatorManager(stick, winch, align, grabber);
-		autonomousManager = new AutonomousManager(mecanumDrive, winch, grabber, align, camera, lidar, imu);
+		autonomousManager = new AutonomousManager(winch, grabber, align, camera, lidar, imu);
 		// Drivers, operators, autonomous
 		autonomous = autonomousManager.getSelected();
 		// This list should include everything with a motor

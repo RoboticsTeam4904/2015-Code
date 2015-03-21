@@ -10,14 +10,13 @@ import org.usfirst.frc4904.robot.input.IMU;
 import org.usfirst.frc4904.robot.input.LIDAR;
 import org.usfirst.frc4904.robot.operator.AutoOperator;
 import org.usfirst.frc4904.robot.output.Grabber;
-import org.usfirst.frc4904.robot.output.Mecanum;
 import org.usfirst.frc4904.robot.output.Winch;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class AutonomousManager extends TypedNamedSendableChooser<Autonomous> {
 	private final LogKitten logger;
 	
-	public AutonomousManager(Mecanum mecanumDrive, Winch winch, Grabber grabber, AutoAlign align, Camera camera, LIDAR lidar, IMU imu) {
+	public AutonomousManager(Winch winch, Grabber grabber, AutoAlign align, Camera camera, LIDAR lidar, IMU imu) {
 		super();
 		Autonomous.passSensors(camera, grabber, lidar, imu);
 		addObject(new YellowToteStack());

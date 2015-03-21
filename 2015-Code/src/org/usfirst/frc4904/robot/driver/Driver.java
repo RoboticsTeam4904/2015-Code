@@ -9,8 +9,8 @@ import org.usfirst.frc4904.robot.input.XboxController;
 import org.usfirst.frc4904.robot.output.Mecanum;
 
 public abstract class Driver implements Disablable, Updatable, Named {
-	protected static Mecanum mecanumDrive;
-	protected static AutoAlign align;
+	private static Mecanum mecanumDrive;
+	private static AutoAlign align;
 	protected static XboxController xboxController;
 	private final String name;
 	
