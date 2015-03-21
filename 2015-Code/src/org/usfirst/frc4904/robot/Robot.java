@@ -192,7 +192,7 @@ public class Robot extends SampleRobot {
 		startAlwaysUpdates(state);
 		// These should have fast updates
 		new Updater(state, new Updatable[] {driver, operator, mecanumDrive, lidar, frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel, grabber, winch}, fastUpdatePeriod).start();
-		while (getRobotState() == state) {
+		while (isAutonomous() && isEnabled()) {
 			Timer.delay(0.01);
 		}
 	}
@@ -236,10 +236,10 @@ public class Robot extends SampleRobot {
 		if (isDisabled()) {
 			return RobotState.DISABLED;
 		}
-		if (isOperatorControl()) {
+		if (isOperatorControl() && isEnabled()) {
 			return RobotState.OPERATOR;
 		}
-		if (isAutonomous()) {
+		if (isAutonomous() && isEnabled()) {
 			return RobotState.AUTONOMOUS;
 		}
 		return RobotState.DISABLED;

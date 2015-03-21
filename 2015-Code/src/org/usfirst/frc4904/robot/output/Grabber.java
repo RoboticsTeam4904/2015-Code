@@ -94,7 +94,6 @@ public class Grabber extends Talon implements Disablable, Updatable {
 			set(grabberState.motorSpeed * negate);
 		} else {
 			set(overrideSpeed);
-			override = false;
 		}
 		logger.d("update", "motorSpeed: " + grabberState.motorSpeed * negate);
 	}
@@ -145,8 +144,6 @@ public class Grabber extends Talon implements Disablable, Updatable {
 			if (grabberState == GrabberState.CLOSING) {
 				grabberState = GrabberState.CLOSED;
 			}
-			// if (this.get() < 0) negate = 1;
-			// else if (this.get() > 0) negate = -1;
 			logger.f("checkPowerUsage", "stopped close " + currentCurrent);
 		}
 		if (currentCurrent > LIMIT_AMPS) {
