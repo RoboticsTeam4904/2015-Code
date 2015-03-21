@@ -30,7 +30,7 @@ public class Grabber extends Talon implements Disablable, Updatable {
 	private int currentPosition = 0;
 	
 	public enum GrabberState { // an enum containing grabber states and their values
-		OPEN(0), CLOSED(-0.0), OPENING(0.5), CLOSING(-0.5), DISABLED(0); // grabber state and values
+		OPEN(0), CLOSED(-0.1), OPENING(0.5), CLOSING(-0.5), DISABLED(0); // grabber state and values
 		public final double motorSpeed; // the architecture allowing the enum states to have values
 		
 		private GrabberState(double speed) {
