@@ -129,7 +129,7 @@ public class Robot extends SampleRobot {
 		autonomousManager = new AutonomousManager(mecanumDrive, winch, grabber, align, camera, lidar, imu);
 		modeManager = new ModeManager();
 		// Drivers, operators, autonomous
-		autonomous = autonomousManager.getAutonomous();
+		autonomous = autonomousManager.getSelected();
 		// This list should include everything with a motor
 		toDisable = new Disablable[] {winch, grabber, driver, operator, autonomous, frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel};
 		toEnable = new Enablable[] {mecanumDrive, winch};
@@ -162,7 +162,7 @@ public class Robot extends SampleRobot {
 		System.out.println("*** AUTONOMOUS ***");
 		logger.v("Autonomous", "Autonomous");
 		RobotState state = RobotState.AUTONOMOUS;
-		autonomous = autonomousManager.getAutonomous();
+		autonomous = autonomousManager.getSelected();
 		driver = autonomous.getAutoDriver();
 		operator = autonomous.getAutoOperator();
 		for (Enablable implementsenable : toEnable) {

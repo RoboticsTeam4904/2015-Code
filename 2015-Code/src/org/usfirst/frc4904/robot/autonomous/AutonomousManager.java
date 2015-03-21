@@ -11,17 +11,10 @@ import org.usfirst.frc4904.robot.operator.AutoOperator;
 import org.usfirst.frc4904.robot.output.Grabber;
 import org.usfirst.frc4904.robot.output.Mecanum;
 import org.usfirst.frc4904.robot.output.Winch;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class AutonomousManager {
-	private final Autonomous[] autonomouses = new Autonomous[6];
-	private static final int YELLOW_TOTE_STACK = 0;
-	private static final int LANDFILL_STACK = 1;
-	private static final int ONE_TOTE_MOVE = 2;
-	private static final int AUTO_ZONE_MOVE = 3;
-	private static final int FREEZE = 4;
-	private static final int TIMED_BACKWARDS = 5;
-	private static final int AUTO_DEFAULT = AUTO_ZONE_MOVE;
+public class AutonomousManager extends SendableChooser {
 	private final Mecanum mecanumDrive;
 	private final Winch winch;
 	private final Grabber grabber;
@@ -29,35 +22,47 @@ public class AutonomousManager {
 	private final LogKitten logger;
 	
 	public AutonomousManager(Mecanum mecanumDrive, Winch winch, Grabber grabber, AutoAlign align, Camera camera, LIDAR lidar, IMU imu) {
-		autonomouses[YELLOW_TOTE_STACK] = new YellowToteStack(camera, grabber, lidar, imu);
-		autonomouses[LANDFILL_STACK] = new LandfillStack(lidar, grabber);
-		autonomouses[ONE_TOTE_MOVE] = new OneToteMove(imu, grabber);
-		autonomouses[AUTO_ZONE_MOVE] = new AutoZoneMove(imu);
-		autonomouses[FREEZE] = new Freeze();
-		autonomouses[TIMED_BACKWARDS] = new BackwardsMove();
+		super();
+		addObject(new YellowToteStack(camera, grabber, lidar, imu));
+		addObject(new LandfillStack(lidar, grabber));
+		addObject(new OneToteMove(imu, grabber));
+		addDefault(new AutoZoneMove(imu));
+		addObject(new Freeze());
+		addObject(new TimedBackwardsMove());
 		this.mecanumDrive = mecanumDrive;
 		this.winch = winch;
 		this.align = align;
 		this.grabber = grabber;
-		for (Autonomous auto : autonomouses) {
-			registerAutonomous(auto);
-		}
 		logger = new LogKitten("AutonomousManager", LogKitten.LEVEL_VERBOSE);
-		SmartDashboard.putNumber("Autonomous", AUTO_DEFAULT);
+		SmartDashboard.putData("Autonomous Chooser", this);
 	}
 	
-	public Autonomous getAutonomous() {
-		System.out.println("Getting auton");
-		int autoMode = (int) SmartDashboard.getNumber("Autonomous", AUTO_DEFAULT);
-		if (autoMode > autonomouses.length) {
-			autoMode = autonomouses.length;
-		}
-		logger.f("getAutonomous", "Auto mode " + Integer.toString(autoMode));
-		return autonomouses[autoMode];
+	public void addObject(Autonomous autonMode) {
+		registerAutonomous(autonMode);
+		super.addObject(autonMode.getName(), autonMode);
 	}
 	
-	private void registerAutonomous(Autonomous auto) {
-		auto.setAutoDriver(new AutoDriver(mecanumDrive, align, auto));
-		auto.setAutoOperator(new AutoOperator(winch, align, grabber, auto));
+	public void addDefault(Autonomous autonMode) {
+		registerAutonomous(autonMode);
+		super.addDefault(autonMode.getName() + " (default)", autonMode);
+	}
+	
+	public void addObject(String arg0, Object arg1) {
+		throw new Error("addObject on AutonomousManager shouldn't be called directly!");
+	}
+	
+	public void addDefault(String arg0, Object arg1) {
+		throw new Error("addObject on AutonomousManager shouldn't be called directly!");
+	}
+	
+	public Autonomous getSelected() {
+		Autonomous selected = (Autonomous) super.getSelected();
+		logger.v("getAutonomous", "Auto mode: " + selected);
+		return selected;
+	}
+	
+	private void registerAutonomous(Autonomous autonMode) {
+		autonMode.setAutoDriver(new AutoDriver(mecanumDrive, align, autonMode));
+		autonMode.setAutoOperator(new AutoOperator(winch, align, grabber, autonMode));
 	}
 }
