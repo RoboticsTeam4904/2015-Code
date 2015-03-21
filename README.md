@@ -1,13 +1,13 @@
 # 2015-Code
 Team 4904 - Code for 2015
 
-IDE: Eclipse Luna
+IDE: Eclipse Luna<br>
 Language: Java
 
 2015 Robot Uses:
 * LIDAR (laser vision)
 * Logitech USB Camera
-* UDAR (ultrasonic vision) 
+* UDAR (ultrasonic vision)
 * Mecanum Wheels
 * and Adafruit NeoPixels
 and other stuff I haven't written
