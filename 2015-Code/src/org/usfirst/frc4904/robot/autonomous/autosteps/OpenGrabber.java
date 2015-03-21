@@ -12,10 +12,11 @@ public class OpenGrabber extends Step {
 		this.grabber = grabber;
 	}
 	
-	public void init() {}
+	public void init() {
+		grabber.setDesiredGrabberState(GrabberState.OPEN);
+	}
 	
 	public boolean run() {
-		grabber.setDesiredGrabberState(GrabberState.OPEN);
 		if (grabber.getState() == GrabberState.OPEN) {
 			return true;
 		} else {
