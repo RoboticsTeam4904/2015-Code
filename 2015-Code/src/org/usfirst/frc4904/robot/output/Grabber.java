@@ -3,6 +3,7 @@ package org.usfirst.frc4904.robot.output;
 
 import org.usfirst.frc4904.robot.Disablable;
 import org.usfirst.frc4904.robot.LogKitten;
+import org.usfirst.frc4904.robot.Robot;
 import org.usfirst.frc4904.robot.Updatable;
 import org.usfirst.frc4904.robot.input.PDP;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -13,7 +14,8 @@ public class Grabber extends Talon implements Disablable, Updatable {
 	public static final int RIGHT_OUTER_SWITCH = 0;
 	public static final int LEFT_OUTER_SWITCH = 1;
 	public static final int PDP_PORT = 1;
-	private static final double MAX_AMPS = 6; // Tune this value
+	private static final double MAX_AMPS = 12; // Tune this value
+	private static final int NUM_PAST_CURRENTS = (int) (0.25 / Robot.fastUpdatePeriod); // Number of past currents to average
 	private final DigitalInput[] limitSwitches;
 	private LogKitten logger;
 	private double overrideSpeed;
@@ -21,6 +23,8 @@ public class Grabber extends Talon implements Disablable, Updatable {
 	private PDP pdp;
 	private int negate = 1;
 	private long openStart;
+	private final double[] pastAmperage;
+	private int currentPosition = 0;
 	
 	public enum GrabberState { // an enum containing grabber states and their values
 		OPEN(0), CLOSED(-0.1), OPENING(0.5), CLOSING(-0.5), DISABLED(0), FREEZE(-0.075), FIXING(-0.2); // grabber state and values
@@ -40,6 +44,7 @@ public class Grabber extends Talon implements Disablable, Updatable {
 		logger = new LogKitten("Grabber", LogKitten.LEVEL_DEBUG, LogKitten.LEVEL_ERROR);
 		overrideSpeed = 0;
 		override = false;
+		pastAmperage = new double[NUM_PAST_CURRENTS];
 	}
 	
 	public void negateGrabber() {
@@ -77,7 +82,9 @@ public class Grabber extends Talon implements Disablable, Updatable {
 	
 	public void update() {
 		SmartDashboard.putNumber("Grabber Motor Current", pdp.getCurrent(PDP_PORT));
-		System.out.println(pdp.getCurrent(PDP_PORT));
+		System.out.println(pdp.getCurrent(PDP_PORT) + " | " + grabberState);
+		pastAmperage[currentPosition++] = pdp.getCurrent(PDP_PORT);
+		currentPosition %= pastAmperage.length;
 		checkLimitSwitches();
 		checkPowerUsage();
 		if (grabberState == GrabberState.OPENING && openStart == 0) {
@@ -114,7 +121,11 @@ public class Grabber extends Talon implements Disablable, Updatable {
 	}
 	
 	private void checkPowerUsage() {
-		double currentCurrent = pdp.getCurrent(PDP_PORT);
+		double currentCurrent = 0;
+		for (double current : pastAmperage) {
+			currentCurrent += current;
+		}
+		currentCurrent /= pastAmperage.length;
 		if (currentCurrent > MAX_AMPS) {
 			if (grabberState == GrabberState.CLOSING) {
 				grabberState = GrabberState.CLOSED;

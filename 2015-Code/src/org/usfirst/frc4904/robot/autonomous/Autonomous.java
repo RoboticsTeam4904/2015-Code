@@ -72,7 +72,7 @@ public class Autonomous implements Updatable, Disablable, Named {
 	
 	public void update() {
 		if (finished) {
-			disable();
+			resetMovement();
 			return;
 		}
 		if (!firstInit) {
@@ -123,5 +123,6 @@ public class Autonomous implements Updatable, Disablable, Named {
 		resetMovement();
 		firstInit = false;
 		currentStep = 0;
+		finished = false;
 	}
 }

@@ -57,7 +57,7 @@ public abstract class Operator implements Disablable, Updatable, Named {
 	}
 	
 	protected void overrideGrabber(double speed) {
-		grabber.override(speed / 5);
+		grabber.override(speed);
 	}
 	
 	public void disable() {

@@ -3,9 +3,10 @@ package org.usfirst.frc4904.robot.autonomous;
 
 import org.usfirst.frc4904.robot.autonomous.autosteps.BackwardsCharge;
 import org.usfirst.frc4904.robot.autonomous.autosteps.TimedDrive;
+import org.usfirst.frc4904.robot.autonomous.autosteps.WaitWithMessage;
 
 public class AutoZoneMove extends Autonomous {
 	protected AutoZoneMove() {
-		super("AutoZoneMove", new Step[] {new BackwardsCharge(imu), new TimedDrive(0, 0.25, 0.5)});
+		super("AutoZoneMove", new Step[] {new BackwardsCharge(imu), new WaitWithMessage(1, "Hello"), new TimedDrive(0, 0.5, 1)});
 	}
 }
