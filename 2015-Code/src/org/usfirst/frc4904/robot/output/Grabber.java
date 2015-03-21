@@ -116,10 +116,12 @@ public class Grabber extends Talon implements Disablable, Updatable {
 			case CLOSING:
 				if (!limitSwitches[RIGHT_INNER_SWITCH].get()) { // If limit switch has been hit (get() returns opposite - true if not pressed)
 					logger.v("checkLimitSwitches", "Right inner switch");
+					System.out.println("Right inner switch");
 					grabberState = GrabberState.CLOSED; // Don't go too far
 				}
 				if (!limitSwitches[LEFT_INNER_SWITCH].get()) {
 					logger.v("checkLimitSwitches", "Left inner switch");
+					System.out.println("Left inner switch");
 					grabberState = GrabberState.CLOSED; // Don't go too far
 				}
 				return;
@@ -140,7 +142,7 @@ public class Grabber extends Talon implements Disablable, Updatable {
 	private void checkPowerUsage() {
 		SmartDashboard.putNumber("Grabber Motor Current", pdp.getCurrent(PDP_PORT));
 		SmartDashboard.putNumber("Avg. Grabber Motor Current", avgCurrent());
-		System.out.println(avgCurrent() + " | " + pdp.getCurrent(PDP_PORT) + " | " + grabberState);
+		// System.out.println(avgCurrent() + " | " + pdp.getCurrent(PDP_PORT) + " | " + grabberState);
 		pastAmperage[currentPosition++] = pdp.getCurrent(PDP_PORT);
 		currentPosition %= pastAmperage.length;
 		double currentCurrent = avgCurrent();
