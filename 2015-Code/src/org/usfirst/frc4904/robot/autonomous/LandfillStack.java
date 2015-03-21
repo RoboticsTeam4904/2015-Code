@@ -9,6 +9,6 @@ import org.usfirst.frc4904.robot.output.Grabber;
 
 public class LandfillStack extends Autonomous {
 	public LandfillStack(LIDAR lidar, Grabber grabber) {
-		super(new Step[] {new ForwardCharge(lidar), new CloseGrabber(grabber), new SetWinch(2)});
+		super("LandfillStack", new Step[] {new ForwardCharge(lidar), new CloseGrabber(grabber), new SetWinch(2)});
 	}
 }

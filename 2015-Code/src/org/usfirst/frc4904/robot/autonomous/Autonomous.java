@@ -18,16 +18,22 @@ public class Autonomous implements Updatable, Disablable {
 	protected final Step[] steps;
 	private boolean finished = false;
 	private boolean firstInit = false;
+	private String name;
 	int currentStep = 0;
 	LogKitten logger;
 	
-	protected Autonomous(Step[] steps) {
+	protected Autonomous(String name, Step[] steps) {
 		this.steps = steps;
 		logger = new LogKitten("Autonomous", LogKitten.LEVEL_DEBUG);
+		this.name = name;
 	}
 	
 	public AutoDriver getAutoDriver() {
 		return driver;
+	}
+	
+	public String getName() {
+		return name;
 	}
 	
 	public AutoOperator getAutoOperator() {

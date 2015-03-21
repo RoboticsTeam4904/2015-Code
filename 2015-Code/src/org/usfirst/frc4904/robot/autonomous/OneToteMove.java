@@ -11,6 +11,6 @@ import org.usfirst.frc4904.robot.output.Grabber;
 
 public class OneToteMove extends Autonomous {
 	protected OneToteMove(IMU imu, Grabber grabber) {
-		super(new Step[] {new CloseGrabber(grabber), new SetWinch(1), new BackwardsCharge(imu), new TimedDrive(0, 0.1, 0.2), new SetWinch(0), new OpenGrabber(grabber)});
+		super("OneToteMove", new Step[] {new CloseGrabber(grabber), new SetWinch(1), new BackwardsCharge(imu), new TimedDrive(0, 0.1, 0.2), new SetWinch(0), new OpenGrabber(grabber)});
 	}
 }
