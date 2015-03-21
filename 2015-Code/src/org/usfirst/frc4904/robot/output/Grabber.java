@@ -18,7 +18,7 @@ public class Grabber extends Talon implements Disablable, Updatable {
 	public static final int PDP_PORT = 1;
 	private static final double MAX_AMPS = 8; // Tune this value
 	private static final double LIMIT_AMPS = 25;
-	private static final int NUM_PAST_CURRENTS = (int) (0.125 / Robot.fastUpdatePeriod); // Number of past currents to average
+	private static final int NUM_PAST_CURRENTS = (int) (0.25 / Robot.fastUpdatePeriod); // Number of past currents to average
 	private final DigitalInput[] limitSwitches;
 	private LogKitten logger;
 	private double overrideSpeed;
@@ -83,12 +83,16 @@ public class Grabber extends Talon implements Disablable, Updatable {
 	public void update() {
 		checkLimitSwitches();
 		checkPowerUsage();
-		if (grabberState == GrabberState.OPENING && openStart == 0) {
-			openStart = System.currentTimeMillis();
-		}
-		if (System.currentTimeMillis() - openStart > 10000) {
+		if (grabberState == GrabberState.OPENING) {
+			if (openStart == 0) {
+				openStart = System.currentTimeMillis();
+			}
+			if (System.currentTimeMillis() - openStart > 10000) {
+				openStart = 0;
+				grabberState = GrabberState.DISABLED;
+			}
+		} else {
 			openStart = 0;
-			grabberState = GrabberState.DISABLED;
 		}
 		if (!override) {
 			set(grabberState.motorSpeed * negate);
