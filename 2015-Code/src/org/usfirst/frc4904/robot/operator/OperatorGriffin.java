@@ -55,6 +55,12 @@ public class OperatorGriffin extends Operator {
 		if (stick.buttons[11].getRaw()) {
 			overrideGrabber(stick.getX());
 		}
+		if (stick.buttons[8].get()) {
+			grabber.negateGrabber();
+		}
+		if (stick.buttons[9].get()) {
+			grabber.disable();
+		}
 	}
 	
 	public void disable() {

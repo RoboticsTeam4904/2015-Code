@@ -7,6 +7,7 @@ import org.usfirst.frc4904.robot.Updatable;
 import org.usfirst.frc4904.robot.input.PDP;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Talon;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Grabber extends Talon implements Disablable, Updatable {
 	public static final int RIGHT_OUTER_SWITCH = 0;
@@ -19,9 +20,10 @@ public class Grabber extends Talon implements Disablable, Updatable {
 	private boolean override;
 	private PDP pdp;
 	private int negate = 1;
+	private long openStart;
 	
 	public enum GrabberState { // an enum containing grabber states and their values
-		OPEN(0), CLOSED(-0.5), OPENING(0.75), CLOSING(-0.75), DISABLED(0), FREEZE(-0.1), FIXING(-0.2); // grabber state and values
+		OPEN(0), CLOSED(-0.1), OPENING(0.5), CLOSING(-0.5), DISABLED(0), FREEZE(-0.075), FIXING(-0.2); // grabber state and values
 		public final double motorSpeed; // the architecture allowing the enum states to have values
 		
 		private GrabberState(double speed) {
@@ -38,6 +40,10 @@ public class Grabber extends Talon implements Disablable, Updatable {
 		logger = new LogKitten("Grabber", LogKitten.LEVEL_DEBUG, LogKitten.LEVEL_ERROR);
 		overrideSpeed = 0;
 		override = false;
+	}
+	
+	public void negateGrabber() {
+		negate *= -1;
 	}
 	
 	public void setDesiredGrabberState(GrabberState state) {
@@ -70,8 +76,17 @@ public class Grabber extends Talon implements Disablable, Updatable {
 	}
 	
 	public void update() {
+		SmartDashboard.putNumber("Grabber Motor Current", pdp.getCurrent(PDP_PORT));
+		System.out.println(pdp.getCurrent(PDP_PORT));
 		checkLimitSwitches();
 		checkPowerUsage();
+		if (grabberState == GrabberState.OPENING && openStart == 0) {
+			openStart = System.currentTimeMillis();
+		}
+		if (openStart > 10000) {
+			openStart = 0;
+			grabberState = GrabberState.DISABLED;
+		}
 		if (!override) {
 			set(grabberState.motorSpeed * negate);
 		} else {
@@ -104,8 +119,8 @@ public class Grabber extends Talon implements Disablable, Updatable {
 			if (grabberState == GrabberState.CLOSING) {
 				grabberState = GrabberState.CLOSED;
 			}
-			if (this.get() < 0) negate = 1;
-			else if (this.get() > 0) negate = -1;
+			// if (this.get() < 0) negate = 1;
+			// else if (this.get() > 0) negate = -1;
 			logger.f("checkPowerUsage", "stopped close " + currentCurrent);
 		}
 	}
