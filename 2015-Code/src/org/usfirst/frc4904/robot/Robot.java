@@ -70,9 +70,9 @@ public class Robot extends SampleRobot {
 	private final OperatorManager operatorManager;
 	private final AutonomousManager autonomousManager;
 	// Drivers and operators
-	private Driver driver;
-	private Operator operator;
-	private Autonomous autonomous;
+	private volatile Driver driver;
+	private volatile Operator operator;
+	private volatile Autonomous autonomous;
 	private final AutoAlign align; // the AutoAlign class contains code to align the robot with totes and cans
 	// Update system
 	public static final double fastUpdatePeriod = 0.02; // update every 0.01 seconds/10 milliseconds (100Hz) This is IMU speed
@@ -246,7 +246,7 @@ public class Robot extends SampleRobot {
 	}
 	
 	public static double time() {
-		return (double) System.currentTimeMillis() / 1000;
+		return ((double) System.currentTimeMillis()) / 1000D;
 	}
 	
 	private class Updater extends Thread { // Function to update automatically in a new thread
