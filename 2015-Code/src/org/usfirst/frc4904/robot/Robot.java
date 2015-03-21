@@ -41,9 +41,9 @@ public class Robot extends SampleRobot {
 	private static final int WINCH_ENCODER_PORT_1 = 3;
 	private static final int WINCH_ENCODER_PORT_2 = 2;
 	private static final int UDAR_I2C_PORT = 4;
-	private static final double WINCH_P_COEFFICIENT = 0.001;
-	private static final double WINCH_I_COEFFICIENT = 0.001;
-	private static final double WINCH_D_COEFFICIENT = 0.001;
+	private static final double WINCH_P_COEFFICIENT = -0.7;
+	private static final double WINCH_I_COEFFICIENT = 0.00;
+	private static final double WINCH_D_COEFFICIENT = 0.00;
 	private static final double MECANUM_P_COEFFICIENT = 0.1;
 	private static final double MECANUM_I_COEFFICIENT = 0.1;
 	private static final double MECANUM_D_COEFFICIENT = 0.1;
@@ -140,6 +140,7 @@ public class Robot extends SampleRobot {
 	public void robotInit() {
 		System.out.println("*** INITIALIZING ***");
 		logger.v("Initializing", "Initializing");
+		imu.zero();
 	}
 	
 	public void disabled() {

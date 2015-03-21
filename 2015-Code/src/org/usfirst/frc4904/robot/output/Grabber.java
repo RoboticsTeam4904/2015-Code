@@ -18,9 +18,10 @@ public class Grabber extends Talon implements Disablable, Updatable {
 	private double overrideSpeed;
 	private boolean override;
 	private PDP pdp;
+	private int negate = 1;
 	
 	public enum GrabberState { // an enum containing grabber states and their values
-		OPEN(0), CLOSED(-0.5), OPENING(0.5), CLOSING(-0.75), DISABLED(0), FREEZE(-0.1); // grabber state and values
+		OPEN(0), CLOSED(-0.5), OPENING(0.75), CLOSING(-0.75), DISABLED(0), FREEZE(-0.1), FIXING(-0.2); // grabber state and values
 		public final double motorSpeed; // the architecture allowing the enum states to have values
 		
 		private GrabberState(double speed) {
@@ -34,7 +35,7 @@ public class Grabber extends Talon implements Disablable, Updatable {
 		this.limitSwitches = limitSwitches;
 		this.pdp = pdp;
 		grabberState = GrabberState.OPEN;
-		logger = new LogKitten("Grabber", LogKitten.LEVEL_DEBUG, LogKitten.LEVEL_FATAL);
+		logger = new LogKitten("Grabber", LogKitten.LEVEL_DEBUG, LogKitten.LEVEL_ERROR);
 		overrideSpeed = 0;
 		override = false;
 	}
@@ -62,6 +63,7 @@ public class Grabber extends Talon implements Disablable, Updatable {
 			case FREEZE:
 				grabberState = GrabberState.FREEZE;
 				logger.w("setDesiredGrabberState", "Setting state to freeze");
+				break;
 			default:
 				throw new Error("Invalid or unsupported state passed to setDesiredGrabberState");
 		}
@@ -71,16 +73,17 @@ public class Grabber extends Talon implements Disablable, Updatable {
 		checkLimitSwitches();
 		checkPowerUsage();
 		if (!override) {
-			set(grabberState.motorSpeed);
+			set(grabberState.motorSpeed * negate);
 		} else {
 			set(overrideSpeed);
 		}
-		logger.d("update", "motorSpeed: " + grabberState.motorSpeed);
+		logger.d("update", "motorSpeed: " + grabberState.motorSpeed * negate);
 	}
 	
 	private void checkLimitSwitches() {
 		switch (grabberState) {
 			case OPENING:
+			case FIXING:
 				if (!limitSwitches[RIGHT_OUTER_SWITCH].get()) { // If limit switch has been hit (get() returns opposite - true if not pressed)
 					logger.v("checkLimitSwitches", "Right outer switch");
 					grabberState = GrabberState.OPEN; // Don't go too far
@@ -97,9 +100,13 @@ public class Grabber extends Talon implements Disablable, Updatable {
 	
 	private void checkPowerUsage() {
 		double currentCurrent = pdp.getCurrent(PDP_PORT);
-		if (currentCurrent > MAX_AMPS && grabberState == GrabberState.CLOSING) {
-			grabberState = GrabberState.CLOSED;
-			logger.v("checkPowerUsage", "stopped close");
+		if (currentCurrent > MAX_AMPS) {
+			if (grabberState == GrabberState.CLOSING) {
+				grabberState = GrabberState.CLOSED;
+			}
+			if (this.get() < 0) negate = 1;
+			else if (this.get() > 0) negate = -1;
+			logger.f("checkPowerUsage", "stopped close " + currentCurrent);
 		}
 	}
 	

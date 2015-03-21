@@ -1,0 +1,66 @@
+<xml version="1.0">
+<dashboard>
+	<widget field="Turn Speed PID Output" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="399"/>
+	</widget>
+	<widget field="Q0" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="378"/>
+	</widget>
+	<widget field="Autonomous" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="357"/>
+	</widget>
+	<widget field="Q1" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="336"/>
+	</widget>
+	<widget field="Q2" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="315"/>
+	</widget>
+	<widget field="Q3" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="294"/>
+	</widget>
+	<widget field="Roll" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="273"/>
+	</widget>
+	<widget field="Yaw" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="252"/>
+	</widget>
+	<widget field="Operator" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="231"/>
+	</widget>
+	<widget field="Turn PID Disable" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="210"/>
+	</widget>
+	<widget field="Kd Mecanum" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="189"/>
+	</widget>
+	<widget field="Mode" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="168"/>
+	</widget>
+	<widget field="Kd Winch" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="147"/>
+	</widget>
+	<widget field="Ki Mecanum" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="126"/>
+	</widget>
+	<widget field="Driver" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="105"/>
+	</widget>
+	<widget field="UseMode" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="84"/>
+	</widget>
+	<widget field="Pitch" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="63"/>
+	</widget>
+	<widget field="Kp Mecanum" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="42"/>
+	</widget>
+	<widget field="Kp Winch" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="21"/>
+	</widget>
+	<widget field="Ki Winch" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="0"/>
+	</widget>
+</dashboard>
+<live-window>
+</live-window>
+</xml>

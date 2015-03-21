@@ -11,11 +11,12 @@ import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Winch extends Talon implements Disablable, Enablable, Updatable, PIDOutput {
-	private static final double MAX_HEIGHT = 12; // each level is half a tote height off the bottom-most position of the winch
-	private static final double DISTANCE_PER_PULSE = (58.0 / 6.0) / 344.00; // Makerslide height: 57-58". Half-tote: 6". Winch pulses per makerslide: 344.
+	public static final double MAX_HEIGHT = 9.5; // each level is half a tote height off the bottom-most position of the winch
+	private static final double MAX_TICKS = 375.00;
+	private static final double DISTANCE_PER_PULSE = (58.0 / 6.0) / MAX_TICKS; // Makerslide height: 57-58". Half-tote: 6". Winch pulses per makerslide: 255.
 	private final Encoder encoder;
 	private final PIDController pid;
-	private boolean overridePID = true;
+	private boolean overridePID = false;
 	
 	public Winch(int channel, Encoder encoder, double Kp, double Ki, double Kd) {
 		super(channel);
@@ -29,12 +30,12 @@ public class Winch extends Talon implements Disablable, Enablable, Updatable, PI
 		// It is also possible to use rate, by changing kDistance to kRate.
 		encoder.setPIDSourceParameter(Encoder.PIDSourceParameter.kDistance);
 		// Initializes the PID Controller
-		pid = new PIDController(Kp, Ki, Kd, encoder, new PIDVariable());
+		pid = new PIDController(Kp, Ki, Kd, encoder, this);
 		pid.setInputRange(0, MAX_HEIGHT);
 		pid.setOutputRange(-1, 1);
 		pid.setAbsoluteTolerance(0.5);
 		pid.disable();
-		SmartDashboard.putNumber("Kp Winch", 0);
+		SmartDashboard.putNumber("Kp Winch", -0.7);
 		SmartDashboard.putNumber("Ki Winch", 0);
 		SmartDashboard.putNumber("Kd Winch", 0);
 	}
@@ -72,6 +73,7 @@ public class Winch extends Talon implements Disablable, Enablable, Updatable, PI
 	public void update() {
 		pid.setPID(SmartDashboard.getNumber("Kp Winch"), SmartDashboard.getNumber("Ki Winch"), SmartDashboard.getNumber("Kd Winch"));
 		if (overridePID) {}
+		// System.out.println(pid.getSetpoint() + " | " + encoder.get() + " | " + get());
 	}
 	
 	public void overrideSet(double speed) {
@@ -82,6 +84,7 @@ public class Winch extends Talon implements Disablable, Enablable, Updatable, PI
 		}
 		if (!pid.isEnable()) {
 			super.set(speed);
+			pid.setSetpoint(encoder.getDistance());
 		}
 	}
 }

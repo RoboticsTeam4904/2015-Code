@@ -12,10 +12,12 @@ public class CloseGrabber extends Step {
 		this.grabber = grabber;
 	}
 	
-	public void init() {}
+	public void init() {
+		grabber.setDesiredGrabberState(GrabberState.CLOSED);
+	}
 	
 	public boolean run() {
-		grabber.setDesiredGrabberState(GrabberState.CLOSED);
+		System.out.println(grabber.getState());
 		if (grabber.getState() == GrabberState.CLOSED) {
 			return true;
 		} else {

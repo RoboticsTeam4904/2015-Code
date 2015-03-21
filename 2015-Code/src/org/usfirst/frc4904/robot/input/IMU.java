@@ -67,7 +67,7 @@ public class IMU extends MPU9150 implements PIDSource, Updatable {
 	}
 	
 	public boolean isGoingOverScoringPlatform() {
-		return Math.abs(angles[1]) > 5 || Math.abs(angles[2]) > 5; // TODO 5 degrees is ballpark - measure
+		return (angles[1] > 5 && angles[1] < 355) || (angles[2] > 5 && angles[2] < 355); // TODO 5 degrees is ballpark - measure
 	}
 	
 	public double pidGet() {

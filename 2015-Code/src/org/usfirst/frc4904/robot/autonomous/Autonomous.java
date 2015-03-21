@@ -66,7 +66,7 @@ public class Autonomous implements Updatable, Disablable {
 		this.desiredXMovement = movement[0];
 		this.desiredYMovement = movement[1];
 		if (stepCompleted) {
-			System.out.println(currentStep + "completed");
+			System.out.println(currentStep + " completed");
 			currentStep++;
 			if (currentStep >= steps.length) {// Otherwise, this would throw an ArrayIndexOutOfBoundsException when the last step finished
 				finished = true;
@@ -99,6 +99,7 @@ public class Autonomous implements Updatable, Disablable {
 	
 	public void disable() {
 		resetMovement();
+		firstInit = false;
 		currentStep = 0;
 	}
 }
