@@ -12,14 +12,6 @@ public abstract class TypedNamedSendableChooser<T extends Named> extends Sendabl
 		super.addDefault(object.getName() + " (default)", object);
 	}
 	
-	public void addObject(String arg0, Object arg1) {
-		throw new Error("addObject on TypedNamedSendableChooser shouldn't be called directly!");
-	}
-	
-	public void addDefault(String arg0, Object arg1) {
-		throw new Error("addDefault on TypedNamedSendableChooser shouldn't be called directly!");
-	}
-	
 	@SuppressWarnings("unchecked")
 	public T getSelected() {
 		return (T) super.getSelected();
