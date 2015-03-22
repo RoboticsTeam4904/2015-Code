@@ -176,7 +176,7 @@ public class Robot extends SampleRobot {
 		startAlwaysUpdates(state);
 		// These should have fast updates
 		new Updater(state, new Updatable[] {autonomous, driver, operator, mecanumDrive, lidar, frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel, grabber, winch}, fastUpdatePeriod).start();
-		while (getRobotState() == state) {
+		while (isAutonomous() && isEnabled()) {
 			Timer.delay(0.01);
 		}
 	}
@@ -196,7 +196,7 @@ public class Robot extends SampleRobot {
 		startAlwaysUpdates(state);
 		// These should have fast updates
 		new Updater(state, new Updatable[] {driver, operator, mecanumDrive, lidar, frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel, grabber, winch}, fastUpdatePeriod).start();
-		while (isAutonomous() && isEnabled()) {
+		while (isOperatorControl() && isEnabled()) {
 			Timer.delay(0.01);
 		}
 	}
@@ -218,21 +218,6 @@ public class Robot extends SampleRobot {
 			mecanumDrive.setDesiredTurnSpeed(0.2);
 			mecanumDrive.setDesiredXYSpeed(0, 0);
 			Timer.delay(3);
-		}
-	}
-	
-	/*
-	 * public void trainWinchPID(RobotState state) { System.out.println("*** TRAIN PID ***"); logger.v("trainPID", "trainPID"); startAlwaysUpdates(state); new Updater(state, new Updatable[] {winch}, fastUpdatePeriod).start(); while (getRobotState() == state) { winch.setHeight(8); winch.trainPID(); Timer.delay(5); winch.setHeight(4); winch.trainPID(); Timer.delay(5); } }
-	 */
-	public void dumpLIDAR(RobotState state) {
-		System.out.println("*** DUMP LIDAR ***");
-		logger.v("dumpLIDAR", "dumpLIDAR");
-		startAlwaysUpdates(state);
-		new Updater(state, new Updatable[] {lidar}, fastUpdatePeriod).start();
-		while (getRobotState() == state) {
-			for (int i = 0; i < 360; i++) {
-				logger.w("LIDAR", "(" + Integer.toString(lidar.getXY(i)[0]) + ", " + Integer.toString(lidar.getXY(i)[1]) + ")");
-			}
 		}
 	}
 	
