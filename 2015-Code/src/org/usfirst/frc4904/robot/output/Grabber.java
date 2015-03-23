@@ -24,7 +24,6 @@ public class Grabber extends Talon implements Disablable, Updatable {
 	private double overrideSpeed;
 	private boolean override;
 	private PDP pdp;
-	private int negate = 1;
 	private long openStart;
 	private final double[] pastAmperage;
 	private int currentPosition = 0;
@@ -48,10 +47,6 @@ public class Grabber extends Talon implements Disablable, Updatable {
 		overrideSpeed = 0;
 		override = false;
 		pastAmperage = new double[NUM_PAST_CURRENTS];
-	}
-	
-	public void negateGrabber() {
-		negate *= -1;
 	}
 	
 	public void setDesiredGrabberState(GrabberState state) {
@@ -95,11 +90,11 @@ public class Grabber extends Talon implements Disablable, Updatable {
 			openStart = 0;
 		}
 		if (!override) {
-			set(grabberState.motorSpeed * negate);
+			set(grabberState.motorSpeed);
 		} else {
 			set(overrideSpeed);
 		}
-		logger.d("update", "motorSpeed: " + grabberState.motorSpeed * negate);
+		logger.d("update", "motorSpeed: " + grabberState.motorSpeed);
 	}
 	
 	private void checkLimitSwitches() {

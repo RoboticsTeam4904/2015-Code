@@ -47,9 +47,6 @@ public class OperatorGriffin extends Operator {
 				setWinchSpeed(0.2);
 			}
 		}
-		if (stick.buttons[8].get()) {
-			grabber.negateGrabber();
-		}
 		if (stick.buttons[9].get()) {
 			grabber.disable();
 		}
