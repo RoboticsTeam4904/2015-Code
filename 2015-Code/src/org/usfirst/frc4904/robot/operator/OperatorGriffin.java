@@ -18,12 +18,11 @@ public class OperatorGriffin extends Operator {
 		// Method 1
 		if (!untouched) {
 			if (stick.buttons[0].get()) { // When button 1 is pressed, toggle tote grabbing
-				logger.v("update", "TOTE");
 				if (grabber.getState() == Grabber.GrabberState.OPEN || grabber.getState() == Grabber.GrabberState.OPENING || grabber.getState() == Grabber.GrabberState.DISABLED) {
-					logger.v("update tote", "Grab");
+					logger.v("Griffin Grab");
 					grab();
 				} else {
-					logger.v("update tote", "Release");
+					logger.v("Griffin Release");
 					release();
 				}
 			}
@@ -47,8 +46,15 @@ public class OperatorGriffin extends Operator {
 				setWinchSpeed(0.2);
 			}
 		}
+		// Grabber kill
 		if (stick.buttons[9].get()) {
 			grabber.disable();
+			logger.w("Grabber killed by operator (Griffin)");
+		}
+		// E-kill
+		if (stick.buttons[7].get()) {
+			disable();
+			logger.w("Robot killed by operator (Griffin)");
 		}
 	}
 	

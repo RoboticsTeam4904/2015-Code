@@ -25,15 +25,15 @@ public class PDP extends PowerDistributionPanel implements Updatable {
 	public void update() {
 		if (logVerbose) {
 			SmartDashboard.putNumber("PDP Temperature: ", getTemperature());
-			logger.v("Temperature", Double.toString(getTemperature()));
+			logger.v("Temperature: " + Double.toString(getTemperature()));
 			SmartDashboard.putNumber("PDP Voltage", getVoltage());
-			logger.v("Voltage", Double.toString(getVoltage()));
+			logger.v("Voltage: " + Double.toString(getVoltage()));
 			for (int i = 0; i < NUM_PDP_PORTS; i++) {
 				SmartDashboard.putNumber("PDP Port " + i + " Current", getCurrent(i));
-				logger.v("Port " + Integer.toString(i), Double.toString(getCurrent(i)));
+				logger.v("Port " + Integer.toString(i) + ": " + Double.toString(getCurrent(i)));
 			}
-			logger.v("Energy", Double.toString(getTotalEnergy()));
-			logger.v("Power", Double.toString(getTotalPower()));
+			logger.v("Energy: " + Double.toString(getTotalEnergy()));
+			logger.v("Power: " + Double.toString(getTotalPower()));
 		}
 	}
 }

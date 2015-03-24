@@ -5,26 +5,61 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Calendar;
+import java.util.Comparator;
 
 public class LogKitten {
+	private static class DebugLevel implements Comparable<DebugLevel>, Comparator<DebugLevel> {
+		private String name;
+		private int severity;
+		
+		public DebugLevel(String name, int severity) {
+			this.severity = severity;
+			this.name = name;
+		}
+		
+		public int getSeverity() {
+			return severity;
+		}
+		
+		public String getName() {
+			return name;
+		}
+		
+		public int compare(DebugLevel o1, DebugLevel o2) {
+			return severity - o2.getSeverity();
+		}
+		
+		public int compareTo(DebugLevel o) {
+			if (compare(this, o) > 0) {
+				return 1;
+			} else if (compare(this, o) == 0) {
+				return 0;
+			} else {
+				return -1;
+			}
+		}
+	}
 	private FileOutputStream fileOutput;
 	private final File file;
-	private final int level;
-	private final int printLevel;
 	private final String identifier;
-	public final static int LEVEL_FATAL = 0;
-	public final static int LEVEL_ERROR = 1;
-	public final static int LEVEL_WARN = 2;
-	public final static int LEVEL_VERBOSE = 3;
-	public final static int LEVEL_DEBUG = 4;
+	private final DebugLevel logLevel;
+	private final DebugLevel printLevel;
+	public final static DebugLevel LEVEL_FATAL = new DebugLevel("FATAL", 0);
+	public final static DebugLevel LEVEL_ERROR = new DebugLevel("ERROR", 1);
+	public final static DebugLevel LEVEL_WARN = new DebugLevel("WARN", 2);
+	public final static DebugLevel LEVEL_VERBOSE = new DebugLevel("VERBOSE", 3);
+	public final static DebugLevel LEVEL_DEBUG = new DebugLevel("DEBUG", 4);
+	private static DebugLevel DEFAULT_LOG_LEVEL = LEVEL_VERBOSE;
+	private static DebugLevel DEFAULT_PRINT_LEVEL = LEVEL_FATAL;
+	private static String LOG_PATH = "/home/lvuser/logs/";
 	
-	public LogKitten(String identifier, int logLevel, int printLevel) {
+	public LogKitten(String identifier, DebugLevel logLevel, DebugLevel printLevel) {
 		this.identifier = identifier;
-		level = logLevel;
-		String filePath;
-		filePath = "/home/lvuser/logs/" + identifier + ".log"; // Set this sessions log to /home/lvuser/logs/[current time].log
+		this.logLevel = logLevel;
+		String filePath = LOG_PATH + identifier + ".log"; // Set this sessions log to /home/lvuser/logs/[current time].log
 		file = new File(filePath);
 		try {
+			// Delete file if it exists
 			if (file.exists()) {
 				file.delete();
 			}
@@ -42,98 +77,74 @@ public class LogKitten {
 		this.printLevel = printLevel;
 	}
 	
-	public LogKitten(String identifier, int logLevel) {
-		this(identifier, logLevel, LEVEL_FATAL);
+	public LogKitten(String identifier, DebugLevel logLevel) {
+		this(identifier, logLevel, DEFAULT_LOG_LEVEL);
 	}
 	
-	public void f(String tag, String message) { // Log error message
-		if (level < LEVEL_FATAL) {
-			return;
-		}
-		try {
-			String content = timestamp() + " FATAL: " + tag + ": " + message + " " + "\n";
-			fileOutput.write(content.getBytes());
-			fileOutput.flush();
-		}
-		catch (IOException ioe) {
-			System.out.println("Error logging error.");
-			ioe.printStackTrace();
-		}
-		if (printLevel >= LEVEL_FATAL) {
-			System.out.println(identifier + " " + "FATAL: " + tag + ": " + message + "\n");
-		}
+	public LogKitten(String identifier) {
+		this(identifier, DEFAULT_PRINT_LEVEL);
 	}
 	
-	public void e(String tag, String message) { // Log error message
-		if (level < LEVEL_ERROR) {
-			return;
-		}
-		try {
-			String content = timestamp() + " ERROR: " + tag + ": " + message + " " + "\n";
-			fileOutput.write(content.getBytes());
-			fileOutput.flush();
-		}
-		catch (IOException ioe) {
-			System.out.println("Error logging error.");
-			ioe.printStackTrace();
-		}
-		if (printLevel >= LEVEL_ERROR) {
-			System.out.println(identifier + " " + "ERROR: " + tag + ": " + message + "\n");
-		}
+	// If no identifier is given, use caller class name
+	public LogKitten(DebugLevel logLevel, DebugLevel printLevel) {
+		this(Thread.currentThread().getStackTrace()[1].getClassName(), logLevel, printLevel);
 	}
 	
-	public void w(String tag, String message) { // Log error message
-		if (level < LEVEL_WARN) {
-			return;
+	public LogKitten(DebugLevel logLevel) {
+		this(Thread.currentThread().getStackTrace()[1].getClassName(), logLevel);
+	}
+	
+	public LogKitten() {
+		this(Thread.currentThread().getStackTrace()[1].getClassName());
+	}
+	
+	public static void setDefaultLogLevel(DebugLevel DEFAULT_LOG_LEVEL) {
+		LogKitten.DEFAULT_LOG_LEVEL = DEFAULT_LOG_LEVEL;
+	}
+	
+	public static void setDefaultPrintLevel(DebugLevel DEFAULT_PRINT_LEVEL) {
+		LogKitten.DEFAULT_PRINT_LEVEL = DEFAULT_PRINT_LEVEL;
+	}
+	
+	public static void setLogPath(String LOG_PATH) {
+		LogKitten.LOG_PATH = LOG_PATH;
+	}
+	
+	private void logMessage(String message, DebugLevel level) {
+		if (logLevel.compareTo(level) > 0) {
+			try {
+				String content = timestamp() + " " + level.getName() + ": " + Thread.currentThread().getStackTrace()[1].getMethodName() + ": " + message + " \n";
+				fileOutput.write(content.getBytes());
+				fileOutput.flush();
+			}
+			catch (IOException ioe) {
+				System.out.println("Error logging " + level.getName() + " message");
+				ioe.printStackTrace();
+			}
 		}
-		try {
-			String content = timestamp() + " WARN: " + tag + ": " + message + " " + "\n";
-			fileOutput.write(content.getBytes());
-			fileOutput.flush();
-		}
-		catch (IOException ioe) {
-			System.out.println("Error logging error.");
-			ioe.printStackTrace();
-		}
-		if (printLevel >= LEVEL_WARN) {
-			System.out.println(identifier + " " + "WARN: " + tag + ": " + message + "\n");
+		if (printLevel.compareTo(level) > 0) {
+			System.out.println(identifier + " " + level.getName() + ": " + Thread.currentThread().getStackTrace()[1].getMethodName() + ": " + message + " \n");
 		}
 	}
 	
-	public void v(String tag, String message) { // Log verbose message
-		if (level < LEVEL_VERBOSE) {
-			return;
-		}
-		try {
-			String content = timestamp() + " VERBOSE: " + tag + ": " + message + " " + "\n";
-			fileOutput.write(content.getBytes());
-			fileOutput.flush();
-		}
-		catch (IOException ioe) {
-			System.out.println("Error logging verbose message.");
-			ioe.printStackTrace();
-		}
-		if (printLevel >= LEVEL_VERBOSE) {
-			System.out.println(identifier + " " + "VERBOSE: " + tag + ": " + message + "\n");
-		}
+	public void f(String message) { // Log fatal message
+		logMessage(message, LEVEL_FATAL);
 	}
 	
-	public void d(String tag, String message) { // Log debug message
-		if (level < LEVEL_DEBUG) {
-			return;
-		}
-		try {
-			String content = timestamp() + " DEBUG: " + tag + ": " + message + " " + "\n";
-			fileOutput.write(content.getBytes());
-			fileOutput.flush();
-		}
-		catch (IOException ioe) {
-			System.out.println("Error logging debug message");
-			ioe.printStackTrace();
-		}
-		if (printLevel >= LEVEL_DEBUG) {
-			System.out.println(identifier + " " + "DEBUG: " + tag + ": " + message + " " + Integer.toString(printLevel) + "\n");
-		}
+	public void e(String message) { // Log error message
+		logMessage(message, LEVEL_ERROR);
+	}
+	
+	public void w(String message) { // Log warn message
+		logMessage(message, LEVEL_WARN);
+	}
+	
+	public void v(String message) { // Log verbose message
+		logMessage(message, LEVEL_VERBOSE);
+	}
+	
+	public void d(String message) { // Log debug message
+		logMessage(message, LEVEL_DEBUG);
 	}
 	
 	public void clean() {

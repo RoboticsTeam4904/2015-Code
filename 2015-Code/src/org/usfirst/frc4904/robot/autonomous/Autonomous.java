@@ -88,7 +88,7 @@ public class Autonomous implements Updatable, Disablable, Named {
 		this.desiredXMovement = movement[0];
 		this.desiredYMovement = movement[1];
 		if (stepCompleted) {
-			logger.d("Step", currentStep + " completed");
+			logger.d("autonomous step " + currentStep + " completed");
 			currentStep++;
 			if (currentStep >= steps.length) {// Otherwise, this would throw an ArrayIndexOutOfBoundsException when the last step finished
 				finished = true;

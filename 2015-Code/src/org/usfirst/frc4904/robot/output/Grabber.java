@@ -52,7 +52,7 @@ public class Grabber extends Talon implements Disablable, Updatable {
 	public void setDesiredGrabberState(GrabberState state) {
 		override = false;
 		if (state == grabberState) {
-			logger.d("setDesiredGrabberState", "Not changing state");
+			logger.d("Not changing state");
 			return;
 		}
 		switch (state) {
@@ -61,14 +61,14 @@ public class Grabber extends Talon implements Disablable, Updatable {
 					break;
 				}
 				grabberState = GrabberState.OPENING;
-				logger.w("setDesiredGrabberState", "Setting state to opening");
+				logger.w("Setting state to opening");
 				break;
 			case CLOSED:
 				if (grabberState == GrabberState.CLOSING) {
 					break;
 				}
 				grabberState = GrabberState.CLOSING;
-				logger.w("setDesiredGrabberState", "Setting state to closing");
+				logger.w("Setting state to closing");
 				break;
 			default:
 				throw new Error("Invalid or unsupported state passed to setDesiredGrabberState");
@@ -94,27 +94,27 @@ public class Grabber extends Talon implements Disablable, Updatable {
 		} else {
 			set(overrideSpeed);
 		}
-		logger.d("update", "motorSpeed: " + grabberState.motorSpeed);
+		logger.d("motorSpeed: " + grabberState.motorSpeed);
 	}
 	
 	private void checkLimitSwitches() {
 		switch (grabberState) {
 			case OPENING:
 				if (!limitSwitches[RIGHT_OUTER_SWITCH].get()) { // If limit switch has been hit (get() returns opposite - true if not pressed)
-					logger.v("checkLimitSwitches", "Right outer switch");
+					logger.v("Right outer switch");
 					grabberState = GrabberState.OPEN; // Don't go too far
 				}
 				if (!limitSwitches[LEFT_OUTER_SWITCH].get()) {
-					logger.v("checkLimitSwitches", "Left outer switch");
+					logger.v("Left outer switch");
 					grabberState = GrabberState.OPEN; // Don't go too far
 				}// We are not returning here, because we want opening to check the inner ones too in case it goes too far
 			case CLOSING:
 				if (!limitSwitches[RIGHT_INNER_SWITCH].get()) { // If limit switch has been hit (get() returns opposite - true if not pressed)
-					logger.v("checkLimitSwitches", "Right inner switch");
+					logger.v("Right inner switch");
 					grabberState = GrabberState.CLOSED; // Don't go too far
 				}
 				if (!limitSwitches[LEFT_INNER_SWITCH].get()) {
-					logger.v("checkLimitSwitches", "Left inner switch");
+					logger.v("Left inner switch");
 					grabberState = GrabberState.CLOSED; // Don't go too far
 				}
 				return;
@@ -135,8 +135,8 @@ public class Grabber extends Talon implements Disablable, Updatable {
 	private void checkPowerUsage() {
 		SmartDashboard.putNumber("Grabber Motor Current", pdp.getCurrent(PDP_PORT));
 		SmartDashboard.putNumber("Avg. Grabber Motor Current", avgCurrent());
-		logger.d("Average grabber current", "" + avgCurrent());
-		logger.d("Grabber state", "" + grabberState);
+		logger.d("" + avgCurrent());
+		logger.d("" + grabberState);
 		pastAmperage[currentPosition++] = pdp.getCurrent(PDP_PORT);
 		currentPosition %= pastAmperage.length;
 		double currentCurrent = avgCurrent();
@@ -144,11 +144,11 @@ public class Grabber extends Talon implements Disablable, Updatable {
 			if (grabberState == GrabberState.CLOSING) {
 				grabberState = GrabberState.CLOSED;
 			}
-			logger.v("checkPowerUsage", "Stopped closing - current hit " + currentCurrent);
+			logger.v("Stopped closing - current hit " + currentCurrent);
 		}
 		if (currentCurrent > LIMIT_AMPS) {
 			grabberState = GrabberState.DISABLED;
-			logger.f("checkPowerUsage", "WARNING: Too much current: " + currentCurrent + " > " + LIMIT_AMPS);
+			logger.f("WARNING: Too much current: " + currentCurrent + " > " + LIMIT_AMPS);
 		}
 	}
 	

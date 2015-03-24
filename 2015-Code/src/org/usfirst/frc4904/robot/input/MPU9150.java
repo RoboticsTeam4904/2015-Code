@@ -45,7 +45,7 @@ public class MPU9150 {
 				q[0] = parseFloat(floatString[3]);
 			}
 			catch (Exception e) {
-				logger.e("update", "Error parsing IMU data \"" + returnData + "\": " + e.getMessage());
+				logger.e("Error parsing IMU data \"" + returnData + "\": " + e.getMessage());
 			}
 			angles[0] = -1 * Math.atan2(2 * q[1] * q[2] - 2 * q[0] * q[3], 2 * q[0] * q[0] + 2 * q[1] * q[1] - 1) * (180 / Math.PI); // psi
 			angles[1] = -1 * Math.asin(2 * q[1] * q[3] + 2 * q[0] * q[2]) * 180 / Math.PI; // theta

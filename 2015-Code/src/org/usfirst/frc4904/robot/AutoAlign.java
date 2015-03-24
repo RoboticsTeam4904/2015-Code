@@ -62,7 +62,7 @@ public class AutoAlign implements Updatable {
 	private void alignWithToteTick() {
 		int[] toteFront = lidar.getLine();
 		double angle = Math.atan2(toteFront[3] - toteFront[1], toteFront[2] - toteFront[0]); // Angle of the tote relative to the X axis (us)
-		logger.v("alignWithToteTick", "Current angle: " + Double.toString(angle));
+		logger.v("Current angle: " + Double.toString(angle));
 		if (Math.abs(angle) < Math.PI / 60) {
 			double x = 0;
 			double y = 0;

@@ -21,11 +21,9 @@ public class LIDAR implements Updatable {
 	public static final int CORRECTED_ANGLE_BREADTH = 16; // How many angles to average when correcting an angle. Should be divisible by 4
 	public static final boolean DISABLED = true;
 	
-	// private final SerialPort port;
 	public LIDAR() {
 		dists = new int[360];
 		logger = new LogKitten("LIDAR", LogKitten.LEVEL_WARN, LogKitten.LEVEL_DEBUG);
-		logger.v("LIDAR", "Started Logging");
 		i2c = new I2C(I2C.Port.kOnboard, 5);
 	}
 	
@@ -53,19 +51,19 @@ public class LIDAR implements Updatable {
 		}
 		ArrayList<int[]> inFront = new ArrayList<int[]>();
 		for (HoughLine line : H.getLines(houghSensitivity)) {
-			logger.v("HoughLine", "Checking a line");
+			logger.v("Checking a line");
 			int[] tmpcoords = new int[4];
 			tmpcoords = line.getCoordinates();
 			if (tmpcoords[0] > 0 && tmpcoords[2] > 0) {
 				// If the two Y coordinates are on opposites sides of the X axis (the line crosses the X axis)
 				// and both X coordinates are positive,
 				// assume that this is a line that we like, because it's directly in front of the sensor 0 degrees
-				logger.v("HoughLine", "Added line");
+				logger.v("Added line");
 				inFront.add(tmpcoords);
 			}
 		}
 		// TODO check the length of the lines to see which is the most reasonable
-		logger.v("getLines", "Line: " + Integer.toString(inFront.get(0)[0]) + " " + Integer.toString(inFront.get(0)[1]) + " " + Integer.toString(inFront.get(0)[2]) + " " + Integer.toString(inFront.get(0)[3]));
+		logger.v("Line: " + Integer.toString(inFront.get(0)[0]) + " " + Integer.toString(inFront.get(0)[1]) + " " + Integer.toString(inFront.get(0)[2]) + " " + Integer.toString(inFront.get(0)[3]));
 		return inFront.get(0);
 	}
 	
@@ -86,7 +84,7 @@ public class LIDAR implements Updatable {
 		// if (port.getBytesReceived() < 128) { // LIDAR returns 1980 bytes per cycle
 		// logger.v("getBytesReceived", "only " + port.getBytesReceived() + " bytes received");
 		// }
-		logger.v("update", "Updating LIDAR");
+		logger.d("Updating LIDAR");
 		try {
 			for (int i = 0; i < 180; i++) { // Reading in chunks of 4, so only 90 steps
 				dists[i] = read(i);
@@ -96,7 +94,7 @@ public class LIDAR implements Updatable {
 			}
 		}
 		catch (Exception e) {
-			logger.e("update", "Exception: " + e);
+			logger.e("Error updating LIDAR: " + e.getMessage());
 		}
 	}
 	

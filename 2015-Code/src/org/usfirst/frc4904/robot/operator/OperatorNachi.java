@@ -19,12 +19,11 @@ public class OperatorNachi extends Operator {
 			setWinchSpeed(0);
 		}
 		if (stick.buttons[0].get()) { // When button 1 is pressed, toggle tote grabbing
-			logger.v("update", "TOTE");
 			if (grabber.getState() == Grabber.GrabberState.OPEN || grabber.getState() == Grabber.GrabberState.DISABLED) {
-				logger.v("update", "Grab");
+				logger.v("Nachi Grab");
 				grab();
 			} else {
-				logger.v("update", "Release");
+				logger.v("Nachi Release");
 				release();
 			}
 		}
@@ -44,10 +43,10 @@ public class OperatorNachi extends Operator {
 		if (stick.buttons[11].getRaw()) {
 			overrideGrabber(stick.getY());
 		}
-		// Disable
+		// E-kill
 		if (stick.buttons[7].get()) {
 			disable();
-			logger.w("update", "disabled");
+			logger.w("Robot killed by operator (Nachi)");
 		}
 	}
 	

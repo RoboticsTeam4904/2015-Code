@@ -28,7 +28,7 @@ public class DriverNathan extends Driver {
 		}
 		if (xboxController.getButton(XboxController.BACK_BUTTON)) {
 			disable();
-			logger.w("update", "disabled");
+			logger.w("Robot killed by driver (Nathan)");
 		}
 		if (xboxController.getButton(XboxController.X_BUTTON)) {
 			autoAlign(true);

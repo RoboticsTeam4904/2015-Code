@@ -59,7 +59,7 @@ public class XboxController extends Joystick {
 			this.setRumble(RumbleType.kRightRumble, desiredRightIntensity);
 			this.rumbleLeft = desiredRightIntensity;
 		}
-		logger.d("Rumble", "Rumbled: Left(" + desiredLeftIntesity + ") Right(" + desiredRightIntensity + ")");
+		logger.d("Rumbled: Left(" + desiredLeftIntesity + ") Right(" + desiredRightIntensity + ")");
 	}
 	
 	public void rumble(int desiredRumbleIntensity) { // stero rumble is easier this way

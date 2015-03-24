@@ -97,7 +97,7 @@ public class Robot extends SampleRobot {
 		System.out.println("*** CONSTRUCTING ROBOT ***");
 		// Initializing logging
 		logger = new LogKitten("Robot", LogKitten.LEVEL_VERBOSE, LogKitten.LEVEL_VERBOSE);
-		logger.v("Constructing", "Constructing");
+		logger.v("Constructing");
 		// Initialize serial interface
 		// Initialize sensors
 		limitSwitches[Grabber.RIGHT_OUTER_SWITCH] = new DigitalInput(RIGHT_OUTER_SWITCH_PORT);
@@ -141,13 +141,13 @@ public class Robot extends SampleRobot {
 	
 	public void robotInit() {
 		System.out.println("*** INITIALIZING ***");
-		logger.v("Initializing", "Initializing");
+		logger.v("Initializing");
 		imu.zero();
 	}
 	
 	public void disabled() {
 		System.out.println("*** DISABLED ***");
-		logger.v("Disabled", "Disabled");
+		logger.v("Disabled");
 		RobotState state = RobotState.DISABLED;
 		startAlwaysUpdates(state);
 		while (isDisabled()) {
@@ -162,7 +162,7 @@ public class Robot extends SampleRobot {
 	
 	public void autonomous() {
 		System.out.println("*** AUTONOMOUS ***");
-		logger.v("Autonomous", "Autonomous");
+		logger.v("Autonomous");
 		RobotState state = RobotState.AUTONOMOUS;
 		autonomous = autonomousManager.getSelected();
 		driver = autonomous.getAutoDriver();
@@ -183,7 +183,7 @@ public class Robot extends SampleRobot {
 	
 	public void operatorControl() {
 		System.out.println("*** TELEOPERATED ***");
-		logger.v("Teleoperated", "Teleoperated");
+		logger.v("Teleoperated");
 		RobotState state = RobotState.OPERATOR;
 		for (Enablable implementsenable : toEnable) {
 			if (implementsenable != null) {
@@ -210,11 +210,11 @@ public class Robot extends SampleRobot {
 	
 	public void trainMecanumPID(RobotState state) {
 		System.out.println("*** TRAIN PID ***");
-		logger.v("trainPID", "trainPID");
+		logger.v("trainPID");
 		startAlwaysUpdates(state);
 		new Updater(state, new Updatable[] {frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel, mecanumDrive}, fastUpdatePeriod).start();
 		while (getRobotState() == state) {
-			logger.v("trainPID", "training cycle");
+			logger.v("training cycle");
 			mecanumDrive.setDesiredTurnSpeed(0.2);
 			mecanumDrive.setDesiredXYSpeed(0, 0);
 			Timer.delay(3);
@@ -257,7 +257,7 @@ public class Robot extends SampleRobot {
 				return;
 			}
 			double desiredTime = time() + updateSpeed; // Sync with clock to ensure that update interval is consistent regardless of how long each update takes
-			logger.d("Run", "Starting");
+			logger.d("Starting");
 			while (getRobotState() == robotState) {
 				for (Updatable update : toUpdate) {
 					update.update();
@@ -267,12 +267,12 @@ public class Robot extends SampleRobot {
 					Timer.delay(delay); // Wait until the time that this tick should end
 				} else {
 					if (delay < -0.1) {
-						logger.d("Run", "Delay is " + delay + " seconds for " + updateSpeed);
+						logger.d("Delay is " + delay + " seconds for " + updateSpeed);
 					}
 				}
 				desiredTime += updateSpeed; // Next tick should end updatePeriod seconds in the future
 			}
-			logger.d("Run", "Terminating");
+			logger.d("Terminating");
 		}
 	}
 }
