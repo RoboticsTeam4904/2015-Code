@@ -43,7 +43,7 @@ public class Grabber extends Talon implements Disablable, Updatable {
 		this.limitSwitches = limitSwitches;
 		this.pdp = pdp;
 		grabberState = GrabberState.OPEN;
-		logger = new LogKitten("Grabber", LogKitten.LEVEL_DEBUG, LogKitten.LEVEL_ERROR);
+		logger = new LogKitten("Grabber", LogKitten.LEVEL_DEBUG, LogKitten.LEVEL_DEBUG);
 		overrideSpeed = 0;
 		override = false;
 		pastAmperage = new double[NUM_PAST_CURRENTS];
@@ -111,12 +111,10 @@ public class Grabber extends Talon implements Disablable, Updatable {
 			case CLOSING:
 				if (!limitSwitches[RIGHT_INNER_SWITCH].get()) { // If limit switch has been hit (get() returns opposite - true if not pressed)
 					logger.v("checkLimitSwitches", "Right inner switch");
-					System.out.println("Right inner switch");
 					grabberState = GrabberState.CLOSED; // Don't go too far
 				}
 				if (!limitSwitches[LEFT_INNER_SWITCH].get()) {
 					logger.v("checkLimitSwitches", "Left inner switch");
-					System.out.println("Left inner switch");
 					grabberState = GrabberState.CLOSED; // Don't go too far
 				}
 				return;
@@ -137,7 +135,8 @@ public class Grabber extends Talon implements Disablable, Updatable {
 	private void checkPowerUsage() {
 		SmartDashboard.putNumber("Grabber Motor Current", pdp.getCurrent(PDP_PORT));
 		SmartDashboard.putNumber("Avg. Grabber Motor Current", avgCurrent());
-		// System.out.println(avgCurrent() + " | " + pdp.getCurrent(PDP_PORT) + " | " + grabberState);
+		logger.d("Average grabber current", "" + avgCurrent());
+		logger.d("Grabber state", "" + grabberState);
 		pastAmperage[currentPosition++] = pdp.getCurrent(PDP_PORT);
 		currentPosition %= pastAmperage.length;
 		double currentCurrent = avgCurrent();
@@ -145,11 +144,11 @@ public class Grabber extends Talon implements Disablable, Updatable {
 			if (grabberState == GrabberState.CLOSING) {
 				grabberState = GrabberState.CLOSED;
 			}
-			logger.f("checkPowerUsage", "stopped close " + currentCurrent);
+			logger.v("checkPowerUsage", "Stopped closing - current hit " + currentCurrent);
 		}
 		if (currentCurrent > LIMIT_AMPS) {
 			grabberState = GrabberState.DISABLED;
-			logger.f("checkPowerUsage", "Too much current: " + currentCurrent + " above " + LIMIT_AMPS);
+			logger.f("checkPowerUsage", "WARNING: Too much current: " + currentCurrent + " > " + LIMIT_AMPS);
 		}
 	}
 	

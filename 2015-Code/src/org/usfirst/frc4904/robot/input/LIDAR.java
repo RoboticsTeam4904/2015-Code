@@ -24,7 +24,7 @@ public class LIDAR implements Updatable {
 	// private final SerialPort port;
 	public LIDAR() {
 		dists = new int[360];
-		logger = new LogKitten("LIDAR", LogKitten.LEVEL_FATAL, LogKitten.LEVEL_DEBUG);
+		logger = new LogKitten("LIDAR", LogKitten.LEVEL_WARN, LogKitten.LEVEL_DEBUG);
 		logger.v("LIDAR", "Started Logging");
 		i2c = new I2C(I2C.Port.kOnboard, 5);
 	}
@@ -96,7 +96,7 @@ public class LIDAR implements Updatable {
 			}
 		}
 		catch (Exception e) {
-			System.out.println("Exception: " + e);
+			logger.e("update", "Exception: " + e);
 		}
 	}
 	

@@ -2,14 +2,17 @@ package org.usfirst.frc4904.robot.input;
 
 
 import java.util.Arrays;
+import org.usfirst.frc4904.robot.LogKitten;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class MPU9150 {
 	private SerialPort port;
 	private double[] angles;
+	private final LogKitten logger;
 	
 	public MPU9150() {
+		logger = new LogKitten("MPU9150", LogKitten.LEVEL_WARN, LogKitten.LEVEL_WARN);
 		port = new SerialPort(115200, SerialPort.Port.kMXP);
 		port.flush();
 		angles = new double[3];
@@ -42,8 +45,7 @@ public class MPU9150 {
 				q[0] = parseFloat(floatString[3]);
 			}
 			catch (Exception e) {
-				// System.out.println("Error parsing IMU data...");
-				// System.out.println(returnData);
+				logger.e("update", "Error parsing IMU data \"" + returnData + "\": " + e.getMessage());
 			}
 			angles[0] = -1 * Math.atan2(2 * q[1] * q[2] - 2 * q[0] * q[3], 2 * q[0] * q[0] + 2 * q[1] * q[1] - 1) * (180 / Math.PI); // psi
 			angles[1] = -1 * Math.asin(2 * q[1] * q[3] + 2 * q[0] * q[2]) * 180 / Math.PI; // theta

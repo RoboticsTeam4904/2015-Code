@@ -17,7 +17,6 @@ public class CloseGrabber extends Step {
 	}
 	
 	public boolean run() {
-		System.out.println(grabber.getState());
 		if (grabber.getState() == GrabberState.CLOSED) {
 			return true;
 		} else {

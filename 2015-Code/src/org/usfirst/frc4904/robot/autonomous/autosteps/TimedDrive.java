@@ -14,7 +14,6 @@ public class TimedDrive extends Step {
 	}
 	
 	public void init() {
-		System.out.println("TimedDrive");
 		startingTime = System.currentTimeMillis();
 	}
 	
