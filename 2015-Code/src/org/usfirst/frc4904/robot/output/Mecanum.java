@@ -25,7 +25,7 @@ public class Mecanum implements Updatable, Disablable, Enablable {
 	
 	public Mecanum(DampenedMotor frontLeftWheel, DampenedMotor frontRightWheel, DampenedMotor backLeftWheel, DampenedMotor backRightWheel, IMU imu, double Kp, double Ki, double Kd) {
 		// Initialize motor controllers with default ports
-		logger = new LogKitten("Mecanum", LogKitten.LEVEL_FATAL, LogKitten.LEVEL_VERBOSE);
+		logger = new LogKitten();
 		this.frontLeftWheel = frontLeftWheel;
 		this.frontRightWheel = frontRightWheel;
 		this.backLeftWheel = backLeftWheel;

@@ -25,7 +25,7 @@ public class AutonomousManager extends TypedNamedSendableChooser<Autonomous> {
 		addObject(new AutoZoneMove());
 		addObject(new Freeze());
 		addDefault(new TimedBackwardsMove());
-		logger = new LogKitten("AutonomousManager", LogKitten.LEVEL_VERBOSE);
+		logger = new LogKitten();
 		SmartDashboard.putData("Autonomous Chooser", this);
 	}
 	

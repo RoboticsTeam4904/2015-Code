@@ -8,37 +8,6 @@ import java.util.Calendar;
 import java.util.Comparator;
 
 public class LogKitten {
-	private static class DebugLevel implements Comparable<DebugLevel>, Comparator<DebugLevel> {
-		private String name;
-		private int severity;
-		
-		public DebugLevel(String name, int severity) {
-			this.severity = severity;
-			this.name = name;
-		}
-		
-		public int getSeverity() {
-			return severity;
-		}
-		
-		public String getName() {
-			return name;
-		}
-		
-		public int compare(DebugLevel o1, DebugLevel o2) {
-			return severity - o2.getSeverity();
-		}
-		
-		public int compareTo(DebugLevel o) {
-			if (compare(this, o) > 0) {
-				return 1;
-			} else if (compare(this, o) == 0) {
-				return 0;
-			} else {
-				return -1;
-			}
-		}
-	}
 	private FileOutputStream fileOutput;
 	private final File file;
 	private final String identifier;
@@ -49,8 +18,8 @@ public class LogKitten {
 	public final static DebugLevel LEVEL_WARN = new DebugLevel("WARN", 2);
 	public final static DebugLevel LEVEL_VERBOSE = new DebugLevel("VERBOSE", 3);
 	public final static DebugLevel LEVEL_DEBUG = new DebugLevel("DEBUG", 4);
-	private static DebugLevel DEFAULT_LOG_LEVEL = LEVEL_VERBOSE;
-	private static DebugLevel DEFAULT_PRINT_LEVEL = LEVEL_FATAL;
+	public static DebugLevel DEFAULT_LOG_LEVEL = LEVEL_VERBOSE;
+	public static DebugLevel DEFAULT_PRINT_LEVEL = LEVEL_WARN;
 	private static String LOG_PATH = "/home/lvuser/logs/";
 	
 	public LogKitten(String identifier, DebugLevel logLevel, DebugLevel printLevel) {
@@ -77,8 +46,8 @@ public class LogKitten {
 		this.printLevel = printLevel;
 	}
 	
-	public LogKitten(String identifier, DebugLevel logLevel) {
-		this(identifier, logLevel, DEFAULT_LOG_LEVEL);
+	public LogKitten(String identifier, DebugLevel printLevel) {
+		this(identifier, DEFAULT_LOG_LEVEL, printLevel);
 	}
 	
 	public LogKitten(String identifier) {
@@ -90,8 +59,8 @@ public class LogKitten {
 		this(Thread.currentThread().getStackTrace()[1].getClassName(), logLevel, printLevel);
 	}
 	
-	public LogKitten(DebugLevel logLevel) {
-		this(Thread.currentThread().getStackTrace()[1].getClassName(), logLevel);
+	public LogKitten(DebugLevel printLevel) {
+		this(Thread.currentThread().getStackTrace()[1].getClassName(), printLevel);
 	}
 	
 	public LogKitten() {
@@ -166,5 +135,37 @@ public class LogKitten {
 		timestamp += ":" + Integer.toString(now.get(Calendar.MINUTE));
 		timestamp += ":" + Integer.toString(now.get(Calendar.SECOND));
 		return timestamp;
+	}
+	
+	private static class DebugLevel implements Comparable<DebugLevel>, Comparator<DebugLevel> {
+		private String name;
+		private int severity;
+		
+		public DebugLevel(String name, int severity) {
+			this.severity = severity;
+			this.name = name;
+		}
+		
+		public int getSeverity() {
+			return severity;
+		}
+		
+		public String getName() {
+			return name;
+		}
+		
+		public int compare(DebugLevel o1, DebugLevel o2) {
+			return severity - o2.getSeverity();
+		}
+		
+		public int compareTo(DebugLevel o) {
+			if (compare(this, o) > 0) {
+				return 1;
+			} else if (compare(this, o) == 0) {
+				return 0;
+			} else {
+				return -1;
+			}
+		}
 	}
 }

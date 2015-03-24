@@ -96,7 +96,7 @@ public class Robot extends SampleRobot {
 	public Robot() {
 		System.out.println("*** CONSTRUCTING ROBOT ***");
 		// Initializing logging
-		logger = new LogKitten("Robot", LogKitten.LEVEL_VERBOSE, LogKitten.LEVEL_VERBOSE);
+		logger = new LogKitten(LogKitten.LEVEL_VERBOSE);
 		logger.v("Constructing");
 		// Initialize serial interface
 		// Initialize sensors

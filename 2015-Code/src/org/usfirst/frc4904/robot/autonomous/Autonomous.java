@@ -33,7 +33,7 @@ public class Autonomous implements Updatable, Disablable, Named {
 	
 	protected Autonomous(String name, Step[] steps) {
 		this.steps = steps;
-		logger = new LogKitten("Autonomous", LogKitten.LEVEL_DEBUG);
+		logger = new LogKitten(LogKitten.LEVEL_DEBUG);
 		this.name = name;
 	}
 	

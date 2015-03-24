@@ -7,27 +7,22 @@ import org.usfirst.frc4904.robot.output.Winch;
 
 public class OperatorGriffin extends Operator {
 	private final LogKitten logger;
-	private boolean untouched = true;
 	
 	public OperatorGriffin() {
 		super("Griffin");
-		logger = new LogKitten("OperatorGriffin", LogKitten.LEVEL_VERBOSE, LogKitten.LEVEL_FATAL);
+		logger = new LogKitten();
 	}
 	
 	public synchronized void update() {
-		// Method 1
-		if (!untouched) {
-			if (stick.buttons[0].get()) { // When button 1 is pressed, toggle tote grabbing
-				if (grabber.getState() == Grabber.GrabberState.OPEN || grabber.getState() == Grabber.GrabberState.OPENING || grabber.getState() == Grabber.GrabberState.DISABLED) {
-					logger.v("Griffin Grab");
-					grab();
-				} else {
-					logger.v("Griffin Release");
-					release();
-				}
+		// Grabber toggle
+		if (stick.buttons[0].get()) { // When button 1 is pressed, toggle tote grabbing
+			if (grabber.getState() == Grabber.GrabberState.OPEN || grabber.getState() == Grabber.GrabberState.OPENING || grabber.getState() == Grabber.GrabberState.DISABLED) {
+				logger.v("Griffin Grab");
+				grab();
+			} else {
+				logger.v("Griffin Release");
+				release();
 			}
-		} else {
-			untouched = !stick.buttons[0].getRaw(); // technically only runs once
 		}
 		// Grabber override
 		if (stick.buttons[11].getRaw()) {

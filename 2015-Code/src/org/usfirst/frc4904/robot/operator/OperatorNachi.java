@@ -9,7 +9,7 @@ public class OperatorNachi extends Operator {
 	
 	public OperatorNachi() {
 		super("Nachi");
-		logger = new LogKitten("OperatorNachi", LogKitten.LEVEL_VERBOSE, LogKitten.LEVEL_FATAL);
+		logger = new LogKitten();
 	}
 	
 	public synchronized void update() {

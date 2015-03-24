@@ -23,7 +23,7 @@ public class LIDAR implements Updatable {
 	
 	public LIDAR() {
 		dists = new int[360];
-		logger = new LogKitten("LIDAR", LogKitten.LEVEL_WARN, LogKitten.LEVEL_DEBUG);
+		logger = new LogKitten(LogKitten.LEVEL_DEBUG);
 		i2c = new I2C(I2C.Port.kOnboard, 5);
 	}
 	

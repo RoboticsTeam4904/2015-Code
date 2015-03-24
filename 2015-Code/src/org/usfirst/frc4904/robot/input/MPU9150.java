@@ -12,7 +12,7 @@ public class MPU9150 {
 	private final LogKitten logger;
 	
 	public MPU9150() {
-		logger = new LogKitten("MPU9150", LogKitten.LEVEL_WARN, LogKitten.LEVEL_WARN);
+		logger = new LogKitten();
 		port = new SerialPort(115200, SerialPort.Port.kMXP);
 		port.flush();
 		angles = new double[3];

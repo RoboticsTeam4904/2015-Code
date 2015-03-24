@@ -16,7 +16,7 @@ public class UDAR implements Updatable {
 	public UDAR(int i2cPort) {
 		i2c = new I2C(Port.kMXP, i2cPort);
 		data = new double[3];
-		logger = new LogKitten("UDAR", LogKitten.LEVEL_VERBOSE, LogKitten.LEVEL_FATAL);
+		logger = new LogKitten();
 	}
 	
 	public double[] read() {

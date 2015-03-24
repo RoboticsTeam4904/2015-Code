@@ -24,7 +24,7 @@ public class AutoAlign implements Updatable {
 		this.imu = imu;
 		this.lidar = lidar;
 		currentState = State.IDLE;
-		logger = new LogKitten("AutoAlign", LogKitten.LEVEL_VERBOSE, LogKitten.LEVEL_FATAL);
+		logger = new LogKitten();
 	}
 	
 	public void alignWithTote() {
