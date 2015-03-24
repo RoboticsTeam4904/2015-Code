@@ -45,7 +45,9 @@ public abstract class Operator implements Disablable, Updatable, Named {
 	}
 	
 	protected void setWinchSpeed(double value) {
-		winch.overrideSet(-1 * value); // Sets winch motor speed
+		if (stick.active(LogitechJoystick.Y_AXIS)) {
+			winch.overrideSet(-1 * value); // Sets winch motor speed
+		}
 	}
 	
 	protected void setWinchHeight(double height) {
@@ -57,7 +59,9 @@ public abstract class Operator implements Disablable, Updatable, Named {
 	}
 	
 	protected void overrideGrabber(double speed) {
-		grabber.override(speed);
+		if (stick.active(LogitechJoystick.Y_AXIS)) {
+			grabber.override(speed);
+		}
 	}
 	
 	public void disable() {
