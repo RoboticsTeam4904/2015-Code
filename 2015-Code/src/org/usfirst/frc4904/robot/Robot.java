@@ -175,7 +175,7 @@ public class Robot extends SampleRobot {
 		new Updater(state, new Updatable[] {camera}, slowUpdatePeriod).start(); // Controller and align are potentially slower
 		startAlwaysUpdates(state);
 		// These should have fast updates
-		new Updater(state, new Updatable[] {autonomous, driver, operator, mecanumDrive, lidar, frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel, grabber, winch}, fastUpdatePeriod).start();
+		new Updater(state, new Updatable[] {autonomous, driver, operator, mecanumDrive, lidar, frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel, grabber}, fastUpdatePeriod).start();
 		while (isAutonomous() && isEnabled()) {
 			Timer.delay(0.01);
 		}
@@ -195,7 +195,7 @@ public class Robot extends SampleRobot {
 		new Updater(state, new Updatable[] {}, slowUpdatePeriod).start(); // align is potentially slower
 		startAlwaysUpdates(state);
 		// These should have fast updates
-		new Updater(state, new Updatable[] {driver, operator, mecanumDrive, lidar, frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel, grabber, winch}, fastUpdatePeriod).start();
+		new Updater(state, new Updatable[] {driver, operator, mecanumDrive, lidar, frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel, grabber}, fastUpdatePeriod).start();
 		while (isOperatorControl() && isEnabled()) {
 			Timer.delay(0.01);
 		}
