@@ -27,18 +27,19 @@ public class OperatorGriffin extends Operator {
 		// Grabber override
 		if (stick.buttons[11].getRaw()) {
 			overrideGrabber(stick.getX());
-		} else {
+		} else { // Winch override (by default)
+			stopOverrideGrabber(); // Make sure grabber is functioning normally
 			if (getWinch() <= Winch.MAX_HEIGHT && getWinch() >= 0) {
 				if (getWinch() > Winch.MAX_HEIGHT - 0.5) {
 					double x = (getWinch() - (Winch.MAX_HEIGHT - 0.5)) / 0.5;
-					setWinchSpeed(x * (-0.2) + (1 - x) * (stick.getY()));
+					overrideWinch(x * (-0.2) + (1 - x) * (stick.getY()));
 				} else {
-					setWinchSpeed(stick.getY()); // Always adjust the winch speed via the stick value
+					overrideWinch(stick.getY()); // Always adjust the winch speed via the stick value
 				}
 			} else if (getWinch() > Winch.MAX_HEIGHT) {
-				setWinchSpeed(-0.2);
+				overrideWinch(-0.2);
 			} else if (getWinch() < -0) {
-				setWinchSpeed(0.2);
+				overrideWinch(0.2);
 			}
 		}
 		// Grabber kill
@@ -54,6 +55,6 @@ public class OperatorGriffin extends Operator {
 	}
 	
 	public void disable() {
-		setWinchSpeed(0);
+		overrideWinch(0);
 	}
 }

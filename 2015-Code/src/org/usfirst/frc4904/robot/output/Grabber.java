@@ -3,6 +3,7 @@ package org.usfirst.frc4904.robot.output;
 
 import org.usfirst.frc4904.robot.Disablable;
 import org.usfirst.frc4904.robot.LogKitten;
+import org.usfirst.frc4904.robot.Overridable;
 import org.usfirst.frc4904.robot.Robot;
 import org.usfirst.frc4904.robot.Updatable;
 import org.usfirst.frc4904.robot.input.PDP;
@@ -10,7 +11,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class Grabber extends Talon implements Disablable, Updatable {
+public class Grabber extends Talon implements Disablable, Updatable, Overridable<Double> {
 	public static final int RIGHT_OUTER_SWITCH = 0;
 	public static final int LEFT_OUTER_SWITCH = 1;
 	public static final int RIGHT_INNER_SWITCH = 2;
@@ -21,7 +22,6 @@ public class Grabber extends Talon implements Disablable, Updatable {
 	private static final int NUM_PAST_CURRENTS = (int) (0.25 / Robot.fastUpdatePeriod); // Number of past currents to average
 	private final DigitalInput[] limitSwitches;
 	private LogKitten logger;
-	private double overrideSpeed;
 	private boolean override;
 	private PDP pdp;
 	private long openStart;
@@ -40,17 +40,15 @@ public class Grabber extends Talon implements Disablable, Updatable {
 	
 	public Grabber(int channel, DigitalInput[] limitSwitches, PDP pdp) {
 		super(channel);
+		logger = new LogKitten(LogKitten.LEVEL_DEBUG);
 		this.limitSwitches = limitSwitches;
 		this.pdp = pdp;
 		grabberState = GrabberState.OPEN;
-		logger = new LogKitten(LogKitten.LEVEL_DEBUG);
-		overrideSpeed = 0;
 		override = false;
 		pastAmperage = new double[NUM_PAST_CURRENTS];
 	}
 	
 	public void setDesiredGrabberState(GrabberState state) {
-		override = false;
 		if (state == grabberState) {
 			logger.d("Not changing state");
 			return;
@@ -61,14 +59,14 @@ public class Grabber extends Talon implements Disablable, Updatable {
 					break;
 				}
 				grabberState = GrabberState.OPENING;
-				logger.w("Setting state to opening");
+				logger.v("Setting state to opening");
 				break;
 			case CLOSED:
 				if (grabberState == GrabberState.CLOSING) {
 					break;
 				}
 				grabberState = GrabberState.CLOSING;
-				logger.w("Setting state to closing");
+				logger.v("Setting state to closing");
 				break;
 			default:
 				throw new Error("Invalid or unsupported state passed to setDesiredGrabberState");
@@ -91,10 +89,7 @@ public class Grabber extends Talon implements Disablable, Updatable {
 		}
 		if (!override) {
 			set(grabberState.motorSpeed);
-		} else {
-			set(overrideSpeed);
 		}
-		logger.d("motorSpeed: " + grabberState.motorSpeed);
 	}
 	
 	private void checkLimitSwitches() {
@@ -107,7 +102,12 @@ public class Grabber extends Talon implements Disablable, Updatable {
 				if (!limitSwitches[LEFT_OUTER_SWITCH].get()) {
 					logger.v("Left outer switch");
 					grabberState = GrabberState.OPEN; // Don't go too far
-				}// We are not returning here, because we want opening to check the inner ones too in case it goes too far
+				}
+				if (!limitSwitches[RIGHT_INNER_SWITCH].get() || !limitSwitches[LEFT_INNER_SWITCH].get()) { // This should fire if the grabber missed the outer switches and rolled around to closing
+					logger.f("WARNING: Grabber hit inner limit switches while opening");
+					grabberState = GrabberState.DISABLED;
+				}
+				return;
 			case CLOSING:
 				if (!limitSwitches[RIGHT_INNER_SWITCH].get()) { // If limit switch has been hit (get() returns opposite - true if not pressed)
 					logger.v("Right inner switch");
@@ -117,7 +117,10 @@ public class Grabber extends Talon implements Disablable, Updatable {
 					logger.v("Left inner switch");
 					grabberState = GrabberState.CLOSED; // Don't go too far
 				}
-				return;
+				if (!limitSwitches[RIGHT_OUTER_SWITCH].get() || !limitSwitches[LEFT_OUTER_SWITCH].get()) { // This should fire if the grabber missed the inner switches and rolled around to opening
+					logger.f("WARNING: Grabber hit outer limit switches while closing");
+					grabberState = GrabberState.DISABLED;
+				}
 			default:
 				return;
 		}
@@ -155,14 +158,19 @@ public class Grabber extends Talon implements Disablable, Updatable {
 	public void disable() {
 		grabberState = GrabberState.DISABLED;
 		set(0);
+		stopOverride();
 	}
 	
 	public GrabberState getState() {
 		return grabberState;
 	}
 	
-	public void override(double speed) {
+	public void override(Double speed) {
 		override = true;
-		overrideSpeed = speed;
+		super.set(speed);
+	}
+	
+	public void stopOverride() {
+		override = false;
 	}
 }

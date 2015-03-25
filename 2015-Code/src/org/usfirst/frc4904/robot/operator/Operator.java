@@ -44,10 +44,12 @@ public abstract class Operator implements Disablable, Updatable, Named {
 		grabber.setDesiredGrabberState(GrabberState.OPEN);
 	}
 	
-	protected void setWinchSpeed(double value) {
-		if (stick.active(LogitechJoystick.Y_AXIS)) {
-			winch.overrideSet(-1 * value); // Sets winch motor speed
-		}
+	protected void overrideWinch(double speed) {
+		winch.override(-1 * speed); // Sets winch motor speed
+	}
+	
+	protected void stopOverrideWinch() {
+		winch.stopOverride(); // Reenable winch after override
 	}
 	
 	protected void setWinchHeight(double height) {
@@ -59,9 +61,11 @@ public abstract class Operator implements Disablable, Updatable, Named {
 	}
 	
 	protected void overrideGrabber(double speed) {
-		if (stick.active(LogitechJoystick.Y_AXIS)) {
-			grabber.override(speed);
-		}
+		grabber.override(speed);
+	}
+	
+	protected void stopOverrideGrabber() {
+		grabber.stopOverride();
 	}
 	
 	public void disable() {
