@@ -6,7 +6,6 @@ import org.usfirst.frc4904.robot.Enablable;
 import org.usfirst.frc4904.robot.LogKitten;
 import org.usfirst.frc4904.robot.Updatable;
 import org.usfirst.frc4904.robot.input.IMU;
-import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Mecanum implements Updatable, Disablable, Enablable {
@@ -14,14 +13,13 @@ public class Mecanum implements Updatable, Disablable, Enablable {
 	private final DampenedMotor frontRightWheel;
 	private final DampenedMotor backLeftWheel;
 	private final DampenedMotor backRightWheel;
-	private final PIDController pid;
+	private final DisablablePID pid;
 	private final PIDVariable turnSpeed;
 	private volatile double desiredXSpeed;
 	private volatile double desiredYSpeed;
 	private volatile double desiredTurnSpeed;
 	private volatile double actualTurnSpeed;
 	private final LogKitten logger;
-	private boolean overridePID = true;
 	
 	public Mecanum(DampenedMotor frontLeftWheel, DampenedMotor frontRightWheel, DampenedMotor backLeftWheel, DampenedMotor backRightWheel, IMU imu, double Kp, double Ki, double Kd) {
 		// Initialize motor controllers with default ports
@@ -31,7 +29,7 @@ public class Mecanum implements Updatable, Disablable, Enablable {
 		this.backLeftWheel = backLeftWheel;
 		this.backRightWheel = backRightWheel;
 		this.turnSpeed = new PIDVariable();
-		pid = new PIDController(Kp, Ki, Kd, imu, turnSpeed);
+		pid = new DisablablePID(Kp, Ki, Kd, imu, turnSpeed, false);
 		pid.setContinuous();
 		pid.setInputRange(0, 360);
 		pid.setOutputRange(-1, 1);
@@ -44,9 +42,7 @@ public class Mecanum implements Updatable, Disablable, Enablable {
 	}
 	
 	public void enable() {
-		if (!overridePID) {
-			pid.enable();
-		}
+		pid.enable();
 	}
 	
 	public void disable() {
@@ -77,7 +73,7 @@ public class Mecanum implements Updatable, Disablable, Enablable {
 		pid.setPID(SmartDashboard.getNumber("Kp Mecanum"), SmartDashboard.getNumber("Ki Mecanum"), SmartDashboard.getNumber("Kd Mecanum"));
 		double setSpeed = Math.sqrt(desiredXSpeed * desiredXSpeed + desiredYSpeed * desiredYSpeed);
 		double setAngle = Math.atan2(desiredYSpeed, desiredXSpeed);
-		if (!overridePID) {
+		if (!pid.isEnable()) {
 			pid.setSetpoint(desiredTurnSpeed);
 			actualTurnSpeed += turnSpeed.read();
 		} else {
