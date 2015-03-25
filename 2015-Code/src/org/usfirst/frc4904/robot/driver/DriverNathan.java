@@ -31,7 +31,5 @@ public class DriverNathan extends Driver {
 		}
 	}
 	
-	public void disable() {
-		xboxController.rumble(0); // kill the rumble
-	}
+	public void disable() {}
 }
