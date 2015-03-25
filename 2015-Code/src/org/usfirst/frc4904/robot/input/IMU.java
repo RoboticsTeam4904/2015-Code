@@ -12,6 +12,7 @@ public class IMU extends MPU9150 implements PIDSource, Updatable {
 	private double[] rate; // Same as above
 	private double[] zeroAngles;
 	private double lastTime;
+	private static final double GOING_OVER_PLATFORM_ANGLE = 5;
 	
 	public IMU() {
 		super();
@@ -54,8 +55,8 @@ public class IMU extends MPU9150 implements PIDSource, Updatable {
 		angles[1] = ((angles[1] - zeroAngles[1] + 3600) % 360);
 		angles[2] = ((angles[2] - zeroAngles[2] + 3600) % 360);
 		SmartDashboard.putNumber("Yaw", angles[0]);
-		SmartDashboard.putNumber("Pitch", angles[1]); // TODO This might be roll
-		SmartDashboard.putNumber("Roll", angles[2]); // TODO This might be pitch
+		SmartDashboard.putNumber("Pitch", angles[1]); // This might be roll
+		SmartDashboard.putNumber("Roll", angles[2]); // This might be pitch
 	}
 	
 	public double[] read() {
@@ -67,7 +68,7 @@ public class IMU extends MPU9150 implements PIDSource, Updatable {
 	}
 	
 	public boolean isGoingOverScoringPlatform() {
-		return (angles[1] > 5 && angles[1] < 355) || (angles[2] > 5 && angles[2] < 355); // TODO 5 degrees is ballpark - measure
+		return (angles[1] > GOING_OVER_PLATFORM_ANGLE && angles[1] < 360 - GOING_OVER_PLATFORM_ANGLE) || (angles[2] > GOING_OVER_PLATFORM_ANGLE && angles[2] < 360 - GOING_OVER_PLATFORM_ANGLE);
 	}
 	
 	public double pidGet() {

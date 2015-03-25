@@ -1,6 +1,4 @@
-// TODO Danger: goes really really fast (like warp 9 or so)
-// TODO May kill innocents, please test (with innocents nearby)
-// TODO May destroy totes and cans (and cats inside totes)
+// TODO Tune speeds (this goes really fast)
 /* Starting position: In staging zone, facing rightmost tote (from DS perspective), with yellow tote between 
  * Synopsis: makes a stack of all 3 yellow totes by strafing, then move backwards until hitting the scoring platform, then inch forward and release
  */
