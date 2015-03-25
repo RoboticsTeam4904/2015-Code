@@ -20,8 +20,6 @@ public class XboxController extends Joystick {
 	public final static int Y_STICK = 1; // Left y
 	public final static int TWIST_STICK = 2; // Button pair on front. Left is twist, trying to determine right
 	private SuperButton[] buttons = new SuperButton[10];
-	private float rumbleLeft = 0;
-	private float rumbleRight = 0;
 	
 	public XboxController(int port) {
 		super(port);
@@ -48,21 +46,5 @@ public class XboxController extends Joystick {
 	
 	public boolean getButton(int button) {
 		return buttons[button].get();
-	}
-	
-	public void rumble(int desiredLeftIntesity, int desiredRightIntensity) {
-		if (desiredLeftIntesity != this.rumbleLeft) {
-			this.setRumble(RumbleType.kLeftRumble, desiredLeftIntesity);
-			this.rumbleLeft = desiredLeftIntesity;
-		}
-		if (desiredRightIntensity != this.rumbleRight) {
-			this.setRumble(RumbleType.kRightRumble, desiredRightIntensity);
-			this.rumbleLeft = desiredRightIntensity;
-		}
-		logger.d("Rumbled: Left(" + desiredLeftIntesity + ") Right(" + desiredRightIntensity + ")");
-	}
-	
-	public void rumble(int desiredRumbleIntensity) { // stero rumble is easier this way
-		this.rumble(desiredRumbleIntensity, desiredRumbleIntensity);
 	}
 }
