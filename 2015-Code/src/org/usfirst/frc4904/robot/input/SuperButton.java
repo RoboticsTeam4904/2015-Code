@@ -9,7 +9,6 @@ public class SuperButton extends JoystickButton {
 	
 	public SuperButton(GenericHID joystick, int buttonNumber) {
 		super(joystick, buttonNumber);
-		// TODO Auto-generated constructor stub
 		currentState = false;
 	}
 	

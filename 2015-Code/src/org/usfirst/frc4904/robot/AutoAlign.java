@@ -75,7 +75,7 @@ public class AutoAlign implements Updatable {
 				x = 0.0;
 			}
 			if (lidar.getDists()[0] > 100) {
-				y = 0.5; // TODO Really fast (see comment on speeds at top of YellowToteStack)
+				y = 0.5; // TODO Really fast - tune speed
 			} else {
 				y = 0;
 				currentState = State.IDLE;
