@@ -5,12 +5,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import org.usfirst.frc4904.robot.LogKitten;
 import org.usfirst.frc4904.robot.Updatable;
-import edu.wpi.first.wpilibj.I2C;
+import edu.wpi.first.wpilibj.SerialPort;
 
 public class LIDAR implements Updatable {
 	private volatile int[] dists;
 	private final LogKitten logger;
-	private final I2C i2c;
+	private final SerialPort port;
 	private static final int width = 1280;// This is the resolution of my screen, because that seemed to work
 	private static final int height = 720;
 	private static final double d = 5;// Settings from my screen
@@ -24,11 +24,14 @@ public class LIDAR implements Updatable {
 	public LIDAR() {
 		dists = new int[360];
 		logger = new LogKitten(LogKitten.LEVEL_DEBUG);
-		i2c = new I2C(I2C.Port.kOnboard, 5);
+		port = new SerialPort(115200, SerialPort.Port.kMXP);
 	}
 	
 	private int read(int angle) throws Exception {
-		return 0;
+		port.writeString(Integer.toString(angle));
+		String data = port.readString();
+		System.out.println(data);
+		return Integer.parseInt(data);
 	}
 	
 	public int[] getDists() {
