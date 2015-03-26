@@ -106,7 +106,7 @@ public class Robot extends SampleRobot {
 		imu = new IMU(); // Initialize IMU
 		lidar = new LIDAR(); // Initialize LIDAR
 		pdp = new PDP(); // Power Distribution Panel interface and logging.
-		camera = new Camera();
+		camera = new Camera(false);
 		/* Action! */
 		// Initialize movement controllers
 		winch = new Winch(WINCH_PORT, winchEncoder, WINCH_P_COEFFICIENT, WINCH_I_COEFFICIENT, WINCH_D_COEFFICIENT); // Initialize Winch control
