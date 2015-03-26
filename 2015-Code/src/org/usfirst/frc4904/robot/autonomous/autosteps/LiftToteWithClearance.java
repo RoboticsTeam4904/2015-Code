@@ -12,6 +12,6 @@ public class LiftToteWithClearance extends Step {
 	public void init() {}
 	
 	public boolean run() {
-		return currentWinchHeight == desiredWinchHeight;
+		return currentWinchHeight == desiredWinchHeight; // If the current winch height equals the desired winch height then it is finished
 	}
 }

@@ -221,7 +221,7 @@ public class Robot extends SampleRobot {
 		}
 	}
 	
-	private RobotState getRobotState() {
+	private RobotState getRobotState() { // Get the current robot state
 		if (isDisabled()) {
 			return RobotState.DISABLED;
 		}
@@ -250,9 +250,9 @@ public class Robot extends SampleRobot {
 		}
 		
 		public void run() {
-			if (toUpdate.length > 1) {
+			if (toUpdate.length > 1) { // If there is more than one thing to update
 				for (Updatable u : toUpdate) {
-					new Updater(robotState, new Updatable[] {u}, updateSpeed).start();
+					new Updater(robotState, new Updatable[] {u}, updateSpeed).start(); // Then fork into many Updaters
 				}
 				return;
 			}
