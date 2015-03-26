@@ -38,12 +38,8 @@ public abstract class Driver implements Disablable, Updatable, Named {
 		mecanumDrive.setDesiredTurnSpeed(speed);
 	}
 	
-	protected void autoAlign(boolean tote) {
-		if (tote) {
-			align.alignWithTote();
-		} else {
-			align.alignWithCan();
-		}
+	protected void autoAlign() {
+		align.alignWithTote();
 	}
 	
 	protected void abortAlign() {

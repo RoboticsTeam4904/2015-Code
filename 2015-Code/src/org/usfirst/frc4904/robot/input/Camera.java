@@ -25,8 +25,13 @@ public class Camera implements Updatable {
 	private static final String CAMERA_NAME = "cam1";
 	private NIVision.ParticleFilterCriteria2 criteria[] = new NIVision.ParticleFilterCriteria2[1];
 	private NIVision.ParticleFilterOptions2 filterOptions = new NIVision.ParticleFilterOptions2(0, 0, 1, 1);
+	private final boolean enabled;
 	
-	public Camera() {
+	public Camera(boolean enabled) {
+		this.enabled = enabled;
+		if (!enabled) {
+			return;
+		}
 		frame = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_RGB, 0);
 		cameraSession = NIVision.IMAQdxOpenCamera(CAMERA_NAME, NIVision.IMAQdxCameraControlMode.CameraControlModeController);
 		NIVision.IMAQdxConfigureGrab(cameraSession);
@@ -34,6 +39,9 @@ public class Camera implements Updatable {
 	}
 	
 	public void update() {
+		if (!enabled) {
+			return;
+		}
 		NIVision.IMAQdxGrab(cameraSession, frame, 1);
 		// Create simple image
 		Image binaryFrame = NIVision.imaqCreateImage(ImageType.IMAGE_U8, 0);

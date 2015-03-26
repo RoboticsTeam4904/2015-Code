@@ -6,12 +6,13 @@ import org.usfirst.frc4904.robot.Updatable;
 import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class IMU extends MPU9150 implements PIDSource, Updatable {
+public class IMU extends NAVX implements PIDSource, Updatable {
 	private double[] angles; // Angle 0 is perpendicular (yaw), Angle 1 is lateral (pitch), Angle 2 is longitudinal (roll)
 	private double[] lastAngles;
 	private double[] rate; // Same as above
 	private double[] zeroAngles;
 	private double lastTime;
+	private static final double GOING_OVER_PLATFORM_ANGLE = 5;
 	
 	public IMU() {
 		super();
@@ -39,7 +40,6 @@ public class IMU extends MPU9150 implements PIDSource, Updatable {
 	
 	public synchronized void update() {
 		double time = getTime();
-		super.update();
 		updateData();
 		for (int i = 0; i < 3; i++) {
 			rate[i] = (angles[i] - lastAngles[i]) / (time - lastTime);
@@ -49,13 +49,12 @@ public class IMU extends MPU9150 implements PIDSource, Updatable {
 	}
 	
 	private void updateData() {
-		angles = super.readRaw();
-		angles[0] = ((angles[0] - zeroAngles[0] + 3600) % 360);
-		angles[1] = ((angles[1] - zeroAngles[1] + 3600) % 360);
-		angles[2] = ((angles[2] - zeroAngles[2] + 3600) % 360);
+		angles[0] = super.getYaw();
+		angles[1] = super.getRoll();
+		angles[2] = super.getPitch();
 		SmartDashboard.putNumber("Yaw", angles[0]);
-		SmartDashboard.putNumber("Pitch", angles[1]); // TODO This might be roll
-		SmartDashboard.putNumber("Roll", angles[2]); // TODO This might be pitch
+		SmartDashboard.putNumber("Pitch", angles[1]); // This might be roll
+		SmartDashboard.putNumber("Roll", angles[2]); // This might be pitch
 	}
 	
 	public double[] read() {
@@ -67,7 +66,7 @@ public class IMU extends MPU9150 implements PIDSource, Updatable {
 	}
 	
 	public boolean isGoingOverScoringPlatform() {
-		return (angles[1] > 5 && angles[1] < 355) || (angles[2] > 5 && angles[2] < 355); // TODO 5 degrees is ballpark - measure
+		return (angles[1] > GOING_OVER_PLATFORM_ANGLE && angles[1] < 360 - GOING_OVER_PLATFORM_ANGLE) || (angles[2] > GOING_OVER_PLATFORM_ANGLE && angles[2] < 360 - GOING_OVER_PLATFORM_ANGLE);
 	}
 	
 	public double pidGet() {

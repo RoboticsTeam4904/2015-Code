@@ -5,6 +5,7 @@ import org.usfirst.frc4904.robot.Disablable;
 import org.usfirst.frc4904.robot.LogKitten;
 import org.usfirst.frc4904.robot.Overridable;
 import org.usfirst.frc4904.robot.Robot;
+import org.usfirst.frc4904.robot.TimeSafeguard;
 import org.usfirst.frc4904.robot.Updatable;
 import org.usfirst.frc4904.robot.input.PDP;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -24,9 +25,9 @@ public class Grabber extends Talon implements Disablable, Updatable, Overridable
 	private LogKitten logger;
 	private boolean override;
 	private PDP pdp;
-	private long openStart;
 	private final double[] pastAmperage;
 	private int currentPosition = 0;
+	private final TimeSafeguard timeSafeguard;
 	
 	public enum GrabberState { // an enum containing grabber states and their values
 		OPEN(0), CLOSED(-0.1), OPENING(0.5), CLOSING(-0.5), DISABLED(0); // grabber state and values
@@ -46,6 +47,7 @@ public class Grabber extends Talon implements Disablable, Updatable, Overridable
 		grabberState = GrabberState.OPEN;
 		override = false;
 		pastAmperage = new double[NUM_PAST_CURRENTS];
+		timeSafeguard = new TimeSafeguard("Grabber open time safeguard", 10);
 	}
 	
 	public void setDesiredGrabberState(GrabberState state) {
@@ -77,15 +79,12 @@ public class Grabber extends Talon implements Disablable, Updatable, Overridable
 		checkLimitSwitches();
 		checkPowerUsage();
 		if (grabberState == GrabberState.OPENING) {
-			if (openStart == 0) {
-				openStart = System.currentTimeMillis();
-			}
-			if (System.currentTimeMillis() - openStart > 10000) {
-				openStart = 0;
+			if (!timeSafeguard.isSafe()) {
 				grabberState = GrabberState.DISABLED;
+				logger.f("WARNING - grabber opened for too long - ekilled");
 			}
 		} else {
-			openStart = 0;
+			timeSafeguard.reset();
 		}
 		if (!override) {
 			set(grabberState.motorSpeed);
