@@ -89,7 +89,7 @@ public class Robot extends SampleRobot {
 	// Power distribution board
 	private final PDP pdp;
 	
-	private enum RobotState {
+	public enum RobotState {
 		DISABLED, OPERATOR, AUTONOMOUS
 	}
 	
@@ -172,10 +172,10 @@ public class Robot extends SampleRobot {
 				implementsenable.enable();
 			}
 		}
-		new Updater(state, new Updatable[] {camera}, slowUpdatePeriod).start(); // Controller and align are potentially slower
+		new Updater(this, state, new Updatable[] {camera}, slowUpdatePeriod).start(); // Controller and align are potentially slower
 		startAlwaysUpdates(state);
 		// These should have fast updates
-		new Updater(state, new Updatable[] {autonomous, driver, operator, mecanumDrive, lidar, frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel, grabber}, fastUpdatePeriod).start();
+		new Updater(this, state, new Updatable[] {autonomous, driver, operator, mecanumDrive, lidar, frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel, grabber}, fastUpdatePeriod).start();
 		while (isAutonomous() && isEnabled()) {
 			Timer.delay(0.01);
 		}
@@ -192,10 +192,10 @@ public class Robot extends SampleRobot {
 		}
 		operator = operatorManager.getSelected();
 		driver = driverManager.getSelected();
-		new Updater(state, new Updatable[] {}, slowUpdatePeriod).start(); // align is potentially slower
+		new Updater(this, state, new Updatable[] {}, slowUpdatePeriod).start(); // align is potentially slower
 		startAlwaysUpdates(state);
 		// These should have fast updates
-		new Updater(state, new Updatable[] {driver, operator, mecanumDrive, lidar, frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel, grabber}, fastUpdatePeriod).start();
+		new Updater(this, state, new Updatable[] {driver, operator, mecanumDrive, lidar, frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel, grabber}, fastUpdatePeriod).start();
 		while (isOperatorControl() && isEnabled()) {
 			Timer.delay(0.01);
 		}
@@ -203,16 +203,16 @@ public class Robot extends SampleRobot {
 	
 	public void startAlwaysUpdates(RobotState state) {
 		// IMU, and PDP should always update
-		new Updater(state, alwaysUpdate, fastUpdatePeriod).start();
+		new Updater(this, state, alwaysUpdate, fastUpdatePeriod).start();
 		// always slow updates
-		new Updater(state, alwaysUpdateSlow, slowUpdatePeriod).start();
+		new Updater(this, state, alwaysUpdateSlow, slowUpdatePeriod).start();
 	}
 	
 	public void trainMecanumPID(RobotState state) {
 		System.out.println("*** TRAIN PID ***");
 		logger.v("trainPID");
 		startAlwaysUpdates(state);
-		new Updater(state, new Updatable[] {frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel, mecanumDrive}, fastUpdatePeriod).start();
+		new Updater(this, state, new Updatable[] {frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel, mecanumDrive}, fastUpdatePeriod).start();
 		while (getRobotState() == state) {
 			logger.v("training cycle");
 			mecanumDrive.setDesiredTurnSpeed(0.2);
@@ -221,7 +221,7 @@ public class Robot extends SampleRobot {
 		}
 	}
 	
-	private RobotState getRobotState() {
+	public RobotState getRobotState() {
 		if (isDisabled()) {
 			return RobotState.DISABLED;
 		}
@@ -236,43 +236,5 @@ public class Robot extends SampleRobot {
 	
 	public static double time() {
 		return ((double) System.currentTimeMillis()) / 1000D;
-	}
-	
-	private class Updater extends Thread { // Function to update automatically in a new thread
-		private final RobotState robotState;
-		private final Updatable[] toUpdate;
-		private final double updateSpeed;
-		
-		public Updater(RobotState state, Updatable[] toUpdate, double updateSpeed) {
-			robotState = state;
-			this.toUpdate = toUpdate;
-			this.updateSpeed = updateSpeed;
-		}
-		
-		public void run() {
-			if (toUpdate.length > 1) {
-				for (Updatable u : toUpdate) {
-					new Updater(robotState, new Updatable[] {u}, updateSpeed).start();
-				}
-				return;
-			}
-			double desiredTime = time() + updateSpeed; // Sync with clock to ensure that update interval is consistent regardless of how long each update takes
-			logger.d("Starting");
-			while (getRobotState() == robotState) {
-				for (Updatable update : toUpdate) {
-					update.update();
-				}
-				double delay = desiredTime - time();
-				if (delay > 0) {
-					Timer.delay(delay); // Wait until the time that this tick should end
-				} else {
-					if (delay < -0.1) {
-						logger.d("Delay is " + delay + " seconds for " + updateSpeed);
-					}
-				}
-				desiredTime += updateSpeed; // Next tick should end updatePeriod seconds in the future
-			}
-			logger.d("Terminating");
-		}
 	}
 }
