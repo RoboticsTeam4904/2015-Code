@@ -3,24 +3,21 @@ package org.usfirst.frc4904.robot;
 
 import org.usfirst.frc4904.robot.input.IMU;
 import org.usfirst.frc4904.robot.input.LIDAR;
-import org.usfirst.frc4904.robot.input.UDAR;
 import org.usfirst.frc4904.robot.output.Mecanum;
 
 public class AutoAlign implements Updatable {
 	private final Mecanum mecanum;
-	private final UDAR udar;
 	private final IMU imu;
 	private final LIDAR lidar;
 	private final LogKitten logger;
 	
 	private enum State {
-		IDLE, ALIGNING_WITH_TOTE, ALIGNING_WITH_CAN
+		IDLE, ALIGNING
 	}
 	private volatile State currentState;
 	
-	public AutoAlign(Mecanum mecanum, UDAR udar, LIDAR lidar, IMU imu) {
+	public AutoAlign(Mecanum mecanum, LIDAR lidar, IMU imu) {
 		this.mecanum = mecanum;
-		this.udar = udar;
 		this.imu = imu;
 		this.lidar = lidar;
 		currentState = State.IDLE;
@@ -28,35 +25,11 @@ public class AutoAlign implements Updatable {
 	}
 	
 	public void alignWithTote() {
-		currentState = State.ALIGNING_WITH_TOTE;
-	}
-	
-	public void alignWithCan() {
-		currentState = State.ALIGNING_WITH_CAN;
+		currentState = State.ALIGNING;
 	}
 	
 	public void abortAlign() {
 		currentState = State.IDLE;
-	}
-	
-	private void alignWithCanTick(boolean grab) {
-		double[] UDARdists = udar.read();
-		if (UDARdists[2] > LIDAR.GRABBER_LENGTH_OFFSET) {
-			return;
-		}
-		if (UDARdists[1] > UDARdists[3]) { // If right sensor detects can, turn right
-			mecanum.setDesiredTurnSpeed(0.5);
-		} else if (UDARdists[3] > UDARdists[1]) { // Otherwise, turn left
-			mecanum.setDesiredTurnSpeed(-0.5);
-		} else {
-			mecanum.setDesiredTurnSpeed(0);
-			if (UDARdists[2] > LIDAR.GRABBER_LENGTH_OFFSET) {
-				mecanum.setDesiredXYSpeed(0, 1);
-			} else {
-				mecanum.setDesiredXYSpeed(0, 0);
-				currentState = State.IDLE;
-			}
-		}
 	}
 	
 	private void alignWithToteTick() {
@@ -95,17 +68,14 @@ public class AutoAlign implements Updatable {
 	
 	private void doAligningTick() {
 		switch (currentState) {
-			case ALIGNING_WITH_CAN:
-				currentState = State.ALIGNING_WITH_CAN;
-				return;
-			case ALIGNING_WITH_TOTE:
-				currentState = State.ALIGNING_WITH_TOTE;
+			case ALIGNING:
+				currentState = State.ALIGNING;
 				return;
 			case IDLE:
 				return;
 			default: // Should never reach here
 				mecanum.setDesiredXYSpeed(0, 0);
-				mecanum.setDesiredTurnSpeed(0);// Stop the robot, otherwise it would just keep going in the same speed and direction it was when grab was called
+				mecanum.setDesiredTurnSpeed(0); // Stop the robot, otherwise it would just keep going in the same speed and direction it was when grab was called
 				return;
 		}
 	}
@@ -118,8 +88,7 @@ public class AutoAlign implements Updatable {
 	
 	public boolean isCurrentlyAligning() {
 		switch (currentState) {
-			case ALIGNING_WITH_CAN:
-			case ALIGNING_WITH_TOTE:
+			case ALIGNING:
 				return true;
 			default:
 				return false;

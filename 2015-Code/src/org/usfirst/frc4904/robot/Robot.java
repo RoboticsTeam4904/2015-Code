@@ -10,7 +10,6 @@ import org.usfirst.frc4904.robot.input.IMU;
 import org.usfirst.frc4904.robot.input.LIDAR;
 import org.usfirst.frc4904.robot.input.LogitechJoystick;
 import org.usfirst.frc4904.robot.input.PDP;
-import org.usfirst.frc4904.robot.input.UDAR;
 import org.usfirst.frc4904.robot.input.XboxController;
 import org.usfirst.frc4904.robot.operator.Operator;
 import org.usfirst.frc4904.robot.operator.OperatorManager;
@@ -51,8 +50,7 @@ public class Robot extends SampleRobot {
 	private static final double MECANUM_D_COEFFICIENT = 0.1;
 	private final LogitechJoystick stick; // the X3D Extreme3DPro Logitech joystick (right hand) - operator
 	private final XboxController xboxController; // the Xbox 360 controller - driver
-	// Input devices
-	private final UDAR udar; // the UDAR (ultrasonic detection and ranging)
+	// Input devicess
 	private final IMU imu;
 	private final LIDAR lidar;
 	private final DigitalInput limitSwitches[] = new DigitalInput[4];
@@ -107,7 +105,6 @@ public class Robot extends SampleRobot {
 		// Initialize Encoders
 		winchEncoder = new Encoder(WINCH_ENCODER_PORT_1, WINCH_ENCODER_PORT_2);
 		imu = new IMU(); // Initialize IMU
-		udar = new UDAR(UDAR_I2C_PORT); // Initialize UDAR
 		lidar = new LIDAR(); // Initialize LIDAR
 		pdp = new PDP(); // Power Distribution Panel interface and logging.
 		camera = new Camera();
@@ -125,7 +122,7 @@ public class Robot extends SampleRobot {
 		stick = new LogitechJoystick(JOYSTICK_PORT);
 		xboxController = new XboxController(CONTROLLER_PORT);
 		// Initalize subsystems
-		align = new AutoAlign(mecanumDrive, udar, lidar, imu); // Initialize AutoAlign system
+		align = new AutoAlign(mecanumDrive, lidar, imu); // Initialize AutoAlign system
 		// Initialize managers
 		driverManager = new DriverManager(mecanumDrive, align, xboxController);
 		operatorManager = new OperatorManager(stick, winch, align, grabber);
