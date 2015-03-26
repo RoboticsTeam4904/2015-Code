@@ -49,9 +49,9 @@ public class IMU extends NAVX implements PIDSource, Updatable {
 	}
 	
 	private void updateData() {
-		angles[0] = super.yaw;
-		angles[1] = super.roll;
-		angles[1] = super.pitch;
+		angles[0] = super.getYaw();
+		angles[1] = super.getRoll();
+		angles[2] = super.getPitch();
 		SmartDashboard.putNumber("Yaw", angles[0]);
 		SmartDashboard.putNumber("Pitch", angles[1]); // This might be roll
 		SmartDashboard.putNumber("Roll", angles[2]); // This might be pitch

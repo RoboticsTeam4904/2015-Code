@@ -10,14 +10,20 @@ public class NAVX extends AHRS {
 	}
 	
 	public float getYaw() {
-		return (super.getYaw() + 360) % 360;
+		float yaw = super.getYaw();
+		if (yaw < 0) return 360.00f + yaw;
+		else return yaw;
 	}
 	
 	public float getPitch() {
-		return (super.getPitch() + 360) % 360;
+		float pitch = super.getPitch();
+		if (pitch < 0) return 360.00f + pitch;
+		else return pitch;
 	}
 	
 	public float getRoll() {
-		return (super.getRoll() + 360) % 360;
+		float roll = super.getRoll();
+		if (roll < 0) return 360.00f + roll;
+		else return roll;
 	}
 }
