@@ -15,11 +15,11 @@ public class OperatorNachi extends Operator {
 	
 	public synchronized void update() {
 		if (stick.buttons[10].getRaw()) {
-			overrideWinch(stick.getY()); // When button 11 is pressed, adjust the winch
+			overrideWinch(stick.getY()); // When button 11 is pressed, override the winch
 		} else {
 			stopOverrideWinch();
 		}
-		if (stick.buttons[0].get()) { // When button 1 is pressed, toggle tote grabbing
+		if (stick.buttons[0].get()) { // When button 1 is pressed, toggle grabbing
 			if (grabber.getState() == Grabber.GrabberState.OPEN || grabber.getState() == Grabber.GrabberState.DISABLED) {
 				logger.v("Nachi Grab");
 				grab();
@@ -40,11 +40,11 @@ public class OperatorNachi extends Operator {
 		if (stick.buttons[3].get()) {
 			setWinchHeight(0); // When button 4 is pressed, lower the winch all the way
 		}
-		// Grabber override
+		// Grabber override on button 12
 		if (stick.buttons[11].getRaw()) {
 			overrideGrabber(stick.getY());
 		}
-		// E-kill
+		// E-kill on button 8
 		if (stick.buttons[7].get()) {
 			disable();
 			logger.w("Robot killed by operator (Nachi)");

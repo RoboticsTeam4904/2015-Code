@@ -41,23 +41,24 @@ public class Robot extends SampleRobot {
 	// Various I2C ports
 	private static final int WINCH_ENCODER_PORT_1 = 3;
 	private static final int WINCH_ENCODER_PORT_2 = 2;
-	private static final int UDAR_I2C_PORT = 4;
+	// PID coefficients
 	private static final double WINCH_P_COEFFICIENT = -0.7;
 	private static final double WINCH_I_COEFFICIENT = 0.00;
 	private static final double WINCH_D_COEFFICIENT = 0.00;
 	private static final double MECANUM_P_COEFFICIENT = 0.1;
 	private static final double MECANUM_I_COEFFICIENT = 0.1;
 	private static final double MECANUM_D_COEFFICIENT = 0.1;
+	// Controls
 	private final LogitechJoystick stick; // the X3D Extreme3DPro Logitech joystick (right hand) - operator
 	private final XboxController xboxController; // the Xbox 360 controller - driver
-	// Input devicess
+	// Sensors
 	private final IMU imu;
 	private final LIDAR lidar;
 	private final DigitalInput limitSwitches[] = new DigitalInput[4];
 	private final Camera camera;
-	// private final DemoLightSequence lightSequence;
 	private final Encoder winchEncoder;
-	// movement controllers
+	private final PDP pdp;
+	// Movement controllers
 	private final Winch winch; // the Winch class takes care of moving to specific heights
 	private final Grabber grabber; // the grabber class takes care of opening and closing the grabber
 	private final Mecanum mecanumDrive; // the Mecanum class that takes care of the math required to use mecanum drive
@@ -75,7 +76,7 @@ public class Robot extends SampleRobot {
 	private volatile Autonomous autonomous;
 	private final AutoAlign align; // the AutoAlign class contains code to align the robot with totes and cans
 	// Update system
-	public static final double fastUpdatePeriod = 0.02; // update every 0.01 seconds/10 milliseconds (100Hz) This is IMU speed
+	public static final double fastUpdatePeriod = 0.02; // update every 0.02 seconds/20 milliseconds (50Hz) - this is IMU speed
 	public static final double slowUpdatePeriod = 0.2; // update every 0.2 seconds/200 milliseconds (5Hz)
 	// Logging system
 	private final LogKitten logger;
@@ -84,8 +85,6 @@ public class Robot extends SampleRobot {
 	private final Disablable[] toDisable;
 	private final Updatable[] alwaysUpdate;
 	private final Updatable[] alwaysUpdateSlow;
-	// Power distribution board
-	private final PDP pdp;
 	
 	public enum RobotState {
 		DISABLED, OPERATOR, AUTONOMOUS

@@ -14,8 +14,7 @@ public class OperatorGriffin extends Operator {
 	}
 	
 	public synchronized void update() {
-		// Grabber toggle
-		if (stick.buttons[0].get()) { // When button 1 is pressed, toggle tote grabbing
+		if (stick.buttons[0].get()) { // When button 1 is pressed, toggle grabbing
 			if (grabber.getState() == Grabber.GrabberState.OPEN || grabber.getState() == Grabber.GrabberState.OPENING || grabber.getState() == Grabber.GrabberState.DISABLED) {
 				logger.v("Griffin Grab");
 				grab();
@@ -24,12 +23,12 @@ public class OperatorGriffin extends Operator {
 				release();
 			}
 		}
-		// Grabber override
+		// Grabber override on button 12
 		if (stick.buttons[11].getRaw()) {
 			overrideGrabber(stick.getX());
 		} else { // Winch override (by default)
 			stopOverrideGrabber(); // Make sure grabber is functioning normally
-			if (getWinch() <= Winch.MAX_HEIGHT && getWinch() >= 0) {
+			if (getWinch() <= Winch.MAX_HEIGHT && getWinch() >= 0) { // Add a floor and a ceiling to winch height via reading the encoder
 				if (getWinch() > Winch.MAX_HEIGHT - 0.5) {
 					double x = (getWinch() - (Winch.MAX_HEIGHT - 0.5)) / 0.5;
 					overrideWinch(x * (-0.2) + (1 - x) * (stick.getY()));
@@ -42,12 +41,12 @@ public class OperatorGriffin extends Operator {
 				overrideWinch(0.2);
 			}
 		}
-		// Grabber kill
+		// Grabber kill on button 10
 		if (stick.buttons[9].get()) {
 			grabber.disable();
 			logger.w("Grabber killed by operator (Griffin)");
 		}
-		// E-kill
+		// E-kill on button 8
 		if (stick.buttons[7].get()) {
 			disable();
 			logger.w("Robot killed by operator (Griffin)");

@@ -83,6 +83,7 @@ public class Grabber extends Talon implements Disablable, Updatable, Overridable
 			if (System.currentTimeMillis() - openStart > 10000) {
 				openStart = 0;
 				grabberState = GrabberState.DISABLED;
+				logger.f("WARNING - grabber opened for too long - ekilled");
 			}
 		} else {
 			openStart = 0;
