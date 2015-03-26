@@ -18,6 +18,6 @@ public class TimedDrive extends Step {
 	}
 	
 	public boolean run() {
-		return System.currentTimeMillis() - startingTime > duration * 1000;
+		return System.currentTimeMillis() - startingTime > duration * 1000; // If the time is greater that starting time plus duration, then the timeddrive is finished
 	}
 }

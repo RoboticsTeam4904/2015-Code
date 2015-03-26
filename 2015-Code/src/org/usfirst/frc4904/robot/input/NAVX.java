@@ -6,7 +6,8 @@ import edu.wpi.first.wpilibj.SerialPort;
 
 public class NAVX extends AHRS {
 	public NAVX() {
-		super(new SerialPort(57600, SerialPort.Port.kUSB), (byte) 50);
+		super(new SerialPort(57600, SerialPort.Port.kUSB));
+		super.zeroYaw();
 	}
 	
 	public float getYaw() {
