@@ -23,22 +23,22 @@ import edu.wpi.first.wpilibj.SampleRobot;
 import edu.wpi.first.wpilibj.Timer;
 
 public class Robot extends SampleRobot {
-	// Default ports for joystick/controller
+	// Control input ports
 	private static final int JOYSTICK_PORT = 0;
 	private static final int CONTROLLER_PORT = 1;
-	// Default ports for motors
+	// PWM (motor) ports
 	private static final int FRONT_LEFT_WHEEL_PORT = 0;
 	private static final int FRONT_RIGHT_WHEEL_PORT = 1;
 	private static final int BACK_LEFT_WHEEL_PORT = 2;
 	private static final int BACK_RIGHT_WHEEL_PORT = 3;
 	private static final int WINCH_PORT = 4;
 	private static final int GRABBER_PORT = 5;
-	// Default ports for limit switches
+	// DIO ports
 	private static final int RIGHT_OUTER_SWITCH_PORT = 0;
 	private static final int LEFT_OUTER_SWITCH_PORT = 1;
 	private static final int RIGHT_INNER_SWITCH_PORT = 8;
 	private static final int LEFT_INNER_SWITCH_PORT = 9;
-	// Various I2C ports
+	// I2C ports
 	private static final int WINCH_ENCODER_PORT_1 = 3;
 	private static final int WINCH_ENCODER_PORT_2 = 2;
 	// PID coefficients
