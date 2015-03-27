@@ -32,10 +32,12 @@ double motor_rpm;
 void setup() {
   delay(500);
   Serial.begin(115200); // USB serial
-  Serial.println("Arduino Neato XV-11 Motor control board v0.1 by Cheng-Lung Lee, modified by Andrew");
+  //Serial.println("Arduino Neato XV-11 Motor control board v0.1 by Cheng-Lung Lee, modified by Andrew");
 
   Serial1.begin(115200); // LIDAR serial
-  Serial.println("LIDAR connected");
+  //Serial.println("LIDAR connected");
+  
+  Serial2.begin(115200);
 }
 
 void loop() {
@@ -52,6 +54,12 @@ void loop() {
     int angle = Serial.parseInt();
     Serial.println(distance_array[angle]);
     while(Serial.available() > 0) Serial.read();
+  }
+  
+  if(Serial2.available() > 0) {
+    int angle = Serial2.parseInt();
+    Serial2.println(distance_array[angle]);
+    while(Serial2.available() > 0) Serial2.read();
   }
 
   if(Serial1.available() > 0) {
