@@ -118,35 +118,18 @@ public class AutoAlign implements Updatable {
 	}
 	
 	/**
-	 * Do one tick of alignment.
-	 * This will call the correct alignment function based on the state.
-	 */
-	private void doAligningTick() {
-		switch (currentState) {
-			case ALIGNING:
-				alignWithToteTick();
-				return;
-			case IDLE: // Should never reach here, as update() checks the current state
-				return;
-			default: // Should never reach here - this means the case is unsupported or null
-				mecanum.setDesiredXYSpeed(0, 0);
-				mecanum.setDesiredTurnSpeed(0); // Stop the robot, otherwise it would just keep going in the same speed and direction it was when grab was called
-				return;
-		}
-	}
-	
-	/**
 	 * Update the AutoAlign system.
 	 * This will do an alignment tick if the system is currently aligning.
 	 */
 	public synchronized void update() {
 		if (isCurrentlyAligning()) {
-			doAligningTick();
+			alignWithToteTick();
 		}
 	}
 	
 	/**
 	 * Check if the system is currently aligning.
+	 * 
 	 * @return boolean - true if the system is currently aligning
 	 */
 	public boolean isCurrentlyAligning() {
