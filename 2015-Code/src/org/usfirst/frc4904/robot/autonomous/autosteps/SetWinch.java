@@ -5,7 +5,7 @@ import org.usfirst.frc4904.robot.autonomous.Step;
 
 public class SetWinch extends Step {
 	public SetWinch(int stackHeight) {
-		desiredWinchHeight = stackHeight; // The desired
+		desiredWinchHeight = stackHeight;
 	}
 	
 	public void init() {}
