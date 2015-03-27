@@ -69,7 +69,7 @@ public class AutoAlign implements Updatable {
 	private void doAligningTick() {
 		switch (currentState) {
 			case ALIGNING:
-				currentState = State.ALIGNING;
+				alignWithToteTick();
 				return;
 			case IDLE:
 				return;
@@ -87,15 +87,6 @@ public class AutoAlign implements Updatable {
 	}
 	
 	public boolean isCurrentlyAligning() {
-		switch (currentState) {
-			case ALIGNING:
-				return true;
-			default:
-				return false;
-		}
-	}
-	
-	public boolean isInControl() {
-		return !isCurrentlyAligning();
+		return currentState == State.ALIGNING;
 	}
 }
