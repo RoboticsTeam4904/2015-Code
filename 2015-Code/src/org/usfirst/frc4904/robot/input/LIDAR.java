@@ -116,6 +116,14 @@ public class LIDAR implements Updatable {
 			this.r = r;
 		}
 		
+		/**
+		 * Initialises the hough array. Called by the constructor so you don't need
+		 * to call it yourself, however you can use it to reset the transform if you
+		 * want to plug in another image (although that image must have the same
+		 * width and height)
+		 * 
+		 * @return An int array. array[0],array[1] is first point of line, array[2],array[3] is the end of the line
+		 */
 		public int[] getCoordinates() {
 			int[] X = new int[360];// X and Y coordinates of the 360 points
 			int[] Y = new int[360];
