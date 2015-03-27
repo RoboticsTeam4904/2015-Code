@@ -233,16 +233,16 @@ public class LIDAR implements Updatable {
 		public HoughTransform(int width, int height) {
 			this.width = width;
 			this.height = height;
-			initialise();
+			initialize();
 		}
 		
 		/**
-		 * Initialises the hough array. Called by the constructor so you don't need
+		 * Initializes the hough array. Called by the constructor so you don't need
 		 * to call it yourself, however you can use it to reset the transform if you
 		 * want to plug in another image (although that image must have the same
 		 * width and height)
 		 */
-		private void initialise() {
+		private void initialize() {
 			// Calculate the maximum height the hough array needs to have
 			houghHeight = (int) (Math.sqrt(2) * Math.max(height, width)) / 2;
 			// Double the height of the hough array to cope with negative r values
@@ -254,7 +254,7 @@ public class LIDAR implements Updatable {
 			centerY = height / 2;
 			// Count how many points there are
 			numPoints = 0;
-			// cache the values of sin and cos for faster processing
+			// Cache the values of sin and cos for faster processing
 			sinCache = new double[maxTheta];
 			cosCache = sinCache.clone();
 			for (int t = 0; t < maxTheta; t++) {
