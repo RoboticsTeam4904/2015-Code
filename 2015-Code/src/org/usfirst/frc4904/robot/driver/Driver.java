@@ -30,12 +30,16 @@ public abstract class Driver implements Disablable, Updatable, Named {
 	
 	public abstract void update();
 	
-	protected void setMovement(double x, double y) {// All movement passes through here so that autoalign has precedence
-		mecanumDrive.setDesiredXYSpeed(x, y);
+	protected void setMovement(double x, double y) { // All movement passes through here so that AutoAlign has precedence
+		if (align.isCurrentlyAligning()) {
+			mecanumDrive.setDesiredXYSpeed(x, y);
+		}
 	}
 	
 	protected void setTurn(double speed) {
-		mecanumDrive.setDesiredTurnSpeed(speed);
+		if (align.isCurrentlyAligning()) {
+			mecanumDrive.setDesiredTurnSpeed(speed);
+		}
 	}
 	
 	protected void autoAlign() {
