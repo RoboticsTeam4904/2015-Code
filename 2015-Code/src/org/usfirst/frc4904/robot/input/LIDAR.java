@@ -1,6 +1,7 @@
 package org.usfirst.frc4904.robot.input;
 
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import org.usfirst.frc4904.robot.LogKitten;
@@ -19,7 +20,7 @@ public class LIDAR implements Updatable {
 	public static final int GRABBER_LENGTH = 700; // Distance from LIDAR to grabber
 	public static final int GRABBER_LENGTH_OFFSET = GRABBER_LENGTH + 100; // Go an extra 100 mm (to tell if lines are the grabber or totes)
 	public static final int CORRECTED_ANGLE_BREADTH = 16; // How many angles to average when correcting an angle. Should be divisible by 4
-	public static final boolean DISABLED = true;
+	public static final boolean DISABLED = false;
 	
 	public LIDAR() {
 		dists = new int[360];
@@ -27,9 +28,14 @@ public class LIDAR implements Updatable {
 		port = new SerialPort(115200, SerialPort.Port.kMXP);
 	}
 	
-	private int read(int angle) throws Exception {
-		port.writeString(Integer.toString(angle));
+	private int read(int angle) {
+		port.flush();
+		System.out.print("Reading at angle " + angle + " value ");
+		byte[] writeBuffer = BigInteger.valueOf(angle).toByteArray();
+		port.write(writeBuffer, writeBuffer.length);
+		while (port.getBytesReceived() == 0) {}
 		String data = port.readString();
+		System.out.println(writeBuffer.length + " " + port.getBytesReceived());
 		System.out.println(data);
 		return Integer.parseInt(data);
 	}
