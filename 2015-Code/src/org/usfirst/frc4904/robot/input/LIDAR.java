@@ -8,13 +8,19 @@ import org.usfirst.frc4904.robot.LogKitten;
 import org.usfirst.frc4904.robot.Updatable;
 import edu.wpi.first.wpilibj.SerialPort;
 
+/**
+ * The LIDAR class lets other classes retrieve data from an Arduino
+ * that reads from a physical Neato XV-11 LIDAR. It needs to be updated
+ * to receive new data. It provides methods to read raw data, find
+ * distances, and find lines (totes) via a Hough transform.
+ */
 public class LIDAR implements Updatable {
-	private volatile int[] dists;
 	private final LogKitten logger;
-	private final SerialPort port;
-	private static final int width = 1280;// This is the resolution of my screen, because that seemed to work
-	private static final int height = 720;
-	private static final double d = 5;// Settings from my screen
+	private final SerialPort port; // Serial port used to talk to the LIDAR,
+	private volatile int[] dists; // Array that contains distances to objects 360 degrees around the LIDAR.
+	private static final int width = 1280; // The width of the Hough transform coordinate system
+	private static final int height = 720; // The height of the Hough transform coordinate system
+	private static final double d = 5; // Settings from my screen
 	private static final int houghSensitivity = 30;
 	public static final int LIDAR_MOUNT_OFFSET = -100; // mm to right. Cartesian. Because.
 	public static final int GRABBER_LENGTH = 700; // Distance from LIDAR to grabber
@@ -28,24 +34,47 @@ public class LIDAR implements Updatable {
 		port = new SerialPort(115200, SerialPort.Port.kMXP);
 	}
 	
+	/**
+	 * Reads the distance from the LIDAR to wherever its beam hits at a certain angle relative to the chassis.
+	 * 
+	 * @param angle
+	 *        The angle at which to return the distance, as an integer.
+	 * @return The requested distance as an integer.
+	 */
 	private int read(int angle) {
-		port.flush();
-		System.out.print("Reading at angle " + angle + " value ");
-		byte[] writeBuffer = BigInteger.valueOf(angle).toByteArray();
-		port.write(writeBuffer, writeBuffer.length);
-		while (port.getBytesReceived() == 0) {}
-		String data = port.readString();
-		System.out.println(writeBuffer.length + " " + port.getBytesReceived());
-		System.out.println(data);
-		return Integer.parseInt(data);
+		// Make sure angle is within the correct range and shift it.
+		// The angle is shifted by 90 so that 0 is to the right (like a normal graph.)
+		// It is then modded. Lastly, we add 360 and mod again to account for negative angle inputs.
+		angle = (((angle + 90) % 360) + 360) % 360;
+		logger.d("Reading LIDAR at angle " + angle);
+		// Write to the port requesting distance at angle.
+		port.flush(); // Flush port to make sure we get the data we ask for
+		byte[] writeBuffer = BigInteger.valueOf(angle).toByteArray(); // Convert angle to byte array for writing to port
+		port.write(writeBuffer, writeBuffer.length); // Write our angle to port (request data)
+		// Read response.
+		while (port.getBytesReceived() == 0) {} // Wait till we receive the data
+		String data = port.readString(); // Read data from port as string
+		logger.d(writeBuffer.length + " " + port.getBytesReceived());
+		logger.d(data);
+		return Integer.parseInt(data); // Return data as integer
 	}
 	
+	/**
+	 * @return An int array of distances 360 degrees around the LIDAR.
+	 */
 	public int[] getDists() {
 		return dists;
 	}
 	
+	/**
+	 * Uses a Hough transform to get the most prominent line the LIDAR can see.
+	 * 
+	 * @return An int array of length 4, containing two ordered pairs with the XY coordinates of the line endpoints.
+	 *         E.g. [3, 1, 7, 7] means a line with endpoints (3, 1) and (7, 7).
+	 */
 	public int[] getLine() {
-		HoughTransform H = new HoughTransform(width, height);
+		HoughTransform H = new HoughTransform(width, height); // Make a new Hough transform canvas
+		// For
 		for (int i = 0; i < 360; i++) {
 			if (dists[i] < 0 || dists[i] > 1500) {
 				dists[i] = 0;
@@ -54,8 +83,8 @@ public class LIDAR implements Updatable {
 			int x = xy[0];
 			int y = xy[1];
 			H.addPoint(x, y);
-			H.addPoint(x + 1, y);// We drew a 2x2 pixel square, wanted to emulate that
-			H.addPoint(x, y + 1);// so this is as similar to the GUI version as possible
+			H.addPoint(x + 1, y); // We drew a 2x2 pixel square, wanted to emulate that
+			H.addPoint(x, y + 1); // so this is as similar to the GUI version as possible
 			H.addPoint(x + 1, y + 1);
 		}
 		ArrayList<int[]> inFront = new ArrayList<int[]>();
@@ -76,6 +105,12 @@ public class LIDAR implements Updatable {
 		return inFront.get(0);
 	}
 	
+	/**
+	 * Gets the distance at an angle
+	 * 
+	 * @param angle
+	 * @return
+	 */
 	public int getCorrectedAngleDist(int angle) {
 		int[] avDists = Arrays.copyOfRange(dists, angle - LIDAR.CORRECTED_ANGLE_BREADTH / 2, angle + LIDAR.CORRECTED_ANGLE_BREADTH / 2);
 		Arrays.sort(avDists);
@@ -107,11 +142,10 @@ public class LIDAR implements Updatable {
 		}
 	}
 	
-	public int[] getXY(int i) {
-		double angle = i;
-		angle = angle * Math.PI / 180;
-		int x = (int) (width / 2 + Math.cos(angle + Math.PI / 2) * dists[i] / d);
-		int y = (int) (height / 2 + -Math.sin(angle + Math.PI / 2) * dists[i] / d);
+	public int[] getXY(int angle) {
+		double radians = angle * Math.PI / 180;
+		int x = (int) (width / 2 + Math.cos(radians + Math.PI / 2) * dists[angle] / d);
+		int y = (int) (height / 2 - Math.sin(radians + Math.PI / 2) * dists[angle] / d);
 		return new int[] {x, y};
 	}
 	
@@ -126,7 +160,7 @@ public class LIDAR implements Updatable {
 		}
 		
 		/**
-		 * Initialises the hough array. Called by the constructor so you don't need
+		 * Initializes the hough array. Called by the constructor so you don't need
 		 * to call it yourself, however you can use it to reset the transform if you
 		 * want to plug in another image (although that image must have the same
 		 * width and height)
@@ -230,11 +264,13 @@ public class LIDAR implements Updatable {
 		private double[] cosCache;
 		
 		/**
-		 * Initialises the hough transform. The dimensions of the input image are
-		 * needed in order to initialise the hough array.
+		 * Initializes the hough transform. The dimensions of the input image are
+		 * needed in order to initialize the hough array.
 		 *
-		 * @param width The width of the input image
-		 * @param height The height of the input image
+		 * @param width
+		 *        The width of the input image
+		 * @param height
+		 *        The height of the input image
 		 */
 		public HoughTransform(int width, int height) {
 			this.width = width;
@@ -302,7 +338,7 @@ public class LIDAR implements Updatable {
 		 * @return
 		 */
 		public ArrayList<HoughLine> getLines(int threshold) {
-			// Initialise the vector of lines that we'll return
+			// Initialize the vector of lines that we'll return
 			ArrayList<HoughLine> lines = new ArrayList<HoughLine>(20);
 			// Only proceed if the hough array is not empty
 			if (numPoints == 0) {
