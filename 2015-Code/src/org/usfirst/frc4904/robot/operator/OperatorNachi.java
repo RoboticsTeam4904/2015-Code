@@ -14,6 +14,11 @@ public class OperatorNachi extends Operator {
 	}
 	
 	public synchronized void update() {
+		if (!stick.connected()) {
+			overrideWinch(0);
+			overrideGrabber(0);
+			return;
+		}
 		if (stick.buttons[10].getRaw()) {
 			overrideWinch(stick.getY()); // When button 11 is pressed, override the winch
 		} else {
