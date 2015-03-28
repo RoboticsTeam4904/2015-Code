@@ -39,6 +39,8 @@ public class LIDAR implements Updatable {
 	 * 
 	 * @param angle
 	 *        The angle at which to return the distance, as an integer.
+	 *        Note that 0 as the input means straight ahead - the function
+	 *        shifts the data so 0 is to the right, like in normal polar coordinates.
 	 * @return The requested distance as an integer.
 	 */
 	private int read(int angle) {
