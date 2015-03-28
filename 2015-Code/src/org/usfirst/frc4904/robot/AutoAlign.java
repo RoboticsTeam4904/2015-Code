@@ -10,9 +10,9 @@ import org.usfirst.frc4904.robot.output.Mecanum;
  * using alignWithTote() and abortAlign().
  */
 public class AutoAlign implements Updatable {
+	private final LogKitten logger;
 	private final Mecanum mecanum;
 	private final LIDAR lidar;
-	private final LogKitten logger;
 	private static final double ALIGN_DEADZONE_WIDTH = 10; // Deadzone width (in mm) within which you are considered aligned (facing the tote)
 	private static final double ALIGN_DEADZONE_DISTANCE = 100; // Deadzone distance (in mm) within which you are considered close enough to the tote
 	private static final double ALIGN_CLOSE_ANGLE = Math.PI / 60.0; // When you are aligned within this angle (in radians), switch to "close" mode
