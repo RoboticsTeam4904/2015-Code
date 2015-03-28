@@ -61,7 +61,6 @@ public class Winch extends Talon implements Disablable, Enablable, Overridable<D
 		set(0);
 		pid.setSetpoint(encoder.getDistance());
 		pid.disable();
-		stopOverride();
 	}
 	
 	public void override(Double speed) {
