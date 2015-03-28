@@ -48,6 +48,8 @@ public class Robot extends SampleRobot {
 	private static final double MECANUM_P_COEFFICIENT = 0.1;
 	private static final double MECANUM_I_COEFFICIENT = 0.1;
 	private static final double MECANUM_D_COEFFICIENT = 0.1;
+	// Camera name
+	private static final String CAMERA_NAME = "cam1";
 	// Controls
 	private final LogitechJoystick stick; // the X3D Extreme3DPro Logitech joystick (right hand) - operator
 	private final XboxController xboxController; // the Xbox 360 controller - driver
@@ -106,7 +108,7 @@ public class Robot extends SampleRobot {
 		imu = new IMU(); // Initialize IMU
 		lidar = new LIDAR(); // Initialize LIDAR
 		pdp = new PDP(); // Power Distribution Panel interface and logging.
-		camera = new Camera(false);
+		camera = new Camera(CAMERA_NAME); // Initialize camera
 		/* Action! */
 		// Initialize movement controllers
 		winch = new Winch(WINCH_PORT, winchEncoder, WINCH_P_COEFFICIENT, WINCH_I_COEFFICIENT, WINCH_D_COEFFICIENT); // Initialize Winch control

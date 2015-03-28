@@ -19,27 +19,51 @@ public class Camera implements Updatable {
 	private static final double LONG_RATIO = 2.22; // Tote long side = 26.9 / Tote height = 12.1 = 2.22
 	private static final double SHORT_RATIO = 1.4; // Tote short side = 16.9 / Tote height = 12.1 = 1.4
 	private static final double SCORE_MIN = 75.0; // Minimum score to be considered a tote
-	private static int CAMERA_QUALITY = 10;
 	private double X_RES;
 	private double Y_RES;
-	private static final String CAMERA_NAME = "cam1";
 	private NIVision.ParticleFilterCriteria2 criteria[] = new NIVision.ParticleFilterCriteria2[1];
 	private NIVision.ParticleFilterOptions2 filterOptions = new NIVision.ParticleFilterOptions2(0, 0, 1, 1);
-	private final boolean enabled;
+	private boolean connectedSuccessfully;
 	
-	public Camera(boolean enabled) {
-		this.enabled = enabled;
-		if (!enabled) {
-			return;
+	/**
+	 * The Camera class provides access to the camera with the given name.
+	 * It must be update()'d to do its job.
+	 * It contains vision code to recognize yellow totes.
+	 * 
+	 * @param name
+	 *        The name of the camera to connect to ("cam0", "cam1"...)
+	 *        The name of your camera can be found in the RoboRIO web dashboard,
+	 *        at the URL roborio-XXXX.local, where XXXX is your team number.
+	 */
+	public Camera(String name) {
+		// Try to connect to the camera, and save whether we succeeded.
+		connectedSuccessfully = true;
+		try {
+			cameraSession = NIVision.IMAQdxOpenCamera(name, NIVision.IMAQdxCameraControlMode.CameraControlModeController);
+		}
+		catch (Exception e) {
+			connectedSuccessfully = false;
+			return; // If we couldn't connect to the camera don't bother with the rest.
 		}
 		frame = NIVision.imaqCreateImage(NIVision.ImageType.IMAGE_RGB, 0);
-		cameraSession = NIVision.IMAQdxOpenCamera(CAMERA_NAME, NIVision.IMAQdxCameraControlMode.CameraControlModeController);
 		NIVision.IMAQdxConfigureGrab(cameraSession);
 		criteria[0] = new NIVision.ParticleFilterCriteria2(NIVision.MeasurementType.MT_AREA_BY_IMAGE_AREA, AREA_MINIMUM, 100.0, 0, 0);
 	}
 	
+	/**
+	 * Check whether the camera is connected.
+	 * This method should be used before calling other camera methods, as they will return
+	 * null (or equivalent) results if the camera isn't connected.
+	 * 
+	 * @return boolean - true if the camera is connected.
+	 */
+	public boolean isConnected() {
+		return connectedSuccessfully;
+	}
+	
 	public void update() {
-		if (!enabled) {
+		// If we aren't connected, do nothing.
+		if (!connectedSuccessfully) {
 			return;
 		}
 		NIVision.IMAQdxGrab(cameraSession, frame, 1);
@@ -76,20 +100,41 @@ public class Camera implements Updatable {
 		toteCoord[1] = (tote.BoundingRectTop + tote.BoundingRectBottom) / 2;
 	}
 	
-	public double[] getYellowTote() { // This function will return the scaled x, y coordinates of the center of the yellow tote.
+	/**
+	 * This function will return the scaled (x, y) coordinates of the center of the yellow tote.
+	 * 
+	 * @return A double array of length 2 that contains the X and Y coordinates in that order.
+	 */
+	public double[] getYellowTote() {
+		// If we aren't connected, do nothing.
+		if (!connectedSuccessfully) {
+			return null;
+		}
 		double[] scaledCoord = new double[2];
 		scaledCoord[0] = (toteCoord[0] - (X_RES / 2)) / X_RES;
 		scaledCoord[1] = (toteCoord[1] - (Y_RES / 2)) / Y_RES;
 		return scaledCoord; // It uses logic.
 	}
 	
-	// Comparator function for sorting particles. Returns true if particle 1 is larger
+	/**
+	 * Comparator function for sorting particles by size.
+	 * 
+	 * @param particle1
+	 * @param particle2
+	 * @return boolean - true if particle1 > particle2, false otherwise
+	 */
 	private boolean CompareParticleSizes(ParticleReport particle1, ParticleReport particle2) {
 		// we want descending sort order
 		return particle1.PercentAreaToImageArea > particle2.PercentAreaToImageArea;
 	}
 	
-	// Method to score if the aspect ratio of the particle appears to match the retro-reflective target. Target is 7"x7" so aspect should be 1
+	/**
+	 * Method to score if the aspect ratio of the particle appears to match the retro-reflective target. Target is 7"x7" so aspect should be 1
+	 * 
+	 * @param report
+	 *        ParticleReport to score
+	 * @return score of ParticleReport
+	 */
 	private double AspectScore(ParticleReport report) {
 		return ratioToScore(((report.BoundingRectRight - report.BoundingRectLeft) / (report.BoundingRectBottom - report.BoundingRectTop)));
 	}
@@ -98,7 +143,9 @@ public class Camera implements Updatable {
 		return (Math.max(0, Math.min(100 * (1 - Math.abs(1 - ratio)), 100)));
 	}
 	
-	// A structure to hold measurements of a particle
+	/**
+	 * A structure to hold measurements of a particle
+	 */
 	private class ParticleReport implements Comparator<ParticleReport>, Comparable<ParticleReport> {
 		double PercentAreaToImageArea;
 		double Area;
