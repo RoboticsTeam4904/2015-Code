@@ -4,6 +4,9 @@ package org.usfirst.frc4904.robot.output;
 import org.usfirst.frc4904.robot.Disablable;
 import org.usfirst.frc4904.robot.Enablable;
 import org.usfirst.frc4904.robot.Overridable;
+import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.PIDOutput;
+import edu.wpi.first.wpilibj.Talon;
 
 public class EncodedMotor extends Talon implements Disablable, Enablable, Overridable<Double>, PIDOutput {
 	private final Encoder encoder;

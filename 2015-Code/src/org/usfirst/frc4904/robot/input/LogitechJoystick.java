@@ -1,6 +1,7 @@
 package org.usfirst.frc4904.robot.input;
 
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 
 public class LogitechJoystick extends Joystick {
@@ -8,9 +9,11 @@ public class LogitechJoystick extends Joystick {
 	public static final int X_AXIS = 0;
 	public static final int Y_AXIS = 1;
 	private static final double moveThreshold = 0.05;
+	private final int port;
 	
 	public LogitechJoystick(int port) {
 		super(port);
+		this.port = port;
 		for (int i = 0; i < 12; i++) {
 			buttons[i] = new SuperButton(this, i + 1); // Initialize all the buttons. Remember the index is one less than the button num
 		}
@@ -24,5 +27,9 @@ public class LogitechJoystick extends Joystick {
 		} else {
 			return false;
 		}
+	}
+	
+	public boolean connected() {
+		return DriverStation.getInstance().getStickButtonCount(port) > 0;
 	}
 }

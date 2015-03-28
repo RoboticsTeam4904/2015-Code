@@ -2,6 +2,7 @@ package org.usfirst.frc4904.robot.input;
 
 
 import org.usfirst.frc4904.robot.LogKitten;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Joystick;
 
 public class XboxController extends Joystick {
@@ -20,9 +21,11 @@ public class XboxController extends Joystick {
 	public final static int Y_STICK = 1; // Left y
 	public final static int TWIST_STICK = 2; // Button pair on front. Left is twist, trying to determine right
 	private SuperButton[] buttons = new SuperButton[10];
+	private final int port;
 	
 	public XboxController(int port) {
 		super(port);
+		this.port = port;
 		for (int i = 0; i < 10; i++) {
 			buttons[i] = new SuperButton(this, i + 1);
 		}
@@ -46,5 +49,9 @@ public class XboxController extends Joystick {
 	
 	public boolean getButton(int button) {
 		return buttons[button].get();
+	}
+	
+	public boolean connected() {
+		return DriverStation.getInstance().getStickButtonCount(port) > 0;
 	}
 }
