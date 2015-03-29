@@ -80,7 +80,7 @@ public class LogKitten {
 	}
 	
 	private void logMessage(String message, DebugLevel level) {
-		if (logLevel.compareTo(level) > 0) {
+		if (logLevel.compareTo(level) >= 0) {
 			try {
 				String content = timestamp() + " " + level.getName() + ": " + Thread.currentThread().getStackTrace()[1].getMethodName() + ": " + message + " \n";
 				fileOutput.write(content.getBytes());
@@ -91,7 +91,7 @@ public class LogKitten {
 				ioe.printStackTrace();
 			}
 		}
-		if (printLevel.compareTo(level) > 0) {
+		if (printLevel.compareTo(level) >= 0) {
 			System.out.println(identifier + " " + level.getName() + ": " + Thread.currentThread().getStackTrace()[1].getMethodName() + ": " + message + " \n");
 		}
 	}

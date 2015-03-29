@@ -58,8 +58,10 @@ void loop() {
   
   if(Serial2.available() > 0) {
     int angle = Serial2.parseInt();
-    Serial.println(angle);
-    Serial2.println(distance_array[angle]);
+    Serial.print(angle);
+    Serial.print(" ");
+    Serial2.print(distance_array[angle]);
+    Serial.println(distance_array[angle]);
     while(Serial2.available() > 0) Serial2.read();
   }
 
