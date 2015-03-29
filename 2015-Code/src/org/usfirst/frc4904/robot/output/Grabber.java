@@ -41,7 +41,7 @@ public class Grabber extends Talon implements Disablable, Updatable, Overridable
 	
 	public Grabber(int channel, DigitalInput[] limitSwitches, PDP pdp) {
 		super(channel);
-		logger = new LogKitten(LogKitten.LEVEL_DEBUG);
+		logger = new LogKitten();
 		this.limitSwitches = limitSwitches;
 		this.pdp = pdp;
 		grabberState = GrabberState.OPEN;
@@ -137,8 +137,6 @@ public class Grabber extends Talon implements Disablable, Updatable, Overridable
 	private void checkPowerUsage() {
 		SmartDashboard.putNumber("Grabber Motor Current", pdp.getCurrent(PDP_PORT));
 		SmartDashboard.putNumber("Avg. Grabber Motor Current", avgCurrent());
-		logger.d("" + avgCurrent());
-		logger.d("" + grabberState);
 		pastAmperage[currentPosition++] = pdp.getCurrent(PDP_PORT);
 		currentPosition %= pastAmperage.length;
 		double currentCurrent = avgCurrent();
