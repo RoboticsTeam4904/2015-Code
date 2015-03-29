@@ -31,13 +31,13 @@ public abstract class Driver implements Disablable, Updatable, Named {
 	public abstract void update();
 	
 	protected void setMovement(double x, double y) { // All movement passes through here so that AutoAlign has precedence
-		if (align.isCurrentlyAligning()) {
+		if (!align.isCurrentlyAligning()) {
 			mecanumDrive.setDesiredXYSpeed(x, y);
 		}
 	}
 	
 	protected void setTurn(double speed) {
-		if (align.isCurrentlyAligning()) {
+		if (!align.isCurrentlyAligning()) {
 			mecanumDrive.setDesiredTurnSpeed(speed);
 		}
 	}
