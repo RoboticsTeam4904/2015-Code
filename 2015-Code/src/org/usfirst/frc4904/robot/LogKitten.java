@@ -11,18 +11,18 @@ public class LogKitten {
 	private FileOutputStream fileOutput;
 	private final File file;
 	private final String identifier;
-	private final DebugLevel logLevel;
-	private final DebugLevel printLevel;
-	public final static DebugLevel LEVEL_FATAL = new DebugLevel("FATAL", 0);
-	public final static DebugLevel LEVEL_ERROR = new DebugLevel("ERROR", 1);
-	public final static DebugLevel LEVEL_WARN = new DebugLevel("WARN", 2);
-	public final static DebugLevel LEVEL_VERBOSE = new DebugLevel("VERBOSE", 3);
-	public final static DebugLevel LEVEL_DEBUG = new DebugLevel("DEBUG", 4);
-	public static DebugLevel DEFAULT_LOG_LEVEL = LEVEL_VERBOSE;
-	public static DebugLevel DEFAULT_PRINT_LEVEL = LEVEL_WARN;
+	private final KittenLevel logLevel;
+	private final KittenLevel printLevel;
+	public final static KittenLevel LEVEL_FATAL = new KittenLevel("FATAL", 0);
+	public final static KittenLevel LEVEL_ERROR = new KittenLevel("ERROR", 1);
+	public final static KittenLevel LEVEL_WARN = new KittenLevel("WARN", 2);
+	public final static KittenLevel LEVEL_VERBOSE = new KittenLevel("VERBOSE", 3);
+	public final static KittenLevel LEVEL_DEBUG = new KittenLevel("DEBUG", 4);
+	public static KittenLevel DEFAULT_LOG_LEVEL = LEVEL_VERBOSE;
+	public static KittenLevel DEFAULT_PRINT_LEVEL = LEVEL_WARN;
 	private static String LOG_PATH = "/home/lvuser/logs/";
 	
-	public LogKitten(String identifier, DebugLevel logLevel, DebugLevel printLevel) {
+	public LogKitten(String identifier, KittenLevel logLevel, KittenLevel printLevel) {
 		this.identifier = identifier;
 		this.logLevel = logLevel;
 		String filePath = LOG_PATH + identifier + ".log"; // Set this sessions log to /home/lvuser/logs/[current time].log
@@ -46,7 +46,7 @@ public class LogKitten {
 		this.printLevel = printLevel;
 	}
 	
-	public LogKitten(String identifier, DebugLevel printLevel) {
+	public LogKitten(String identifier, KittenLevel printLevel) {
 		this(identifier, DEFAULT_LOG_LEVEL, printLevel);
 	}
 	
@@ -55,11 +55,11 @@ public class LogKitten {
 	}
 	
 	// If no identifier is given, use caller class name
-	public LogKitten(DebugLevel logLevel, DebugLevel printLevel) {
+	public LogKitten(KittenLevel logLevel, KittenLevel printLevel) {
 		this(getCallerConstructor(), logLevel, printLevel);
 	}
 	
-	public LogKitten(DebugLevel printLevel) {
+	public LogKitten(KittenLevel printLevel) {
 		this(getCallerConstructor(), printLevel);
 	}
 	
@@ -75,11 +75,11 @@ public class LogKitten {
 		return Thread.currentThread().getStackTrace()[4].getMethodName();
 	}
 	
-	public static void setDefaultLogLevel(DebugLevel DEFAULT_LOG_LEVEL) {
+	public static void setDefaultLogLevel(KittenLevel DEFAULT_LOG_LEVEL) {
 		LogKitten.DEFAULT_LOG_LEVEL = DEFAULT_LOG_LEVEL;
 	}
 	
-	public static void setDefaultPrintLevel(DebugLevel DEFAULT_PRINT_LEVEL) {
+	public static void setDefaultPrintLevel(KittenLevel DEFAULT_PRINT_LEVEL) {
 		LogKitten.DEFAULT_PRINT_LEVEL = DEFAULT_PRINT_LEVEL;
 	}
 	
@@ -87,7 +87,7 @@ public class LogKitten {
 		LogKitten.LOG_PATH = LOG_PATH;
 	}
 	
-	private void logMessage(String message, DebugLevel level) {
+	private void logMessage(String message, KittenLevel level) {
 		if (logLevel.compareTo(level) >= 0) {
 			try {
 				String content = timestamp() + " " + level.getName() + ": " + getCallerMethod() + ": " + message + " \n";
@@ -145,11 +145,11 @@ public class LogKitten {
 		return timestamp;
 	}
 	
-	private static class DebugLevel implements Comparable<DebugLevel>, Comparator<DebugLevel> {
+	private static class KittenLevel implements Comparable<KittenLevel>, Comparator<KittenLevel> {
 		private String name;
 		private int severity;
 		
-		public DebugLevel(String name, int severity) {
+		public KittenLevel(String name, int severity) {
 			this.severity = severity;
 			this.name = name;
 		}
@@ -162,11 +162,11 @@ public class LogKitten {
 			return name;
 		}
 		
-		public int compare(DebugLevel o1, DebugLevel o2) {
+		public int compare(KittenLevel o1, KittenLevel o2) {
 			return severity - o2.getSeverity();
 		}
 		
-		public int compareTo(DebugLevel o) {
+		public int compareTo(KittenLevel o) {
 			if (compare(this, o) > 0) {
 				return 1;
 			} else if (compare(this, o) == 0) {
