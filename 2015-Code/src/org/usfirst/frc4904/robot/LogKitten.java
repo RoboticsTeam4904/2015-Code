@@ -56,19 +56,23 @@ public class LogKitten {
 	
 	// If no identifier is given, use caller class name
 	public LogKitten(DebugLevel logLevel, DebugLevel printLevel) {
-		this(getCaller().getClassName(), logLevel, printLevel);
+		this(getCallerConstructor(), logLevel, printLevel);
 	}
 	
 	public LogKitten(DebugLevel printLevel) {
-		this(getCaller().getClassName(), printLevel);
+		this(getCallerConstructor(), printLevel);
 	}
 	
 	public LogKitten() {
-		this(getCaller().getClassName());
+		this(getCallerConstructor());
 	}
 	
-	public static StackTraceElement getCaller() {
-		return Thread.currentThread().getStackTrace()[2];
+	public static String getCallerConstructor() {
+		return Thread.currentThread().getStackTrace()[3].getClassName().replaceAll("^.*\\.", "");
+	}
+	
+	public static String getCallerMethod() {
+		return Thread.currentThread().getStackTrace()[4].getMethodName();
 	}
 	
 	public static void setDefaultLogLevel(DebugLevel DEFAULT_LOG_LEVEL) {
@@ -86,7 +90,7 @@ public class LogKitten {
 	private void logMessage(String message, DebugLevel level) {
 		if (logLevel.compareTo(level) >= 0) {
 			try {
-				String content = timestamp() + " " + level.getName() + ": " + getCaller().getMethodName() + ": " + message + " \n";
+				String content = timestamp() + " " + level.getName() + ": " + getCallerMethod() + ": " + message + " \n";
 				fileOutput.write(content.getBytes());
 				fileOutput.flush();
 			}
@@ -96,7 +100,7 @@ public class LogKitten {
 			}
 		}
 		if (printLevel.compareTo(level) >= 0) {
-			System.out.println(identifier + " " + level.getName() + ": " + getCaller().getMethodName() + ": " + message + " \n");
+			System.out.println(identifier + " " + level.getName() + ": " + getCallerMethod() + ": " + message + " \n");
 		}
 	}
 	
