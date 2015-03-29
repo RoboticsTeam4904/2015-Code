@@ -49,7 +49,7 @@ public class LIDAR implements Updatable {
 		// It is then modded. Lastly, we add 360 and mod again to account for negative angle inputs.
 		angle = (((angle + 90) % 360) + 360) % 360;
 		// Write to the port requesting distance at angle.
-		port.flush(); // Flush port to make sure we get the data we ask for
+		// port.flush(); // Flush port to make sure we get the data we ask for
 		byte[] writeBuffer = BigInteger.valueOf(angle).toByteArray(); // Convert angle to byte array for writing to port
 		// port.write(writeBuffer, writeBuffer.length); // Write our angle to port (request data)
 		port.writeString(Integer.toString(angle));
@@ -57,7 +57,7 @@ public class LIDAR implements Updatable {
 		while (port.getBytesReceived() < 2) {} // Wait till we receive the data
 		String data = port.readString();
 		data = data.substring(0, data.indexOf('\n') - 1);
-		logger.d("Reading LIDAR at angle " + angle + "bytes sent " + writeBuffer.length + " bytes received " + port.getBytesReceived() + "distance " + data);
+		logger.d("Reading LIDAR at angle " + angle + " bytes sent " + writeBuffer.length + " bytes received " + port.getBytesReceived() + " distance " + data);
 		return Integer.parseInt(data); // Return data as integer
 	}
 	
@@ -127,12 +127,9 @@ public class LIDAR implements Updatable {
 		if (LIDAR.DISABLED) {
 			return;
 		}
-		// if (port.getBytesReceived() < 128) { // LIDAR returns 1980 bytes per cycle
-		// logger.v("getBytesReceived", "only " + port.getBytesReceived() + " bytes received");
-		// }
 		logger.d("Updating LIDAR");
 		try {
-			for (int i = 0; i < 180; i++) { // Reading in chunks of 4, so only 90 steps
+			for (int i = 0; i < 180; i++) { // We only want the area in front of the LIDAR
 				dists[i] = read(i);
 			}
 			for (int i = 0; i < 180; i++) { // Do it again for redundancy
