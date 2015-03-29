@@ -41,7 +41,7 @@ public class Grabber extends Talon implements Disablable, Updatable, Overridable
 	
 	public Grabber(int channel, DigitalInput[] limitSwitches, PDP pdp) {
 		super(channel);
-		logger = new LogKitten(LogKitten.LEVEL_DEBUG);
+		logger = new LogKitten(LogKitten.LEVEL_ERROR);
 		this.limitSwitches = limitSwitches;
 		this.pdp = pdp;
 		grabberState = GrabberState.OPEN;
