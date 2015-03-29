@@ -49,4 +49,10 @@ public abstract class Driver implements Disablable, Updatable, Named {
 	protected void abortAlign() {
 		align.abortAlign();
 	}
+	
+	public void disable() {
+		abortAlign();
+		setMovement(0, 0);
+		setTurn(0);
+	}
 }

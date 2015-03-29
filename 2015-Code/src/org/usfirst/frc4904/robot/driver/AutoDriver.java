@@ -11,11 +11,6 @@ public class AutoDriver extends Driver {
 		this.auto = auto;
 	}
 	
-	public void disable() {
-		setTurn(0);
-		setMovement(0, 0);
-	}
-	
 	public void update() {
 		double[] movement = auto.getDesiredMovement();
 		setMovement(movement[0], movement[1]);

@@ -32,6 +32,4 @@ public class DriverNathan extends Driver {
 			abortAlign();
 		}
 	}
-	
-	public void disable() {}
 }

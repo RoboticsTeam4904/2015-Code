@@ -69,6 +69,7 @@ public abstract class Operator implements Disablable, Updatable, Named {
 	}
 	
 	public void disable() {
-		winch.set(0);
+		winch.disable();
+		grabber.disable();
 	}
 }

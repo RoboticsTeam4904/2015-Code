@@ -55,8 +55,4 @@ public class OperatorNachi extends Operator {
 			logger.w("Robot killed by operator (Nachi)");
 		}
 	}
-	
-	public void disable() {
-		overrideWinch(0);
-	}
 }

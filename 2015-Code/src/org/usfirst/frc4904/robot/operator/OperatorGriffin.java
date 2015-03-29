@@ -57,8 +57,4 @@ public class OperatorGriffin extends Operator {
 			logger.w("Robot killed by operator (Griffin)");
 		}
 	}
-	
-	public void disable() {
-		overrideWinch(0);
-	}
 }
