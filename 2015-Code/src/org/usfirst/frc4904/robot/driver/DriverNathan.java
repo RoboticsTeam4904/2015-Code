@@ -2,7 +2,6 @@ package org.usfirst.frc4904.robot.driver;
 
 
 import org.usfirst.frc4904.robot.LogKitten;
-import org.usfirst.frc4904.robot.input.XboxController;
 
 public class DriverNathan extends Driver {
 	private final LogKitten logger;
@@ -18,17 +17,17 @@ public class DriverNathan extends Driver {
 			setTurn(0);
 			return;
 		}
-		setMovement(xboxController.getValue(XboxController.X_STICK) / 2, -xboxController.getValue(XboxController.Y_STICK) / 2);
-		double turnSpeed = xboxController.getValue(XboxController.TWIST_STICK) / 2; // Turns way too fast otherwise
+		setMovement(xboxController.leftStick.getX() / 2, -xboxController.leftStick.getY() / 2);
+		double turnSpeed = xboxController.rightStick.getX() / 2; // Turns way too fast otherwise
 		setTurn(turnSpeed); // Actually do the turning
-		if (xboxController.getButton(XboxController.BACK_BUTTON)) {
+		if (xboxController.back.get()) {
 			disable();
 			logger.w("Robot killed by driver (Nathan)");
 		}
-		if (xboxController.getButton(XboxController.X_BUTTON)) {
+		if (xboxController.x.get()) {
 			autoAlign();
 		}
-		if (xboxController.getButton(XboxController.B_BUTTON)) {
+		if (xboxController.b.get()) {
 			abortAlign();
 		}
 	}
