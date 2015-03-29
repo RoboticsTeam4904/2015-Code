@@ -30,7 +30,7 @@ public class LIDAR implements Updatable {
 	
 	public LIDAR() {
 		dists = new int[360];
-		logger = new LogKitten(LogKitten.LEVEL_DEBUG);
+		logger = new LogKitten(LogKitten.LEVEL_DEBUG, LogKitten.LEVEL_DEBUG);
 		port = new SerialPort(115200, SerialPort.Port.kMXP);
 	}
 	
@@ -48,16 +48,16 @@ public class LIDAR implements Updatable {
 		// The angle is shifted by 90 so that 0 is to the right (like a normal graph.)
 		// It is then modded. Lastly, we add 360 and mod again to account for negative angle inputs.
 		angle = (((angle + 90) % 360) + 360) % 360;
-		logger.d("Reading LIDAR at angle " + angle);
 		// Write to the port requesting distance at angle.
 		port.flush(); // Flush port to make sure we get the data we ask for
 		byte[] writeBuffer = BigInteger.valueOf(angle).toByteArray(); // Convert angle to byte array for writing to port
-		port.write(writeBuffer, writeBuffer.length); // Write our angle to port (request data)
+		// port.write(writeBuffer, writeBuffer.length); // Write our angle to port (request data)
+		port.writeString(Integer.toString(angle));
 		// Read response.
-		while (port.getBytesReceived() == 0) {} // Wait till we receive the data
-		String data = port.readString(); // Read data from port as string
-		logger.d(writeBuffer.length + " " + port.getBytesReceived());
-		logger.d(data);
+		while (port.getBytesReceived() < 2) {} // Wait till we receive the data
+		String data = port.readString();
+		data = data.substring(0, data.indexOf('\n') - 1);
+		logger.d("Reading LIDAR at angle " + angle + "bytes sent " + writeBuffer.length + " bytes received " + port.getBytesReceived() + "distance " + data);
 		return Integer.parseInt(data); // Return data as integer
 	}
 	
@@ -140,7 +140,8 @@ public class LIDAR implements Updatable {
 			}
 		}
 		catch (Exception e) {
-			logger.e("Error updating LIDAR: " + e.getMessage());
+			logger.e("Error updating LIDAR: ");
+			e.printStackTrace();
 		}
 	}
 	
