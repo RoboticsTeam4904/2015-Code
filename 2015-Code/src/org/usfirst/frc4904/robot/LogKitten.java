@@ -21,7 +21,19 @@ public class LogKitten {
 	public static KittenLevel DEFAULT_LOG_LEVEL = LEVEL_VERBOSE;
 	public static KittenLevel DEFAULT_PRINT_LEVEL = LEVEL_WARN;
 	private static String LOG_PATH = "/home/lvuser/logs/";
+	private static final int METHOD_CONSTRUCTOR = 3;
+	private static final int METHOD_LOGGER = 4;
 	
+	/**
+	 * Gives birth to a new LogKitten instance - 4904's logging class
+	 * 
+	 * @param identifier
+	 *        a string to identify the subject of the logs
+	 * @param logLevel
+	 *        the minimum KittenLevel (exposed publicly from LogKitten) which messages will be streamed to a file
+	 * @param printLevel
+	 *        the minimum KittenLevel (exposed publicly from LogKitten) which messages will be printed to the console
+	 */
 	public LogKitten(String identifier, KittenLevel logLevel, KittenLevel printLevel) {
 		this.identifier = identifier;
 		this.logLevel = logLevel;
@@ -46,43 +58,94 @@ public class LogKitten {
 		this.printLevel = printLevel;
 	}
 	
+	/**
+	 * New LogKitten with default logLevel and specified printLevel
+	 * 
+	 * @param identifier
+	 * @param printLevel
+	 */
 	public LogKitten(String identifier, KittenLevel printLevel) {
 		this(identifier, DEFAULT_LOG_LEVEL, printLevel);
 	}
 	
+	/**
+	 * New LogKitten with default log and print level
+	 * 
+	 * @param identifier
+	 */
 	public LogKitten(String identifier) {
 		this(identifier, DEFAULT_PRINT_LEVEL);
 	}
 	
-	// If no identifier is given, use caller class name
+	/**
+	 * New LogKitten with caller class name as identifier
+	 * 
+	 * @param logLevel
+	 * @param printLevel
+	 */
 	public LogKitten(KittenLevel logLevel, KittenLevel printLevel) {
-		this(getCallerConstructor(), logLevel, printLevel);
+		this(getCallerMethodName(METHOD_CONSTRUCTOR), logLevel, printLevel);
 	}
 	
+	/**
+	 * New LogKitten with caller class name as identifier and default logLevel
+	 * 
+	 * @param printLevel
+	 */
 	public LogKitten(KittenLevel printLevel) {
-		this(getCallerConstructor(), printLevel);
+		this(getCallerMethodName(METHOD_CONSTRUCTOR), printLevel);
 	}
 	
+	/**
+	 * New LogKitten with caller class name as identifier and default log and print levels
+	 */
 	public LogKitten() {
-		this(getCallerConstructor());
+		this(getCallerMethodName(METHOD_CONSTRUCTOR));
 	}
 	
-	public static String getCallerConstructor() {
-		return Thread.currentThread().getStackTrace()[3].getClassName().replaceAll("^.*\\.", "");
+	/**
+	 * Get the name of a method's caller
+	 * 
+	 * @param methodType
+	 *        either METHOD_CONSTRUCTOR if the callee is the constuctor or METHOD_LOGGER if the callee is f, e, w, v, d
+	 * @return the name of the caller method as a string
+	 */
+	private static String getCallerMethodName(int methodType) {
+		switch (methodType) {
+			case METHOD_CONSTRUCTOR:
+				return Thread.currentThread().getStackTrace()[METHOD_CONSTRUCTOR].getClassName().replaceAll("^.*\\.", "");
+			case METHOD_LOGGER:
+				return Thread.currentThread().getStackTrace()[METHOD_LOGGER].getMethodName();
+		}
+		return "";
 	}
 	
-	public static String getCallerMethod() {
-		return Thread.currentThread().getStackTrace()[4].getMethodName();
-	}
-	
+	/**
+	 * Set the default level for which logs will be streamed to a file (for all LogKitten instances)
+	 * 
+	 * @param DEFAULT_LOG_LEVEL
+	 *        default write-to-file level
+	 */
 	public static void setDefaultLogLevel(KittenLevel DEFAULT_LOG_LEVEL) {
 		LogKitten.DEFAULT_LOG_LEVEL = DEFAULT_LOG_LEVEL;
 	}
 	
+	/**
+	 * Set the default level for which logs will be printed to the console (for all LogKitten instances)
+	 * 
+	 * @param DEFAULT_PRINT_LEVEL
+	 *        default console log level
+	 */
 	public static void setDefaultPrintLevel(KittenLevel DEFAULT_PRINT_LEVEL) {
 		LogKitten.DEFAULT_PRINT_LEVEL = DEFAULT_PRINT_LEVEL;
 	}
 	
+	/**
+	 * Set the logfile path for all LogKitten instances
+	 * 
+	 * @param LOG_PATH
+	 *        logfile path as a string
+	 */
 	public static void setLogPath(String LOG_PATH) {
 		LogKitten.LOG_PATH = LOG_PATH;
 	}
@@ -90,7 +153,7 @@ public class LogKitten {
 	private void logMessage(String message, KittenLevel level) {
 		if (logLevel.compareTo(level) >= 0) {
 			try {
-				String content = timestamp() + " " + level.getName() + ": " + getCallerMethod() + ": " + message + " \n";
+				String content = timestamp() + " " + level.getName() + ": " + getCallerMethodName(METHOD_LOGGER) + ": " + message + " \n";
 				fileOutput.write(content.getBytes());
 				fileOutput.flush();
 			}
@@ -100,30 +163,63 @@ public class LogKitten {
 			}
 		}
 		if (printLevel.compareTo(level) >= 0) {
-			System.out.println(identifier + " " + level.getName() + ": " + getCallerMethod() + ": " + message + " \n");
+			System.out.println(identifier + " " + level.getName() + ": " + getCallerMethodName(METHOD_LOGGER) + ": " + message + " \n");
 		}
 	}
 	
+	/**
+	 * Log message at level LEVEL_FATAL
+	 * 
+	 * @param message
+	 *        the message to log
+	 */
 	public void f(String message) { // Log fatal message
 		logMessage(message, LEVEL_FATAL);
 	}
 	
+	/**
+	 * Log message at level LEVEL_ERROR
+	 * 
+	 * @param message
+	 *        the message to log
+	 */
 	public void e(String message) { // Log error message
 		logMessage(message, LEVEL_ERROR);
 	}
 	
+	/**
+	 * Log message at level LEVEL_FATAL
+	 * 
+	 * @param message
+	 *        the message to log
+	 */
 	public void w(String message) { // Log warn message
 		logMessage(message, LEVEL_WARN);
 	}
 	
+	/**
+	 * Log message at level LEVEL_VERBOSE
+	 * 
+	 * @param message
+	 *        the message to log
+	 */
 	public void v(String message) { // Log verbose message
 		logMessage(message, LEVEL_VERBOSE);
 	}
 	
+	/**
+	 * Log message at level LEVEL_DEBUG
+	 * 
+	 * @param message
+	 *        the message to log
+	 */
 	public void d(String message) { // Log debug message
 		logMessage(message, LEVEL_DEBUG);
 	}
 	
+	/**
+	 * Tries to close the logfile stream
+	 */
 	public void clean() {
 		try {
 			fileOutput.close();
@@ -134,6 +230,11 @@ public class LogKitten {
 		}
 	}
 	
+	/**
+	 * Get a timestamp for the current datetime - me-wow!
+	 * 
+	 * @return timestamp as string in the format "YEAR-MONTH-DAY_HOUR:MIN:SEC"
+	 */
 	private String timestamp() {
 		Calendar now = Calendar.getInstance();
 		String timestamp = Integer.toString(now.get(Calendar.YEAR));
@@ -149,23 +250,45 @@ public class LogKitten {
 		private String name;
 		private int severity;
 		
+		/**
+		 * Construct a new KittenLevel instance
+		 * 
+		 * @param name
+		 * @param severity
+		 */
 		public KittenLevel(String name, int severity) {
 			this.severity = severity;
 			this.name = name;
 		}
 		
+		/**
+		 * Get the level severity
+		 * 
+		 * @return the level severity as an int
+		 */
 		public int getSeverity() {
 			return severity;
 		}
 		
+		/**
+		 * Get the level name
+		 * 
+		 * @return level name as a string
+		 */
 		public String getName() {
 			return name;
 		}
 		
+		/**
+		 * Compare the severity of two KittenLevels
+		 */
 		public int compare(KittenLevel o1, KittenLevel o2) {
-			return severity - o2.getSeverity();
+			return o1.getSeverity() - o2.getSeverity();
 		}
 		
+		/**
+		 * Compare the instance's severity to another KittenLevel
+		 */
 		public int compareTo(KittenLevel o) {
 			if (compare(this, o) > 0) {
 				return 1;
