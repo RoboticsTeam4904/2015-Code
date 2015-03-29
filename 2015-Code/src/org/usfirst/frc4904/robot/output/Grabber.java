@@ -137,8 +137,6 @@ public class Grabber extends Talon implements Disablable, Updatable, Overridable
 	private void checkPowerUsage() {
 		SmartDashboard.putNumber("Grabber Motor Current", pdp.getCurrent(PDP_PORT));
 		SmartDashboard.putNumber("Avg. Grabber Motor Current", avgCurrent());
-		logger.d("" + avgCurrent());
-		logger.d("" + grabberState);
 		pastAmperage[currentPosition++] = pdp.getCurrent(PDP_PORT);
 		currentPosition %= pastAmperage.length;
 		double currentCurrent = avgCurrent();
