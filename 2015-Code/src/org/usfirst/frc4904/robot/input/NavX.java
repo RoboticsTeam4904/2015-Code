@@ -6,8 +6,18 @@ import edu.wpi.first.wpilibj.SerialPort;
 
 public class NavX extends AHRS {
 	public NavX() {
-		super(new SerialPort(57600, SerialPort.Port.kUSB));
+		super(constructSerialPortSafely());
 		super.zeroYaw();
+	}
+	
+	private static SerialPort constructSerialPortSafely() {
+		try {
+			return new SerialPort(57600, SerialPort.Port.kUSB);
+		}
+		catch (Error e) {
+			System.out.println("FATAL: Could not connect to NavX");
+			throw e;
+		}
 	}
 	
 	public float getYaw() {
