@@ -6,7 +6,7 @@ import org.usfirst.frc4904.robot.Updatable;
 import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class IMU extends NAVX implements PIDSource, Updatable {
+public class IMU extends NavX implements PIDSource, Updatable {
 	private double[] angles; // Angle 0 is perpendicular (yaw), Angle 1 is lateral (pitch), Angle 2 is longitudinal (roll)
 	private double[] lastAngles;
 	private double[] rate; // Same as above
