@@ -31,7 +31,13 @@ public class LIDAR implements Updatable {
 	public LIDAR() {
 		dists = new int[360];
 		logger = new LogKitten(LogKitten.LEVEL_DEBUG, LogKitten.LEVEL_DEBUG);
-		port = new SerialPort(115200, SerialPort.Port.kMXP);
+		try {
+			port = new SerialPort(115200, SerialPort.Port.kMXP);
+		}
+		catch (Error e) {
+			logger.f("Could not connect to LIDAR");
+			throw e;
+		}
 	}
 	
 	/**
