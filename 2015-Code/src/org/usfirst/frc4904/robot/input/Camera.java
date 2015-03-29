@@ -50,13 +50,6 @@ public class Camera implements Updatable {
 		criteria[0] = new NIVision.ParticleFilterCriteria2(NIVision.MeasurementType.MT_AREA_BY_IMAGE_AREA, AREA_MINIMUM, 100.0, 0, 0);
 	}
 	
-	/**
-	 * Check whether the camera is connected.
-	 * This method should be used before calling other camera methods, as they will return
-	 * null (or equivalent) results if the camera isn't connected.
-	 * 
-	 * @return boolean - true if the camera is connected.
-	 */
 	public boolean isConnected() {
 		return connectedSuccessfully;
 	}
