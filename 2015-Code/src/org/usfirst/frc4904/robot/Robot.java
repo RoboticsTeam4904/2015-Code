@@ -190,7 +190,7 @@ public class Robot extends SampleRobot {
 		}
 		operator = operatorManager.getSelected();
 		driver = driverManager.getSelected();
-		new Updater(this, state, new Updatable[] {}, slowUpdatePeriod).start(); // align is potentially slower
+		new Updater(this, state, new Updatable[] {align}, slowUpdatePeriod).start(); // align is potentially slower
 		startAlwaysUpdates(state);
 		// These should have fast updates
 		new Updater(this, state, new Updatable[] {driver, operator, mecanumDrive, lidar, frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel, grabber}, fastUpdatePeriod).start();
