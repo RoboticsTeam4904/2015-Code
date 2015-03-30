@@ -1,7 +1,6 @@
 package org.usfirst.frc4904.robot.input;
 
 
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
 import org.usfirst.frc4904.robot.LogKitten;
@@ -18,15 +17,25 @@ public class LIDAR implements Updatable {
 	private final LogKitten logger;
 	private final SerialPort port; // Serial port used to talk to the LIDAR,
 	private volatile int[] dists; // Array that contains distances to objects 360 degrees around the LIDAR.
-	private static final int width = 1280; // The width of the Hough transform coordinate system
-	private static final int height = 720; // The height of the Hough transform coordinate system
-	private static final double d = 5; // Settings from my screen
+	private static final int width = 1280 / 2; // The width of the Hough transform coordinate system
+	private static final int height = 720 / 2; // The height of the Hough transform coordinate system
+	private static final double scalingFactor = 5; // Factor to scale coordinates by so they fit within the width and height.
 	private static final int houghSensitivity = 30;
 	public static final int LIDAR_MOUNT_OFFSET = -100; // mm to right. Cartesian. Because.
 	public static final int GRABBER_LENGTH = 700; // Distance from LIDAR to grabber
 	public static final int GRABBER_LENGTH_OFFSET = GRABBER_LENGTH + 100; // Go an extra 100 mm (to tell if lines are the grabber or totes)
 	public static final int CORRECTED_ANGLE_BREADTH = 16; // How many angles to average when correcting an angle. Should be divisible by 4
 	public static final boolean DISABLED = false;
+	private static final double[] staticSinCache = new double[360];
+	private static final double[] staticCosCache = new double[360];
+	// Cache values
+	static {
+		for (int i = 0; i < 360; i++) {
+			double radians = i * Math.PI / 180;
+			staticCosCache[i] = Math.cos(radians + Math.PI / 2);
+			staticSinCache[i] = Math.sin(radians + Math.PI / 2);
+		}
+	}
 	
 	public LIDAR() {
 		dists = new int[360];
@@ -53,11 +62,9 @@ public class LIDAR implements Updatable {
 		// Make sure angle is within the correct range and shift it.
 		// The angle is shifted by 90 so that 0 is to the right (like a normal graph.)
 		// It is then modded. Lastly, we add 360 and mod again to account for negative angle inputs.
-		angle = (((angle + 270) % 360) + 360) % 360;
+		angle = ((angle + 270 + 360) % 360);
 		// Write to the port requesting distance at angle.
 		port.flush(); // Flush port to make sure we get the data we ask for
-		byte[] writeBuffer = BigInteger.valueOf(angle).toByteArray(); // Convert angle to byte array for writing to port
-		// port.write(writeBuffer, writeBuffer.length); // Write our angle to port (request data)
 		port.writeString(Integer.toString(angle) + "#");
 		// Read response.
 		while (port.getBytesReceived() < 2) {} // Wait till we receive the data
@@ -67,7 +74,7 @@ public class LIDAR implements Updatable {
 			return 0;
 		}
 		data = data.substring(0, data.indexOf('\n') - 1);
-		logger.d("Reading LIDAR at angle " + angle + " bytes sent " + writeBuffer.length + " bytes received " + port.getBytesReceived() + " distance " + data);
+		logger.d("Reading LIDAR at angle " + angle + " bytes received " + port.getBytesReceived() + " distance " + data);
 		return Integer.parseInt(data); // Return data as integer
 	}
 	
@@ -88,17 +95,16 @@ public class LIDAR implements Updatable {
 		long time = System.currentTimeMillis();
 		HoughTransform H = new HoughTransform(width, height); // Make a new Hough transform canvas
 		// For
-		for (int i = 0; i < 360; i++) {
+		for (int i = 0; i < 180; i++) {
 			if (dists[i] < 0 || dists[i] > 1500) {
-				dists[i] = 0;
+				continue;
 			}
 			int[] xy = getXY(i);
 			int x = xy[0];
 			int y = xy[1];
-			H.addPoint(x, y);
-			H.addPoint(x + 1, y); // We drew a 2x2 pixel square, wanted to emulate that
-			H.addPoint(x, y + 1); // so this is as similar to the GUI version as possible
-			H.addPoint(x + 1, y + 1);
+			if (x != 0 || y != 0) {
+				H.addPoint(x, y);
+			}
 		}
 		System.out.println(System.currentTimeMillis() - time);
 		ArrayList<int[]> inFront = new ArrayList<int[]>();
@@ -153,9 +159,8 @@ public class LIDAR implements Updatable {
 	}
 	
 	public int[] getXY(int angle) {
-		double radians = angle * Math.PI / 180;
-		int x = (int) (width / 2 + Math.cos(radians + Math.PI / 2) * dists[angle] / d);
-		int y = (int) (height / 2 - Math.sin(radians + Math.PI / 2) * dists[angle] / d);
+		int x = (int) (width / 2 + staticCosCache[angle] * dists[angle] / scalingFactor);
+		int y = (int) (height / 2 - staticSinCache[angle] * dists[angle] / scalingFactor);
 		return new int[] {x, y};
 	}
 	
@@ -231,7 +236,9 @@ public class LIDAR implements Updatable {
 			int max = greenSensitivityPixels * greenSensitivityPixels;// We only want points closer than the sensitivity
 			int maxInd = -1;// Index of the closest point
 			for (int i = 0; i < 360; i++) {
-				int dist = (X[i] - x) * (X[i] - x) + (Y[i] - y) * (Y[i] - y);
+				int xx = X[i] - x;
+				int yy = Y[i] - y;
+				int dist = xx * xx + yy * yy;
 				if (dist < max) {
 					max = dist;
 					maxInd = i;
