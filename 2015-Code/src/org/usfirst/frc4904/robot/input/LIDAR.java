@@ -53,7 +53,7 @@ public class LIDAR implements Updatable {
 		// Make sure angle is within the correct range and shift it.
 		// The angle is shifted by 90 so that 0 is to the right (like a normal graph.)
 		// It is then modded. Lastly, we add 360 and mod again to account for negative angle inputs.
-		angle = (((angle - 90) % 360) + 360) % 360;
+		angle = (((angle + 270) % 360) + 360) % 360;
 		// Write to the port requesting distance at angle.
 		port.flush(); // Flush port to make sure we get the data we ask for
 		byte[] writeBuffer = BigInteger.valueOf(angle).toByteArray(); // Convert angle to byte array for writing to port
