@@ -65,6 +65,8 @@ public class AutoAlign implements Updatable {
 		double yTargetCenter = (toteFront[3] + toteFront[1]) / 2.0; // The center of the target tote is the X coordinate of the midpoint of the line.
 		double angle = Math.atan2(toteFront[3] - toteFront[1], toteFront[2] - toteFront[0]) - (Math.PI / 2.0); // Angle of the tote relative to the Y axis (straight line forward from the LIDAR)
 		logger.v("Current angle: " + Double.toString(angle));
+		logger.v("Line coordinates " + xTargetCenter + " " + yTargetCenter);
+		System.out.println(System.currentTimeMillis());
 		if (Math.abs(angle) <= ALIGN_CLOSE_ANGLE) { // "Close" alignment mode. Will not turn and move forward and sideways at a slow, fixed rate.
 			double xSpeed = 0;
 			double ySpeed = 0;
@@ -114,6 +116,7 @@ public class AutoAlign implements Updatable {
 			}
 			mecanum.setDesiredXYSpeed(xSpeed, ySpeed); // Move at desired X and Y speeds
 			mecanum.setDesiredTurnSpeed(turnSpeed); // Move at desired turn speed
+			System.out.println(xSpeed + " | " + ySpeed + " | " + turnSpeed);
 		}
 	}
 	
@@ -122,6 +125,7 @@ public class AutoAlign implements Updatable {
 	 * This will do an alignment tick if the system is currently aligning.
 	 */
 	public synchronized void update() {
+		System.out.println(System.currentTimeMillis());
 		if (isCurrentlyAligning()) {
 			alignWithToteTick();
 		}

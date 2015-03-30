@@ -30,7 +30,7 @@ public class LIDAR implements Updatable {
 	
 	public LIDAR() {
 		dists = new int[360];
-		logger = new LogKitten(LogKitten.LEVEL_DEBUG, LogKitten.LEVEL_DEBUG);
+		logger = new LogKitten(LogKitten.LEVEL_ERROR);
 		try {
 			port = new SerialPort(115200, SerialPort.Port.kMXP);
 		}
@@ -85,6 +85,7 @@ public class LIDAR implements Updatable {
 	 *         E.g. [3, 1, 7, 7] means a line with endpoints (3, 1) and (7, 7).
 	 */
 	public int[] getLine() {
+		long time = System.currentTimeMillis();
 		HoughTransform H = new HoughTransform(width, height); // Make a new Hough transform canvas
 		// For
 		for (int i = 0; i < 360; i++) {
@@ -99,6 +100,7 @@ public class LIDAR implements Updatable {
 			H.addPoint(x, y + 1); // so this is as similar to the GUI version as possible
 			H.addPoint(x + 1, y + 1);
 		}
+		System.out.println(System.currentTimeMillis() - time);
 		ArrayList<int[]> inFront = new ArrayList<int[]>();
 		for (HoughLine line : H.getLines(houghSensitivity)) {
 			logger.v("Checking a line");
@@ -112,6 +114,7 @@ public class LIDAR implements Updatable {
 				inFront.add(tmpcoords);
 			}
 		}
+		System.out.println(System.currentTimeMillis() - time);
 		// TODO check the length of the lines to see which is the most reasonable
 		logger.v("Line: " + Integer.toString(inFront.get(0)[0]) + " " + Integer.toString(inFront.get(0)[1]) + " " + Integer.toString(inFront.get(0)[2]) + " " + Integer.toString(inFront.get(0)[3]));
 		return inFront.get(0);
