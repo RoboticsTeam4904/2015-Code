@@ -51,18 +51,18 @@ void loop() {
   }
   
   if(Serial.available() > 0) {
-    int angle = Serial.parseInt();
-    Serial.println(distance_array[angle]);
-    while(Serial.available() > 0) Serial.read();
+    int requestedAngle = Serial.parseInt();
+    Serial.println(distance_array[requestedAngle]);
+    Serial.flush();
   }
   
   if(Serial2.available() > 0) {
-    int angle = Serial2.parseInt();
-    Serial.print(angle);
+    int requestedAngle = Serial2.parseInt();
+    Serial.print(requestedAngle);
     Serial.print(" ");
-    Serial2.print(distance_array[angle]);
-    Serial.println(distance_array[angle]);
-    while(Serial2.available() > 0) Serial2.read();
+    Serial2.println(distance_array[requestedAngle]);
+    Serial.println(distance_array[requestedAngle]);
+    Serial2.flush();
   }
 
   if(Serial1.available() > 0) {

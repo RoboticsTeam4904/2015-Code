@@ -63,7 +63,7 @@ public class AutoAlign implements Updatable {
 		int[] toteFront = lidar.getLine(); // Get the line that represents the tote (hopefully) from the LIDAR
 		double xTargetCenter = ((toteFront[2] + toteFront[0]) / 2.0) - LIDAR.LIDAR_MOUNT_OFFSET; // The center of the target tote is the X coordinate of the midpoint of the line. Shifted to make coordinate system centered around robot and not LIDAR.
 		double yTargetCenter = (toteFront[3] + toteFront[1]) / 2.0; // The center of the target tote is the X coordinate of the midpoint of the line.
-		double angle = Math.atan2(yTargetCenter, xTargetCenter) - (Math.PI / 2.0); // Angle of the tote relative to the Y axis (straight line forward from the LIDAR)
+		double angle = Math.atan2(toteFront[3] - toteFront[1], toteFront[2] - toteFront[0]) - (Math.PI / 2.0); // Angle of the tote relative to the Y axis (straight line forward from the LIDAR)
 		logger.v("Current angle: " + Double.toString(angle));
 		if (Math.abs(angle) <= ALIGN_CLOSE_ANGLE) { // "Close" alignment mode. Will not turn and move forward and sideways at a slow, fixed rate.
 			double xSpeed = 0;
