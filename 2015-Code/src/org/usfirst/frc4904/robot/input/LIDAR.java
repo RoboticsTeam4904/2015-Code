@@ -154,7 +154,7 @@ public class LIDAR implements Updatable {
 			for (int i = 0; i < 360; i++) { // We only want the area in front of the LIDAR
 				int data = read(i);
 				if (data != 0) {
-					dists[i] = read(i);
+					dists[i] = data;
 				}
 			}
 		}
