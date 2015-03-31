@@ -18,11 +18,11 @@ public class LIDAR implements Updatable {
 	private final SerialPort port; // Serial port used to talk to the LIDAR,
 	private volatile int[] dists; // Array that contains distances to objects 360 degrees around the LIDAR.
 	private volatile long[] distUpdateTime; // Array that represents the number of milliseconds since each distance was updated
-	private static final int width = 1280 / 2; // The width of the Hough transform coordinate system
-	private static final int height = 720 / 2; // The height of the Hough transform coordinate system
-	private static final double scalingFactor = 5; // Factor to scale coordinates by so they fit within the width and height.
-	private static final int houghSensitivity = 30;
-	private static final int dataSaveTime = 5000; // Amount of time to save LIDAR data (ms).
+	private static final int HOUGH_WIDTH = 1280 / 2; // The width of the Hough transform coordinate system
+	private static final int HOUGH_HEIGHT = 720 / 2; // The height of the Hough transform coordinate system
+	private static final double HOUGH_SCALING_FACTOR = 5; // Factor to scale coordinates by so they fit within the width and height.
+	private static final int HOUGH_SENSITIVITY = 30;
+	private static final int DATA_SAVE_TIME = 5000; // Amount of time to save LIDAR data (ms).
 	public static final int LIDAR_MOUNT_OFFSET = -100; // mm to right. Cartesian. Because.
 	public static final int GRABBER_LENGTH = 700; // Distance from LIDAR to grabber
 	public static final int GRABBER_LENGTH_OFFSET = GRABBER_LENGTH + 100; // Go an extra 100 mm (to tell if lines are the grabber or totes)
@@ -95,7 +95,7 @@ public class LIDAR implements Updatable {
 	 */
 	public int[] getLine() {
 		long time = System.currentTimeMillis();
-		HoughTransform H = new HoughTransform(width, height); // Make a new Hough transform canvas
+		HoughTransform H = new HoughTransform(HOUGH_WIDTH, HOUGH_HEIGHT); // Make a new Hough transform canvas
 		// For
 		System.out.println("OCTOTHORPDANKSTART" + time);
 		for (int i = 0; i < 180; i++) {
@@ -113,7 +113,7 @@ public class LIDAR implements Updatable {
 		System.out.println("OCTOTHORPDANKEND" + time);
 		System.out.println(System.currentTimeMillis() - time);
 		ArrayList<int[]> inFront = new ArrayList<int[]>();
-		for (HoughLine line : H.getLines(houghSensitivity)) {
+		for (HoughLine line : H.getLines(HOUGH_SENSITIVITY)) {
 			logger.v("Checking a line");
 			int[] tmpcoords = new int[4];
 			tmpcoords = line.getCoordinates();
@@ -158,7 +158,7 @@ public class LIDAR implements Updatable {
 				if (data != 0) {
 					dists[i] = data;
 					distUpdateTime[i] = System.currentTimeMillis();
-				} else if (dists[i] != 0 && distUpdateTime[i] < System.currentTimeMillis() + dataSaveTime) {
+				} else if (dists[i] != 0 && distUpdateTime[i] < System.currentTimeMillis() + DATA_SAVE_TIME) {
 					dists[i] = 0; // If the data is not updated for x seconds, replace it with 0 in order to prevent hough transform from getting weird.
 				}
 			}
@@ -170,8 +170,8 @@ public class LIDAR implements Updatable {
 	}
 	
 	public int[] getXY(int angle) {
-		int x = (int) (width / 2 + staticCosCache[angle] * dists[angle] / scalingFactor);
-		int y = (int) (height / 2 - staticSinCache[angle] * dists[angle] / scalingFactor);
+		int x = (int) (HOUGH_WIDTH / 2 + staticCosCache[angle] * dists[angle] / HOUGH_SCALING_FACTOR);
+		int y = (int) (HOUGH_HEIGHT / 2 - staticSinCache[angle] * dists[angle] / HOUGH_SCALING_FACTOR);
 		return new int[] {x, y};
 	}
 	
@@ -206,10 +206,10 @@ public class LIDAR implements Updatable {
 				Y[i] = xy[1];
 			}
 			// During processing h_h is doubled so that -ve r values
-			int houghHeight = (int) (Math.sqrt(2) * Math.max(height, width)) / 2;
+			int houghHeight = (int) (Math.sqrt(2) * Math.max(HOUGH_HEIGHT, HOUGH_WIDTH)) / 2;
 			// Find edge points and vote in array
-			float centerX = width / 2;
-			float centerY = height / 2;
+			float centerX = HOUGH_WIDTH / 2;
+			float centerY = HOUGH_HEIGHT / 2;
 			// Draw edges in output array
 			double tsin = thetaSin;
 			double tcos = thetaCos;
@@ -217,17 +217,17 @@ public class LIDAR implements Updatable {
 			boolean inLine = false;
 			if (theta < Math.PI * 0.25 || theta > Math.PI * 0.75) {
 				// Draw vertical-ish lines
-				for (int y = 0; y < height; y++) {
+				for (int y = 0; y < HOUGH_HEIGHT; y++) {
 					int x = (int) ((r - houghHeight - (y - centerY) * tsin) / tcos + centerX);
-					if (x < width && x >= 0) {
+					if (x < HOUGH_WIDTH && x >= 0) {
 						inLine = process(x, y, X, Y, me, inLine);
 					}
 				}
 			} else {
 				// Draw horizontal-sh lines
-				for (int x = 0; x < width; x++) {
+				for (int x = 0; x < HOUGH_WIDTH; x++) {
 					int y = (int) ((r - houghHeight - (x - centerX) * tcos) / tsin + centerY);
-					if (y < height && y >= 0) {
+					if (y < HOUGH_HEIGHT && y >= 0) {
 						inLine = process(x, y, X, Y, me, inLine);
 					}
 				}
