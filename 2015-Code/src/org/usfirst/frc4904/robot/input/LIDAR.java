@@ -17,10 +17,12 @@ public class LIDAR implements Updatable {
 	private final LogKitten logger;
 	private final SerialPort port; // Serial port used to talk to the LIDAR,
 	private volatile int[] dists; // Array that contains distances to objects 360 degrees around the LIDAR.
+	private volatile long[] distUpdateTime; // Array that represents the number of milliseconds since each distance was updated
 	private static final int width = 1280 / 2; // The width of the Hough transform coordinate system
 	private static final int height = 720 / 2; // The height of the Hough transform coordinate system
 	private static final double scalingFactor = 5; // Factor to scale coordinates by so they fit within the width and height.
 	private static final int houghSensitivity = 30;
+	private static final int dataSaveTime = 5000; // Amount of time to save LIDAR data (ms).
 	public static final int LIDAR_MOUNT_OFFSET = -100; // mm to right. Cartesian. Because.
 	public static final int GRABBER_LENGTH = 700; // Distance from LIDAR to grabber
 	public static final int GRABBER_LENGTH_OFFSET = GRABBER_LENGTH + 100; // Go an extra 100 mm (to tell if lines are the grabber or totes)
@@ -155,6 +157,9 @@ public class LIDAR implements Updatable {
 				int data = read(i);
 				if (data != 0) {
 					dists[i] = data;
+					distUpdateTime[i] = System.currentTimeMillis();
+				} else if (dists[i] != 0 && distUpdateTime[i] < System.currentTimeMillis() + dataSaveTime) {
+					dists[i] = 0; // If the data is not updated for x seconds, replace it with 0 in order to prevent hough transform from getting weird.
 				}
 			}
 		}
