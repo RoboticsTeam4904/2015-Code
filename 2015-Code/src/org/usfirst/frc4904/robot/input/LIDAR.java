@@ -39,7 +39,7 @@ public class LIDAR implements Updatable {
 	
 	public LIDAR() {
 		dists = new int[360];
-		logger = new LogKitten(LogKitten.LEVEL_ERROR);
+		logger = new LogKitten(LogKitten.LEVEL_WARN);
 		try {
 			port = new SerialPort(115200, SerialPort.Port.kMXP);
 		}
@@ -95,6 +95,7 @@ public class LIDAR implements Updatable {
 		long time = System.currentTimeMillis();
 		HoughTransform H = new HoughTransform(width, height); // Make a new Hough transform canvas
 		// For
+		System.out.println("OCTOTHORPDANKSTART" + time);
 		for (int i = 0; i < 180; i++) {
 			if (dists[i] < 0 || dists[i] > 1500) {
 				continue;
@@ -102,10 +103,12 @@ public class LIDAR implements Updatable {
 			int[] xy = getXY(i);
 			int x = xy[0];
 			int y = xy[1];
-			if (x != 0 || y != 0) {
+			if (x != 320 && y != 180) {
 				H.addPoint(x, y);
+				System.out.println("#dank" + time + "," + x + "," + y);
 			}
 		}
+		System.out.println("OCTOTHORPDANKEND" + time);
 		System.out.println(System.currentTimeMillis() - time);
 		ArrayList<int[]> inFront = new ArrayList<int[]>();
 		for (HoughLine line : H.getLines(houghSensitivity)) {
@@ -122,7 +125,7 @@ public class LIDAR implements Updatable {
 		}
 		System.out.println(System.currentTimeMillis() - time);
 		// TODO check the length of the lines to see which is the most reasonable
-		logger.v("Line: " + Integer.toString(inFront.get(0)[0]) + " " + Integer.toString(inFront.get(0)[1]) + " " + Integer.toString(inFront.get(0)[2]) + " " + Integer.toString(inFront.get(0)[3]));
+		// if (inFront.isEmpty()) logger.w("Line: " + Integer.toString(inFront.get(0)[0]) + " " + Integer.toString(inFront.get(0)[1]) + " " + Integer.toString(inFront.get(0)[2]) + " " + Integer.toString(inFront.get(0)[3]));
 		return inFront.get(0);
 	}
 	
@@ -148,8 +151,11 @@ public class LIDAR implements Updatable {
 		}
 		logger.d("Updating LIDAR");
 		try {
-			for (int i = 0; i < 180; i++) { // We only want the area in front of the LIDAR
-				dists[i] = read(i);
+			for (int i = 0; i < 360; i++) { // We only want the area in front of the LIDAR
+				int data = read(i);
+				if (data != 0) {
+					dists[i] = read(i);
+				}
 			}
 		}
 		catch (Exception e) {
@@ -166,12 +172,16 @@ public class LIDAR implements Updatable {
 	
 	public class HoughLine {
 		double theta;
+		double thetaSin;
+		double thetaCos;
 		double r;
 		static final int greenSensitivityPixels = 5;
 		
-		public HoughLine(double theta, double r) {
+		public HoughLine(double theta, double r, double thetaSin, double thetaCos) {
 			this.theta = theta;
 			this.r = r;
+			this.thetaSin = thetaSin;
+			this.thetaCos = thetaCos;
 		}
 		
 		/**
@@ -196,8 +206,8 @@ public class LIDAR implements Updatable {
 			float centerX = width / 2;
 			float centerY = height / 2;
 			// Draw edges in output array
-			double tsin = Math.sin(theta);
-			double tcos = Math.cos(theta);
+			double tsin = thetaSin;
+			double tcos = thetaCos;
 			ArrayList<ArrayList<int[]>> me = new ArrayList<ArrayList<int[]>>();// All the segments in this line
 			boolean inLine = false;
 			if (theta < Math.PI * 0.25 || theta > Math.PI * 0.75) {
@@ -385,8 +395,10 @@ public class LIDAR implements Updatable {
 						}
 						// calculate the true value of theta
 						double theta = t * thetaStep;
+						double thetaSin = staticSinCache[t];
+						double thetaCos = staticCosCache[t];
 						// add the line to the vector
-						lines.add(new HoughLine(theta, r));
+						lines.add(new HoughLine(theta, r, thetaSin, thetaCos));
 					}
 				}
 			}
