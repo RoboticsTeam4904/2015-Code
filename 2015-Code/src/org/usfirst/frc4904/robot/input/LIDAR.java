@@ -81,6 +81,8 @@ public class LIDAR implements Updatable {
 	}
 	
 	/**
+	 * Returns the array of distances around the LIDAR. 90 is straight forward. Returns an updated array, so it returns quickly.
+	 * 
 	 * @return An int array of distances 360 degrees around the LIDAR.
 	 */
 	public int[] getDists() {
@@ -88,7 +90,7 @@ public class LIDAR implements Updatable {
 	}
 	
 	/**
-	 * Uses a Hough transform to get the most prominent line the LIDAR can see.
+	 * Uses a Hough transform to get the most prominent line the LIDAR can see. The Hough transform is done when this function is called, so it can be slow.
 	 * 
 	 * @return An int array of length 4, containing two ordered pairs with the XY coordinates of the line endpoints.
 	 *         E.g. [3, 1, 7, 7] means a line with endpoints (3, 1) and (7, 7).
