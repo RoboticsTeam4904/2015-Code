@@ -112,7 +112,7 @@ public class LIDAR implements Updatable {
 		}
 		System.out.println("OCTOTHORPDANKEND" + time);
 		System.out.println(System.currentTimeMillis() - time);
-		ArrayList<int[]> inFront = new ArrayList<int[]>();
+		ArrayList<HoughLine> inFront = new ArrayList<HoughLine>();
 		for (HoughLine line : H.getLines(HOUGH_SENSITIVITY)) {
 			logger.v("Checking a line");
 			int[] tmpcoords = new int[4];
@@ -121,13 +121,14 @@ public class LIDAR implements Updatable {
 				// If the two Y coordinates are positive.
 				// assume that this is a line that we like, because it's in front of the sensor 0 degrees (offset to 90 degrees)
 				logger.v("Added line");
-				inFront.add(tmpcoords);
+				inFront.add(line);
 			}
 		}
 		System.out.println(System.currentTimeMillis() - time);
 		// TODO check the length of the lines to see which is the most reasonable
 		// if (inFront.isEmpty()) logger.w("Line: " + Integer.toString(inFront.get(0)[0]) + " " + Integer.toString(inFront.get(0)[1]) + " " + Integer.toString(inFront.get(0)[2]) + " " + Integer.toString(inFront.get(0)[3]));
-		return inFront.get(0);
+		System.out.println(inFront.get(0).getLength());
+		return inFront.get(0).getCoordinates();
 	}
 	
 	/**
@@ -244,6 +245,11 @@ public class LIDAR implements Updatable {
 			int[] A = a.get(0);
 			int[] B = a.get(a.size() - 1);
 			return new int[] {A[1], A[2], B[1], B[2]};
+		}
+		
+		public double getLength() {
+			int xy[] = getCoordinates();
+			return Math.sqrt((xy[2] - xy[0]) * (xy[2] - xy[0]) + (xy[3] = xy[1]) * (xy[3] = xy[1]));
 		}
 		
 		public boolean process(int x, int y, int[] X, int[] Y, ArrayList<ArrayList<int[]>> me, boolean inLine) {
