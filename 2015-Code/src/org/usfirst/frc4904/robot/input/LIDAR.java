@@ -28,14 +28,14 @@ public class LIDAR implements Updatable {
 	public static final int GRABBER_LENGTH_OFFSET = GRABBER_LENGTH + 100; // Go an extra 100 mm (to tell if lines are the grabber or totes)
 	public static final int CORRECTED_ANGLE_BREADTH = 16; // How many angles to average when correcting an angle. Should be divisible by 4
 	public static final boolean DISABLED = false;
-	private static final double[] staticSinCache = new double[360];
-	private static final double[] staticCosCache = new double[360];
+	private static final double[] sinCache = new double[360];
+	private static final double[] cosCache = new double[360];
 	// Cache values
 	static {
 		for (int i = 0; i < 360; i++) {
 			double radians = i * Math.PI / 180;
-			staticCosCache[i] = Math.cos(radians + Math.PI / 2);
-			staticSinCache[i] = Math.sin(radians + Math.PI / 2);
+			cosCache[i] = Math.cos(radians);
+			sinCache[i] = Math.sin(radians);
 		}
 	}
 	
@@ -171,8 +171,8 @@ public class LIDAR implements Updatable {
 	}
 	
 	public int[] getXY(int angle) {
-		int x = (int) (HOUGH_WIDTH / 2 + staticCosCache[angle] * dists[angle] / HOUGH_SCALING_FACTOR);
-		int y = (int) (HOUGH_HEIGHT / 2 - staticSinCache[angle] * dists[angle] / HOUGH_SCALING_FACTOR);
+		int x = (int) (HOUGH_WIDTH / 2 + cosCache[angle] * dists[angle] / HOUGH_SCALING_FACTOR);
+		int y = (int) (HOUGH_HEIGHT / 2 - sinCache[angle] * dists[angle] / HOUGH_SCALING_FACTOR);
 		return new int[] {x, y};
 	}
 	
@@ -297,9 +297,6 @@ public class LIDAR implements Updatable {
 		protected int doubleHeight;
 		// the number of points that have been added
 		protected int numPoints;
-		// cache of values of sin and cos for different theta values. Has a significant performance improvement.
-		private double[] sinCache;
-		private double[] cosCache;
 		
 		/**
 		 * Initializes the hough transform. The dimensions of the input image are
@@ -334,14 +331,6 @@ public class LIDAR implements Updatable {
 			centerY = height / 2;
 			// Count how many points there are
 			numPoints = 0;
-			// Cache the values of sin and cos for faster processing
-			sinCache = new double[maxTheta];
-			cosCache = sinCache.clone();
-			for (int t = 0; t < maxTheta; t++) {
-				double realTheta = t * thetaStep;
-				sinCache[t] = Math.sin(realTheta);
-				cosCache[t] = Math.cos(realTheta);
-			}
 		}
 		
 		/**
@@ -406,8 +395,8 @@ public class LIDAR implements Updatable {
 						}
 						// calculate the true value of theta
 						double theta = t * thetaStep;
-						double thetaSin = staticSinCache[t];
-						double thetaCos = staticCosCache[t];
+						double thetaSin = sinCache[t];
+						double thetaCos = cosCache[t];
 						// add the line to the vector
 						lines.add(new HoughLine(theta, r, thetaSin, thetaCos));
 					}
