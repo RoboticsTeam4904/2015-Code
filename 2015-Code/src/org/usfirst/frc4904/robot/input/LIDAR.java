@@ -101,16 +101,14 @@ public class LIDAR implements Updatable {
 		// For
 		System.out.println("OCTOTHORPDANKSTART" + time);
 		for (int i = 0; i < 180; i++) {
-			if (dists[i] < 0 || dists[i] > 1500) {
+			if (dists[i] <= 0 || dists[i] > 1500) {
 				continue;
 			}
 			int[] xy = getXY(i);
 			int x = xy[0];
 			int y = xy[1];
-			if (x != 320 && y != 180) {
-				H.addPoint(x, y);
-				System.out.println("#dank" + time + "," + x + "," + y);
-			}
+			H.addPoint(x, y);
+			System.out.println("#dank" + time + "," + x + "," + y);
 		}
 		System.out.println("OCTOTHORPDANKEND" + time);
 		System.out.println(System.currentTimeMillis() - time);
