@@ -127,7 +127,8 @@ public class LIDAR implements Updatable {
 		System.out.println(System.currentTimeMillis() - time);
 		// TODO check the length of the lines to see which is the most reasonable
 		// if (inFront.isEmpty()) logger.w("Line: " + Integer.toString(inFront.get(0)[0]) + " " + Integer.toString(inFront.get(0)[1]) + " " + Integer.toString(inFront.get(0)[2]) + " " + Integer.toString(inFront.get(0)[3]));
-		System.out.println(inFront.get(0).getLength());
+		int[] coords = inFront.get(0).getCoordinates();
+		System.out.println(inFront.get(0).getLength() + " " + coords[0] + "," + coords[1] + " " + coords[2] + "," + coords[3]);
 		return inFront.get(0).getCoordinates();
 	}
 	
