@@ -45,32 +45,33 @@ public class OperatorNachi extends Operator {
 			switch (stackingStep) {
 				case 1: // Just started - open grabber.
 					release();
-					stackingStep = 2;
-				case 2: // Wait for grabber to open.
-					if (grabber.getState() == Grabber.GrabberState.OPEN || grabber.getState() == Grabber.GrabberState.DISABLED) {
+					if (grabber.getState() == Grabber.GrabberState.OPEN || grabber.getState() == Grabber.GrabberState.DISABLED) {// Wait for grabber to open.
+						stackingStep = 2;
+					}
+					break;
+				case 2: // Go down 2 half-totes.
+					changeHeight(-2);
+					// Wait for winch to lower.
+					if (winch.onTarget()) {
 						stackingStep = 3;
 					}
-				case 3: // Go down 2 half-totes.
-					changeHeight(-2);
-					stackingStep = 4;
-				case 4: // Wait for winch to lower.
-					if (winch.onTarget()) {
-						stackingStep = 5;
-					}
-				case 5: // Close grabber.
+					break;
+				case 3: // Close grabber.
 					grab();
-					stackingStep = 6;
-				case 6: // Wait for grabber to close.
+					// Wait for grabber to close.
 					if (grabber.getState() == Grabber.GrabberState.CLOSED) {
-						stackingStep = 7;
+						stackingStep = 4;
 					}
-				case 7: // Go up 2 half-totes.
+					break;
+				case 4: // Go up 2 half-totes.
 					changeHeight(2);
-					stackingStep = 8;
-				case 8: // Wait for winch to rise.
+					// Wait for winch to rise.
 					if (winch.onTarget()) {
 						stackingStep = 0; // Done stacking.
 					}
+					break;
+				default:
+					break;
 			}
 		} else {
 			// When button 1 is pressed, toggle grabbing
