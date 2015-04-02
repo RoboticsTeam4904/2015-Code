@@ -16,7 +16,7 @@ public class OperatorNachi extends Operator {
 	}
 	
 	public synchronized void update() {
-		// E-kill on button 7
+		// Operator kill on button 7
 		if (stick.buttons[6].get()) {
 			disable();
 			logger.w("Robot killed by operator (Nachi)");
@@ -44,6 +44,7 @@ public class OperatorNachi extends Operator {
 			}
 			// Stack a tote. This involves a series of synchronous steps:
 			// Open the grabber, move down 2 half-totes, close the grabber, move up 2 half-totes.
+			logger.v("AutoStacking step " + stackingStep);
 			switch (stackingStep) {
 				case 1: // Just started - open grabber.
 					release();
