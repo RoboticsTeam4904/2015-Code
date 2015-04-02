@@ -16,12 +16,6 @@ public class OperatorNachi extends Operator {
 	}
 	
 	public synchronized void update() {
-		// E-kill on joystick disconnect
-		if (!stick.connected()) {
-			disable();
-			logger.w("Robot killed by joystick disconnect (Nachi)");
-			return;
-		}
 		// E-kill on button 8
 		if (stick.buttons[7].get()) {
 			disable();
