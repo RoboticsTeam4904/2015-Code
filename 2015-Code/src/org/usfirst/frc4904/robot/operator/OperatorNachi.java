@@ -39,7 +39,7 @@ public class OperatorNachi extends Operator {
 		}
 		// If we are stacking right now, ignore non-override buttons
 		if (stackingStep > 0) {
-			if (stick.buttons[1].get()) {
+			if (stick.buttons[0].get()) {
 				stackingStep = 0;
 			}
 			// Stack a tote. This involves a series of synchronous steps:
