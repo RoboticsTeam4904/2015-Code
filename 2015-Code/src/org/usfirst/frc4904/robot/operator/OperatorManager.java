@@ -14,8 +14,8 @@ public class OperatorManager extends TypedNamedSendableChooser<Operator> {
 	
 	public OperatorManager(LogitechJoystick stick, Winch winch, AutoAlign align, Grabber grabber) {
 		super();
-		addDefault(new OperatorGriffin());
-		addObject(new OperatorNachi());
+		addObject(new OperatorGriffin());
+		addDefault(new OperatorNachi());
 		Operator.passSensors(stick, winch, align, grabber);
 		logger = new LogKitten("OperatorManager", LogKitten.LEVEL_VERBOSE);
 		SmartDashboard.putData("Operator Chooser", this);
