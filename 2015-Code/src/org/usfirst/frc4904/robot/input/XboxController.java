@@ -91,9 +91,9 @@ public class XboxController extends Joystick {
 	public XboxController(final int port) {
 		super(port); // Extends Joystick...
 		// Make sure we are connected
-		if (!connected()) {
-			throw new Error("No Xbox controller found at port " + port);
-		}
+		// if (!connected()) {
+		// throw new Error("No Xbox controller found at port " + port);
+		// }
 		/* Initialize */
 		this.port = port;
 		this.controller = new Joystick(this.port); // Joystick referenced by everything
