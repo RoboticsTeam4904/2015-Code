@@ -16,8 +16,8 @@ public class OperatorNachi extends Operator {
 	}
 	
 	public synchronized void update() {
-		// E-kill on button 8
-		if (stick.buttons[7].get()) {
+		// E-kill on button 7
+		if (stick.buttons[6].get()) {
 			disable();
 			logger.w("Robot killed by operator (Nachi)");
 			return;

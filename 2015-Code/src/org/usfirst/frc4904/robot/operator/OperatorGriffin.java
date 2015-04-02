@@ -46,8 +46,8 @@ public class OperatorGriffin extends Operator {
 			grabber.disable();
 			logger.w("Grabber killed by operator (Griffin)");
 		}
-		// E-kill on button 8
-		if (stick.buttons[7].get()) {
+		// E-kill on button 7
+		if (stick.buttons[6].get()) {
 			disable();
 			logger.w("Robot killed by operator (Griffin)");
 		}
