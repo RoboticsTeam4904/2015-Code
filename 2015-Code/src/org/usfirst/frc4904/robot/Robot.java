@@ -5,7 +5,6 @@ import org.usfirst.frc4904.robot.autonomous.Autonomous;
 import org.usfirst.frc4904.robot.autonomous.AutonomousManager;
 import org.usfirst.frc4904.robot.driver.Driver;
 import org.usfirst.frc4904.robot.driver.DriverManager;
-import org.usfirst.frc4904.robot.input.Camera;
 import org.usfirst.frc4904.robot.input.IMU;
 import org.usfirst.frc4904.robot.input.LIDAR;
 import org.usfirst.frc4904.robot.input.LogitechJoystick;
@@ -48,8 +47,6 @@ public class Robot extends SampleRobot {
 	private static final double MECANUM_P_COEFFICIENT = 0.1;
 	private static final double MECANUM_I_COEFFICIENT = 0.1;
 	private static final double MECANUM_D_COEFFICIENT = 0.1;
-	// Camera name
-	private static final String CAMERA_NAME = "cam1";
 	// Controls
 	private final LogitechJoystick stick; // the X3D Extreme3DPro Logitech joystick (right hand) - operator
 	private final XboxController xboxController; // the Xbox 360 controller - driver
@@ -57,7 +54,6 @@ public class Robot extends SampleRobot {
 	private final IMU imu;
 	private final LIDAR lidar;
 	private final DigitalInput limitSwitches[] = new DigitalInput[4];
-	private final Camera camera;
 	private final Encoder winchEncoder;
 	private final PDP pdp;
 	// Movement controllers
@@ -86,7 +82,6 @@ public class Robot extends SampleRobot {
 	private final Enablable[] toEnable;
 	private final Disablable[] toDisable;
 	private final Updatable[] alwaysUpdate;
-	private final Updatable[] alwaysUpdateSlow;
 	
 	public enum RobotState {
 		DISABLED, OPERATOR, AUTONOMOUS
@@ -95,7 +90,7 @@ public class Robot extends SampleRobot {
 	public Robot() {
 		System.out.println("*** CONSTRUCTING ROBOT ***");
 		// Initializing logging
-		logger = new LogKitten(LogKitten.LEVEL_ERROR);
+		logger = new LogKitten(LogKitten.LEVEL_WARN);
 		logger.v("Constructing");
 		// Initialize serial interface
 		// Initialize sensors
@@ -108,7 +103,6 @@ public class Robot extends SampleRobot {
 		imu = new IMU(); // Initialize IMU
 		lidar = new LIDAR(); // Initialize LIDAR
 		pdp = new PDP(); // Power Distribution Panel interface and logging.
-		camera = new Camera(CAMERA_NAME); // Initialize camera
 		/* Action! */
 		// Initialize movement controllers
 		winch = new Winch(WINCH_PORT, winchEncoder, WINCH_P_COEFFICIENT, WINCH_I_COEFFICIENT, WINCH_D_COEFFICIENT); // Initialize Winch control
@@ -127,14 +121,13 @@ public class Robot extends SampleRobot {
 		// Initialize managers
 		driverManager = new DriverManager(mecanumDrive, align, xboxController);
 		operatorManager = new OperatorManager(stick, winch, align, grabber);
-		autonomousManager = new AutonomousManager(winch, grabber, align, camera, lidar, imu);
+		autonomousManager = new AutonomousManager(winch, grabber, align, lidar, imu);
 		// Drivers, operators, autonomous
 		autonomous = autonomousManager.getSelected();
 		// This list should include everything with a motor
 		toDisable = new Disablable[] {winch, grabber, driver, operator, autonomous, frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel};
 		toEnable = new Enablable[] {mecanumDrive, winch};
 		alwaysUpdate = new Updatable[] {imu, pdp};
-		alwaysUpdateSlow = new Updatable[] {};
 	}
 	
 	public void robotInit() {
@@ -170,7 +163,7 @@ public class Robot extends SampleRobot {
 				implementsenable.enable();
 			}
 		}
-		new Updater(this, state, new Updatable[] {camera}, slowUpdatePeriod).start(); // Controller and align are potentially slower
+		new Updater(this, state, new Updatable[] {align}, slowUpdatePeriod).start(); // Controller and align are potentially slower
 		startAlwaysUpdates(state);
 		// These should have fast updates
 		new Updater(this, state, new Updatable[] {autonomous, driver, operator, mecanumDrive, lidar, frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel, grabber}, fastUpdatePeriod).start();
@@ -195,6 +188,7 @@ public class Robot extends SampleRobot {
 		// These should have fast updates
 		new Updater(this, state, new Updatable[] {driver, operator, mecanumDrive, lidar, frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel, grabber}, fastUpdatePeriod).start();
 		while (isOperatorControl() && isEnabled()) {
+			logger.w("" + lidar.getCorrectedAngleDist(90));
 			Timer.delay(0.01);
 		}
 	}
@@ -202,8 +196,6 @@ public class Robot extends SampleRobot {
 	public void startAlwaysUpdates(RobotState state) {
 		// IMU, and PDP should always update
 		new Updater(this, state, alwaysUpdate, fastUpdatePeriod).start();
-		// always slow updates
-		new Updater(this, state, alwaysUpdateSlow, slowUpdatePeriod).start();
 	}
 	
 	public void trainMecanumPID(RobotState state) {

@@ -125,7 +125,6 @@ public class AutoAlign implements Updatable {
 	 * This will do an alignment tick if the system is currently aligning.
 	 */
 	public synchronized void update() {
-		System.out.println(System.currentTimeMillis());
 		if (isCurrentlyAligning()) {
 			alignWithToteTick();
 		}

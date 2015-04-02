@@ -15,7 +15,7 @@ public class Winch extends Talon implements Disablable, Enablable, Overridable<D
 	private static final double HALF_TOTE_HEIGHT = 6.0; // height of half tote (in inches)
 	private static final double DISTANCE_PER_PULSE = (WINCH_HEIGHT / HALF_TOTE_HEIGHT) / MAX_TICKS;
 	private final Encoder encoder;
-	private final DisablablePID pid;
+	public final DisablablePID pid;
 	
 	public Winch(int channel, Encoder encoder, double Kp, double Ki, double Kd) {
 		super(channel);
@@ -42,6 +42,7 @@ public class Winch extends Talon implements Disablable, Enablable, Overridable<D
 	public void setHeight(double height) { // Set winch to specific height
 		pid.enable();
 		pid.setSetpoint(height);
+		System.out.println(height);
 	}
 	
 	public void changeHeight(int heightChange) {
@@ -54,7 +55,6 @@ public class Winch extends Talon implements Disablable, Enablable, Overridable<D
 	
 	public void enable() {
 		pid.enable();
-		pid.setSetpoint(encoder.getDistance());
 	}
 	
 	public void disable() {
@@ -65,6 +65,7 @@ public class Winch extends Talon implements Disablable, Enablable, Overridable<D
 	
 	public void override(Double speed) {
 		pid.disable();
+		pid.setSetpoint(encoder.getDistance());
 		super.set(speed);
 	}
 	
@@ -73,6 +74,7 @@ public class Winch extends Talon implements Disablable, Enablable, Overridable<D
 	}
 	
 	public boolean onTarget() {
+		System.out.println(pid.onTarget());
 		return pid.onTarget();
 	}
 }

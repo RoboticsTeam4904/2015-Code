@@ -47,7 +47,7 @@ public class Grabber extends Talon implements Disablable, Updatable, Overridable
 		grabberState = GrabberState.OPEN;
 		override = false;
 		pastAmperage = new double[NUM_PAST_CURRENTS];
-		timeSafeguard = new TimeSafeguard("Grabber open time safeguard", 10);
+		timeSafeguard = new TimeSafeguard("Grabber open time safeguard", 3);
 	}
 	
 	public void setDesiredGrabberState(GrabberState state) {
@@ -102,10 +102,6 @@ public class Grabber extends Talon implements Disablable, Updatable, Overridable
 					logger.v("Left outer switch");
 					grabberState = GrabberState.OPEN; // Don't go too far
 				}
-				if (!limitSwitches[RIGHT_INNER_SWITCH].get() || !limitSwitches[LEFT_INNER_SWITCH].get()) { // This should fire if the grabber missed the outer switches and rolled around to closing
-					logger.f("WARNING: Grabber hit inner limit switches while opening");
-					grabberState = GrabberState.DISABLED;
-				}
 				return;
 			case CLOSING:
 				if (!limitSwitches[RIGHT_INNER_SWITCH].get()) { // If limit switch has been hit (get() returns opposite - true if not pressed)
@@ -116,10 +112,7 @@ public class Grabber extends Talon implements Disablable, Updatable, Overridable
 					logger.v("Left inner switch");
 					grabberState = GrabberState.CLOSED; // Don't go too far
 				}
-				if (!limitSwitches[RIGHT_OUTER_SWITCH].get() || !limitSwitches[LEFT_OUTER_SWITCH].get()) { // This should fire if the grabber missed the inner switches and rolled around to opening
-					logger.f("WARNING: Grabber hit outer limit switches while closing");
-					grabberState = GrabberState.DISABLED;
-				}
+				return;
 			default:
 				return;
 		}

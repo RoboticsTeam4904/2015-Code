@@ -104,19 +104,19 @@ public class OperatorNachi extends Operator {
 				changeHeight(1);
 			}
 			// When button 3 is pressed, lower the winch one half-tote
-			else if (stick.buttons[2].get()) {
+			if (stick.buttons[2].get()) {
 				changeHeight(-1);
 			}
 			// When button 6 is pressed, raise the winch all the way
-			else if (stick.buttons[5].get()) {
+			if (stick.buttons[5].get()) {
 				setWinchHeight(Winch.MAX_HEIGHT);
 			}
 			// When button 4 is pressed, lower the winch all the way
-			else if (stick.buttons[3].get()) {
+			if (stick.buttons[3].get()) {
 				setWinchHeight(0);
 			}
 			// When button 2 is pressed, stack a tote
-			else if (stick.buttons[1].get()) {
+			if (stick.buttons[1].get()) {
 				stackingStep = 1;
 			}
 		}

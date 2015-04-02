@@ -29,7 +29,7 @@ public class Mecanum implements Updatable, Disablable, Enablable {
 		this.backLeftWheel = backLeftWheel;
 		this.backRightWheel = backRightWheel;
 		this.turnSpeed = new PIDVariable();
-		pid = new DisablablePID(Kp, Ki, Kd, imu, turnSpeed, false);
+		pid = new DisablablePID(Kp, Ki, Kd, imu, turnSpeed, true);
 		pid.setContinuous();
 		pid.setInputRange(0, 360);
 		pid.setOutputRange(-1, 1);

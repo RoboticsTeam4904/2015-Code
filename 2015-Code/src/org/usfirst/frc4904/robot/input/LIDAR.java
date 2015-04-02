@@ -16,8 +16,7 @@ import edu.wpi.first.wpilibj.SerialPort;
 public class LIDAR implements Updatable {
 	private final LogKitten logger;
 	private final SerialPort port; // Serial port used to talk to the LIDAR,
-	private volatile int[] dists; // Array that contains distances to objects 360 degrees around the LIDAR.
-	private volatile long[] distUpdateTime; // Array that represents the number of milliseconds since each distance was updated
+	private volatile int[] dists; // Array that contains distances to objects 360 degrees around the LIDAR
 	private static final int HOUGH_WIDTH = 1280 / 2; // The width of the Hough transform coordinate system
 	private static final int HOUGH_HEIGHT = 720 / 2; // The height of the Hough transform coordinate system
 	private static final double HOUGH_SCALING_FACTOR = 5; // Factor to scale coordinates by so they fit within the width and height.
@@ -158,9 +157,6 @@ public class LIDAR implements Updatable {
 				int data = read(i);
 				if (data != 0) {
 					dists[i] = data;
-					distUpdateTime[i] = System.currentTimeMillis();
-				} else if (dists[i] != 0 && distUpdateTime[i] < System.currentTimeMillis() + DATA_SAVE_TIME) {
-					dists[i] = 0; // If the data is not updated for x seconds, replace it with 0 in order to prevent hough transform from getting weird.
 				}
 			}
 		}

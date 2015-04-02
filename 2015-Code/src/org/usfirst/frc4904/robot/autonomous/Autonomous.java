@@ -6,7 +6,6 @@ import org.usfirst.frc4904.robot.LogKitten;
 import org.usfirst.frc4904.robot.Named;
 import org.usfirst.frc4904.robot.Updatable;
 import org.usfirst.frc4904.robot.driver.AutoDriver;
-import org.usfirst.frc4904.robot.input.Camera;
 import org.usfirst.frc4904.robot.input.IMU;
 import org.usfirst.frc4904.robot.input.LIDAR;
 import org.usfirst.frc4904.robot.operator.AutoOperator;
@@ -20,7 +19,6 @@ public class Autonomous implements Updatable, Disablable, Named {
 	protected volatile double desiredTurnSpeed = 0;
 	protected volatile double desiredWinchHeight = 0;
 	protected volatile double currentWinchHeight = 0;
-	protected static Camera camera;
 	protected static Grabber grabber;
 	protected static LIDAR lidar;
 	protected static IMU imu;
@@ -37,8 +35,7 @@ public class Autonomous implements Updatable, Disablable, Named {
 		this.name = name;
 	}
 	
-	public static void passSensors(Camera camera, Grabber grabber, LIDAR lidar, IMU imu) {
-		Autonomous.camera = camera;
+	public static void passSensors(Grabber grabber, LIDAR lidar, IMU imu) {
 		Autonomous.grabber = grabber;
 		Autonomous.lidar = lidar;
 		Autonomous.imu = imu;

@@ -5,7 +5,6 @@ import org.usfirst.frc4904.robot.AutoAlign;
 import org.usfirst.frc4904.robot.LogKitten;
 import org.usfirst.frc4904.robot.TypedNamedSendableChooser;
 import org.usfirst.frc4904.robot.driver.AutoDriver;
-import org.usfirst.frc4904.robot.input.Camera;
 import org.usfirst.frc4904.robot.input.IMU;
 import org.usfirst.frc4904.robot.input.LIDAR;
 import org.usfirst.frc4904.robot.operator.AutoOperator;
@@ -16,9 +15,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class AutonomousManager extends TypedNamedSendableChooser<Autonomous> {
 	private final LogKitten logger;
 	
-	public AutonomousManager(Winch winch, Grabber grabber, AutoAlign align, Camera camera, LIDAR lidar, IMU imu) {
+	public AutonomousManager(Winch winch, Grabber grabber, AutoAlign align, LIDAR lidar, IMU imu) {
 		super();
-		Autonomous.passSensors(camera, grabber, lidar, imu);
+		Autonomous.passSensors(grabber, lidar, imu);
 		addObject(new YellowToteStack());
 		addObject(new LandfillStack());
 		addObject(new OneToteMove());

@@ -33,7 +33,7 @@ public abstract class Operator implements Disablable, Updatable, Named {
 	}
 	
 	protected void changeHeight(int levels) {
-		winch.setHeight(levels + winch.getHeight());
+		winch.changeHeight(levels);
 	}
 	
 	protected void grab() {

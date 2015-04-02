@@ -3,7 +3,7 @@ package org.usfirst.frc4904.robot;
 
 public class TimeSafeguard extends Safeguard {
 	private final int duration;
-	private int start;
+	private long start;
 	
 	public TimeSafeguard(String name, int duration) {
 		super(name);
@@ -12,7 +12,7 @@ public class TimeSafeguard extends Safeguard {
 	}
 	
 	public void reset() {
-		start = (int) System.currentTimeMillis();
+		start = System.currentTimeMillis();
 	}
 	
 	protected boolean safetyCondition() {
