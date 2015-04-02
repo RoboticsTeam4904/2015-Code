@@ -39,9 +39,11 @@ public class OperatorNachi extends Operator {
 		}
 		// If we are stacking right now, ignore non-override buttons
 		if (stackingStep > 0) {
+			if (stick.buttons[1].get()) {
+				stackingStep = 0;
+			}
 			// Stack a tote. This involves a series of synchronous steps:
 			// Open the grabber, move down 2 half-totes, close the grabber, move up 2 half-totes.
-			// This is a crude step system, and will be dumped when switching to command based.
 			switch (stackingStep) {
 				case 1: // Just started - open grabber.
 					release();
