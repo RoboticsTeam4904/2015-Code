@@ -22,8 +22,8 @@ public class OperatorNachi extends Operator {
 			logger.w("Robot killed by operator (Nachi)");
 			return;
 		}
-		// Grabber kill on button 10
-		if (stick.buttons[9].get()) {
+		// Grabber kill on button 8
+		if (stick.buttons[7].get()) {
 			grabber.disable();
 			logger.w("Grabber killed by operator (Nachi)");
 		}
