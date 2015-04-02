@@ -71,4 +71,8 @@ public class Winch extends Talon implements Disablable, Enablable, Overridable<D
 	public void stopOverride() {
 		enable();
 	}
+	
+	public boolean onTarget() {
+		return pid.onTarget();
+	}
 }
