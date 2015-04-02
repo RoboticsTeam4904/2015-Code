@@ -8,12 +8,13 @@ public class DriverNathan extends Driver {
 	
 	public DriverNathan() {
 		super("Nathan");
-		logger = new LogKitten();
+		logger = new LogKitten(LogKitten.LEVEL_ERROR);
 	}
 	
 	public synchronized void update() {
 		setMovement(xboxController.leftStick.getX() / 2, xboxController.leftStick.getY() / 2);
-		setTurn(xboxController.rightStick.getX() / 2); // Turns way too fast otherwise
+		logger.v("" + xboxController.leftStick.getX());
+		setTurn(xboxController.rightStick.getX() / 3); // Turns way too fast otherwise
 		if (xboxController.back.get()) {
 			disable();
 			logger.w("Robot killed by driver (Nathan)");

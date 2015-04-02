@@ -29,9 +29,9 @@ public class Mecanum implements Updatable, Disablable, Enablable {
 		this.backLeftWheel = backLeftWheel;
 		this.backRightWheel = backRightWheel;
 		this.turnSpeed = new PIDVariable();
-		pid = new DisablablePID(Kp, Ki, Kd, imu, turnSpeed, true);
+		pid = new DisablablePID(Kp, Ki, Kd, imu, turnSpeed, false);
 		pid.setContinuous();
-		pid.setInputRange(0, 360);
+		pid.setInputRange(-1, 1);
 		pid.setOutputRange(-1, 1);
 		pid.setAbsoluteTolerance(0.5);
 		// Add SmartDashboard fields for PID constants
@@ -47,7 +47,9 @@ public class Mecanum implements Updatable, Disablable, Enablable {
 	
 	public void disable() {
 		pid.disable();
+		pid.setSetpoint(0);
 		actualTurnSpeed = 0;
+		desiredTurnSpeed = 0;
 	}
 	
 	private void move(double desiredSpeed, double desiredAngle, double turnSpeed) {
@@ -73,9 +75,10 @@ public class Mecanum implements Updatable, Disablable, Enablable {
 		pid.setPID(SmartDashboard.getNumber("Kp Mecanum"), SmartDashboard.getNumber("Ki Mecanum"), SmartDashboard.getNumber("Kd Mecanum"));
 		double setSpeed = Math.sqrt(desiredXSpeed * desiredXSpeed + desiredYSpeed * desiredYSpeed);
 		double setAngle = Math.atan2(desiredYSpeed, desiredXSpeed);
-		if (!pid.isEnable()) {
+		if (pid.isEnable()) {
 			pid.setSetpoint(desiredTurnSpeed);
-			actualTurnSpeed += turnSpeed.read();
+			actualTurnSpeed = turnSpeed.read();
+			System.out.println("turnspeed: " + actualTurnSpeed);
 		} else {
 			actualTurnSpeed = desiredTurnSpeed;
 		}

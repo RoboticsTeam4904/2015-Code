@@ -1,0 +1,45 @@
+<xml version="1.0">
+<dashboard>
+	<widget field="Grabber Motor Current" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.LinePlot">
+		<location x="852" y="20"/>
+	</widget>
+	<widget field="Avg. Grabber Motor Current" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="241" y="171"/>
+	</widget>
+	<widget field="Turn Speed PID Output" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="254" y="99"/>
+	</widget>
+	<widget field="Grabber open time safeguard" type="Boolean" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="229" y="58"/>
+	</widget>
+	<widget field="Yaw" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="592" y="48"/>
+	</widget>
+	<widget field="Driver Chooser" type="String Chooser" class="edu.wpi.first.smartdashboard.gui.elements.Chooser">
+		<location x="9" y="162"/>
+	</widget>
+	<widget field="Kp Mecanum" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="574" y="110"/>
+	</widget>
+	<widget field="Ki Mecanum" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="578" y="133"/>
+	</widget>
+	<widget field="Operator Chooser" type="String Chooser" class="edu.wpi.first.smartdashboard.gui.elements.Chooser">
+		<location x="8" y="205"/>
+	</widget>
+	<widget field="Pitch" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="591" y="7"/>
+	</widget>
+	<widget field="Kd Mecanum" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="574" y="154"/>
+	</widget>
+	<widget field="Roll" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="595" y="27"/>
+	</widget>
+	<widget field="Autonomous Chooser" type="String Chooser" class="edu.wpi.first.smartdashboard.gui.elements.Chooser">
+		<location x="0" y="0"/>
+	</widget>
+</dashboard>
+<live-window>
+</live-window>
+</xml>

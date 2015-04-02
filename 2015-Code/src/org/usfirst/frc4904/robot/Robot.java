@@ -188,7 +188,7 @@ public class Robot extends SampleRobot {
 		// These should have fast updates
 		new Updater(this, state, new Updatable[] {driver, operator, mecanumDrive, lidar, frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel, grabber}, fastUpdatePeriod).start();
 		while (isOperatorControl() && isEnabled()) {
-			logger.w("" + lidar.getCorrectedAngleDist(90));
+			logger.w("" + lidar.getDists()[0] + " | " + lidar.getDists()[90] + " | " + lidar.getDists()[180] + " | " + lidar.getDists()[270]);
 			Timer.delay(0.01);
 		}
 	}

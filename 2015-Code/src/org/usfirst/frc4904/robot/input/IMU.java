@@ -12,7 +12,8 @@ public class IMU extends NavX implements PIDSource, Updatable {
 	private double[] rate; // Same as above
 	private double[] zeroAngles;
 	private double lastTime;
-	private static final double GOING_OVER_PLATFORM_ANGLE = 5;
+	private static final double GOING_OVER_PLATFORM_ANGLE = 10;
+	private static final double TURN_SCALE = 1.0 / 360.0; // Scale degrees per second to between -1 and 1
 	
 	public IMU() {
 		super();
@@ -42,7 +43,7 @@ public class IMU extends NavX implements PIDSource, Updatable {
 		double time = getTime();
 		updateData();
 		for (int i = 0; i < 3; i++) {
-			rate[i] = (angles[i] - lastAngles[i]) / (time - lastTime);
+			rate[i] = ((angles[i] - lastAngles[i]) / (time - lastTime)) * TURN_SCALE;
 		}
 		lastTime = time;
 		lastAngles = angles;
