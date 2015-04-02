@@ -49,31 +49,39 @@ public class OperatorNachi extends Operator {
 				case 1: // Just started - open grabber.
 					release();
 					stackingStep = 2;
+					break;
 				case 2: // Wait for grabber to open.
 					if (grabber.getState() == Grabber.GrabberState.OPEN || grabber.getState() == Grabber.GrabberState.DISABLED) {
 						stackingStep = 3;
 					}
+					break;
 				case 3: // Go down 2 half-totes.
 					changeHeight(-2);
 					stackingStep = 4;
+					break;
 				case 4: // Wait for winch to lower.
 					if (winch.onTarget()) {
 						stackingStep = 5;
 					}
+					break;
 				case 5: // Close grabber.
 					grab();
 					stackingStep = 6;
+					break;
 				case 6: // Wait for grabber to close.
 					if (grabber.getState() == Grabber.GrabberState.CLOSED) {
 						stackingStep = 7;
 					}
+					break;
 				case 7: // Go up 2 half-totes.
 					changeHeight(2);
 					stackingStep = 8;
+					break;
 				case 8: // Wait for winch to rise.
 					if (winch.onTarget()) {
 						stackingStep = 0; // Done stacking.
 					}
+					break;
 				default: // If there's an invalid step
 					logger.w("*** invalid stacking step (" + stackingStep + ") - killing stack");
 					stackingStep = 0; // Stop stacking
