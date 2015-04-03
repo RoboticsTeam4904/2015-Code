@@ -33,11 +33,11 @@ public class Robot extends SampleRobot {
 	private static final int WINCH_PORT = 4;
 	private static final int GRABBER_PORT = 5;
 	// DIO ports
-	private static final int RIGHT_OUTER_SWITCH_PORT = 0;
-	private static final int LEFT_OUTER_SWITCH_PORT = 1;
-	private static final int RIGHT_INNER_SWITCH_PORT = 8;
-	private static final int LEFT_INNER_SWITCH_PORT = 9;
-	// I2C ports
+	private static final int RIGHT_OUTER_SWITCH_PORT = 10;
+	private static final int LEFT_OUTER_SWITCH_PORT = 11;
+	private static final int RIGHT_INNER_SWITCH_PORT = 12;
+	private static final int LEFT_INNER_SWITCH_PORT = 13;
+	// Encoder ports
 	private static final int WINCH_ENCODER_PORT_1 = 3;
 	private static final int WINCH_ENCODER_PORT_2 = 2;
 	// PID coefficients
