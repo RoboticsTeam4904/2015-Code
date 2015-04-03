@@ -139,6 +139,7 @@ public class Robot extends SampleRobot {
 		logger.v("Disabled");
 		RobotState state = RobotState.DISABLED;
 		startAlwaysUpdates(state);
+		imu.zero();
 		while (isDisabled()) {
 			for (Disablable implementsdisable : toDisable) {
 				if (implementsdisable != null) {

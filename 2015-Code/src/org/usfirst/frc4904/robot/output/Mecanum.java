@@ -39,7 +39,7 @@ public class Mecanum implements Updatable, Disablable, Enablable {
 		pid.setOutputRange(-1, 1);
 		pid.setAbsoluteTolerance(0.5);
 		// Add SmartDashboard fields for PID constants
-		SmartDashboard.putNumber("Kp Mecanum", 0);
+		SmartDashboard.putNumber("Kp Mecanum", 0.003);
 		SmartDashboard.putNumber("Ki Mecanum", 0);
 		SmartDashboard.putNumber("Kd Mecanum", 0);
 		actualTurnSpeed = 0;
@@ -50,7 +50,7 @@ public class Mecanum implements Updatable, Disablable, Enablable {
 		pid.setSetpoint(imu.getYaw());
 		desiredAngle = imu.getYaw();
 		actualTurnSpeed = 0;
-		desiredTurnSpeed = 0;
+		setDesiredTurnSpeed(0);
 		pid.enable();
 	}
 	
@@ -59,7 +59,7 @@ public class Mecanum implements Updatable, Disablable, Enablable {
 		pid.setSetpoint(imu.getYaw());
 		desiredAngle = imu.getYaw();
 		actualTurnSpeed = 0;
-		desiredTurnSpeed = 0;
+		setDesiredTurnSpeed(0);
 	}
 	
 	private void move(double desiredSpeed, double desiredAngle, double turnSpeed) {
@@ -82,7 +82,7 @@ public class Mecanum implements Updatable, Disablable, Enablable {
 	
 	public synchronized void update() {
 		SmartDashboard.putNumber("Turn Speed PID Output", turnSpeed.read());
-		pid.setPID(SmartDashboard.getNumber("Kp Mecanum"), SmartDashboard.getNumber("Ki Mecanum"), SmartDashboard.getNumber("Kd Mecanum"));
+		pid.setPID(SmartDashboard.getNumber("Kp Mecanum"), SmartDashboard.getNumber("Ki Mecanum") / 100, SmartDashboard.getNumber("Kd Mecanum"));
 		double setSpeed = Math.sqrt(desiredXSpeed * desiredXSpeed + desiredYSpeed * desiredYSpeed);
 		double setAngle = Math.atan2(desiredYSpeed, desiredXSpeed);
 		if (pid.isEnable()) {
@@ -100,8 +100,7 @@ public class Mecanum implements Updatable, Disablable, Enablable {
 		this.desiredYSpeed = desiredXSpeed;
 	}
 	
-	public void setDesiredTurnSpeed(double desiredTurnSpeed) {
-		this.desiredTurnSpeed = desiredTurnSpeed;
-		this.desiredAngle = (((desiredAngle + desiredTurnSpeed * (double) INPUT_RESCALE) % 360) + 360) % 360;
+	public void setDesiredTurnSpeed(double desiredAngle) {
+		this.desiredAngle = ((desiredAngle % 360) + 360) % 360;
 	}
 }

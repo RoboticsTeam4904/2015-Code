@@ -10,20 +10,17 @@ public class IMU extends NavX implements PIDSource, Updatable {
 	private double[] angles; // Angle 0 is perpendicular (yaw), Angle 1 is lateral (pitch), Angle 2 is longitudinal (roll)
 	private double[] lastAngles;
 	private double[] rate; // Same as above
-	private double[] zeroAngles;
 	private double lastTime;
-	private static final double GOING_OVER_PLATFORM_ANGLE = 10;
+	private static final double GOING_OVER_PLATFORM_ANGLE = 5;
 	private static final double TURN_SCALE = 1.0 / 360.0; // Scale degrees per second to between -1 and 1
 	
 	public IMU() {
 		super();
 		angles = new double[3];
 		lastAngles = new double[3];
-		zeroAngles = new double[3];
 		rate = new double[3];
 		Arrays.fill(angles, 0);
 		Arrays.fill(lastAngles, 0);
-		Arrays.fill(zeroAngles, 0);
 		lastTime = getTime();
 		zero();
 	}
@@ -33,10 +30,7 @@ public class IMU extends NavX implements PIDSource, Updatable {
 	}
 	
 	public void zero() {
-		update();
-		zeroAngles[0] += angles[0];
-		zeroAngles[1] += angles[1];
-		zeroAngles[2] += angles[2];
+		super.zeroYaw();
 	}
 	
 	public synchronized void update() {
@@ -71,6 +65,6 @@ public class IMU extends NavX implements PIDSource, Updatable {
 	}
 	
 	public double pidGet() {
-		return getYaw();
+		return angles[0];
 	}
 }
