@@ -168,6 +168,12 @@ public class Robot extends SampleRobot {
 		RobotState state = RobotState.DISABLED;
 		startAlwaysUpdates(state);
 		imu.zero();
+		for (Disablable implementsdisable : toDisable) {
+			if (implementsdisable != null) {
+				implementsdisable.disable();
+			}
+		}
+		System.gc();
 		while (isDisabled()) {
 			for (Disablable implementsdisable : toDisable) {
 				if (implementsdisable != null) {
