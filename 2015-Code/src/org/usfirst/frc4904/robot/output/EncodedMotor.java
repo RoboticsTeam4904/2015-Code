@@ -34,7 +34,7 @@ public class EncodedMotor extends Talon implements Disablable, Enablable, Overri
 	 * @param speed
 	 *        A double from -1 to 1 representing the desired speed
 	 */
-	public void set(double speed) {
+	public void setValue(double speed) {
 		pid.setSetpoint(speed);
 	}
 	
