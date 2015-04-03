@@ -33,7 +33,7 @@ public class Mecanum implements Updatable, Disablable, Enablable {
 		this.backRightWheel = backRightWheel;
 		this.turnSpeed = new PIDVariable();
 		this.imu = imu;
-		pid = new DisablablePID(Kp, Ki, Kd, imu, turnSpeed, true);
+		pid = new DisablablePID(Kp, Ki, Kd, imu, turnSpeed, false);
 		pid.setContinuous();
 		pid.setInputRange(0, 360);
 		pid.setOutputRange(-1, 1);
@@ -97,7 +97,6 @@ public class Mecanum implements Updatable, Disablable, Enablable {
 			// System.out.println(actualTurnSpeed + " | " + imu.pidGet() + " | " + pid.getSetpoint());
 		} else {
 			actualTurnSpeed = desiredTurnSpeed;
-			System.out.println("Actual: " + actualTurnSpeed);
 		}
 		move(setSpeed, setAngle, actualTurnSpeed); // This system allows for different updating times and rates
 	}
@@ -112,6 +111,6 @@ public class Mecanum implements Updatable, Disablable, Enablable {
 	}
 	
 	public void setDesiredTurnSpeed(double turnSpeed) {
-		this.desiredTurnSpeed = desiredTurnSpeed;
+		this.desiredTurnSpeed = turnSpeed;
 	}
 }
