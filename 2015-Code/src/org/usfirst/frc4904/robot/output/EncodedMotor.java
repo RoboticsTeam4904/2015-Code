@@ -9,17 +9,17 @@ import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.Talon;
 
 public class EncodedMotor extends Talon implements Disablable, Enablable, Overridable<Double>, PIDOutput {
-	private final Encoder encoder;
 	private final DisablablePID pid;
 	private final static boolean ENABLED = false;
+	private final static double ROTATION_PER_PULSE = 1.0 / 360.0;
 	
 	public EncodedMotor(int channel, Encoder encoder, double Kp, double Ki, double Kd) {
 		super(channel);
-		this.encoder = encoder;
 		// Zero the encoder.
 		encoder.reset();
 		// Set the encoders to use rate for PID.
 		encoder.setPIDSourceParameter(Encoder.PIDSourceParameter.kRate);
+		encoder.setDistancePerPulse(ROTATION_PER_PULSE);
 		// Initialize and configure the PID Controller.
 		pid = new DisablablePID(Kp, Ki, Kd, encoder, this, ENABLED);
 		pid.setOutputRange(-1, 1);
@@ -34,7 +34,7 @@ public class EncodedMotor extends Talon implements Disablable, Enablable, Overri
 	 * @param speed
 	 *        A double from -1 to 1 representing the desired speed
 	 */
-	public void set(double speed) {
+	public void setValue(double speed) {
 		pid.setSetpoint(speed);
 	}
 	
