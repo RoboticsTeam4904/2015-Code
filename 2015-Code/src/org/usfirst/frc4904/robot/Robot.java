@@ -202,7 +202,7 @@ public class Robot extends SampleRobot {
 		}
 		startAlwaysUpdates(state);
 		// These should have fast updates
-		new Updater(this, state, new Updatable[] {autonomous, driver, operator, mecanumDrive, lidar, grabber}, fastUpdatePeriod).start();
+		new Updater(this, state, new Updatable[] {autonomous, driver, operator, mecanumDrive, frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel, lidar, grabber}, fastUpdatePeriod).start();
 		while (isAutonomous() && isEnabled()) {
 			Timer.delay(0.01);
 		}
@@ -221,7 +221,7 @@ public class Robot extends SampleRobot {
 		driver = driverManager.getSelected();
 		startAlwaysUpdates(state);
 		// These should have fast updates
-		new Updater(this, state, new Updatable[] {driver, operator, mecanumDrive, lidar, grabber}, fastUpdatePeriod).start();
+		new Updater(this, state, new Updatable[] {driver, operator, mecanumDrive, frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel, lidar, grabber}, fastUpdatePeriod).start();
 		while (isOperatorControl() && isEnabled()) {
 			System.out.println("E: " + winch.pid.get());
 			Timer.delay(0.01);
@@ -237,7 +237,7 @@ public class Robot extends SampleRobot {
 		System.out.println("*** TRAIN PID ***");
 		logger.v("trainPID");
 		startAlwaysUpdates(state);
-		new Updater(this, state, new Updatable[] {mecanumDrive}, fastUpdatePeriod).start();
+		new Updater(this, state, new Updatable[] {frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel, mecanumDrive}, fastUpdatePeriod).start();
 		while (getRobotState() == state) {
 			logger.v("training cycle");
 			mecanumDrive.setDesiredTurnSpeed(0.2);
