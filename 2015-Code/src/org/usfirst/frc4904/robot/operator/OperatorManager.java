@@ -1,7 +1,6 @@
 package org.usfirst.frc4904.robot.operator;
 
 
-import org.usfirst.frc4904.robot.AutoAlign;
 import org.usfirst.frc4904.robot.LogKitten;
 import org.usfirst.frc4904.robot.TypedNamedSendableChooser;
 import org.usfirst.frc4904.robot.input.LogitechJoystick;
@@ -12,11 +11,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class OperatorManager extends TypedNamedSendableChooser<Operator> {
 	private final LogKitten logger;
 	
-	public OperatorManager(LogitechJoystick stick, Winch winch, AutoAlign align, Grabber grabber) {
+	public OperatorManager(LogitechJoystick stick, Winch winch, Grabber grabber) {
 		super();
 		addObject(new OperatorGriffin());
 		addDefault(new OperatorNachi());
-		Operator.passSensors(stick, winch, align, grabber);
+		Operator.passSensors(stick, winch, grabber);
 		logger = new LogKitten("OperatorManager", LogKitten.LEVEL_VERBOSE);
 		SmartDashboard.putData("Operator Chooser", this);
 	}

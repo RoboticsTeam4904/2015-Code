@@ -72,7 +72,6 @@ public class Robot extends SampleRobot {
 	private volatile Driver driver;
 	private volatile Operator operator;
 	private volatile Autonomous autonomous;
-	private final AutoAlign align; // the AutoAlign class contains code to align the robot with totes and cans
 	// Update system
 	public static final double fastUpdatePeriod = 0.02; // update every 0.02 seconds/20 milliseconds (50Hz) - this is IMU speed
 	public static final double slowUpdatePeriod = 0.2; // update every 0.2 seconds/200 milliseconds (5Hz)
@@ -117,11 +116,10 @@ public class Robot extends SampleRobot {
 		stick = new LogitechJoystick(JOYSTICK_PORT);
 		xboxController = new XboxController(CONTROLLER_PORT);
 		// Initalize subsystems
-		align = new AutoAlign(mecanumDrive, lidar); // Initialize AutoAlign system
 		// Initialize managers
-		driverManager = new DriverManager(mecanumDrive, align, xboxController);
-		operatorManager = new OperatorManager(stick, winch, align, grabber);
-		autonomousManager = new AutonomousManager(winch, grabber, align, lidar, imu);
+		driverManager = new DriverManager(mecanumDrive, xboxController);
+		operatorManager = new OperatorManager(stick, winch, grabber);
+		autonomousManager = new AutonomousManager(winch, grabber, lidar, imu);
 		// Drivers, operators, autonomous
 		autonomous = autonomousManager.getSelected();
 		// This list should include everything with a motor
@@ -163,7 +161,6 @@ public class Robot extends SampleRobot {
 				implementsenable.enable();
 			}
 		}
-		new Updater(this, state, new Updatable[] {align}, slowUpdatePeriod).start(); // Controller and align are potentially slower
 		startAlwaysUpdates(state);
 		// These should have fast updates
 		new Updater(this, state, new Updatable[] {autonomous, driver, operator, mecanumDrive, lidar, frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel, grabber}, fastUpdatePeriod).start();
@@ -183,12 +180,10 @@ public class Robot extends SampleRobot {
 		}
 		operator = operatorManager.getSelected();
 		driver = driverManager.getSelected();
-		new Updater(this, state, new Updatable[] {align}, slowUpdatePeriod).start(); // align is potentially slower
 		startAlwaysUpdates(state);
 		// These should have fast updates
 		new Updater(this, state, new Updatable[] {driver, operator, mecanumDrive, lidar, frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel, grabber}, fastUpdatePeriod).start();
 		while (isOperatorControl() && isEnabled()) {
-			logger.w("" + lidar.getDists()[0] + " | " + lidar.getDists()[90] + " | " + lidar.getDists()[180] + " | " + lidar.getDists()[270]);
 			Timer.delay(0.01);
 		}
 	}

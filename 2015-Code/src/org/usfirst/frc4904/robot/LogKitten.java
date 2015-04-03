@@ -40,10 +40,6 @@ public class LogKitten {
 		String filePath = LOG_PATH + identifier + ".log"; // Set this sessions log to /home/lvuser/logs/[current time].log
 		file = new File(filePath);
 		try {
-			// Delete file if it exists
-			if (file.exists()) {
-				file.delete();
-			}
 			// Create new file if it doesn't exist (this should happen)
 			if (!file.exists()) {
 				file.createNewFile();

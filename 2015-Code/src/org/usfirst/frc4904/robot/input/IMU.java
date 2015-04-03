@@ -71,6 +71,6 @@ public class IMU extends NavX implements PIDSource, Updatable {
 	}
 	
 	public double pidGet() {
-		return readRate()[0];
+		return getYaw();
 	}
 }
