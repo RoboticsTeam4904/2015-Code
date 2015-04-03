@@ -9,13 +9,11 @@ import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.Talon;
 
 public class EncodedMotor extends Talon implements Disablable, Enablable, Overridable<Double>, PIDOutput {
-	private final Encoder encoder;
 	private final DisablablePID pid;
 	private final static boolean ENABLED = false;
 	
 	public EncodedMotor(int channel, Encoder encoder, double Kp, double Ki, double Kd) {
 		super(channel);
-		this.encoder = encoder;
 		// Zero the encoder.
 		encoder.reset();
 		// Set the encoders to use rate for PID.
