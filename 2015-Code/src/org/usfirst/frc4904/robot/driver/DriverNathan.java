@@ -18,12 +18,6 @@ public class DriverNathan extends Driver {
 		setMovement(xboxController.leftStick.getX(), xboxController.leftStick.getY());
 		logger.v("" + xboxController.leftStick.getX());
 		setTurn(xboxController.rightStick.getX() / 3.0); // Turns way too fast otherwise
-		// if (xboxController.rightStick.getMagnitude() > TURN_STICK_DEADZONE) {
-		angle += xboxController.rightStick.getX() * 6;
-		angle = ((angle % 360) + 360) % 360;
-		System.out.println("target angle " + angle + " joystick input: " + xboxController.rightStick.getX());
-		setAngle(angle);
-		// }
 		if (xboxController.y.get()) {
 			disable();
 			logger.w("Robot killed by driver (Nathan)");

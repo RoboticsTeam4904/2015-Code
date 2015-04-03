@@ -221,7 +221,7 @@ public class Robot extends SampleRobot {
 		driver = driverManager.getSelected();
 		startAlwaysUpdates(state);
 		// These should have fast updates
-		new Updater(this, state, new Updatable[] {driver, operator, mecanumDrive, frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel, lidar, grabber}, fastUpdatePeriod).start();
+		new Updater(this, state, new Updatable[] {driver, operator, mecanumDrive, frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel, grabber}, fastUpdatePeriod).start();
 		while (isOperatorControl() && isEnabled()) {
 			Timer.delay(0.01);
 		}
