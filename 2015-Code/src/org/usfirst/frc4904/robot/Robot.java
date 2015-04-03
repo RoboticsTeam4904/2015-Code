@@ -38,8 +38,8 @@ public class Robot extends SampleRobot {
 	private static final int RIGHT_INNER_SWITCH_PORT = 12;
 	private static final int LEFT_INNER_SWITCH_PORT = 13;
 	// Encoder ports
-	private static final int WINCH_ENCODER_PORT_1 = 3;
-	private static final int WINCH_ENCODER_PORT_2 = 2;
+	private static final int WINCH_ENCODER_PORT_1 = 5;
+	private static final int WINCH_ENCODER_PORT_2 = 4;
 	// PID coefficients
 	private static final double WINCH_P_COEFFICIENT = -0.7;
 	private static final double WINCH_I_COEFFICIENT = 0.00;
