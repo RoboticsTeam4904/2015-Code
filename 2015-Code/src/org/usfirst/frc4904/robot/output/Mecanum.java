@@ -39,7 +39,7 @@ public class Mecanum implements Updatable, Disablable, Enablable {
 		pid.setOutputRange(-1, 1);
 		pid.setAbsoluteTolerance(0.5);
 		// Add SmartDashboard fields for PID constants
-		SmartDashboard.putNumber("Kp Mecanum", 0.003);
+		SmartDashboard.putNumber("Kp Mecanum", 0.006);
 		SmartDashboard.putNumber("Ki Mecanum", 0);
 		SmartDashboard.putNumber("Kd Mecanum", 0);
 		actualTurnSpeed = 0;
@@ -51,6 +51,7 @@ public class Mecanum implements Updatable, Disablable, Enablable {
 		setDesiredAngle(imu.getYaw());
 		actualTurnSpeed = 0;
 		setDesiredTurnSpeed(0);
+		zero();
 		pid.enable();
 	}
 	
