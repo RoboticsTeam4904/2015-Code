@@ -223,7 +223,6 @@ public class Robot extends SampleRobot {
 		// These should have fast updates
 		new Updater(this, state, new Updatable[] {driver, operator, mecanumDrive, frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel, lidar, grabber}, fastUpdatePeriod).start();
 		while (isOperatorControl() && isEnabled()) {
-			System.out.println("E: " + winch.pid.get());
 			Timer.delay(0.01);
 		}
 	}

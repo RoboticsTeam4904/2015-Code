@@ -64,6 +64,7 @@ public class Mecanum implements Updatable, Disablable, Enablable {
 	
 	public void zero() {
 		imu.zero();
+		pid.setSetpoint(imu.getYaw());
 	}
 	
 	private void move(double desiredSpeed, double desiredAngle, double turnSpeed) {
@@ -111,6 +112,5 @@ public class Mecanum implements Updatable, Disablable, Enablable {
 	
 	public void setDesiredTurnSpeed(double turnSpeed) {
 		this.desiredTurnSpeed = desiredTurnSpeed;
-		System.out.println("Desired: " + desiredTurnSpeed);
 	}
 }
