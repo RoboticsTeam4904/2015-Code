@@ -35,6 +35,14 @@ public abstract class Driver implements Disablable, Updatable, Named {
 		mecanumDrive.setDesiredTurnSpeed(speed);
 	}
 	
+	protected void setAngle(double angle) {
+		mecanumDrive.setDesiredAngle(angle);
+	}
+	
+	protected void zeroMecanum() {
+		mecanumDrive.zero();
+	}
+	
 	public void disable() {
 		setMovement(0, 0);
 		setTurn(0);

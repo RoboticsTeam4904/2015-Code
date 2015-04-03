@@ -48,7 +48,7 @@ public class Mecanum implements Updatable, Disablable, Enablable {
 	
 	public void enable() {
 		pid.setSetpoint(imu.getYaw());
-		desiredAngle = imu.getYaw();
+		setDesiredAngle(imu.getYaw());
 		actualTurnSpeed = 0;
 		setDesiredTurnSpeed(0);
 		pid.enable();
@@ -57,9 +57,13 @@ public class Mecanum implements Updatable, Disablable, Enablable {
 	public void disable() {
 		pid.reset();
 		pid.setSetpoint(imu.getYaw());
-		desiredAngle = imu.getYaw();
+		setDesiredAngle(imu.getYaw());
 		actualTurnSpeed = 0;
 		setDesiredTurnSpeed(0);
+	}
+	
+	public void zero() {
+		imu.zero();
 	}
 	
 	private void move(double desiredSpeed, double desiredAngle, double turnSpeed) {
@@ -88,9 +92,10 @@ public class Mecanum implements Updatable, Disablable, Enablable {
 		if (pid.isEnable()) {
 			pid.setSetpoint(desiredAngle);
 			actualTurnSpeed = turnSpeed.read();
-			System.out.println(actualTurnSpeed + " | " + imu.pidGet() + " | " + pid.getSetpoint());
+			// System.out.println(actualTurnSpeed + " | " + imu.pidGet() + " | " + pid.getSetpoint());
 		} else {
 			actualTurnSpeed = desiredTurnSpeed;
+			System.out.println("Actual: " + actualTurnSpeed);
 		}
 		move(setSpeed, setAngle, actualTurnSpeed); // This system allows for different updating times and rates
 	}
@@ -100,7 +105,12 @@ public class Mecanum implements Updatable, Disablable, Enablable {
 		this.desiredYSpeed = desiredXSpeed;
 	}
 	
-	public void setDesiredTurnSpeed(double desiredAngle) {
+	public void setDesiredAngle(double desiredAngle) {
 		this.desiredAngle = ((desiredAngle % 360) + 360) % 360;
+	}
+	
+	public void setDesiredTurnSpeed(double turnSpeed) {
+		this.desiredTurnSpeed = desiredTurnSpeed;
+		System.out.println("Desired: " + desiredTurnSpeed);
 	}
 }

@@ -148,15 +148,15 @@ public class LogKitten {
 	
 	private void logMessage(String message, KittenLevel level) {
 		if (logLevel.compareTo(level) >= 0) {
-			try {
-				String content = timestamp() + " " + level.getName() + ": " + getCallerMethodName(METHOD_LOGGER) + ": " + message + " \n";
-				fileOutput.write(content.getBytes());
-				fileOutput.flush();
-			}
-			catch (IOException ioe) {
-				System.out.println("Error logging " + level.getName() + " message");
-				ioe.printStackTrace();
-			}
+			// try {
+			// String content = timestamp() + " " + level.getName() + ": " + getCallerMethodName(METHOD_LOGGER) + ": " + message + " \n";
+			// fileOutput.write(content.getBytes());
+			// fileOutput.flush();
+			// }
+			// catch (IOException ioe) {
+			// System.out.println("Error logging " + level.getName() + " message");
+			// ioe.printStackTrace();
+			// }
 		}
 		if (printLevel.compareTo(level) >= 0) {
 			System.out.println(identifier + " " + level.getName() + ": " + getCallerMethodName(METHOD_LOGGER) + ": " + message + " \n");

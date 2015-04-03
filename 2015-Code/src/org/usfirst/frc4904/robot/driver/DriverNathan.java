@@ -9,19 +9,23 @@ public class DriverNathan extends Driver {
 	
 	public DriverNathan() {
 		super("Nathan");
-		logger = new LogKitten(LogKitten.LEVEL_ERROR);
+		logger = new LogKitten();
 		xboxController.rightStick.setDeadZone(TURN_STICK_DEADZONE);
 	}
 	
 	public synchronized void update() {
-		setMovement(xboxController.leftStick.getX() / 2, xboxController.leftStick.getY() / 2);
+		setMovement(xboxController.leftStick.getX() / 2.0, xboxController.leftStick.getY() / 2.0);
 		logger.v("" + xboxController.leftStick.getX());
+		setTurn(xboxController.rightStick.getX() / 3.0); // Turns way too fast otherwise
 		if (xboxController.rightStick.getMagnitude() > TURN_STICK_DEADZONE) {
-			setTurn(xboxController.rightStick.getAngle());
+			setAngle(xboxController.rightStick.getAngle());
 		}
-		if (xboxController.back.get()) {
+		if (xboxController.y.get()) {
 			disable();
 			logger.w("Robot killed by driver (Nathan)");
+		}
+		if (xboxController.a.get()) {
+			zeroMecanum();
 		}
 	}
 }

@@ -33,13 +33,13 @@ public class Robot extends SampleRobot {
 	private static final int WINCH_PORT = 4;
 	private static final int GRABBER_PORT = 5;
 	// DIO ports
-	private static final int RIGHT_OUTER_SWITCH_PORT = 0;
-	private static final int LEFT_OUTER_SWITCH_PORT = 1;
+	private static final int RIGHT_OUTER_SWITCH_PORT = 6;
+	private static final int LEFT_OUTER_SWITCH_PORT = 7;
 	private static final int RIGHT_INNER_SWITCH_PORT = 8;
 	private static final int LEFT_INNER_SWITCH_PORT = 9;
 	// I2C ports
-	private static final int WINCH_ENCODER_PORT_1 = 3;
-	private static final int WINCH_ENCODER_PORT_2 = 2;
+	private static final int WINCH_ENCODER_PORT_1 = 5;
+	private static final int WINCH_ENCODER_PORT_2 = 4;
 	// PID coefficients
 	private static final double WINCH_P_COEFFICIENT = -0.7;
 	private static final double WINCH_I_COEFFICIENT = 0.00;
@@ -140,6 +140,12 @@ public class Robot extends SampleRobot {
 		RobotState state = RobotState.DISABLED;
 		startAlwaysUpdates(state);
 		imu.zero();
+		for (Disablable implementsdisable : toDisable) {
+			if (implementsdisable != null) {
+				implementsdisable.disable();
+			}
+		}
+		System.gc();
 		while (isDisabled()) {
 			for (Disablable implementsdisable : toDisable) {
 				if (implementsdisable != null) {
@@ -185,6 +191,7 @@ public class Robot extends SampleRobot {
 		// These should have fast updates
 		new Updater(this, state, new Updatable[] {driver, operator, mecanumDrive, lidar, frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel, grabber}, fastUpdatePeriod).start();
 		while (isOperatorControl() && isEnabled()) {
+			System.out.println("E: " + winch.pid.get());
 			Timer.delay(0.01);
 		}
 	}

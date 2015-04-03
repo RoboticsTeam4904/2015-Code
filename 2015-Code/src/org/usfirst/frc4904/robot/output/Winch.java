@@ -41,7 +41,7 @@ public class Winch extends Talon implements Disablable, Enablable, Overridable<D
 	
 	public void setHeight(double height) { // Set winch to specific height
 		pid.enable();
-		pid.setSetpoint(height);
+																																																								pid.setSetpoint(height);
 		System.out.println(height);
 	}
 	
@@ -55,6 +55,7 @@ public class Winch extends Talon implements Disablable, Enablable, Overridable<D
 	
 	public void enable() {
 		pid.enable();
+		pid.disable();
 	}
 	
 	public void disable() {
