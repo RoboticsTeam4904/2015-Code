@@ -12,7 +12,7 @@ import org.usfirst.frc4904.robot.input.PDP;
 import org.usfirst.frc4904.robot.input.XboxController;
 import org.usfirst.frc4904.robot.operator.Operator;
 import org.usfirst.frc4904.robot.operator.OperatorManager;
-import org.usfirst.frc4904.robot.output.EncodedMotor;
+import org.usfirst.frc4904.robot.output.DampenedMotor;
 import org.usfirst.frc4904.robot.output.Grabber;
 import org.usfirst.frc4904.robot.output.Mecanum;
 import org.usfirst.frc4904.robot.output.Winch;
@@ -80,13 +80,13 @@ public class Robot extends SampleRobot {
 	private final Winch winch; // the Winch class takes care of moving to specific heights
 	private final Grabber grabber; // the grabber class takes care of opening and closing the grabber
 	private final Mecanum mecanumDrive; // the Mecanum class that takes care of the math required to use mecanum drive
-	private final EncodedMotor frontLeftWheel;
+	private final DampenedMotor frontLeftWheel;
 	private final Encoder frontLeftEncoder;
-	private final EncodedMotor frontRightWheel;
+	private final DampenedMotor frontRightWheel;
 	private final Encoder frontRightEncoder;
-	private final EncodedMotor backLeftWheel;
+	private final DampenedMotor backLeftWheel;
 	private final Encoder backLeftEncoder;
-	private final EncodedMotor backRightWheel;
+	private final DampenedMotor backRightWheel;
 	private final Encoder backRightEncoder;
 	// Managers
 	private final DriverManager driverManager;
@@ -132,13 +132,17 @@ public class Robot extends SampleRobot {
 		grabber = new Grabber(GRABBER_PORT, limitSwitches, pdp); // Initialize Grabber control
 		// Initialize motor controllers with default ports
 		frontLeftEncoder = new Encoder(FRONT_LEFT_ENCODER_PORT_1, FRONT_LEFT_ENCODER_PORT_2);
-		frontLeftWheel = new EncodedMotor(FRONT_LEFT_WHEEL_PORT, frontLeftEncoder, FRONT_LEFT_P_COEFFICIENT, FRONT_LEFT_I_COEFFICIENT, FRONT_LEFT_D_COEFFICIENT);
+		// frontLeftWheel = new EncodedMotor(FRONT_LEFT_WHEEL_PORT, frontLeftEncoder, FRONT_LEFT_P_COEFFICIENT, FRONT_LEFT_I_COEFFICIENT, FRONT_LEFT_D_COEFFICIENT);
+		frontLeftWheel = new DampenedMotor(FRONT_LEFT_WHEEL_PORT);
 		frontRightEncoder = new Encoder(FRONT_RIGHT_ENCODER_PORT_1, FRONT_RIGHT_ENCODER_PORT_2);
-		frontRightWheel = new EncodedMotor(FRONT_RIGHT_WHEEL_PORT, frontRightEncoder, FRONT_RIGHT_P_COEFFICIENT, FRONT_RIGHT_I_COEFFICIENT, FRONT_RIGHT_D_COEFFICIENT);
+		// frontRightWheel = new EncodedMotor(FRONT_RIGHT_WHEEL_PORT, frontRightEncoder, FRONT_RIGHT_P_COEFFICIENT, FRONT_RIGHT_I_COEFFICIENT, FRONT_RIGHT_D_COEFFICIENT);
+		frontRightWheel = new DampenedMotor(FRONT_RIGHT_WHEEL_PORT);
 		backLeftEncoder = new Encoder(BACK_LEFT_ENCODER_PORT_1, BACK_LEFT_ENCODER_PORT_2);
-		backLeftWheel = new EncodedMotor(BACK_LEFT_WHEEL_PORT, backLeftEncoder, BACK_LEFT_P_COEFFICIENT, BACK_LEFT_I_COEFFICIENT, BACK_LEFT_D_COEFFICIENT);
+		// backLeftWheel = new EncodedMotor(BACK_LEFT_WHEEL_PORT, backLeftEncoder, BACK_LEFT_P_COEFFICIENT, BACK_LEFT_I_COEFFICIENT, BACK_LEFT_D_COEFFICIENT);
+		backLeftWheel = new DampenedMotor(BACK_LEFT_WHEEL_PORT);
 		backRightEncoder = new Encoder(BACK_RIGHT_ENCODER_PORT_1, BACK_RIGHT_ENCODER_PORT_2);
-		backRightWheel = new EncodedMotor(BACK_RIGHT_WHEEL_PORT, backRightEncoder, BACK_RIGHT_P_COEFFICIENT, BACK_RIGHT_I_COEFFICIENT, BACK_RIGHT_D_COEFFICIENT);
+		// backRightWheel = new EncodedMotor(BACK_RIGHT_WHEEL_PORT, backRightEncoder, BACK_RIGHT_P_COEFFICIENT, BACK_RIGHT_I_COEFFICIENT, BACK_RIGHT_D_COEFFICIENT);
+		backRightWheel = new DampenedMotor(BACK_RIGHT_WHEEL_PORT);
 		mecanumDrive = new Mecanum(frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel, imu, MECANUM_P_COEFFICIENT, MECANUM_I_COEFFICIENT, MECANUM_D_COEFFICIENT); // Initialize Mecanum control
 		// Initialize joysticks (numbers correspond to value set by driver station)
 		stick = new LogitechJoystick(JOYSTICK_PORT);

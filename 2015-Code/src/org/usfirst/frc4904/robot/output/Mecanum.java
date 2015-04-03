@@ -9,10 +9,10 @@ import org.usfirst.frc4904.robot.input.IMU;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Mecanum implements Updatable, Disablable, Enablable {
-	private final EncodedMotor frontLeftWheel;
-	private final EncodedMotor frontRightWheel;
-	private final EncodedMotor backLeftWheel;
-	private final EncodedMotor backRightWheel;
+	private final DampenedMotor frontLeftWheel;
+	private final DampenedMotor frontRightWheel;
+	private final DampenedMotor backLeftWheel;
+	private final DampenedMotor backRightWheel;
 	private final DisablablePID pid;
 	private final PIDVariable turnSpeed;
 	private final IMU imu;
@@ -24,7 +24,7 @@ public class Mecanum implements Updatable, Disablable, Enablable {
 	private final LogKitten logger;
 	private static final int INPUT_RESCALE = 8;
 	
-	public Mecanum(EncodedMotor frontLeftWheel, EncodedMotor frontRightWheel, EncodedMotor backLeftWheel, EncodedMotor backRightWheel, IMU imu, double Kp, double Ki, double Kd) {
+	public Mecanum(DampenedMotor frontLeftWheel, DampenedMotor frontRightWheel, DampenedMotor backLeftWheel, DampenedMotor backRightWheel, IMU imu, double Kp, double Ki, double Kd) {
 		// Initialize motor controllers with default ports
 		logger = new LogKitten();
 		this.frontLeftWheel = frontLeftWheel;
