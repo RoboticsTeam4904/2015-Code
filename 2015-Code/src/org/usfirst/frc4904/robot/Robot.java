@@ -38,15 +38,15 @@ public class Robot extends SampleRobot {
 	private static final int RIGHT_INNER_SWITCH_PORT = 8;
 	private static final int LEFT_INNER_SWITCH_PORT = 9;
 	// Encoder ports
-	private static final int WINCH_ENCODER_PORT_1 = 5;
-	private static final int WINCH_ENCODER_PORT_2 = 4;
-	private static final int FRONT_LEFT_ENCODER_PORT_1 = 0;
+	private static final int WINCH_ENCODER_PORT_1 = 0;
+	private static final int WINCH_ENCODER_PORT_2 = 5;
+	private static final int FRONT_LEFT_ENCODER_PORT_1 = 1;
 	private static final int FRONT_LEFT_ENCODER_PORT_2 = 10;
-	private static final int FRONT_RIGHT_ENCODER_PORT_1 = 1;
+	private static final int FRONT_RIGHT_ENCODER_PORT_1 = 2;
 	private static final int FRONT_RIGHT_ENCODER_PORT_2 = 11;
-	private static final int BACK_LEFT_ENCODER_PORT_1 = 2;
+	private static final int BACK_LEFT_ENCODER_PORT_1 = 3;
 	private static final int BACK_LEFT_ENCODER_PORT_2 = 12;
-	private static final int BACK_RIGHT_ENCODER_PORT_1 = 3;
+	private static final int BACK_RIGHT_ENCODER_PORT_1 = 4;
 	private static final int BACK_RIGHT_ENCODER_PORT_2 = 13;
 	// PID coefficients
 	private static final double WINCH_P_COEFFICIENT = -0.7;
