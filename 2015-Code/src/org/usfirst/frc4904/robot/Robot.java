@@ -157,7 +157,7 @@ public class Robot extends SampleRobot {
 		// This list should include everything with a motor
 		toDisable = new Disablable[] {winch, grabber, driver, operator, autonomous, frontLeftWheel, frontRightWheel, backLeftWheel, backRightWheel};
 		toEnable = new Enablable[] {mecanumDrive, winch};
-		alwaysUpdate = new Updatable[] {imu, pdp};
+		alwaysUpdate = new Updatable[] {};
 	}
 	
 	public void robotInit() {

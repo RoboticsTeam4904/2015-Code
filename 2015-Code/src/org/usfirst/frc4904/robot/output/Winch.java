@@ -29,7 +29,7 @@ public class Winch extends Talon implements Disablable, Enablable, Overridable<D
 		// It is also possible to use rate, by changing kDistance to kRate.
 		encoder.setPIDSourceParameter(Encoder.PIDSourceParameter.kDistance);
 		// Initializes the PID Controller
-		pid = new DisablablePID(Kp, Ki, Kd, encoder, this, true);
+		pid = new DisablablePID(Kp, Ki, Kd, encoder, this, false);
 		pid.setInputRange(0, MAX_HEIGHT);
 		pid.setOutputRange(-1, 1);
 		pid.setAbsoluteTolerance(0.5);
@@ -54,6 +54,7 @@ public class Winch extends Talon implements Disablable, Enablable, Overridable<D
 	}
 	
 	public void enable() {
+		set(0);
 		pid.enable();
 	}
 	

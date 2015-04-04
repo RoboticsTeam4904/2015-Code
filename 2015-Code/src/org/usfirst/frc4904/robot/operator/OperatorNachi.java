@@ -30,6 +30,7 @@ public class OperatorNachi extends Operator {
 		// When button 11 is pressed, override the winch
 		if (stick.buttons[10].getRaw()) {
 			overrideWinch(stick.getY());
+			System.out.println(stick.getY());
 		} else {
 			stopOverrideWinch();
 		}
