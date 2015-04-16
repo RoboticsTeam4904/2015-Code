@@ -13,11 +13,11 @@ public class CloseGrabber extends Step {
 	}
 	
 	public void init() {
-		grabber.setDesiredGrabberState(GrabberState.CLOSED);
+		grabber.setDesiredGrabberState(GrabberState.CLOSED_TOTE);
 	}
 	
 	public boolean run() {
-		if (grabber.getState() == GrabberState.CLOSED) {
+		if (grabber.getState() == GrabberState.CLOSED_TOTE) {
 			return true;
 		} else {
 			return false;

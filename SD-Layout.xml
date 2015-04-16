@@ -1,5 +1,14 @@
 <xml version="1.0">
 <dashboard>
+	<widget field="nav6 UpdatesPerSec" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="314"/>
+	</widget>
+	<widget field="nav6 Stream Responses" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="293"/>
+	</widget>
+	<widget field="nav6_PortResets" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.TextBox">
+		<location x="0" y="272"/>
+	</widget>
 	<widget field="Grabber Motor Current" type="Number" class="edu.wpi.first.smartdashboard.gui.elements.LinePlot">
 		<location x="852" y="20"/>
 	</widget>

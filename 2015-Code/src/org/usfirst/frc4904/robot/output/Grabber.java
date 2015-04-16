@@ -30,7 +30,7 @@ public class Grabber extends Talon implements Disablable, Updatable, Overridable
 	private final TimeSafeguard timeSafeguard;
 	
 	public enum GrabberState { // an enum containing grabber states and their values
-		OPEN(0), CLOSED(-0.1), OPENING(0.5), CLOSING(-0.5), DISABLED(0); // grabber state and values
+		OPEN(0), CLOSED_TOTE(-0.2), CLOSED_CAN(0), OPENING(0.18), CLOSING_TOTE(-0.5), DISABLED(0), CLOSING_CAN(-0.25); // grabber state and values
 		public final double motorSpeed; // the architecture allowing the enum states to have values
 		
 		private GrabberState(double speed) {
@@ -63,19 +63,26 @@ public class Grabber extends Talon implements Disablable, Updatable, Overridable
 				grabberState = GrabberState.OPENING;
 				logger.v("Setting state to opening");
 				break;
-			case CLOSED:
-				if (grabberState == GrabberState.CLOSING) {
+			case CLOSED_TOTE:
+				if (grabberState == GrabberState.CLOSING_TOTE) {
 					break;
 				}
-				grabberState = GrabberState.CLOSING;
-				logger.v("Setting state to closing");
+				grabberState = GrabberState.CLOSING_TOTE;
+				logger.v("Setting state to closing tote");
 				break;
+			case CLOSED_CAN:
+				if (grabberState == GrabberState.CLOSING_CAN) {
+					break;
+				}
+				grabberState = GrabberState.CLOSING_CAN;
+				logger.v("Setting state to closing can");
 			default:
 				throw new Error("Invalid or unsupported state passed to setDesiredGrabberState");
 		}
 	}
 	
 	public void update() {
+		System.out.println("Grabber: " + grabberState);
 		checkLimitSwitches();
 		checkPowerUsage();
 		if (grabberState == GrabberState.OPENING) {
@@ -103,14 +110,24 @@ public class Grabber extends Talon implements Disablable, Updatable, Overridable
 					grabberState = GrabberState.OPEN; // Don't go too far
 				}
 				return;
-			case CLOSING:
+			case CLOSING_TOTE:
 				if (!limitSwitches[RIGHT_INNER_SWITCH].get()) { // If limit switch has been hit (get() returns opposite - true if not pressed)
 					logger.v("Right inner switch");
-					grabberState = GrabberState.CLOSED; // Don't go too far
+					grabberState = GrabberState.CLOSED_TOTE; // Don't go too far
 				}
 				if (!limitSwitches[LEFT_INNER_SWITCH].get()) {
 					logger.v("Left inner switch");
-					grabberState = GrabberState.CLOSED; // Don't go too far
+					grabberState = GrabberState.CLOSED_TOTE; // Don't go too far
+				}
+				return;
+			case CLOSING_CAN:
+				if (!limitSwitches[RIGHT_INNER_SWITCH].get()) { // If limit switch has been hit (get() returns opposite - true if not pressed)
+					logger.v("Right inner switch");
+					grabberState = GrabberState.CLOSED_TOTE; // Don't go too far
+				}
+				if (!limitSwitches[LEFT_INNER_SWITCH].get()) {
+					logger.v("Left inner switch");
+					grabberState = GrabberState.CLOSED_TOTE; // Don't go too far
 				}
 				return;
 			default:
@@ -133,11 +150,13 @@ public class Grabber extends Talon implements Disablable, Updatable, Overridable
 		pastAmperage[currentPosition++] = pdp.getCurrent(PDP_PORT);
 		currentPosition %= pastAmperage.length;
 		double currentCurrent = avgCurrent();
-		if (currentCurrent > MAX_AMPS) {
-			if (grabberState == GrabberState.CLOSING) {
-				grabberState = GrabberState.CLOSED;
-			}
+		if (currentCurrent > MAX_AMPS && grabberState == GrabberState.CLOSING_TOTE) {
+			grabberState = GrabberState.CLOSED_TOTE;
 			logger.v("Stopped closing - current hit " + currentCurrent);
+		}
+		if (currentCurrent > MAX_AMPS * 3.0 / 4.0 && grabberState == GrabberState.CLOSING_CAN) {
+			grabberState = GrabberState.CLOSED_CAN;
+			logger.v("Stopped closing (CAN) - current hit " + currentCurrent);
 		}
 		if (currentCurrent > LIMIT_AMPS) {
 			grabberState = GrabberState.DISABLED;

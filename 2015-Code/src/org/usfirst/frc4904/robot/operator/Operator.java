@@ -33,8 +33,12 @@ public abstract class Operator implements Disablable, Updatable, Named {
 		winch.changeHeight(levels);
 	}
 	
-	protected void grab() {
-		grabber.setDesiredGrabberState(GrabberState.CLOSED);
+	protected void toteGrab() {
+		grabber.setDesiredGrabberState(GrabberState.CLOSED_TOTE);
+	}
+	
+	protected void canGrab() {
+		grabber.setDesiredGrabberState(GrabberState.CLOSED_CAN);
 	}
 	
 	protected void release() {

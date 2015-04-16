@@ -17,7 +17,7 @@ public class OperatorGriffin extends Operator {
 		if (stick.buttons[0].get()) { // When button 1 is pressed, toggle grabbing
 			if (grabber.getState() == Grabber.GrabberState.OPEN || grabber.getState() == Grabber.GrabberState.OPENING || grabber.getState() == Grabber.GrabberState.DISABLED) {
 				logger.v("Griffin Grab");
-				grab();
+				toteGrab();
 			} else {
 				logger.v("Griffin Release");
 				release();
