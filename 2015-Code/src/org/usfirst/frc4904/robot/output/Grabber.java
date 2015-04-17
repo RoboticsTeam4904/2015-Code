@@ -82,7 +82,6 @@ public class Grabber extends Talon implements Disablable, Updatable, Overridable
 	}
 	
 	public void update() {
-		System.out.println("Grabber: " + grabberState);
 		checkLimitSwitches();
 		checkPowerUsage();
 		if (grabberState == GrabberState.OPENING) {
