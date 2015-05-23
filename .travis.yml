@@ -3,3 +3,4 @@ jdk:
 - openjdk7
 notifications:
   email: none
+script: cd 2015-Code && ant test
