@@ -1,6 +1,8 @@
 language: java
 jdk:
 - openjdk7
+install:
+- git clone https://github.com/chopshop-166/wpilib-mirror.git ~/wpilib
 notifications:
   email: none
 script: cd 2015-Code && ant jar 
